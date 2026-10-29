@@ -26,9 +26,9 @@ import numpy as np
 import torch
 from PIL import Image
 
-from genrecon.pipelines.full_scene_images_to_3d import FullSceneImagesTo3DPipeline
 from inference.get_chunks import (
     IphoneChunker,
+    PreparedChunker,
     SageGtChunker,
     ScannetChunker,
     ScannetGtChunker,
@@ -36,13 +36,10 @@ from inference.get_chunks import (
 )
 from inference.get_images import (
     IphoneImageSelecter,
+    PreparedImageSelecter,
     SageImageSelecter,
     ScannetImageSelecter,
     ScannetIphoneImageSelecter,
-)
-from inference.transform_to_original import (
-    save_coords_to_original,
-    save_mesh_to_original,
 )
 
 
@@ -75,6 +72,7 @@ def _seed_everything(seed: int) -> None:
 
 
 MODES = {
+    "Prepared": (PreparedChunker, PreparedImageSelecter, lambda p: p / "scene.json"),
     "Sage_gt": (SageGtChunker, SageImageSelecter, lambda p: p / "transforms.json"),
     "Scannet_gt": (
         ScannetGtChunker,
@@ -116,6 +114,8 @@ def _save_plys(
     the per-chunk transform for its coords (identity for the chunk-local save,
     ``m_c2o[chunk_idx]`` for the world save).
     """
+    from inference.transform_to_original import save_coords_to_original, save_mesh_to_original
+
     save_mesh_to_original(out_path / "mesh.ply", scene_mesh, mesh_transform)
     print(label)
     for coords, chunk_idx in zip(coords_list, chunk_indices):
@@ -132,6 +132,7 @@ def _save_to_glb_inputs(
     voxel_size: float,
     origin,
     label: str,
+    scene_coordinates: dict | None = None,
 ) -> None:
     """Build the chunked-GLB conversion inputs and save them to ``to_glb_inputs.pt``.
 
@@ -157,6 +158,8 @@ def _save_to_glb_inputs(
         "aabb": aabb,
         "voxel_size": voxel_size,
     }
+    if scene_coordinates is not None:
+        to_glb_inputs["scene_coordinates"] = scene_coordinates
     torch.save(to_glb_inputs, out_path / "to_glb_inputs.pt")
     print(f"[chunked] saved {label}to_glb_inputs to {out_path / 'to_glb_inputs.pt'}")
 
@@ -166,6 +169,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--mode", required=True, choices=list(MODES))
     parser.add_argument("--path", required=True)
     parser.add_argument("--output_path", required=True)
+    parser.add_argument("--preflight", action="store_true", help="Prepare chunks and conditioning diagnostics without generation models")
+    parser.add_argument("--max_chunks", type=int, default=256, help="Prepared mode: reject larger grids before allocation")
     parser.add_argument("--ss_ckpt", default=None)
     parser.add_argument("--shape_ckpt", default=None)
     parser.add_argument("--tex_ckpt", default=None)
@@ -231,7 +236,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--min_points_per_chunk",
         type=int,
         default=None,
-        help="Override the chunker's min-points-per-chunk threshold. ScannetMixin "
+        help="Override the chunker's min-points-per-chunk threshold (Prepared uses its bundle policy). ScannetMixin "
         "defaults to 500, which is too aggressive for sparse-point datasets like "
         "vfront_gtpoints_10k (only ~10k pts/scene). Lower to e.g. 30 for those.",
     )
@@ -275,10 +280,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--center_crop",
         action="store_true",
-        help="iPhone modes only: revert to the legacy single-square crop around "
+        help="iPhone and Prepared modes: revert to the legacy single-square crop around "
         "the principal point. Default (flag omitted) crops non-square frames "
         "into two square views along the longer axis, doubling the scene-wide "
-        "input pool. Ignored for non-iPhone modes.",
+        "input pool. Ignored for other modes.",
     )
     parser.add_argument(
         "--proj_batch_voxels",
@@ -302,32 +307,32 @@ def main() -> None:
         for n, v in [("--ss_ckpt", args.ss_ckpt), ("--shape_ckpt", args.shape_ckpt), ("--tex_ckpt", args.tex_ckpt)]
         if v is None
     ]
-    if missing:
+    if missing and not args.preflight:
         parser.error(f"{', '.join(missing)} required.")
 
     if args.validation_crop_idx is not None and args.mode != "Sage_gt":
         parser.error("--validation_crop_idx is only supported for --mode Sage_gt.")
+    if args.num_imgs_per_scene < 1 or args.max_chunks < 1:
+        parser.error("view and chunk budgets must be positive")
+    if args.min_points_per_chunk is not None and args.min_points_per_chunk < 1:
+        parser.error("--min_points_per_chunk must be positive")
+    if (args.skip_point_cleaning or args.min_points_per_chunk is not None) and args.mode not in {"Iphone", "Scannet_iphone", "Scannet_colmap", "Prepared"}:
+        parser.error("point-cleaning/chunk-density options require a point-cloud mode")
+    if args.skip_point_cleaning and args.mode == "Prepared":
+        parser.error("Prepared points are already cleaned; configure cleaning during preparation")
 
     _seed_everything(args.seed)
 
     scene_path = Path(args.path)
     out_path = Path(args.output_path)
+    if args.mode == "Prepared" and out_path.resolve().is_relative_to(scene_path.resolve()):
+        parser.error("Prepared output_path must be outside the immutable scene bundle")
     out_path.mkdir(parents=True, exist_ok=True)
 
     with (out_path / "args.json").open("w", encoding="utf-8") as f:
         json.dump(vars(args), f, indent=2, sort_keys=True)
-
-    pipeline = FullSceneImagesTo3DPipeline.from_finetuned(
-        stage_models={
-            "sparse_structure_flow_model": args.ss_ckpt,
-            f"shape_slat_flow_model_{args.pipeline}": args.shape_ckpt,
-            f"tex_slat_flow_model_{args.pipeline}": args.tex_ckpt,
-        },
-        pipeline_config_file=args.pipeline_config,
-    )
-    if args.proj_batch_voxels is not None:
-        pipeline.proj_batch_voxels = args.proj_batch_voxels
-    pipeline.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    # An unsuccessful rerun must not leave an old successful preflight marker.
+    (out_path / "preflight.json").write_text(json.dumps({"mode": args.mode, "status": "running"}) + "\n")
 
     chunker_cls, selecter_cls, transforms_json = MODES[args.mode]
     if args.mode == "Iphone":
@@ -355,6 +360,28 @@ def main() -> None:
     if args.skip_point_cleaning:
         chunker_kwargs["skip_point_cleaning"] = True
 
+    prepared_scene = None
+    scene_coordinates = None
+    if args.mode == "Prepared":
+        from inference.scene_geometry import read_scene_bundle
+
+        prepared_scene = read_scene_bundle(scene_path)
+        minimum = args.min_points_per_chunk
+        if minimum is None:
+            minimum = prepared_scene.point_policy.get("min_points_per_chunk")
+        if not isinstance(minimum, int) or minimum < 1:
+            parser.error("Prepared bundle requires a positive min_points_per_chunk policy or CLI override")
+        chunker_kwargs.update(min_points_per_chunk=minimum, max_chunks=args.max_chunks)
+        scene_coordinates = {
+            "coordinate_frame": "aligned_z_up", "scale_status": prepared_scene.scale_status,
+            "source_to_scene": prepared_scene.source_to_scene.tolist(),
+            "scene_to_source": np.linalg.inv(prepared_scene.source_to_scene).tolist(),
+            "bundle": str(scene_path.resolve()), "provenance": prepared_scene.provenance,
+            "point_policy": prepared_scene.point_policy,
+            "effective_chunk_policy": dict(chunker_kwargs),
+        }
+        (out_path / "scene_coordinates.json").write_text(json.dumps(scene_coordinates, indent=2) + "\n")
+
     if args.validation_crop_idx is not None:
         scene_id = scene_path.name
         crops_json = scene_path.parent.parent / "crops" / f"{scene_id}.json"
@@ -368,20 +395,22 @@ def main() -> None:
             json.dump(crop, f, indent=2)
         print(f"[validation_crop] using crops/{scene_id}.json[chunks][{args.validation_crop_idx}]")
     else:
-        _, m_o2c, m_c2o, rel_t = chunker_cls(**chunker_kwargs).get_chunks(scene_path, out_path)
+        _, m_o2c, m_c2o, rel_t = chunker_cls(**chunker_kwargs).get_chunks(
+            prepared_scene if prepared_scene is not None else scene_path, out_path
+        )
     selecter_kwargs: dict = {}
-    if args.mode in ("Scannet_iphone", "Iphone"):
+    if args.mode in ("Scannet_iphone", "Iphone", "Prepared"):
         selecter_kwargs["center_crop"] = args.center_crop
     sel = selecter_cls(**selecter_kwargs).get_images(
         m_o2c,
-        transforms_json(scene_path),
+        prepared_scene if prepared_scene is not None else transforms_json(scene_path),
         args.num_imgs_per_scene,
         out_path,
         seed=args.seed,
     )
     rel_t_kept = [rel_t[i] for i in sel.chunk_indices]
 
-    if args.save_imgs:
+    if args.save_imgs or args.preflight:
         scene_dir = out_path / "scene"
         scene_dir.mkdir(parents=True, exist_ok=True)
         for view_idx, img in enumerate(sel.scene_images_1024):
@@ -392,6 +421,29 @@ def main() -> None:
             chunk_dir.mkdir(parents=True, exist_ok=True)
             arr = (img.permute(1, 2, 0).clamp(0, 1).cpu().numpy() * 255).astype(np.uint8)
             Image.fromarray(arr).save(chunk_dir / "cond2d.png")
+
+    summary = {"mode": args.mode, "status": "complete", "chunks": len(sel.chunk_indices), "scene_views": len(sel.scene_images_512),
+               "chunk_indices": sel.chunk_indices, "generation_run": False}
+    (out_path / "preflight.json").write_text(json.dumps(summary, indent=2) + "\n")
+    if args.preflight:
+        print(f"Preflight complete: {summary['chunks']} chunks, {summary['scene_views']} views. No generation models loaded.")
+        return
+
+    from genrecon.pipelines.full_scene_images_to_3d import FullSceneImagesTo3DPipeline
+
+    _seed_everything(args.seed)
+    pipeline = FullSceneImagesTo3DPipeline.from_finetuned(
+        stage_models={
+            "sparse_structure_flow_model": args.ss_ckpt,
+            f"shape_slat_flow_model_{args.pipeline}": args.shape_ckpt,
+            f"tex_slat_flow_model_{args.pipeline}": args.tex_ckpt,
+        },
+        pipeline_config_file=args.pipeline_config,
+    )
+    if args.proj_batch_voxels is not None:
+        pipeline.proj_batch_voxels = args.proj_batch_voxels
+    pipeline.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+    _seed_everything(args.seed)
 
     ss_sampler_params: dict = {}
 
@@ -470,6 +522,7 @@ def main() -> None:
             voxel_size=scene_mesh.voxel_size * chunk_size,
             origin=[scene_mesh.origin[i].item() * chunk_size + chunk_center0[i].item() for i in range(3)],
             label="",
+            scene_coordinates=scene_coordinates,
         )
 
         chunk_inputs = {
@@ -477,6 +530,8 @@ def main() -> None:
             "chunk_size_world": chunk_size,
             "chunk_indices": list(sel.chunk_indices),
         }
+        if scene_coordinates is not None:
+            chunk_inputs["scene_coordinates"] = scene_coordinates
         torch.save(chunk_inputs, out_path / "chunk_inputs.pt")
         print(f"[chunked] saved chunk metadata to {out_path / 'chunk_inputs.pt'}")
 

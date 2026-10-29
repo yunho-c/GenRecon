@@ -91,6 +91,8 @@ class BaseImageSelecter:
                 cy_px = float(intr[1, 2]) * H
                 max_half = min(cx_px, W - cx_px, cy_px, H - cy_px)
                 crop_size = int(2 * max_half)
+                if crop_size < 1:
+                    raise ValueError(f"principal point leaves no valid square crop: {img_path}")
                 left = max(0, min(int(round(cx_px - 0.5 * crop_size)), W - crop_size))
                 top = max(0, min(int(round(cy_px - 0.5 * crop_size)), H - crop_size))
                 image = image.crop((left, top, left + crop_size, top + crop_size))
@@ -145,6 +147,7 @@ class BaseImageSelecter:
                 "intrinsics": cam["intrinsics"],
                 "extrinsics_c0": _to_chunk0_extrinsics(cam["c2w_blender"], m_o2c_0),
                 "crop_box": cam.get("crop_box"),
+                "frame_id": cam.get("frame_id", Path(cam["img_path"]).name),
             }
 
         camera_indices = list(range(len(cameras)))
@@ -233,6 +236,26 @@ class BaseImageSelecter:
         inference/eval_reprojection.py.
         """
         cameras = self._get_cameras(camera_params_path)
+        return self.get_images_from_cameras(
+            m_original_to_chunk, cameras, num_imgs_per_scene, out_path, seed, exclude_images
+        )
+
+    def get_images_from_cameras(
+        self,
+        m_original_to_chunk: list[torch.Tensor],
+        cameras: list[dict],
+        num_imgs_per_scene: int,
+        out_path: Path | str,
+        seed: int = 0,
+        exclude_images: list[str] | set[str] | None = None,
+    ) -> SelectedImages:
+        """Shared selector for parsed cameras and portable scene bundles.
+
+        Camera dictionaries retain the legacy Blender c2w and normalized-K
+        convention. Frontend conventions are converted only at this boundary.
+        """
+        if not m_original_to_chunk or num_imgs_per_scene < 1:
+            raise ValueError("image selection requires chunks and a positive view budget")
         if exclude_images:
             exclude_set = {Path(n).name for n in exclude_images}
             kept = [c for c in cameras if Path(c["img_path"]).name not in exclude_set]
@@ -243,6 +266,8 @@ class BaseImageSelecter:
                     f"{sorted(Path(c['img_path']).name for c in dropped)}"
                 )
             cameras = kept
+        if not cameras:
+            raise ValueError("image selection has no usable cameras")
         out_path = Path(out_path)
         out_path.mkdir(parents=True, exist_ok=True)
         rng = random.Random(seed)
@@ -270,6 +295,7 @@ class BaseImageSelecter:
                 "intrinsics": cam["intrinsics"],
                 "extrinsics_c0": _to_chunk0_extrinsics(cam["c2w_blender"], m_o2c_0),
                 "crop_box": cam.get("crop_box"),
+                "frame_id": cam.get("frame_id", Path(cam["img_path"]).name),
             }
             for cam in scene_picks_raw
         ]
@@ -310,6 +336,7 @@ class BaseImageSelecter:
                     "scene": [
                         {
                             "img_path": p["img_path"],
+                            "frame_id": p["frame_id"],
                             "extrinsics_c0": p["extrinsics_c0"].tolist(),
                             "intrinsics": scene_intr[i].tolist(),
                         }
@@ -320,6 +347,7 @@ class BaseImageSelecter:
                             "chunk_index": chunk_indices[i],
                             "cond2d_view": {
                                 "img_path": cond2d_picks[i]["img_path"],
+                                "frame_id": cond2d_picks[i]["frame_id"],
                                 "extrinsics_c0": cond2d_ext_c0_list[i].tolist(),
                                 "intrinsics": cond2d_intr_stack[i].tolist(),
                             },
@@ -770,3 +798,22 @@ class IphoneImageSelecter(_IphoneSelecterMixin, BaseImageSelecter, IphoneMixin):
         """
         super().__init__()
         self.center_crop = center_crop
+
+
+class PreparedImageSelecter(_IphoneSelecterMixin, BaseImageSelecter):
+    def __init__(self, center_crop: bool = False):
+        self.center_crop = center_crop
+
+    def get_images(self, m_original_to_chunk, scene, num_imgs_per_scene, out_path, seed=0):
+        from .geometry import normalize_intrinsics
+
+        cameras = [
+            {
+                "img_path": frame.image_path,
+                "frame_id": frame.id,
+                "intrinsics": torch.tensor(normalize_intrinsics(k, frame.width, frame.height), dtype=torch.float32),
+                "c2w_blender": torch.tensor(pose, dtype=torch.float32) @ _FLIP_Y_Z,
+            }
+            for frame, k, pose in zip(scene.frames, scene.intrinsics, scene.c2w)
+        ]
+        return self.get_images_from_cameras(m_original_to_chunk, cameras, num_imgs_per_scene, out_path, seed)

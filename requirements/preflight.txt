@@ -1,0 +1,9 @@
+# CPU scene preparation and conditioning preflight only.
+# Generation continues to use the supported GPU setup described in README.md.
+numpy
+Pillow
+torch
+opencv-python-headless
+matplotlib
+trimesh
+pandas

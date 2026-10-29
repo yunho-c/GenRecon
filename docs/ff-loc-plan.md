@@ -2,7 +2,7 @@
 
 Implement a selectable camera-and-geometry preparation stage for GenRecon, with MapAnything, VGGT-Omega, and DA3 adapters. A versioned scene bundle is the boundary between preparation and generation. Keep the existing generative model inputs and checkpoints, and retain the current dataset modes as compatibility paths.
 
-Status: planned on `feat/ff-loc`, against source at `719cfb3`. The checkboxes below track implementation and qualification separately.
+Status: milestones 1 and 2 are implemented and covered by CPU preprocessing tests on `feat/ff-loc`. Milestone 2 still requires a supported-GPU generation smoke run for end-to-end qualification. Neural adapters remain planned. The original plan was committed as `ac16bb7`, against source at `719cfb3`.
 
 **Implementation strategy**
 
@@ -79,13 +79,13 @@ Keep geometry preparation independent of CUDA extensions. Core contract tests ru
 
 Dependencies: none. This milestone provides a useful standalone scene validator and portable bundle format.
 
-- [ ] Add the dataclasses, schema version, JSON/NPZ serialization, and validation in `inference/scene_geometry.py`.
-- [ ] Define the adapter callable as `infer(frames, config) -> SceneGeometry` before shared world alignment. Use a fixed registry and keep model imports inside the selected adapter.
-- [ ] Implement OpenCV camera-to-world/world-to-camera conversion, homogeneous matrix handling, z-depth unprojection, and pixel-to-normalized intrinsics conversion.
-- [ ] Implement crop/resize/padding transforms with documented pixel-center conventions. Record the exact upstream operation order and rounding; EXIF rotation must be handled consistently with actual decoded pixels.
-- [ ] Implement up-vector rotation, optional scale transformation, and deterministic bounded point processing. Validate source and aligned geometry separately.
-- [ ] Add independent analytic fixtures: known cameras and a plane, noncentral principal points, rectangular images, and a nontrivial rotated/scaled world. Verify reprojection invariance, image-transform consistency, and depth unprojection against known coordinates.
-- [ ] Test malformed matrices, image/array count mismatches, empty clouds, NaNs, incomplete bundles, and incompatible cache fingerprints.
+- [x] Add the dataclasses, schema version, JSON/NPZ serialization, and validation in `inference/scene_geometry.py`.
+- [x] Define the adapter callable as `infer(frames, config) -> SceneGeometry` before shared world alignment. Use a fixed registry and keep model imports inside the selected adapter.
+- [x] Implement OpenCV camera-to-world/world-to-camera conversion, homogeneous matrix handling, z-depth unprojection, and pixel-to-normalized intrinsics conversion.
+- [x] Implement crop/resize/padding transforms with documented pixel-center conventions. Record the exact upstream operation order and rounding; EXIF rotation must be handled consistently with actual decoded pixels.
+- [x] Implement up-vector rotation, optional scale transformation, and deterministic bounded point processing. Validate source and aligned geometry separately.
+- [x] Add independent analytic fixtures: known cameras and a plane, noncentral principal points, rectangular images, and a nontrivial rotated/scaled world. Verify reprojection invariance, image-transform consistency, and depth unprojection against known coordinates.
+- [x] Test malformed matrices, image/array count mismatches, empty clouds, NaNs, incomplete bundles, and incompatible cache fingerprints.
 
 Done when: a synthetic bundle round-trips without changing geometry, known 3D points project to expected pixels before and after each transform, and invalid bundles fail before generation-model loading. No frontend checkpoint is needed for this gate.
 
@@ -93,14 +93,14 @@ Done when: a synthetic bundle round-trips without changing geometry, known 3D po
 
 Dependencies: milestone 1. This milestone lets existing calibrated scenes use the new interface and isolates adapter errors from integration errors.
 
-- [ ] Extract `get_images_from_cameras(...)` from `BaseImageSelecter.get_images(...)`; leave legacy parsing and selection semantics intact. Convert canonical poses to the current `c2w_blender` dictionaries only at this bridge.
-- [ ] Extract chunk construction from point arrays after cleaning. Keep existing legacy filters and thresholds available; give Prepared input an explicit cleaning/density policy so a bundle is not accidentally filtered twice.
-- [ ] Add the COLMAP text importer with explicit image paths, stable frame order, supported pinhole/undistortion handling, and a compatibility path for legacy point filtering.
-- [ ] Add `--mode Prepared --path <bundle>` to reconstruction. Load and validate the bundle once, then supply it to both the chunker and selector. Keep backend selection independent of dataset mode.
-- [ ] Add a preparation/preflight path that writes selected views, camera/point diagnostics, chunk counts, and transforms without loading generator weights. Move generation-only imports and model loading after preflight; define and reseed selection/model RNGs so loading order cannot change picks.
-- [ ] Resolve the current `--skip_point_cleaning` dispatch mismatch: the CLI forwards this keyword, but `IphoneChunker` does not currently accept it. Limit the fix to supported mode behavior and give incompatible options clear errors.
-- [ ] Compare legacy and Prepared camera matrices, crop-adjusted intrinsics, selected frame IDs, chunk transforms, and relative translations under the same settings and seed. Ensure the comparison uses identical points and cleaning policies.
-- [ ] Keep aligned-frame metadata consistent across mesh PLY, voxel coordinates, `to_glb_inputs.pt`, and `chunk_inputs.pt`.
+- [x] Extract `get_images_from_cameras(...)` from `BaseImageSelecter.get_images(...)`; leave legacy parsing and selection semantics intact. Convert canonical poses to the current `c2w_blender` dictionaries only at this bridge.
+- [x] Extract chunk construction from point arrays after cleaning. Keep existing legacy filters and thresholds available; give Prepared input an explicit cleaning/density policy so a bundle is not accidentally filtered twice.
+- [x] Add the COLMAP text importer with explicit image paths, stable frame order, supported pinhole/undistortion handling, and a compatibility path for legacy point filtering.
+- [x] Add `--mode Prepared --path <bundle>` to reconstruction. Load and validate the bundle once, then supply it to both the chunker and selector. Keep backend selection independent of dataset mode.
+- [x] Add a preparation/preflight path that writes selected views, camera/point diagnostics, chunk counts, and transforms without loading generator weights. Move generation-only imports and model loading after preflight; define and reseed selection/model RNGs so loading order cannot change picks.
+- [x] Resolve the current `--skip_point_cleaning` dispatch mismatch: the CLI forwards this keyword, but `IphoneChunker` does not currently accept it. Limit the fix to supported mode behavior and give incompatible options clear errors.
+- [x] Compare legacy and Prepared camera matrices, crop-adjusted intrinsics, selected frame IDs, chunk transforms, and relative translations under the same settings and seed. Ensure the comparison uses identical points and cleaning policies.
+- [x] Keep aligned-frame metadata consistent across mesh PLY, voxel coordinates, `to_glb_inputs.pt`, and `chunk_inputs.pt`.
 
 Done when: a small calibrated fixture produces matching prepared tensors and chunk layouts through both routes, and Prepared preflight works without neural frontend packages or generation checkpoints. A supported-GPU smoke run of the same scene must also complete before the bridge is labeled end-to-end qualified.
 
@@ -149,7 +149,7 @@ Done when: all supported frontends have reproducible usage and qualification rec
 
 **Proposed command surface**
 
-These commands describe the planned interface; the new command and mode are not implemented yet. `--assume_z_up` is appropriate only when the supplied reconstruction frame is known to be upright. Ordinary unaligned neural output instead requires `--up_vector X Y Z`, expressed in that backend's world frame. Replace the three component placeholders with the known or manually determined up direction; this explicit orientation step is an initial usability limitation, addressed by later automatic estimation.
+The Prepared reconstruction mode is implemented. The MapAnything preparation command below describes the planned neural adapter interface; currently `prepare_scene.py` supports COLMAP text import. See [Prepared scenes](prepared-scenes.md) for working commands. `--assume_z_up` is appropriate only when the supplied reconstruction frame is known to be upright. Ordinary unaligned neural output instead requires `--up_vector X Y Z`, expressed in that backend's world frame. Replace the three component placeholders with the known or manually determined up direction; this explicit orientation step is an initial usability limitation, addressed by later automatic estimation.
 
 ```sh
 python prepare_scene.py \

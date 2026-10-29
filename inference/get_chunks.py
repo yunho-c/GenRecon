@@ -14,6 +14,8 @@ import trimesh
 
 class BaseChunker:
     def __init__(self, min_overlap_factor: int = 4) -> None:
+        if not 0 <= min_overlap_factor < 16:
+            raise ValueError("min_overlap_factor must be in [0, 15]")
         self.atomic_distance = 1 / 16
         self.min_overlap = min_overlap_factor * self.atomic_distance
         self.min_padding = 3.5 / 16
@@ -75,6 +77,8 @@ class BaseChunker:
 
         xs = [x + x_min_padded for x in self._axis_centers(width, chunk_size)]
         ys = [y + y_min_padded for y in self._axis_centers(length, chunk_size)]
+        if len(xs) * len(ys) > getattr(self, "max_chunks", float("inf")):
+            raise ValueError(f"scene would create {len(xs) * len(ys)} chunks; exceeds max_chunks={self.max_chunks}")
         centers = [[x, y, z_center] for y in ys for x in xs]
 
         if out_path is not None:
@@ -163,6 +167,8 @@ class BaseChunker:
           m_chunk_to_originals   list of float32 tensors (4, 4)
           relative_translations  list of float32 tensors (3,)
         """
+        if not chunk_centers:
+            raise ValueError("chunk filtering left no chunks; inspect points, bounds, and min_points_per_chunk")
         s = 1.0 / chunk_size
         ref = chunk_centers[0]
 
@@ -326,8 +332,6 @@ class ScannetMixin:
 
         points3D.txt row format: ID X Y Z R G B ERROR TRACK[(IMG_ID, PT2D_IDX), ...]
         """
-        import open3d as o3d
-
         if max_reproj_error is None:
             max_reproj_error = self.default_max_reproj_error
         if min_track_len is None:
@@ -349,17 +353,20 @@ class ScannetMixin:
         points = np.asarray(xyz, dtype=np.float64)
         print(f"\n Initial number of points: {len(points)}")
 
-        pcd = o3d.geometry.PointCloud()
-        pcd.points = o3d.utility.Vector3dVector(points)
         # Outlier filters are tuned for dense ScanNet clouds (millions of pts).
         # On sparse GT clouds (e.g. vfront_gtpoints_10k with 10k pts/scene) the
         # radius filter rejects ~all points because the per-0.1m-sphere density
         # is far below the 10-neighbour threshold. Bypass when explicitly told.
         if not getattr(self, "skip_point_cleaning", False):
+            import open3d as o3d
+
+            pcd = o3d.geometry.PointCloud()
+            pcd.points = o3d.utility.Vector3dVector(points)
             pcd, _ = pcd.remove_statistical_outlier(nb_neighbors=stat_nb_neighbors, std_ratio=stat_std_ratio)
             pcd, _ = pcd.remove_radius_outlier(nb_points=radius_nb_points, radius=radius_m)
-
-        clean = np.asarray(pcd.points)
+            clean = np.asarray(pcd.points)
+        else:
+            clean = points
         print(f"Number points after cleaning: {len(clean)}")
         trimesh.PointCloud(clean).export(str(Path(out_path) / "clean_points.ply"))
         return clean
@@ -462,7 +469,8 @@ class ScannetMixin:
             )
             ax.text(cx, cy, str(i), ha="center", va="center", fontsize=10, fontweight="bold")
         ax.set_aspect("equal")
-        ax.set_title(f"{len(kept)} kept / {len(removed)} dropped  (chunk_size={chunk_size:.2f} m)")
+        units = getattr(self, "units_label", "m")
+        ax.set_title(f"{len(kept)} kept / {len(removed)} dropped  (chunk_size={chunk_size:.2f} {units})")
         fig.tight_layout()
         fig.savefig(Path(out_path) / "chunk_layout.png", dpi=100)
         plt.close(fig)
@@ -480,7 +488,20 @@ class ScannetMixin:
             if getattr(self, k, None) is not None
         }
         clean_points = self._get_clean_points(path, out_path, **clean_kwargs)
+        return self.get_chunks_from_points(clean_points, out_path)
+
+    def get_chunks_from_points(self, clean_points: np.ndarray, out_path: str | Path):
+        """Construct chunks from already-filtered points without filtering twice."""
+        clean_points = np.asarray(clean_points)
+        if (clean_points.ndim != 2 or clean_points.shape[1] != 3 or not len(clean_points)
+                or not np.isfinite(clean_points).all()):
+            raise ValueError("chunking requires nonempty finite [P, 3] points")
+        if not np.isfinite(self.chunk_size_factor) or self.chunk_size_factor <= 0:
+            raise ValueError("chunk_size_factor must be finite and positive")
+        Path(out_path).mkdir(parents=True, exist_ok=True)
         x_min, x_max, y_min, y_max, z_floor, z_ceiling, delta_z = self._get_room_size(clean_points)
+        if delta_z <= 1e-8:
+            raise ValueError("scene has degenerate vertical extent; check upright alignment and point coverage")
         manual_xy = getattr(self, "manual_xy_bounds", None)
         if manual_xy is not None:
             x_min, x_max, y_min, y_max = manual_xy
@@ -510,9 +531,13 @@ class ScannetGtChunker(BaseChunker, ScannetGtMixin):
 
 
 class ScannetChunker(BaseChunker, ScannetMixin):
-    def __init__(self, min_overlap_factor: int = 4, chunk_size_factor: float = 1.08) -> None:
+    def __init__(self, min_overlap_factor: int = 4, chunk_size_factor: float = 1.08,
+                 min_points_per_chunk: int | None = None, skip_point_cleaning: bool = False) -> None:
         super().__init__(min_overlap_factor=min_overlap_factor)
         self.chunk_size_factor = chunk_size_factor
+        self.skip_point_cleaning = skip_point_cleaning
+        if min_points_per_chunk is not None:
+            self.min_points_per_chunk = min_points_per_chunk
 
 
 class ScannetIphoneMixin(ScannetMixin):
@@ -570,6 +595,7 @@ class IphoneChunker(BaseChunker, IphoneMixin):
         radius_m: float | None = None,
         manual_xy_bounds: tuple[float, float, float, float] | None = None,
         min_points_per_chunk: int | None = None,
+        skip_point_cleaning: bool = False,
     ) -> None:
         super().__init__(min_overlap_factor=min_overlap_factor)
         self.chunk_size_factor = chunk_size_factor
@@ -578,5 +604,24 @@ class IphoneChunker(BaseChunker, IphoneMixin):
         self.radius_nb_points = radius_nb_points
         self.radius_m = radius_m
         self.manual_xy_bounds = manual_xy_bounds
+        self.skip_point_cleaning = skip_point_cleaning
         if min_points_per_chunk is not None:
             self.min_points_per_chunk = min_points_per_chunk
+
+
+class PreparedChunker(BaseChunker, ScannetMixin):
+    """A bounded grid over a bundle's already-cleaned points, in scene units."""
+
+    def __init__(self, *, min_points_per_chunk: int, min_overlap_factor=4, chunk_size_factor=1.11, max_chunks=256):
+        super().__init__(min_overlap_factor)
+        if min_points_per_chunk < 1 or max_chunks < 1:
+            raise ValueError("Prepared chunk and point limits must be positive")
+        self.min_points_per_chunk = min_points_per_chunk
+        self.chunk_size_factor = chunk_size_factor
+        self.max_chunks = max_chunks
+        self.units_label = "scene units"
+
+    def get_chunks(self, scene, out_path):
+        Path(out_path).mkdir(parents=True, exist_ok=True)
+        trimesh.PointCloud(scene.points).export(str(Path(out_path) / "clean_points.ply"))
+        return self.get_chunks_from_points(scene.points, out_path)

@@ -162,6 +162,10 @@ To reconstruct from ScanNet++ iPhone captures instead, pass `--mode Scannet_ipho
 
 
 ### Reconstruct scenes from smartphone videos
+For a reusable camera-and-point bundle and CPU preprocessing checks, see
+[Prepared scenes](docs/prepared-scenes.md). This path currently imports COLMAP text
+reconstructions; feedforward model adapters are planned.
+
 First, you need to compute the camera paramters. We recommend [COLMAP](https://github.com/colmap/colmap).
 ```sh
 python reconstruct_scene.py \
