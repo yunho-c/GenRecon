@@ -5,6 +5,33 @@ TT-XLA frontend (`torch.compile(..., backend="tt", fullgraph=True)`). They are
 not an end-to-end GenRecon implementation. No NVIDIA device is used. SfM/COLMAP
 and training are outside this investigation.
 
+## Current outcome
+
+All three complete pretrained flow networks execute on TT without reported XLA
+fallback in these fixed-chunk, synthetic-input tests. The sparse flows use the
+original network forward, explicit modulation broadcasting and CPU-prepared
+RoPE/layout caches. **A complete image-to-mesh GenRecon pipeline is not yet
+running on TT.**
+
+| Component | Current result |
+| --- | --- |
+| Occupancy flow, all 30 blocks, 4096 latent tokens | Pass; 16.58 s warm median; relative L2 0.08665 against FP32 CPU |
+| Shape flow, all 30 blocks, 512 active voxels | Pass; 2.35 s; relative L2 0.06822 against FP32 CPU |
+| Texture flow, all 30 blocks, 512 active voxels | Pass; 2.34 s; relative L2 0.07984 against FP32 CPU |
+| Three trained multi-view aggregators | Pass, no reported fallback |
+| Complete pretrained occupancy decoder | Pass in FP32, no reported fallback |
+| Camera projection / feature gathering | All-TT version has index/mask mismatches; CPU indices + TT gather/mask passes |
+| Euler/CFG and overlap arithmetic | Tensor-boundary probes pass; orchestration/index preparation remains on host |
+| Shape and texture sparse VAE decoders | Original paths stop at missing O-Voxel/FlexGEMM extensions, before compilation |
+| Mesh extraction, processing and export | Original CUDA-dependent path needs CPU/TT replacements |
+
+The full flows' roughly 7–9% relative error passes the declared smoke gate;
+it does **not** establish reconstruction quality. DINO's exact GenRecon variant,
+real image conditions, multi-step scene generation, variable sparse layouts,
+decoder threshold decisions and end-to-end integration remain unverified.
+The sections below retain both successful results and the failures that defined
+the working compilation boundaries.
+
 ## Environment and method
 
 - Device: one Wormhole B0 chip, PCIe device 3 (cloud environment describes n150).
@@ -151,6 +178,25 @@ Both use fixed coordinates/layout and synthetic conditions. Arbitrary scene
 layouts, compilation reuse across varying token counts and scene quality are
 not established by these results.
 
+## Complete pretrained texture flow
+
+The complete **30-block texture flow** passes using the original sparse forward,
+explicit modulation broadcasting and cached CPU-prepared RoPE/layout. The input
+is `[512,64]` (preconcatenated texture/shape features), with `[1,1029,1024]` image
+condition and `[512,1024]` 3D condition; output is `[512,32]`. This is a synthetic
+single-chunk forward with all checkpoint keys loaded strictly. No XLA fallback
+operations or `aten::` fallback counters were reported.
+
+| Pretrained probe | PCC / relative L2 against FP32 CPU | TT warm median | Evidence |
+| --- | --- | --- | --- |
+| Texture aggregator | 0.999932 / 0.01577 | 11.84 ms | `pretrained-tex-native` |
+| Full native texture flow with cached RoPE | 0.997025 / 0.07984 | 2.34 s | `pretrained-tex-native` |
+
+The texture flow loads 1,352,598,049 parameters (including the separately tested
+aggregator). Compilation/first inference took 237.2 s; the FP32 CPU reference
+took 3.48 s. As with shape and occupancy, this establishes module execution and
+the stated numerical gate, not end-to-end texture or scene quality.
+
 ## Reproduce
 
 Use the same environment that passed DINO; do not install the CUDA setup script.
@@ -244,10 +290,11 @@ file lock. CPU reference work and downloads can overlap; TT workers cannot.
 
 ## Remaining investigation
 
-- Finish the texture checkpoint download and full pretrained texture denoiser
-  and aggregator probes.
 - Validate real projected conditions, occupancy threshold decisions, multi-step
   sampling and scene quality. Current numerical gates use synthetic inputs.
+- Integrate explicit input/output dtypes, CPU-prepared coordinate/RoPE caches,
+  variable token counts and device transfers into the scene pipeline. The exact
+  DINOv3 ViT-L/512 configuration still needs verification.
 - Implement/replace the sparse convolution and mesh-processing extensions for
   a complete pipeline; automated conversion has not supplied these backends.
 
