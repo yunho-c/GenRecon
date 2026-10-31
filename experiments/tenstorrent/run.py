@@ -16,6 +16,8 @@ import subprocess
 import sys
 import time
 import traceback
+import fcntl
+from contextlib import nullcontext
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -45,6 +47,7 @@ def worker(args):
     }
     path = args.output_dir / "result.json"
     write_result(path, result)
+    device_lock = None
     try:
         import torch
         import tt_torch  # noqa: F401 - registers torch.compile backend="tt"
@@ -53,7 +56,9 @@ def worker(args):
         import torch_xla.runtime as xr
         from probes import build_case
 
-        torch.set_num_threads(4)
+        torch.set_num_threads(args.cpu_threads)
+        result["cpu_threads"] = args.cpu_threads
+        result["reference_precision"] = args.reference_precision
         torch.manual_seed(args.seed)
         result["phase"] = "build"
         write_result(path, result)
@@ -68,10 +73,19 @@ def worker(args):
         def outputs(value):
             return list(value) if isinstance(value, (list, tuple)) else [value]
 
-        with torch.no_grad():
+        from reference import float32_reference
+        reference_context = float32_reference(model) if args.reference_precision == "float32" else nullcontext(model)
+        reference_inputs = tuple(t.float() if args.reference_precision == "float32" and t.is_floating_point() else t for t in inputs)
+        with torch.no_grad(), reference_context:
             start = time.perf_counter()
-            reference = [t.detach().cpu() for t in outputs(model(*inputs))]
+            reference = [t.detach().cpu() for t in outputs(model(*reference_inputs))]
             result["cpu_seconds"] = time.perf_counter() - start
+        result["phase"] = "waiting_for_device"
+        write_result(path, result)
+        # Permit CPU references/downloads to overlap, but serialize our hardware
+        # runs even when separate invocations of this harness are queued.
+        device_lock = os.open("/tmp/genrecon-tt-pjrt.lock", os.O_CREAT | os.O_RDWR, 0o600)
+        fcntl.flock(device_lock, fcntl.LOCK_EX)
         result["phase"] = "device_transfer"
         write_result(path, result)
         device = torch_xla.device()
@@ -129,6 +143,8 @@ def worker(args):
         traceback.print_exc()
     write_result(path, result)
     print(json.dumps(result, indent=2), flush=True)
+    # The worker owns the descriptor until process exit, including TT's atexit
+    # teardown. Releasing it here could race the next worker's device startup.
     return 0 if result["status"] == "passed" else 1
 
 
@@ -138,12 +154,14 @@ def main():
     parser.add_argument("--checkpoint-dir", type=Path, default=Path.home() / "models/genrecon")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--runs", type=int, default=3)
+    parser.add_argument("--cpu-threads", type=int, default=4)
+    parser.add_argument("--reference-precision", choices=("native", "float32"), default="native")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--worker", help=argparse.SUPPRESS)
     args = parser.parse_args()
-    if args.runs < 1 or args.timeout < 1:
-        parser.error("runs and timeout must be positive")
+    if args.runs < 1 or args.timeout < 1 or args.cpu_threads < 1:
+        parser.error("runs, timeout and cpu-threads must be positive")
     args.output_dir = args.output_dir.resolve()
     args.checkpoint_dir = args.checkpoint_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -157,7 +175,8 @@ def main():
             raise FileExistsError(f"Use a new output directory; refusing to overwrite {dest}")
         command = [sys.executable, str(Path(__file__).resolve()), "--worker", case,
                    "--output-dir", str(dest), "--checkpoint-dir", str(args.checkpoint_dir),
-                   "--runs", str(args.runs), "--seed", str(args.seed)]
+                   "--runs", str(args.runs), "--seed", str(args.seed), "--cpu-threads", str(args.cpu_threads),
+                   "--reference-precision", args.reference_precision]
         print(f"Running {case}; log: {dest / 'run.log'}", flush=True)
         with (dest / "run.log").open("w") as log:
             try:
@@ -170,6 +189,9 @@ def main():
         result["returncode"] = code
         if result.get("status") in (None, "running"):
             result["status"] = "timeout" if code == 124 else "process_failed"
+            with (dest / "run.log").open("rb") as log:
+                log.seek(max(0, (dest / "run.log").stat().st_size - 16384))
+                result["log_tail"] = log.read().decode("utf-8",errors="replace").splitlines()[-40:]
         write_result(path, result)
         summary.append(result)
         write_result(args.output_dir / "summary.json", summary)

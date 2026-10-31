@@ -10,6 +10,7 @@ from easydict import EasyDict
 from genrecon.utils.model_wrapper_utils import build_single_model
 from genrecon.modules.utils import convert_module_to
 from experiments.tenstorrent.flow_probes import NativeSparseFlowProbe, SingleChunkSLatProbe
+from experiments.tenstorrent.reference import float32_reference
 
 
 class TestFlowAdapter(unittest.TestCase):
@@ -35,6 +36,16 @@ class TestFlowAdapter(unittest.TestCase):
                 expected,actual=native(*inputs),adapted(*inputs)
                 self.assertGreater(expected.std().item(),.01)
                 torch.testing.assert_close(actual,expected)
+                snapshots = {name:t.clone() for name,t in adapted.state_dict().items()}
+                with float32_reference(adapted):
+                    self.assertEqual(adapted.dtype,torch.float32)
+                    self.assertTrue(adapted.phases.is_complex())
+                    self.assertTrue(torch.isfinite(adapted(*inputs)).all())
+                self.assertEqual(adapted.dtype,torch.bfloat16)
+                for name,tensor in adapted.state_dict().items():
+                    self.assertEqual(tensor.dtype,snapshots[name].dtype)
+                    torch.testing.assert_close(tensor,snapshots[name],rtol=0,atol=0)
+                torch.testing.assert_close(adapted(*inputs),expected)
 
 
 if __name__ == "__main__":

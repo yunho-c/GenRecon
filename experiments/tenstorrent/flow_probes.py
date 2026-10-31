@@ -149,11 +149,13 @@ def build_flow_case(name, checkpoints):
     if name.endswith("stock"):
         return native, inputs, metadata
     adapted = SingleChunkSLatProbe(model,config,coords).eval()
-    with torch.no_grad():
+    from reference import float32_reference
+    with torch.no_grad(), float32_reference(nn.ModuleList([native,adapted])):
         expected = native(*inputs)
         actual = adapted(*inputs)
         torch.testing.assert_close(actual,expected)
     metadata.update(cpu_original_equivalence="torch.testing.assert_close passed for all 30 sparse blocks and IO",
+        cpu_original_equivalence_precision="float32",
         adaptation="single chunk active tokens as a dense sequence; all native sparse weights including LoRA preserved",
         host_work="fixed coordinates and RoPE phases; precomputed image conditions",
         active_voxels=len(coords))

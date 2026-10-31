@@ -88,6 +88,37 @@ The shape/texture decoder checkpoints have been downloaded, but their original
 CUDA-extension dependency paths prevent constructing/running them here. These
 are dependency failures, **not compiler rejections of decoder math**. Replacing
 those extensions and O-Voxel mesh processing remains separate porting work.
+Specifically, sparse convolution dispatch calls
+`flex_gemm.ops.spconv.sparse_submanifold_conv3d`; O-Voxel builds a
+`torch.utils.cpp_extension.CUDAExtension`, and its exporter also imports CuMesh,
+nvdiffrast and FlexGEMM grid sampling and explicitly calls `.cuda()`.
+
+## Complete pretrained occupancy flow
+
+The **full 30-block occupancy denoiser** executes on TT with no reported XLA
+fallback. This includes the timestep embedding, trained LoRA paths, learned
+per-block 3D-condition projections, self/cross attention and output head.
+It uses the official checkpoint with strict loading, 1,352,475,145 parameters
+loaded (including the aggregator, which is tested separately), latent input
+`[1,8,16,16,16]`, image condition `[1,1029,1024]` and 3D condition
+`[1,4096,1024]`. Inputs are synthetic and conditions are supplied directly.
+
+| Pretrained probe | Reference | PCC / relative L2 | TT warm median | Evidence |
+| --- | --- | --- | --- | --- |
+| Occupancy aggregator | Native BF16, 4 CPU threads | 0.999978 / 0.01003 | 11.00 ms | `pretrained-ss` |
+| Complete occupancy flow | FP32, 16 CPU threads; TT remains pipeline mixed precision | 0.997091 / 0.08665 | 16.58 s | `ss-flow-math-log` |
+
+Full occupancy compile + first inference took 233.9 s; the FP32 CPU reference
+took 30.79 s. These timings use different compute precision and are not a
+controlled speedup benchmark. The 8.7% relative L2 discrepancy passes the
+declared smoke gate but is substantial: real-condition, multi-step and scene
+quality validation remains necessary. This is one full network forward, not
+an end-to-end reconstruction.
+
+The first full-graph attempt failed on NumPy's timestep scalar; its evidence is
+in `pretrained-ss-fp32ref`. The two interrupted native-BF16 CPU reference attempts
+are retained under `pretrained-ss` and `pretrained-ss-threads16` with explicit
+notes. Neither is counted as a TT compiler failure.
 
 ## Reproduce
 
@@ -99,6 +130,11 @@ hf download microsoft/TRELLIS-image-large \
   --revision 25e0d31ffbebe4b5a97464dd851910efc3002d96 \
   --include 'ckpts/ss_dec_conv3d_16l8_fp16.*' \
   --local-dir "$HOME/models/genrecon/trellis-image-large"
+
+hf download microsoft/TRELLIS.2-4B \
+  --revision af44b45f2e35a493886929c6d786e563ec68364d \
+  --include 'ckpts/shape_dec_next_dc_f16c32_fp16.*' 'ckpts/tex_dec_next_dc_f16c32_fp16.*' \
+  --local-dir "$HOME/models/genrecon/trellis2"
 
 /home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py \
   --output-dir "$HOME/tt-scratchpad/genrecon/new-run" --timeout 300
@@ -131,14 +167,51 @@ python experiments/tenstorrent/fetch_checkpoints.py \
   --destination "$HOME/models/genrecon"
 ```
 
-This uses up to eight HTTP range requests, validates byte ranges against the
+This defaults to eight concurrent HTTP range requests (`--workers 16` was used
+to finish the slow university-host download), validates byte ranges against the
 source size/ETag, retains completed chunks for resume, and records SHA256.
 Weights and large compiler artifacts are kept outside the repository.
 
+Full pretrained flow probes use the source configs and strict checkpoint
+loading, including the trained LoRA, aggregation and per-block conditioning
+weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
+`tex_flow_tensor` use one fixed chunk with 512 active voxels and all 30 blocks;
+texture inputs are preconcatenated shape/texture features. Conditions are
+synthetic, precomputed tensors, not images from an end-to-end reconstruction.
+
+```bash
+/home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py \
+  --cases ss_flow shape_aggregator shape_flow_stock shape_flow_tensor \
+    tex_aggregator tex_flow_stock tex_flow_tensor \
+  --cpu-threads 16 --reference-precision float32 --timeout 1200 \
+  --output-dir "$HOME/tt-scratchpad/genrecon/pretrained-reproduction"
+```
+
+For these full networks, **CPU reference precision differs from TT precision**.
+The EPYC 7352 host lacks native BF16 support. A diagnostic matmul
+`[512,1536] @ [1536,8192]` took 30.54 s in BF16 versus 0.0374 s in FP32 with
+16 threads. Two native-BF16 occupancy reference attempts were deliberately
+interrupted before TT compilation; these are not compiler failures. The practical
+reference promotes the loaded, already quantized weights and activations to
+FP32, then restores every model dtype before TT inference. The TT model retains
+the pipeline's mixed precision. Reported error therefore includes precision
+differences as well as backend differences. CPU tests check exact restoration
+of weights/dtypes and preservation of complex RoPE buffers and LoRA behavior.
+
+The full sparse-flow tensor adapters also check CPU equivalence against the
+native sparse models in FP32 before attempting TT compilation. Their small
+regression fixture additionally checks native mixed-precision equivalence.
+Full-graph capture required replacing `np.log(max_period)` in the timestep
+embedding with `math.log(max_period)`; this matched the original embedding
+exactly for the tested timesteps and even/odd dimensions.
+
+Concurrent harness invocations serialize device use with a process-lifetime
+file lock. CPU reference work and downloads can overlap; TT workers cannot.
+
 ## Remaining investigation
 
-- Finish downloading the three official adapted flow checkpoints; test trained
-  aggregators and full occupancy/shape/texture denoisers, not only one block.
+- Finish the texture checkpoint download and full pretrained shape/texture
+  denoiser and aggregator probes.
 - Check the tensor-only flow adapters against the original complete CPU models
   before compiling pretrained full networks. Block results do not establish that
   all 30 layers fit or compile together.

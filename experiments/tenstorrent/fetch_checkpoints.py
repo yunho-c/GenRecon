@@ -83,8 +83,8 @@ if __name__ == "__main__":
     p.add_argument("--models", nargs="+", choices=["sparse_structure", "shape_slat", "texture_slat"], default=["sparse_structure", "shape_slat", "texture_slat"])
     p.add_argument("--workers", type=int, default=8)
     args = p.parse_args()
-    if not 1 <= args.workers <= 8:
-        p.error("Use between 1 and 8 download workers")
+    if not 1 <= args.workers <= 16:
+        p.error("Use between 1 and 16 download workers")
     args.destination.mkdir(parents=True, exist_ok=True)
     for model in args.models:
         download(model, args.destination, args.workers)
