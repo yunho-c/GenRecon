@@ -265,5 +265,19 @@ def write_pbr_ply(
             PlyElement.describe(face_data, "face"),
         ],
         text=ascii,
+        byte_order="<",
     )
-    ply_data.write(filename)
+    if ascii:
+        ply_data.write(filename)
+        return
+    # Faces are fixed triangles. Bulk records avoid the generic per-face object
+    # writer, which is both slow and fragile for multi-million-face scenes.
+    with open(filename, "wb") as stream:
+        stream.write((ply_data.header + "\n").encode("ascii"))
+        vertex_data.astype(vertex_data.dtype.newbyteorder("<"), copy=False).tofile(stream)
+        for begin in range(0, len(faces), 1_000_000):
+            triangles = faces[begin : begin + 1_000_000]
+            block = np.empty(len(triangles), dtype=[("count", "u1"), ("indices", "<i4", (3,))])
+            block["count"] = 3
+            block["indices"] = triangles
+            block.tofile(stream)

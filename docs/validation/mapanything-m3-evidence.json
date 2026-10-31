@@ -1,0 +1,225 @@
+{
+  "preparation_attempts": [
+    {
+      "status": "complete",
+      "stage": "publish_bundle",
+      "backend": "mapanything",
+      "device": "cuda",
+      "timings": {
+        "checkpoint_resolution_seconds": 0.0012067891657352448,
+        "model_load_seconds": 12.04979776404798,
+        "preprocessing_seconds": 0.2611706331372261,
+        "inference_seconds": 1.558312376961112,
+        "conversion_seconds": 0.8716847458854318
+      },
+      "checkpoint_cache_hit": true,
+      "checkpoint": {
+        "model_id": "facebook/map-anything",
+        "revision": "a1d87e9086706fb9974f3be5a3e3a0ca5401c5aa",
+        "implementation_sha256": "ba9b4a0cda445901c17281cfb9bdd216ad69491e62e6effa3c420c3c2a56d02b",
+        "implementation_revision": "c845b8f4f6cde0c20aecd87573656c3f69f5b2b0"
+      },
+      "hardware": "NVIDIA GeForce RTX 4090",
+      "peak_allocated_bytes": 8523772928,
+      "peak_reserved_bytes": 8784969728,
+      "cache_reused": false,
+      "point_policy": {
+        "input": 2024114,
+        "voxel_fraction": 0.0,
+        "max_points": 250000,
+        "finite": 2024114,
+        "after_voxel": 2024114,
+        "output": 250000,
+        "per_frame": [
+          {
+            "input": 152292,
+            "retained": 124968
+          },
+          {
+            "input": 152292,
+            "retained": 131271
+          },
+          {
+            "input": 152292,
+            "retained": 129943
+          },
+          {
+            "input": 152292,
+            "retained": 125145
+          },
+          {
+            "input": 152292,
+            "retained": 124905
+          },
+          {
+            "input": 152292,
+            "retained": 122338
+          },
+          {
+            "input": 152292,
+            "retained": 124764
+          },
+          {
+            "input": 152292,
+            "retained": 124841
+          },
+          {
+            "input": 152292,
+            "retained": 128252
+          },
+          {
+            "input": 152292,
+            "retained": 130009
+          },
+          {
+            "input": 152292,
+            "retained": 131142
+          },
+          {
+            "input": 152292,
+            "retained": 131657
+          },
+          {
+            "input": 152292,
+            "retained": 123289
+          },
+          {
+            "input": 152292,
+            "retained": 123708
+          },
+          {
+            "input": 152292,
+            "retained": 124316
+          },
+          {
+            "input": 152292,
+            "retained": 123566
+          }
+        ],
+        "min_points_per_chunk": 1,
+        "mask_edges": true,
+        "apply_confidence_mask": false,
+        "confidence_percentile": 10.0
+      },
+      "frames": 16,
+      "total_seconds": 17.29083301918581,
+      "host_peak_rss_bytes": 10454609920
+    },
+    {
+      "status": "complete",
+      "stage": "validate_request",
+      "cache_reused": true,
+      "total_seconds": 0.08537950506433845,
+      "host_peak_rss_bytes": 41865216
+    }
+  ],
+  "orientation": {
+    "up_vector": [
+      0.1298171129332304,
+      -0.9651518337736017,
+      -0.2272211586827575
+    ],
+    "max_disagreement_degrees": 0.35281194640421876,
+    "per_view_degrees": [
+      0.22452668916050433,
+      0.20482858479288482,
+      0.3526610702895307,
+      0.28708348837900677,
+      0.3031098474836471,
+      0.35281194640421876,
+      0.33126238537467984,
+      0.12772766954282438,
+      0.20648600632077144,
+      0.23333331633618515,
+      0.10458107372606927,
+      0.2189016993086336,
+      0.18060807567773343,
+      0.1007407432706942,
+      0.07725841459223905,
+      0.12137376671290995
+    ],
+    "method": "Mean neural c2w rotation times calibrated w2c rotation applied to calibrated +Z; no scale or translation fit"
+  },
+  "generator_args": {
+    "boundary_sensitive_slat": true,
+    "boundary_width_slat": 1,
+    "center_crop": false,
+    "chunk_size_factor": 1.6,
+    "colmap_subdir": "colmap",
+    "max_chunks": 16,
+    "min_overlap_factor": 4,
+    "min_points_per_chunk": null,
+    "mode": "Prepared",
+    "num_imgs_per_scene": 16,
+    "occ_threshold": -1.0,
+    "output_path": "/mnt/8TBStorage/ycho358/GenRecon/ff-loc-m3/generation-42-fixed",
+    "path": "/mnt/8TBStorage/ycho358/GenRecon/ff-loc-m3/bundle-final",
+    "pipeline": "512",
+    "pipeline_config": "configs/pipelines/texture.json",
+    "preflight": false,
+    "proj_batch_voxels": 2048,
+    "radius_m": null,
+    "radius_nb_points": null,
+    "save_imgs": true,
+    "seed": 42,
+    "shape_ckpt": "/mnt/8TBStorage/ycho358/GenRecon/checkpoints/shape_slat/ckpts/model.pt",
+    "skip_point_cleaning": false,
+    "ss_ckpt": "/mnt/8TBStorage/ycho358/GenRecon/checkpoints/sparse_structure/ckpts/model.pt",
+    "stat_std_ratio": null,
+    "tex_ckpt": "/mnt/8TBStorage/ycho358/GenRecon/checkpoints/texture_slat/ckpts/model.pt",
+    "validation_crop_idx": null
+  },
+  "glb_validation": {
+    "vertices": 1929547,
+    "triangles": 2126689,
+    "parts": 9,
+    "finite_vertices": true,
+    "valid_faces": true,
+    "bounds": [
+      [
+        -9.117142677307129,
+        -3.7802324295043945,
+        -1.59548020362854
+      ],
+      [
+        11.47042465209961,
+        16.810007095336914,
+        6.2605156898498535
+      ]
+    ],
+    "render_basis": "aligned_z_up_after_inverse_gltf_basis",
+    "bundle_fingerprint": "c40b12e152e996b26e8b1400c59aa96b98f8e57d0434ed69f08fa6f8bf943f03"
+  },
+  "runtime_sources": {
+    "prepare_scene.py": "6871792564d7a20b42dc0e3eb28c889d2cbd514dba57b4e001a830abfb458771",
+    "inference/frontends/mapanything.py": "0370d3b7161ff69d2629032792af953df6b6dbbc7d7de183e390ea0b872c66d6",
+    "inference/frontends/__init__.py": "c07fda40331651a83ff882de31f83db26ce80be06c683537a7493bbd2eebfb12",
+    "genrecon/utils/mesh_utils.py": "100831279b153c63148b3706dd5dac92cec26e0196ffee3b26c725e214dc556f",
+    "configs/frontends/mapanything.json": "59fae87970c793da9e8c030c27791f053ad68dd59c47cbc41d374a076a1b913e"
+  },
+  "qualification": {
+    "date": "2026-10-29",
+    "generation_seed42_seconds": 252.61,
+    "generation_seed43_seconds": 256.34,
+    "glb_export_process_seconds": 92.56,
+    "generator_environment_has_mapanything": false,
+    "bundle_files_unchanged_after_seed43": 18,
+    "glb_visually_reviewed": true,
+    "reviewed_frames": [
+      0,
+      7,
+      15
+    ],
+    "local_tests": {
+      "passed": 54,
+      "optional_upstream_skipped": 4
+    },
+    "remote_adapter_tests_passed": 18,
+    "remote_ply_tests_passed": 2,
+    "limitations": [
+      "One indoor capture, processed-image conditioning, chunk_size_factor 1.6; not a quality benchmark",
+      "First PLY write failed; bounded binary triangle serialization passed on rerun",
+      "First seed43 initialization failed; fresh process succeeded; underlying runtime issue unresolved"
+    ]
+  }
+}

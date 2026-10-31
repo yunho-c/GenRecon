@@ -11,7 +11,7 @@ class Frontend(Protocol):
     def __call__(self, frames: Sequence[Path], config: dict) -> SceneGeometry: ...
 
 
-_FRONTENDS = {"colmap": ".colmap"}
+_FRONTENDS = {"colmap": ".colmap", "mapanything": ".mapanything"}
 
 
 def available_frontends() -> tuple[str, ...]:

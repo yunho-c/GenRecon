@@ -1,0 +1,13 @@
+{
+  "model_id": "facebook/map-anything",
+  "revision": "a1d87e9086706fb9974f3be5a3e3a0ca5401c5aa",
+  "device": "cuda",
+  "max_frames": 16,
+  "max_points": 250000,
+  "conditioning": "processed",
+  "resolution_set": 518,
+  "amp_dtype": "bf16",
+  "mask_edges": true,
+  "apply_confidence_mask": false,
+  "confidence_percentile": 10.0
+}

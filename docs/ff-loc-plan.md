@@ -2,7 +2,7 @@
 
 Implement a selectable camera-and-geometry preparation stage for GenRecon, with MapAnything, VGGT-Omega, and DA3 adapters. A versioned scene bundle is the boundary between preparation and generation. Keep the existing generative model inputs and checkpoints, and retain the current dataset modes as compatibility paths.
 
-Status: milestones 1 and 2 are implemented and covered by CPU preprocessing tests on `feat/ff-loc`. Milestone 2 still requires a supported-GPU generation smoke run for end-to-end qualification. Neural adapters remain planned. The original plan was committed as `ac16bb7`, against source at `719cfb3`.
+Status: milestones 1–3 are implemented on `feat/ff-loc`. The Prepared bridge and MapAnything adapter have completed GPU generation and GLB export on one 16-frame indoor capture, including a second generation seed reusing the immutable bundle. Legacy/prepared tensor equivalence remains CPU-fixture evidence; the optional COLMAP Open3D cleaning path is not included in this GPU qualification. See [Milestone 3 evidence](validation/mapanything-m3.md) for timings, visual review, failures and limitations. VGGT-Omega and DA3 remain planned. The original plan was committed as `ac16bb7`, against source at `719cfb3`.
 
 **Implementation strategy**
 
@@ -108,13 +108,13 @@ Done when: a small calibrated fixture produces matching prepared tensors and chu
 
 Dependencies: milestones 1 and 2. This is the first usable feedforward reconstruction milestone.
 
-- [ ] Add `prepare_scene.py` frame discovery/ordered-manifest input, deterministic frame cap, backend/config selection, explicit orientation options, and bundle output.
-- [ ] Add the MapAnything adapter using the official inference API. Capture pinhole intrinsics, OpenCV camera-to-world poses, world points, validity masks, and image preprocessing metadata.
-- [ ] Support an explicit local checkpoint or pinned model revision; write the resolved identity into the bundle. Provide actionable missing-dependency/checkpoint errors.
-- [ ] Start with processed images paired with their own intrinsics. Add tested source-resolution calibration mapping before interpreting differences in final mesh detail as a frontend-quality effect.
-- [ ] Add a conservative preset with bounded frame count and point count. Keep confidence/masking options specific to this backend and save their resolved values.
-- [ ] Record synchronized inference wall time, complete preparation wall time, peak allocated/reserved GPU memory, host-memory observations where available, point retention, and failure status. Separate model download/cache state from steady inference timing.
-- [ ] Run a small indoor capture through preparation, preflight, generation, and GLB export. Review camera layout, upright orientation, selected images, bounds, and exported mesh alignment.
+- [x] Add `prepare_scene.py` frame discovery/ordered-manifest input, deterministic frame cap, backend/config selection, explicit orientation options, and bundle output.
+- [x] Add the MapAnything adapter using the official inference API. Capture pinhole intrinsics, OpenCV camera-to-world poses, world points, validity masks, and image preprocessing metadata.
+- [x] Support an explicit local checkpoint or pinned model revision; write the resolved identity into the bundle. Provide actionable missing-dependency/checkpoint errors.
+- [x] Start with processed images paired with their own intrinsics. Add tested source-resolution calibration mapping before interpreting differences in final mesh detail as a frontend-quality effect.
+- [x] Add a conservative preset with bounded frame count and point count. Keep confidence/masking options specific to this backend and save their resolved values.
+- [x] Record synchronized inference wall time, complete preparation wall time, peak allocated/reserved GPU memory, host-memory observations where available, point retention, and failure status. Separate model download/cache state from steady inference timing.
+- [x] Run a small indoor capture through preparation, preflight, generation, and GLB export. Review camera layout, upright orientation, selected images, bounds, and exported mesh alignment.
 
 Done when: a real image set produces a valid reusable scene bundle and a visually inspected GenRecon asset. Re-running generation with different seeds/settings must reuse the bundle without importing or rerunning MapAnything. Report checkpoint, input count/resolution, hardware, and any manual orientation/scale input.
 
@@ -149,7 +149,7 @@ Done when: all supported frontends have reproducible usage and qualification rec
 
 **Proposed command surface**
 
-The Prepared reconstruction mode is implemented. The MapAnything preparation command below describes the planned neural adapter interface; currently `prepare_scene.py` supports COLMAP text import. See [Prepared scenes](prepared-scenes.md) for working commands. `--assume_z_up` is appropriate only when the supplied reconstruction frame is known to be upright. Ordinary unaligned neural output instead requires `--up_vector X Y Z`, expressed in that backend's world frame. Replace the three component placeholders with the known or manually determined up direction; this explicit orientation step is an initial usability limitation, addressed by later automatic estimation.
+The Prepared reconstruction mode and MapAnything preparation command below are implemented; `prepare_scene.py` supports COLMAP text import and MapAnything. See [Prepared scenes](prepared-scenes.md) for working commands. `--assume_z_up` is appropriate only when the supplied reconstruction frame is known to be upright. Ordinary unaligned neural output instead requires `--up_vector X Y Z`, expressed in that backend's world frame. Replace the three component placeholders with the known or manually determined up direction; this explicit orientation step is an initial usability limitation, addressed by later automatic estimation.
 
 ```sh
 python prepare_scene.py \

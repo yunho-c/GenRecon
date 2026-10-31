@@ -1,6 +1,6 @@
 # Prepared scenes
 
-The Prepared input path lets camera-and-point providers share one interface to GenRecon. The initial implementation imports existing COLMAP text reconstructions. MapAnything, VGGT-Omega, and DA3 adapters remain planned; selecting those names is not supported yet.
+The Prepared input path lets camera-and-point providers share one interface to GenRecon. Preparation supports existing COLMAP text reconstructions and the official MapAnything image-only model. VGGT-Omega and DA3 remain planned.
 
 **Prepare an existing reconstruction**
 
@@ -65,7 +65,7 @@ python reconstruct_scene.py \
 
 Preparation and generation may use separate environments. The generator reads the bundle without importing its provider. Generation imports and model loading occur after preprocessing; selection and generation use explicitly seeded RNGs.
 
-All generation artifacts stay in the aligned z-up scene frame. The inverse transform is preserved in `scene_coordinates.json` and in Prepared GLB/chunk input metadata. Do not insert that rotation into the axis-aligned voxel-volume origin: transforming back to the source frame belongs after final mesh/texturing export.
+PLY meshes, voxel coordinates, and GLB baking inputs stay in the aligned z-up scene frame. The existing GLB exporter then applies its standard glTF y-up basis conversion `(x, y, z) -> (x, z, -y)` to the baked mesh; invert that basis when comparing an exported GLB with bundle cameras. The inverse transform is preserved in `scene_coordinates.json` and in Prepared GLB/chunk input metadata. Do not insert that rotation into the axis-aligned voxel-volume origin: transforming back to the source frame belongs after final mesh/texturing export.
 
 **Bundle and cache behavior**
 
@@ -77,13 +77,67 @@ Source text files, selected images, preparation options, adapter code, and relev
 
 The first slice has CPU tests for analytic reprojection, crop/resize transforms, world alignment and scale, serialization/corruption failures, COLMAP parsing/undistortion, chunk limits, cache reuse, and model-free CLI preflight. Legacy and Prepared conditioning are compared with the same points, settings, and seed.
 
-A separate comparison against the untouched `719cfb3` loader and chunker produced identical conditioning tensors and chunk transforms for both crop modes on the six-chunk synthetic fixture (maximum tensor difference 0). This is fixture-level compatibility evidence. Full generation, GLB baking, and the optional Open3D cleaning path are not runtime-qualified by this CPU validation.
+A separate comparison against the untouched `719cfb3` loader and chunker produced identical conditioning tensors and chunk transforms for both crop modes on the six-chunk synthetic fixture (maximum tensor difference 0). This is fixture-level compatibility evidence. This CPU validation does not establish GPU behavior. The MapAnything GPU smoke run is documented in [Milestone 3 qualification](validation/mapanything-m3.md); optional COLMAP Open3D cleaning remains outside that qualification.
 
 Run the focused suite with:
 
 ```sh
-python -m pip install -r requirements/preflight.txt pytest
+python -m pip install -r requirements/preflight.txt pytest plyfile==1.1.5
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 MPLBACKEND=Agg python -m pytest -q tests
 ```
 
-Plugin autoload is disabled to keep unrelated installed pytest plugins out of the test process. See the [implementation plan](ff-loc-plan.md) for the remaining GPU qualification and neural adapters.
+Plugin autoload is disabled to keep unrelated installed pytest plugins out of the test process. See the [implementation plan](ff-loc-plan.md) for the remaining adapters and comparison milestones.
+
+**MapAnything preparation**
+
+MapAnything runs in a separate environment; the generator does not need it. Install
+CUDA PyTorch suitable for your GPU, then the pinned official package:
+
+```sh
+python -m pip install 'mapanything @ git+https://github.com/facebookresearch/map-anything.git@c845b8f4f6cde0c20aecd87573656c3f69f5b2b0'
+python prepare_scene.py --frontend mapanything \
+  --config configs/frontends/mapanything.json \
+  --images capture/rgb --up_vector X Y Z --output prepared/capture-mapanything
+```
+
+Replace X/Y/Z with up expressed in the estimated camera world. `--assume_z_up`
+is an explicit assertion, not gravity estimation. Images alone do not establish
+that their estimated world is upright. Scale is preserved and labeled
+`predicted_metric`; `--scale` scales camera centers and points together.
+
+The preset uses the pinned `facebook/map-anything` snapshot, at most 16 frames,
+518 resolution mapping, BF16 CUDA inference, minibatches of one for dense heads,
+and at most 250,000 points. Upstream validity and edge masks are enabled;
+confidence filtering is opt-in (`--apply_confidence_mask`). No COLMAP error
+threshold is applied to neural confidence. `--device cpu --amp_dtype fp32` is
+available but has not been performance-qualified.
+
+Directory discovery considers JPG/JPEG/PNG files directly inside `--images`,
+sorted lexicographically. Use `--frames ordered.json` (relative filenames) for
+capture order when filenames do not sort chronologically. `--max_frames N`
+selects evenly spaced indices, including endpoints, before inference. Explicit
+CLI options override JSON config and preset defaults. GenRecon's later
+`--num_imgs_per_scene` is a separate conditioning budget.
+
+`--checkpoint /path/to/snapshot` accepts a local pretrained directory containing
+`config.json` and `model.safetensors`, fingerprinted by content. Otherwise,
+`--model_id` and an immutable 40-character `--revision` identify the checkpoint.
+The official loader can also require its DINOv2 Torch Hub cache/network access
+on first use. Installed MapAnything source content and package versions are
+recorded; keep the tested upstream checkout fixed.
+
+Processed RGB images and matching intrinsics are stored by default.
+`--conditioning source` instead stores EXIF-normalized source-resolution RGB
+and maps intrinsics back through the actual rounded resize and center crop.
+This is pinhole calibration mapping, not lens-distortion correction. The crop,
+resize, pixel-center convention, original dimensions and EXIF orientation are
+recorded for each frame. Larger conditioning images alone do not establish
+better reconstruction quality.
+
+Each preparation attempt writes `<output>.run-<timestamp>.json` beside the
+immutable bundle, including failure stage or cache reuse, total wall time and
+host peak RSS. Successful neural runs also record synchronized inference time,
+checkpoint resolution/cache status, model-loading and conversion time, CUDA
+peak allocated/reserved bytes, hardware and point retention. Inference peaks
+include resident model allocations; model load/download is outside inference
+timing. Failed attempts never publish a reconstruction-ready bundle.
