@@ -1,0 +1,333 @@
+[
+  {
+    "case": "projection",
+    "status": "numerical_mismatch",
+    "phase": "complete",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "none",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "parameters": 0,
+    "inputs": [
+      {
+        "shape": [
+          256,
+          3
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          8,
+          1029,
+          1024
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          8,
+          4,
+          4
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          8,
+          3,
+          3
+        ],
+        "dtype": "torch.float32"
+      }
+    ],
+    "cpu_seconds": 0.010826698009623215,
+    "device_type": "TT",
+    "first_inference_seconds": 38.23865939601092,
+    "outputs": [
+      {
+        "shape": [
+          1,
+          8,
+          256,
+          1024
+        ],
+        "dtype": "torch.float32",
+        "relative_l2_error": 0.1868975722017357,
+        "pcc": 0.9825799465179443,
+        "max_abs_error": 5.828964710235596,
+        "all_finite": true,
+        "passed": false
+      },
+      {
+        "shape": [
+          1,
+          8,
+          256
+        ],
+        "dtype": "torch.bool",
+        "exact_match": false,
+        "passed": false
+      }
+    ],
+    "warm_latency_ms": [
+      27.809868013719097,
+      28.3632890204899,
+      28.17866997793317
+    ],
+    "warm_latency_median_ms": 28.17866997793317,
+    "xla_executed_fallback_ops": [],
+    "xla_aten_counters": {},
+    "returncode": 1
+  },
+  {
+    "case": "dense_aggregator",
+    "status": "passed",
+    "phase": "complete",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "random",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "parameters": 8393729,
+    "inputs": [
+      {
+        "shape": [
+          1,
+          8,
+          256,
+          1024
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          8,
+          256
+        ],
+        "dtype": "torch.bool"
+      }
+    ],
+    "cpu_seconds": 0.14939850600785576,
+    "device_type": "TT",
+    "first_inference_seconds": 27.066299486003118,
+    "outputs": [
+      {
+        "shape": [
+          1,
+          256,
+          1024
+        ],
+        "dtype": "torch.float32",
+        "relative_l2_error": 0.0022616648387949675,
+        "pcc": 0.9999977350234985,
+        "max_abs_error": 0.01215866208076477,
+        "all_finite": true,
+        "passed": true
+      }
+    ],
+    "warm_latency_ms": [
+      12.933085003169253,
+      12.862595991464332,
+      12.49038300011307
+    ],
+    "warm_latency_median_ms": 12.862595991464332,
+    "xla_executed_fallback_ops": [],
+    "xla_aten_counters": {},
+    "returncode": 0
+  },
+  {
+    "case": "sparse_aggregator",
+    "status": "passed",
+    "phase": "complete",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "random",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "parameters": 8393729,
+    "inputs": [
+      {
+        "shape": [
+          256,
+          8,
+          1024
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          256,
+          8
+        ],
+        "dtype": "torch.bool"
+      }
+    ],
+    "cpu_seconds": 0.21059088199399412,
+    "device_type": "TT",
+    "first_inference_seconds": 21.18431304700789,
+    "outputs": [
+      {
+        "shape": [
+          256,
+          1024
+        ],
+        "dtype": "torch.float32",
+        "relative_l2_error": 0.0024208127655996553,
+        "pcc": 0.9999964237213135,
+        "max_abs_error": 0.01240280270576477,
+        "all_finite": true,
+        "passed": true
+      }
+    ],
+    "warm_latency_ms": [
+      16.613187995972112,
+      16.49739799904637,
+      16.4660380105488
+    ],
+    "warm_latency_median_ms": 16.49739799904637,
+    "xla_executed_fallback_ops": [],
+    "xla_aten_counters": {},
+    "returncode": 0
+  },
+  {
+    "case": "ss_decoder",
+    "status": "passed",
+    "phase": "complete",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "pretrained",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "checkpoint": "/home/user/models/genrecon/trellis-image-large/ckpts/ss_dec_conv3d_16l8_fp16",
+    "revision": "25e0d31ffbebe4b5a97464dd851910efc3002d96",
+    "parameters": 73671201,
+    "inputs": [
+      {
+        "shape": [
+          1,
+          8,
+          16,
+          16,
+          16
+        ],
+        "dtype": "torch.float32"
+      }
+    ],
+    "cpu_seconds": 2.978010953986086,
+    "device_type": "TT",
+    "first_inference_seconds": 60.78365522797685,
+    "outputs": [
+      {
+        "shape": [
+          1,
+          1,
+          64,
+          64,
+          64
+        ],
+        "dtype": "torch.float32",
+        "relative_l2_error": 0.00260771794011841,
+        "pcc": 0.9998469352722168,
+        "max_abs_error": 1.9037933349609375,
+        "all_finite": true,
+        "passed": true
+      }
+    ],
+    "warm_latency_ms": [
+      2960.8948999957647,
+      2960.437758010812,
+      2960.2614369941875
+    ],
+    "warm_latency_median_ms": 2960.437758010812,
+    "xla_executed_fallback_ops": [],
+    "xla_aten_counters": {},
+    "returncode": 0
+  },
+  {
+    "case": "dit_block",
+    "status": "failed",
+    "phase": "compile_and_first_inference",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "random",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "parameters": 42507776,
+    "inputs": [
+      {
+        "shape": [
+          1,
+          64,
+          1536
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          9216
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          1029,
+          1024
+        ],
+        "dtype": "torch.float32"
+      }
+    ],
+    "cpu_seconds": 0.09611567898537032,
+    "device_type": "TT",
+    "exception_type": "Unsupported",
+    "error": "Failed to trace builtin operator\n  Explanation: Dynamo does not know how to trace builtin operator `globals` with argument types [] (has_kwargs False)\n  Hint: Avoid calling builtin `globals` with argument types []. Consider using an equivalent alternative function/method to `globals`.\n  Hint: If you are attempting to call a logging function (e.g. `print`), you can try adding it to `torch._dynamo.config.reorderable_logging_functions`.\n  Hint: Please report an issue to PyTorch.\n\n  Developer debug context: builtin globals [] False\n\n For more details about this graph break, please visit: https://meta-pytorch.github.io/compile-graph-break-site/gb/gb0059.html\n\nfrom user code:\n   File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/probes.py\", line 51, in forward\n    return self.block(x, mod, context, self.phases)\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\n    return forward_call(*args, **kwargs)\n  File \"/home/user/GitHub/GenRecon/genrecon/modules/transformer/modulated.py\", line 114, in forward\n    return self._forward(\n  File \"/home/user/GitHub/GenRecon/genrecon/modules/transformer/modulated.py\", line 84, in _forward\n    h = self.self_attn(h, phases=phases)\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\n    return forward_call(*args, **kwargs)\n  File \"/home/user/GitHub/GenRecon/genrecon/modules/attention/modules.py\", line 91, in forward\n    h = scaled_dot_product_attention(q, k, v)\n  File \"/home/user/GitHub/GenRecon/genrecon/modules/attention/full_attn.py\", line 130, in scaled_dot_product_attention\n    if \"sdpa\" not in globals():\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For even more developer context, set TORCH_LOGS=\"+dynamo\"\n",
+    "returncode": 1
+  }
+]
