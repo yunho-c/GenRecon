@@ -14,6 +14,30 @@ from experiments.tenstorrent.reference import float32_reference
 
 
 class TestFlowAdapter(unittest.TestCase):
+    def test_ragged_modulation_broadcast(self):
+        from genrecon.modules.sparse import SparseTensor
+        from genrecon.modules.sparse.transformer import ModulatedSparseTransformerCrossBlock
+        from genrecon.modules.transformer import ModulatedTransformerCrossBlock
+        from genrecon.modules.attention import RotaryPositionEmbedder
+        torch.manual_seed(9)
+        sparse = ModulatedSparseTransformerCrossBlock(96,32,4,use_rope=True,share_mod=True,
+            qk_rms_norm=True,qk_rms_norm_cross=True).eval()
+        dense = ModulatedTransformerCrossBlock(96,32,4,use_rope=True,share_mod=True,
+            qk_rms_norm=True,qk_rms_norm_cross=True).eval()
+        dense.load_state_dict(sparse.state_dict(),strict=True)
+        xyz = [torch.randint(0,8,(n,3),dtype=torch.int32) for n in (3,5)]
+        coords = torch.cat([torch.cat([torch.full((len(c),1),i,dtype=torch.int32),c],1) for i,c in enumerate(xyz)])
+        features = [torch.randn(n,96) for n in (3,5)]
+        x = SparseTensor(torch.cat(features),coords)
+        context = torch.randn(2,7,32)
+        with torch.no_grad():
+            for batch in (1,2):
+                mod = torch.randn(batch,576)
+                actual = sparse(x,mod,context).feats
+                expected = torch.cat([dense(features[i][None],mod[min(i,batch-1):min(i,batch-1)+1],
+                    context[i:i+1],RotaryPositionEmbedder(24,3)(xyz[i]))[0] for i in range(2)])
+                torch.testing.assert_close(actual,expected)
+
     def test_shape_and_preconcatenated_texture(self):
         torch.set_num_threads(4)
         for channels in (32,64):

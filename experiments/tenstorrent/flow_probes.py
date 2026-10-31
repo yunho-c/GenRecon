@@ -62,17 +62,25 @@ class DenseFlowProbe(nn.Module):
 
 
 class NativeSparseFlowProbe(nn.Module):
-    def __init__(self, model, coords):
+    def __init__(self, model, coords, precompute_rope=False):
         super().__init__()
         self.model = model
         self.register_buffer("coords", coords)
         self.register_buffer("batch_map", torch.zeros(len(coords),dtype=torch.int64))
+        self.precompute_rope = precompute_rope
+        if precompute_rope:
+            from genrecon.modules.attention import RotaryPositionEmbedder
+            rope = model.blocks[0].self_attn.rope
+            self.rope_key = f"rope_phase_{rope.dim}d_freq{rope.rope_freq[0]}-{rope.rope_freq[1]}_hd{rope.head_dim}"
+            self.register_buffer("phases",RotaryPositionEmbedder(rope.head_dim,rope.dim,rope.rope_freq)(coords[:,1:]))
 
     def sparse(self, features):
         from genrecon.modules.sparse import SparseTensor
         x = SparseTensor(features, self.coords, shape=torch.Size([1,features.shape[-1]]), scale=(1,1,1))
         x.register_spatial_cache("layout", [slice(0,features.shape[0])])
         x.register_spatial_cache("batch_boardcast_map", self.batch_map)
+        if self.precompute_rope:
+            x.register_spatial_cache(self.rope_key,self.phases)
         return x
 
     def forward(self, x, t, context, projected):
@@ -148,6 +156,9 @@ def build_flow_case(name, checkpoints):
     native = NativeSparseFlowProbe(model, coords)
     if name.endswith("stock"):
         return native, inputs, metadata
+    if name.endswith("cached"):
+        metadata["host_work"] = "fixed coordinates, layout and RoPE phases precomputed on CPU; original sparse flow forward"
+        return NativeSparseFlowProbe(model,coords,precompute_rope=True), inputs, metadata
     adapted = SingleChunkSLatProbe(model,config,coords).eval()
     from reference import float32_reference
     with torch.no_grad(), float32_reference(nn.ModuleList([native,adapted])):

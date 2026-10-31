@@ -120,6 +120,37 @@ in `pretrained-ss-fp32ref`. The two interrupted native-BF16 CPU reference attemp
 are retained under `pretrained-ss` and `pretrained-ss-threads16` with explicit
 notes. Neither is counted as a TT compiler failure.
 
+## Complete pretrained shape flow and native sparse path
+
+The complete **30-block shape flow** also passes with 512 active voxels and the
+official checkpoint. Both implementations below were executed, with no reported
+fallback and an FP32 CPU reference; the tensor adapter additionally checked
+equivalence to the original full CPU sparse network before device execution.
+
+| Pretrained probe | PCC / relative L2 | TT warm median | Evidence |
+| --- | --- | --- | --- |
+| Shape aggregator | 0.999970 / 0.01231 | 12.29 ms | `pretrained-shape-fp32ref` |
+| Full shape flow, dense active-token wrapper | 0.997706 / 0.06808 | 2.23 s | `pretrained-shape-fp32ref` |
+| Full shape flow, **original sparse forward with cached RoPE** | 0.997756 / 0.06822 | 2.35 s | `native-cached-rope` |
+
+The native sparse path became traceable after expressing modulation/gating on
+`h.feats` with explicit batch broadcasting. Its sparse DiT initially executed
+with **`aten::polar.out` CPU fallback** (`sparse-explicit-broadcast`), despite
+`fullgraph=True`. Preparing the RoPE phases once on CPU and registering them in
+the sparse spatial cache removes this fallback. The native block and complete
+native shape flow then pass with empty fallback lists (`native-cached-rope`).
+Ragged two-sample CPU tests cover both per-sample and shared modulation so this
+change preserves batch broadcasting. The default FlashAttention backend is
+still unchanged; these probes explicitly select SDPA.
+
+The native shape forward loaded 1,352,548,897 parameters (including its unused
+aggregator), took 262.4 s for compilation/first inference, and used 3.56 s for
+its FP32 CPU reference. The tensor adapter remains an experimental comparison;
+the successful native route does not replace sparse blocks with dense blocks.
+Both use fixed coordinates/layout and synthetic conditions. Arbitrary scene
+layouts, compilation reuse across varying token counts and scene quality are
+not established by these results.
+
 ## Reproduce
 
 Use the same environment that passed DINO; do not install the CUDA setup script.
@@ -181,8 +212,8 @@ synthetic, precomputed tensors, not images from an end-to-end reconstruction.
 
 ```bash
 /home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py \
-  --cases ss_flow shape_aggregator shape_flow_stock shape_flow_tensor \
-    tex_aggregator tex_flow_stock tex_flow_tensor \
+  --cases ss_flow shape_aggregator shape_flow_cached \
+    tex_aggregator tex_flow_cached \
   --cpu-threads 16 --reference-precision float32 --timeout 1200 \
   --output-dir "$HOME/tt-scratchpad/genrecon/pretrained-reproduction"
 ```
@@ -193,8 +224,11 @@ The EPYC 7352 host lacks native BF16 support. A diagnostic matmul
 16 threads. Two native-BF16 occupancy reference attempts were deliberately
 interrupted before TT compilation; these are not compiler failures. The practical
 reference promotes the loaded, already quantized weights and activations to
-FP32, then restores every model dtype before TT inference. The TT model retains
-the pipeline's mixed precision. Reported error therefore includes precision
+FP32, then restores every model dtype before TT inference. The TT model uses
+the source's explicit mixed-precision path: FP32 input/output layers and latent
+inputs, BF16 torso linears, and autocast disabled. The original CUDA pipeline
+also uses CUDA autocast and low-precision noise; a TT scene integration must
+handle those input/output dtypes explicitly. Reported error therefore includes precision
 differences as well as backend differences. CPU tests check exact restoration
 of weights/dtypes and preservation of complex RoPE buffers and LoRA behavior.
 
@@ -210,11 +244,8 @@ file lock. CPU reference work and downloads can overlap; TT workers cannot.
 
 ## Remaining investigation
 
-- Finish the texture checkpoint download and full pretrained shape/texture
-  denoiser and aggregator probes.
-- Check the tensor-only flow adapters against the original complete CPU models
-  before compiling pretrained full networks. Block results do not establish that
-  all 30 layers fit or compile together.
+- Finish the texture checkpoint download and full pretrained texture denoiser
+  and aggregator probes.
 - Validate real projected conditions, occupancy threshold decisions, multi-step
   sampling and scene quality. Current numerical gates use synthetic inputs.
 - Implement/replace the sparse convolution and mesh-processing extensions for

@@ -74,18 +74,25 @@ class ModulatedSparseTransformerCrossBlock(nn.Module):
             )
         else:
             shift_msa, scale_msa, gate_msa, shift_mlp, scale_mlp, gate_mlp = self.adaLN_modulation(mod).chunk(6, dim=1)
+        # Make the batch broadcast explicit at the tensor boundary. Some
+        # torch.compile backends intercept SparseTensor * Tensor before the
+        # sparse object's elementwise operator can unwrap its features.
+        batch = x.batch_boardcast_map
+        def broadcast(value):
+            return torch.broadcast_to(value, x.shape)[batch]
+
         h = x.replace(self.norm1(x.feats))
-        h = h * (1 + scale_msa) + shift_msa
+        h = h.replace(h.feats * broadcast(1 + scale_msa) + broadcast(shift_msa))
         h = self.self_attn(h)
-        h = h * gate_msa
+        h = h.replace(h.feats * broadcast(gate_msa))
         x = x + h
         h = x.replace(self.norm2(x.feats))
         h = self.cross_attn(h, context)
         x = x + h
         h = x.replace(self.norm3(x.feats))
-        h = h * (1 + scale_mlp) + shift_mlp
+        h = h.replace(h.feats * broadcast(1 + scale_mlp) + broadcast(shift_mlp))
         h = self.mlp(h)
-        h = h * gate_mlp
+        h = h.replace(h.feats * broadcast(gate_mlp))
         x = x + h
         return x
 

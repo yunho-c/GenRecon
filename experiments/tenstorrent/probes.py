@@ -97,7 +97,7 @@ class SparseAttentionProbe(nn.Module):
 
 
 class SparseDiTBlockProbe(nn.Module):
-    def __init__(self):
+    def __init__(self, precompute_rope=False):
         super().__init__()
         from genrecon.modules.sparse.transformer import ModulatedSparseTransformerCrossBlock
         self.block = ModulatedSparseTransformerCrossBlock(1536, 1024, 12, mlp_ratio=5.3334,
@@ -105,12 +105,20 @@ class SparseDiTBlockProbe(nn.Module):
         xyz = torch.stack(torch.meshgrid(*[torch.arange(4)]*3, indexing="ij"), dim=-1).reshape(-1,3)
         self.register_buffer("coords", torch.cat([torch.zeros(64,1,dtype=torch.int64), xyz], dim=-1).int())
         self.register_buffer("batch_map", torch.zeros(64,dtype=torch.int64))
+        self.precompute_rope = precompute_rope
+        if precompute_rope:
+            from genrecon.modules.attention import RotaryPositionEmbedder
+            rope = self.block.self_attn.rope
+            self.rope_key = f"rope_phase_{rope.dim}d_freq{rope.rope_freq[0]}-{rope.rope_freq[1]}_hd{rope.head_dim}"
+            self.register_buffer("phases", RotaryPositionEmbedder(rope.head_dim,rope.dim,rope.rope_freq)(xyz))
 
     def forward(self, x, mod, context):
         from genrecon.modules.sparse import SparseTensor
         sparse = SparseTensor(x, self.coords, shape=torch.Size([1, x.shape[-1]]), scale=(1,1,1))
         sparse.register_spatial_cache("layout", [slice(0, x.shape[0])])
         sparse.register_spatial_cache("batch_boardcast_map", self.batch_map)
+        if self.precompute_rope:
+            sparse.register_spatial_cache(self.rope_key,self.phases)
         return self.block(sparse, mod, context).feats
 
 
@@ -164,7 +172,7 @@ class OverlapReductionProbe(nn.Module):
 
 def build_case(name, checkpoints):
     if name in ("ss_flow", "shape_flow_stock", "tex_flow_stock", "shape_flow_tensor", "tex_flow_tensor",
-                "ss_aggregator", "shape_aggregator", "tex_aggregator"):
+                "ss_aggregator", "shape_aggregator", "tex_aggregator", "shape_flow_cached", "tex_flow_cached"):
         from flow_probes import build_flow_case
         return build_flow_case(name, checkpoints)
     meta = {"weights": "random", "input_kind": "seeded synthetic", "dtype": "float32"}
@@ -226,6 +234,16 @@ def build_case(name, checkpoints):
         return SparseAttentionProbe(), (torch.randn(64, 3, 12, 128),), meta
     if name == "sparse_dit_block":
         return SparseDiTBlockProbe(), (torch.randn(64,1536), torch.randn(1,9216), torch.randn(1,1029,1024)), meta
+    if name == "sparse_dit_cached":
+        inputs = (torch.randn(64,1536), torch.randn(1,9216), torch.randn(1,1029,1024))
+        native = SparseDiTBlockProbe().eval()
+        cached = SparseDiTBlockProbe(precompute_rope=True).eval()
+        cached.block.load_state_dict(native.block.state_dict(),strict=True)
+        with torch.no_grad():
+            torch.testing.assert_close(cached(*inputs),native(*inputs),rtol=0,atol=0)
+        meta.update(host_work="fixed coordinates/layout and RoPE phases prepared on CPU",
+            cpu_original_equivalence="exact equality against native block with uncached RoPE")
+        return cached, inputs, meta
     if name == "sparse_dit_tensor":
         native = SparseDiTBlockProbe().eval()
         model = DiTBlockProbe().eval()
