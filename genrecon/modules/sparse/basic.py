@@ -801,7 +801,7 @@ class SparseTensor(VarLenTensor):
         The spatial cache can be any thing you want to cache.
         The registery and retrieval of the cache is based on current scale.
         """
-        scale_key = str(self._scale)
+        scale_key = self._scale
         if scale_key not in self._spatial_cache:
             self._spatial_cache[scale_key] = {}
         self._spatial_cache[scale_key][key] = value
@@ -810,7 +810,7 @@ class SparseTensor(VarLenTensor):
         """
         Get a spatial cache.
         """
-        scale_key = str(self._scale)
+        scale_key = self._scale
         cur_scale_cache = self._spatial_cache.get(scale_key, {})
         if key is None:
             return cur_scale_cache

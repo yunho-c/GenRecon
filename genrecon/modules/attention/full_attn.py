@@ -2,6 +2,7 @@ import math
 from typing import *
 
 import torch
+from torch.nn.functional import scaled_dot_product_attention as sdpa
 
 from . import config
 
@@ -127,8 +128,6 @@ def scaled_dot_product_attention(*args, **kwargs):
             elif num_all_args == 3:
                 out = flash_attn_3.flash_attn_func(q, k, v)
     elif config.BACKEND == "sdpa":
-        if "sdpa" not in globals():
-            from torch.nn.functional import scaled_dot_product_attention as sdpa
         if num_all_args == 1:
             q, k, v = qkv.unbind(dim=2)
         elif num_all_args == 2:

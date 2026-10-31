@@ -7,6 +7,7 @@ timeouts retain the last completed phase. Full logs stay in the output directory
 
 import argparse
 import importlib.metadata
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -37,6 +38,9 @@ def worker(args):
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "versions": {name: importlib.metadata.version(name) for name in ("torch", "torch-xla", "tt-forge", "pjrt-plugin-tt")},
         "seed": args.seed, "fullgraph": True,
+        "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+            for folder in (ROOT / "genrecon", ROOT / "experiments/tenstorrent")
+            for p in sorted(folder.rglob("*.py"))},
         "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
     }
     path = args.output_dir / "result.json"
@@ -93,7 +97,8 @@ def worker(args):
             assert ref.shape == out.shape
             item = {"shape": list(out.shape), "dtype": str(out.dtype)}
             if not ref.is_floating_point():
-                item.update(exact_match=bool(torch.equal(ref, out)), passed=bool(torch.equal(ref, out)))
+                item.update(exact_match=bool(torch.equal(ref, out)), passed=bool(torch.equal(ref, out)),
+                            mismatch_count=int((ref != out).sum()), element_count=ref.numel())
             else:
                 a, b = ref.float().flatten(), out.float().flatten()
                 finite = bool(torch.isfinite(b).all() and torch.isfinite(a).all())

@@ -185,7 +185,25 @@ def sparse_scaled_dot_product_attention(*args, **kwargs):
             k = k.reshape(N * L, H, CI)  # [T_KV, H, Ci]
             v = v.reshape(N * L, H, CO)  # [T_KV, H, Co]
 
-    if config.ATTN == "xformers":
+    if config.ATTN == "sdpa":
+        # Preserve each sample's sequence boundaries without a CUDA-only
+        # varlen kernel. Explicit lengths also permit fixed-shape compilation.
+        if num_all_args == 1:
+            q, k, v = qkv.unbind(dim=1)
+        elif num_all_args == 2:
+            k, v = kv.unbind(dim=1)
+        pieces = []
+        q_start = kv_start = 0
+        for q_len, kv_len in zip(q_seqlen, kv_seqlen):
+            qi = q[q_start : q_start + q_len].transpose(0, 1).unsqueeze(0)
+            ki = k[kv_start : kv_start + kv_len].transpose(0, 1).unsqueeze(0)
+            vi = v[kv_start : kv_start + kv_len].transpose(0, 1).unsqueeze(0)
+            value = torch.nn.functional.scaled_dot_product_attention(qi, ki, vi)
+            pieces.append(value.squeeze(0).transpose(0, 1))
+            q_start += q_len
+            kv_start += kv_len
+        out = torch.cat(pieces, dim=0)
+    elif config.ATTN == "xformers":
         if "xops" not in globals():
             import xformers.ops as xops
         if num_all_args == 1:

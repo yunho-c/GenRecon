@@ -1,0 +1,180 @@
+[
+  {
+    "case": "projection_indices",
+    "status": "numerical_mismatch",
+    "phase": "complete",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "none",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "parameters": 0,
+    "inputs": [
+      {
+        "shape": [
+          256,
+          3
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          8,
+          4,
+          4
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          8,
+          3,
+          3
+        ],
+        "dtype": "torch.float32"
+      }
+    ],
+    "cpu_seconds": 0.0045104059972800314,
+    "device_type": "TT",
+    "first_inference_seconds": 13.130500958999619,
+    "outputs": [
+      {
+        "shape": [
+          8,
+          256,
+          3
+        ],
+        "dtype": "torch.float32",
+        "relative_l2_error": 0.00018361082409901048,
+        "pcc": 1.0,
+        "max_abs_error": 0.00048828125,
+        "all_finite": true,
+        "passed": true
+      },
+      {
+        "shape": [
+          8,
+          256
+        ],
+        "dtype": "torch.bool",
+        "exact_match": false,
+        "passed": false
+      },
+      {
+        "shape": [
+          8,
+          256
+        ],
+        "dtype": "torch.int64",
+        "exact_match": false,
+        "passed": false
+      }
+    ],
+    "warm_latency_ms": [
+      26.615403010509908,
+      26.67500401730649,
+      26.787623995915055
+    ],
+    "warm_latency_median_ms": 26.67500401730649,
+    "xla_executed_fallback_ops": [],
+    "xla_aten_counters": {},
+    "returncode": 1
+  },
+  {
+    "case": "sparse_attention_stock",
+    "status": "failed",
+    "phase": "cpu_reference",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "none",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "parameters": 0,
+    "inputs": [
+      {
+        "shape": [
+          64,
+          3,
+          12,
+          128
+        ],
+        "dtype": "torch.float32"
+      }
+    ],
+    "exception_type": "ModuleNotFoundError",
+    "error": "No module named 'flash_attn'",
+    "returncode": 1
+  },
+  {
+    "case": "shape_decoder_stock",
+    "status": "failed",
+    "phase": "build",
+    "source_commit": "eaf1468118d20469d17079a4a19737297d2ef87b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "exception_type": "ModuleNotFoundError",
+    "error": "No module named 'o_voxel'",
+    "returncode": 1
+  },
+  {
+    "case": "tex_decoder_stock",
+    "status": "failed",
+    "phase": "build",
+    "source_commit": "83e2d3610ecafb04835d2d386ea7238df8c0567b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "exception_type": "ModuleNotFoundError",
+    "error": "No module named 'flex_gemm'",
+    "returncode": 1
+  },
+  {
+    "case": "mesh_export_stock",
+    "status": "failed",
+    "phase": "build",
+    "source_commit": "83e2d3610ecafb04835d2d386ea7238df8c0567b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "exception_type": "ImportError",
+    "error": "cannot import name '_C' from partially initialized module 'o_voxel' (most likely due to a circular import) (/home/user/GitHub/GenRecon/o-voxel/o_voxel/__init__.py)",
+    "returncode": 1
+  }
+]

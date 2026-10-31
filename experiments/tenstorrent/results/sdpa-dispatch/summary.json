@@ -1,0 +1,73 @@
+[
+  {
+    "case": "dit_block",
+    "status": "passed",
+    "phase": "complete",
+    "source_commit": "83e2d3610ecafb04835d2d386ea7238df8c0567b",
+    "versions": {
+      "torch": "2.11.0+cpu",
+      "torch-xla": "2.9.0+git56f8e61",
+      "tt-forge": "1.4.0",
+      "pjrt-plugin-tt": "1.4.0"
+    },
+    "seed": 0,
+    "fullgraph": true,
+    "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+    "weights": "random",
+    "input_kind": "seeded synthetic",
+    "dtype": "float32",
+    "parameters": 42507776,
+    "inputs": [
+      {
+        "shape": [
+          1,
+          64,
+          1536
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          9216
+        ],
+        "dtype": "torch.float32"
+      },
+      {
+        "shape": [
+          1,
+          1029,
+          1024
+        ],
+        "dtype": "torch.float32"
+      }
+    ],
+    "cpu_seconds": 0.0838890050072223,
+    "device_type": "TT",
+    "first_inference_seconds": 56.96679019302246,
+    "outputs": [
+      {
+        "shape": [
+          1,
+          64,
+          1536
+        ],
+        "dtype": "torch.float32",
+        "relative_l2_error": 0.012078806022444799,
+        "pcc": 0.9999369382858276,
+        "max_abs_error": 0.11070537567138672,
+        "all_finite": true,
+        "passed": true
+      }
+    ],
+    "warm_latency_ms": [
+      25.756891001947224,
+      21.608434995869175,
+      21.125582978129387
+    ],
+    "warm_latency_median_ms": 21.608434995869175,
+    "xla_executed_fallback_ops": [],
+    "xla_aten_counters": {},
+    "returncode": 0
+  }
+]
