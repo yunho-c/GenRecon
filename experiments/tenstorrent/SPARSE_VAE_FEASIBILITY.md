@@ -96,13 +96,59 @@ The latter provide a credible optimization path: read indexed feature rows,
 assemble tiles in local memory, run matrix products, and write output tiles.
 That is a proposed design, not an existing validated TT sparse-convolution kernel.
 
-I did not find a ready-made Tenstorrent submanifold-convolution backend in the
-public sources searched. The existing [TTNN sparse_matmul](https://docs.tenstorrent.com/tt-metal/latest/ttnn/ttnn/api/ttnn.sparse_matmul.html)
+I did not find a ready-made, validated Tenstorrent submanifold-convolution
+backend in the public sources searched. **There are directly relevant public
+porting attempts**, including Tenstorrent's MapTR work described below; absence
+of a ready-made backend does not mean nobody has attempted the operation.
+The existing [TTNN sparse_matmul](https://docs.tenstorrent.com/tt-metal/latest/ttnn/ttnn/api/ttnn.sparse_matmul.html)
 operates on sparse matrix groups; it is not a drop-in coordinate-based 3D
 convolution. Documentation for current main/latest also does not guarantee that
 every API is available in our installed TT-Forge 1.4.0 stack.
 
 ## Closest prior art
+
+### Tenstorrent MapTR: a direct sparse-convolution porting attempt
+
+An expanded search on 2026-11-01 found relevant prior work missed by the initial
+study. Tenstorrent's [MapTR model source](https://github.com/tenstorrent/tt-forge-models/blob/45ed219bd6d2b22c22cfe0f6473a19392a36e51a/maptr/pytorch/src/maptr.py#L3096)
+contains `get_indice_pairs_3d_cpu`, `get_indice_conv_cpu_fp32`, `SparseConvolution`,
+and `SubMConv3d`. Its feature computation uses gather, matrix multiplication,
+and scatter accumulation, with cached index pairs and host-side loop control.
+This is directly related to the operation needed by our decoders.
+
+[TT-XLA issue #4013](https://github.com/tenstorrent/tt-xla/issues/4013), opened
+2026-03-31 and still open when checked on 2026-11-01, documents an actual attempt
+to run the MapTR Tiny Fusion path on TT. After a tracing fix, Python loops in
+neighbor-map construction caused an indefinite hang. A vectorized replacement
+then failed TT compilation while legalizing a particular `stablehlo.scatter`
+pattern. The issue links logs and a reproduction branch. Its
+[isolated neighbor-map test](https://github.com/tenstorrent/tt-xla/blob/sai_arthi_raguram/maptr/tests/torch/ops/test_get_indice_pairs_3d_cpu.py)
+is publicly available and explicitly targets 3x3x3 submanifold mapping.
+
+This establishes a real porting attempt, but I found no successful accelerator
+benchmark for that sparse path in the reviewed issue and source. Other MapTR
+variants and their dense image-backbone results do not establish success for
+the sparse LiDAR path. The failed mapping pattern also does not imply that
+all scatter operations are unsupported.
+
+For our implementation, these sources offer useful reproduction cases and
+index-pair semantics. Keeping coordinate-map construction on the CPU avoids
+requiring the compiler to handle the demonstrated failing pattern. The MapTR
+feature code still contains per-pair Python loops and `.item()` calls, so it
+would need adaptation rather than wholesale reuse as an accelerated backend.
+
+### Related TT projects with different evidence
+
+Tenstorrent's [FusionAD sparse encoder in TT-Polaris](https://github.com/tenstorrent/tt-polaris/blob/2accd8e5f8dc056fe9836be5de257111379efc0b/workloads/FusionAD/projects/mmdet_plugin/models/backbones/sparse_encoder_hd.py)
+explicitly approximates sparse 3D convolution with 2D convolution and folds
+depth into the batch dimension. [TT-Polaris](https://github.com/tenstorrent/tt-polaris)
+is a high-level performance-analysis simulator. This is relevant workload
+modeling, not evidence of an exact submanifold-convolution kernel on hardware.
+
+The community [Sparse4D TT port](https://github.com/koreaygj/sparse4D-tt)
+reports actual N300 execution and custom projection, sampling, weighted-sum,
+and compaction kernels. Those are useful neighboring capabilities, but its
+name and detection results alone do not establish a voxel SubMConv3d backend.
 
 ### TRELLIS.2 on Apple Silicon: directly relevant
 
