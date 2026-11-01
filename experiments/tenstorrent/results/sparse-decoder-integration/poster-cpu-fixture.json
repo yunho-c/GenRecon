@@ -1,0 +1,298 @@
+{
+  "status": "passed",
+  "device": "cpu",
+  "precision": "float32",
+  "seed": 123,
+  "scope": "one bounded scene cube, 512 output resolution; no mesh generation",
+  "script_sha256": "5215166b81dda0e009bc5e47c225e0a4dedba6d1c86b77284006c9f0b8d1b980",
+  "transforms_sha256": "09301176ab8cad609669060d4ed6ad6b3814058f033ec94dcc42d028c41b2110",
+  "source_commit": "ff7c4505861ce6b07caa3f71ac63ef2c619f5b68",
+  "source_sha256": {
+    "genrecon/modules/image_feature_extractor.py": "55e3d7294711cf6ab8275f315f709e3f9f6c2f45876a160e088e2d954a5e34d4",
+    "configs/pipelines/texture.json": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0",
+    "experiments/tenstorrent/flow_probes.py": "bece565eaf622aa0ebed5ddb04adf801a1651655ecc5fc949a1005daff89237e",
+    "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c"
+  },
+  "source_transforms": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/transforms_available.json",
+  "torch": "2.11.0+cpu",
+  "colmap_to_scene": [
+    [
+      3.2438553269939644e-17,
+      0.9999999999999998,
+      -2.5699032546058336e-17,
+      6.938893903907228e-17
+    ],
+    [
+      0.9999999999999998,
+      -3.206523589028629e-17,
+      1.6469733683525298e-16,
+      -1.6653345369377348e-16
+    ],
+    [
+      8.921210082717957e-17,
+      1.1627713816888039e-17,
+      -0.9999999999999998,
+      3.469446951953614e-17
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "colmap_cameras_sha256": "5ae3b80bc0dec00c0bbd823ca2f804fc0534420522c388cfa847feb6d13a17fb",
+  "center": [
+    -0.14840045451805728,
+    0.7697914575284823,
+    -1.2254205646856013
+  ],
+  "extent": 19.499052366887362,
+  "cube_selection": "COLMAP 5%-95% bounds, 10% margin",
+  "points3d_sha256": "511189176ac3223f06f9064ed6a9e060992890a6f47d1fbba159f611e82ac3dd",
+  "phase": "complete",
+  "elapsed_seconds": 2034.1896629859693,
+  "images": [
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00001.png",
+      "sha256": "ceae28f8835d622e44b59eb1a6a9cde30df110b399b79efd7ea19ce07e7b0339",
+      "frame_index": 0
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00029.png",
+      "sha256": "cf525a74457c4ceb7a52ecdb1768d484e7fec00fae1db286abc2c1c586b31d20",
+      "frame_index": 14
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00067.png",
+      "sha256": "b07fb9492eec4c4506bdceb642c10651d500809ed1124c6a02d358660b926d8f",
+      "frame_index": 28
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00101.png",
+      "sha256": "26fb5ab5751d726b6d54e7de4a1e6c54b0affdad13806a6e161b471e2845c93e",
+      "frame_index": 42
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00117.png",
+      "sha256": "6748e91d70084158d75a150b7c717caf8d663d835549dd2c38b86b2e2ecaf462",
+      "frame_index": 56
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00165.png",
+      "sha256": "22173a27b5e464a26d65281ee498dc7444b7a6a6b987f13df72ac811eb56ba45",
+      "frame_index": 70
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00199.png",
+      "sha256": "f2144c3a4853fc0936d9e4b5e6b640b9e9903eac46d1c9214991306595f5eeb6",
+      "frame_index": 84
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00217.png",
+      "sha256": "303da6cb2a1c7fca0a9727f769587b680344b04fdaff7ad63442c2dfe10343b5",
+      "frame_index": 99
+    }
+  ],
+  "dino_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+  "sampling": {
+    "sparse_structure_sampler": {
+      "steps": 12,
+      "guidance_strength": 7.5,
+      "guidance_rescale": 0.7,
+      "guidance_interval": [
+        0.6,
+        1.0
+      ],
+      "rescale_t": 5.0
+    },
+    "shape_slat_sampler": {
+      "steps": 12,
+      "guidance_strength": 7.5,
+      "guidance_rescale": 0.5,
+      "guidance_interval": [
+        0.6,
+        1.0
+      ],
+      "rescale_t": 3.0
+    },
+    "tex_slat_sampler": {
+      "steps": 12,
+      "guidance_strength": 5.0,
+      "guidance_rescale": 0.0,
+      "guidance_interval": [
+        0.6,
+        0.9
+      ],
+      "rescale_t": 3.0
+    }
+  },
+  "ss_checkpoint": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/sparse_structure.pt",
+      "bytes": 2862971400,
+      "etag": "\"aaa57a08-65087c2a1eaab\"",
+      "sha256": "e18c1caddb2357dbf5839f0f7e1569c50d855fcb47e0871483d99c91a14e2bb7"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/ss_flow_img/genrecon.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "posed real-image DINO conditioning",
+    "blocks": 30,
+    "execution_dtype": "float32"
+  },
+  "ss_decoder_sha256": {
+    ".json": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5",
+    ".safetensors": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+  },
+  "active_voxels": 4490,
+  "shape_checkpoint": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/shape_slat.pt",
+      "bytes": 5410532174,
+      "etag": "\"1427e2b4e-6503179da85ac\"",
+      "sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/slat_flow_img2shape/genrecon_512.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "posed real-image DINO conditioning",
+    "blocks": 30,
+    "execution_dtype": "float32"
+  },
+  "tex_checkpoint": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/texture_slat.pt",
+      "bytes": 5410728782,
+      "etag": "\"142812b4e-65087b3c07d33\"",
+      "sha256": "28f99217a4fbcd04f36a5f576905975ae8b874ad63548d6ab8afdb96cf03ed47"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/slat_flow_imgshape2tex/genrecon_512.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "posed real-image DINO conditioning",
+    "blocks": 30,
+    "execution_dtype": "float32"
+  },
+  "input_sha256": "ec164c1e73ee3f9117068a45e2e75100f26345b25aba5f954ca6db91d3d69d41",
+  "denormalization_applied": true,
+  "source_dataset": {
+    "repo": "nerfstudioteam/datasets",
+    "revision": "461701c17e83c3f4d2481db32315aa7df703d2f8",
+    "source_url": "https://huggingface.co/datasets/nerfstudioteam/datasets/tree/main/poster",
+    "transforms_original_sha256": "444b54598e48567c8bf24d339dfff96ff63dfb0b29688de4091603b15fe92918",
+    "frame_selection": "filter original transforms to frames published in images_2, then eight evenly spaced sorted entries",
+    "frames_available": 100,
+    "selected": [
+      "poster/images_2/frame_00001.png",
+      "poster/images_2/frame_00029.png",
+      "poster/images_2/frame_00067.png",
+      "poster/images_2/frame_00101.png",
+      "poster/images_2/frame_00117.png",
+      "poster/images_2/frame_00165.png",
+      "poster/images_2/frame_00199.png",
+      "poster/images_2/frame_00217.png"
+    ]
+  },
+  "environment": {
+    "python": "3.10.19",
+    "cpu": "AMD EPYC 7352",
+    "torch_threads": 16,
+    "packages": {
+      "torch": "2.11.0+cpu",
+      "torchvision": "0.26.0+cpu",
+      "transformers": "5.12.1",
+      "numpy": "1.26.4",
+      "scipy": "1.15.3",
+      "safetensors": "0.8.0",
+      "easydict": "1.13",
+      "opencv": "4.8.1"
+    }
+  },
+  "conditioning_check": {
+    "feature_shape": [
+      1,
+      8,
+      1029,
+      1024
+    ],
+    "finite": true,
+    "occupancy_grid_points": 4096,
+    "visible_points_per_view": [
+      495,
+      446,
+      464,
+      439,
+      479,
+      591,
+      541,
+      546
+    ],
+    "points_visible_in_any_view": 2243
+  },
+  "occupancy_check": {
+    "active_voxels": 4490,
+    "coordinate_min": [
+      0,
+      2,
+      0,
+      0
+    ],
+    "coordinate_max": [
+      0,
+      31,
+      31,
+      31
+    ],
+    "unique": true,
+    "latent_shape": [
+      1,
+      8,
+      16,
+      16,
+      16
+    ],
+    "latent_finite": true,
+    "latent_min": -4.643059253692627,
+    "latent_max": 3.3956432342529297
+  },
+  "fixture_arrays": {
+    "coords": {
+      "shape": [
+        4490,
+        4
+      ],
+      "dtype": "int32",
+      "finite": true,
+      "min": 0.0,
+      "max": 31.0
+    },
+    "shape_feats": {
+      "shape": [
+        4490,
+        32
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "min": -28.501489639282227,
+      "max": 26.13190460205078
+    },
+    "texture_feats": {
+      "shape": [
+        4490,
+        32
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "min": -13.719416618347168,
+      "max": 15.4668550491333
+    }
+  },
+  "unique_coordinates": true
+}

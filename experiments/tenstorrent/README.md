@@ -1,9 +1,10 @@
 # GenRecon on Tenstorrent: conversion experiments
 
-These are module-level inference experiments using the existing TT-Forge 1.4.0
-TT-XLA frontend (`torch.compile(..., backend="tt", fullgraph=True)`). They are
-not an end-to-end GenRecon implementation. No NVIDIA device is used. SfM/COLMAP
-and training are outside this investigation.
+The flow experiments use the existing TT-Forge 1.4.0 TT-XLA frontend
+(`torch.compile(..., backend="tt", fullgraph=True)`). The new complete sparse
+decoder adapter uses TTNN and FlexGEMM directly in a separate runtime process.
+These do not yet form an end-to-end image-to-mesh GenRecon implementation. No
+NVIDIA device is used. SfM/COLMAP and training are outside this investigation.
 
 ## Current outcome
 
@@ -22,20 +23,25 @@ running on TT.**
 | Complete pretrained occupancy decoder | Pass in FP32, no reported fallback |
 | Camera projection / feature gathering | All-TT version has index/mask mismatches; CPU indices + TT gather/mask passes |
 | Euler/CFG and overlap arithmetic | Tensor-boundary probes pass; orchestration/index preparation remains on host |
-| Shape and texture sparse VAE decoders | Original paths stop at missing O-Voxel/FlexGEMM extensions, before compilation |
+| Shape and texture sparse VAE decoders | Complete TTNN/FlexGEMM integration; synthetic parity passes. Real-image fixture executes through 1.71M voxels, but a near-zero subdivision decision breaks exact topology parity; see [integration](SPARSE_DECODER_INTEGRATION.md) |
 | Mesh extraction, processing and export | Original CUDA-dependent path needs CPU/TT replacements |
 
 The full flows' roughly 7–9% relative error passes the declared smoke gate;
-it does **not** establish reconstruction quality. DINO's exact GenRecon variant,
-real image conditions, multi-step scene generation, variable sparse layouts,
-decoder threshold decisions and end-to-end integration remain unverified.
+it does **not** establish reconstruction quality. GenRecon's DINO variant on TT,
+real image conditions and multi-step scene generation **on TT**, visual scene
+quality, and end-to-end image-to-mesh integration remain unverified. The exact
+DINOv3-L/512 configuration and all three samplers have run on CPU to generate a
+real-image decoder fixture; both TT decoders have now been evaluated on it.
 The sections below retain both successful results and the failures that defined
 the working compilation boundaries.
 
 A [follow-up sparse VAE feasibility study](SPARSE_VAE_FEASIBILITY.md) inspects the
 decoder architecture and non-CUDA prior art, and tests individual pretrained
 sparse convolutions through gather/GEMM on Wormhole. These operator probes pass
-without reported fallback; complete sparse VAE inference remains unverified.
+without reported fallback. The subsequent [decoder integration](SPARSE_DECODER_INTEGRATION.md)
+implements the complete networks with resident features, an explicit accuracy
+mode, and numerical/topology validation. [Required real-scene data and a CPU
+fixture-generation path](../../docs/required-validation-data.md) are documented separately.
 
 ## Environment and method
 
@@ -116,10 +122,11 @@ supplies positive/negative velocities directly; it is not a learned denoiser or
 a full sampling trajectory. The overlap probe uses two 64-voxel chunks with a
 32-voxel overlap; boundary-sensitive averaging is not covered.
 
-The shape/texture decoder checkpoints have been downloaded, but their original
-CUDA-extension dependency paths prevent constructing/running them here. These
-are dependency failures, **not compiler rejections of decoder math**. Replacing
-those extensions and O-Voxel mesh processing remains separate porting work.
+At this initial stage, the original CUDA-extension dependency paths prevented
+constructing/running the shape/texture decoders. These were dependency failures,
+**not compiler rejections of decoder math**. The subsequent FlexGEMM integration
+replaces the neural decoder dependencies; O-Voxel mesh processing remains
+separate porting work.
 Specifically, sparse convolution dispatch calls
 `flex_gemm.ops.spconv.sparse_submanifold_conv3d`; O-Voxel builds a
 `torch.utils.cpp_extension.CUDAExtension`, and its exporter also imports CuMesh,
@@ -296,12 +303,14 @@ file lock. CPU reference work and downloads can overlap; TT workers cannot.
 ## Remaining investigation
 
 - Validate real projected conditions, occupancy threshold decisions, multi-step
-  sampling and scene quality. Current numerical gates use synthetic inputs.
+  sampling and scene quality on TT. Flow probes still use synthetic conditions;
+  decoder probes now include a CPU-generated real-image fixture.
 - Integrate explicit input/output dtypes, CPU-prepared coordinate/RoPE caches,
   variable token counts and device transfers into the scene pipeline. The exact
   DINOv3 ViT-L/512 configuration still needs verification.
-- Implement/replace the sparse convolution and mesh-processing extensions for
-  a complete pipeline; automated conversion has not supplied these backends.
+- Assess the decoder's real-input topology differences across more scenes and
+  tune latency; the accurate mode currently offers no CPU speedup on the poster
+  fixture. Replace the remaining mesh-processing extensions for a complete pipeline.
 
 Reference: [TT-XLA documentation](https://docs.tenstorrent.com/tt-xla/) and
 [performance/precision options](https://docs.tenstorrent.com/tt-xla/performance.html).

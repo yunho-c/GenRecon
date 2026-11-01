@@ -7,6 +7,7 @@ made. Raw decoder outputs and captured wide-convolution inputs stay outside git.
 
 import argparse
 import fcntl
+import gc
 import hashlib
 import json
 import math
@@ -112,15 +113,20 @@ def main():
     p.add_argument("--precision", choices=("bf16", "accurate"), default="accurate")
     p.add_argument("--threads", type=int, default=16)
     p.add_argument("--warm-repeats", type=int, default=3)
+    p.add_argument("--sequential-weights", action="store_true",
+                   help="release shape weights before texture for large scenes; requires --warm-repeats 0")
     p.add_argument("--output-dir", type=Path, required=True)
     args = p.parse_args()
     if args.points < 1 or args.warm_repeats < 0:
         p.error("points must be positive and warm-repeats nonnegative")
+    if args.sequential_weights and args.warm_repeats:
+        p.error("--sequential-weights requires --warm-repeats 0")
     args.output_dir.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(args.threads)
     config.set_conv_backend("reference")
     report = {"status": "running", "phase": "input", "seed": args.seed,
         "algorithm": args.algorithm, "row_chunk": args.row_chunk, "precision": args.precision,
+        "weight_residency": "sequential" if args.sequential_weights else "both_decoders",
         "watcher": os.environ.get("TT_METAL_WATCHER", "disabled"),
         "input_scope": "saved_latent" if args.latent else "synthetic_gaussian_latent",
         "input_path": str(args.latent) if args.latent else None,
@@ -225,6 +231,7 @@ def main():
             wide_actual = ttnn.to_torch(backend.conv("blocks.0.4.conv1", wide_module,
                 backend.upload(wide_input.feats), wide_input.coords, wide_input.shape[0],
                 tuple(wide_input.spatial_shape), 0)).float()
+            del backend
             wide_atol, wide_rtol = 0.02, 0.02
             wide_ok = bool(torch.isfinite(wide_actual).all() and
                 torch.all((wide_actual - wide_reference).abs() <= wide_atol + wide_rtol * wide_reference.abs()))
@@ -253,11 +260,18 @@ def main():
             report["shape_predicted_stats"] = dict(shape._tenstorrent_backend.stats)
             save_sparse(args.output_dir / "shape_tt_predicted.pt", shape_free)
             save_guides(args.output_dir / "predicted_tt_guides.pt", own_guides)
+            if args.sequential_weights:
+                shape.disable_tenstorrent()
+                cache.clear()
+                gc.collect()
+                ttnn.synchronize_device(device)
+                report["memory_after_shape_release"] = device_memory(device)
             phase("prepare_texture")
             tex.enable_tenstorrent(device, algorithm=args.algorithm, row_chunk=args.row_chunk,
                                    precision=args.precision, topology_cache=cache)
             report["texture_prepare_seconds"] = tex._tenstorrent_backend.prepare_seconds
-            report["memory_after_both_prepare"] = device_memory(device)
+            memory_key = "memory_after_texture_prepare" if args.sequential_weights else "memory_after_both_prepare"
+            report[memory_key] = device_memory(device)
             phase("tt_texture_fixed_guides")
             tex_fixed = tex(xtex, guide_subs=guides)
             report["texture_fixed"] = compare(tex_fixed, tex_ref)
@@ -286,6 +300,7 @@ def main():
         finally:
             shape.disable_tenstorrent()
             tex.disable_tenstorrent()
+            cache.clear()
             ttnn.close_device(device)
     return 0 if report["status"] == "passed" else 1
 

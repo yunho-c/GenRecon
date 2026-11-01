@@ -1,0 +1,23 @@
+{
+  "scope": "Posthoc geometry transforms on exact coordinate intersection; does not assess missing/extra voxels or mesh quality",
+  "raw_report_sha256": "3a80590cae5ca007dc33e38fb715603c5de0f75df4a11b3ef2800f34baf891d7",
+  "common_voxels": 1711798,
+  "missing_voxels": 2,
+  "extra_voxels": 3,
+  "vertex_offsets": {
+    "shape_match": true,
+    "finite": true,
+    "relative_l2": 0.0004935663775745762,
+    "pcc": 0.999999483033264,
+    "max_abs": 0.390583872795105
+  },
+  "vertex_offset_rows_with_abs_error_over_1e_3": 285,
+  "quad_weights": {
+    "shape_match": true,
+    "finite": true,
+    "relative_l2": 0.0006986525145155794,
+    "pcc": 0.999999707060274,
+    "max_abs": 0.9216575622558594
+  },
+  "strict_gate_recheck": false
+}

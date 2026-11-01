@@ -1,0 +1,13 @@
+{
+  "input_sha256": "ec164c1e73ee3f9117068a45e2e75100f26345b25aba5f954ca6db91d3d69d41",
+  "same_input": true,
+  "input_voxels": 4490,
+  "output_voxels": 1711800,
+  "coordinates_bitwise_equal": true,
+  "features_bitwise_equal": true,
+  "old_cpu_shape_seconds": 470.3865062969853,
+  "batched_cpu_shape_seconds": 73.06787278701086,
+  "old_flex_commit": "51e179d19bab1247563ed307a10013ea321d25bb",
+  "batched_flex_commit": "6492d51f585b1c0cd8a6a1113acff1b529379174",
+  "scope": "complete CPU shape forward including topology; one call each, 16 threads; old validation interrupted after shape to adopt the verified batched lookup"
+}

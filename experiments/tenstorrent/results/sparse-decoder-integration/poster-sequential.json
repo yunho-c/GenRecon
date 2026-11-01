@@ -1,0 +1,281 @@
+{
+  "status": "numerical_failure",
+  "phase": "complete",
+  "precision": "accurate",
+  "algorithm": "explicit_gemm",
+  "row_chunk": 1024,
+  "input_voxels": 4490,
+  "input_scope": "saved_real_image_latent",
+  "original_input_sha256": "ec164c1e73ee3f9117068a45e2e75100f26345b25aba5f954ca6db91d3d69d41",
+  "reference_dir": "/home/user/tt-scratchpad/genrecon/sparse-decoder-poster-bounded",
+  "reference_manifest_sha256": "176bc05823ce4213956da22e37d9c918a537fb520677437aa46e71fb9b52e5f9",
+  "reference_files_sha256": {
+    "decoder_input.npz": "593adfea32242c0e7f664dfe08a7d6c6528ec06291101763157c912b0f00639e",
+    "shape_reference.pt": "d3a4c458a05d1e4efa6d82962b7a2132959db04650c26fa774d300bd9b20fb5d",
+    "texture_reference.pt": "432b5a3cdd52e90ee10f26502d4d24274aec3f4352806efa0c31ca932736af29",
+    "reference_guides.pt": "401522fa0f8bfbb8cb91ea60748da198e6b866da66e4a73e12c3fda4c893ebdf"
+  },
+  "checkpoint_sha256": {
+    "shape_dec_next_dc_f16c32_fp16.json": "5f1b856dffce79466fb18f5f0eefc08f08c673b24b3c05b20359c0b6d318a209",
+    "shape_dec_next_dc_f16c32_fp16.safetensors": "e3b718d3e43e4f8780e9a24ac6fff231811a67e3b058e336e10fe654c911d581",
+    "tex_dec_next_dc_f16c32_fp16.json": "22074e4ab5b28e2b72d33a3fe61bf416134b89e12d0fc5c729f37da75da0c4d1",
+    "tex_dec_next_dc_f16c32_fp16.safetensors": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c"
+  },
+  "gate": {
+    "relative_l2": 0.0001,
+    "pcc": 0.999999,
+    "coordinates": "exact",
+    "subdivision_signs": "exact",
+    "geometry_edge_signs": "exact",
+    "scope": "decoder numerical parity; real-scene reconstruction quality is separate"
+  },
+  "watcher": "30",
+  "scope": "saved CPU references; one decoder's weights resident at a time; all voxel rows retained",
+  "source": {
+    "commit": "f463051ffbf3a41ce9891de59bc4fb54ceebbb13",
+    "dirty": true,
+    "sha256": {
+      "experiments/tenstorrent/sparse_decoder_scene_probe.py": "420a980ba61530f781be8942e88f0dcd9b67abcacce63a22d6ad8404635b45c8",
+      "genrecon/backends/tenstorrent/__init__.py": "1e299786b91f8491a4e0b21f2c8b4074aa9a60c63928d30d6450b131f0ae6465",
+      "genrecon/backends/tenstorrent/precision.py": "fd73cf6890ad9fdf4399253ed3d8c3694407823befb6d3466bd5bede9303dd75",
+      "genrecon/backends/tenstorrent/sparse_decoder.py": "acd89654fb7fa194db0b18540f953178b787fb9960077ff37092925cf2ebc725"
+    }
+  },
+  "flex_gemm": {
+    "commit": "6492d51f585b1c0cd8a6a1113acff1b529379174",
+    "dirty": false,
+    "sha256": {
+      "flex_gemm/tenstorrent/reference.py": "a0dc3709115acfb282ea9d472b63ed470e62421e478ab67d20b2387b8ea0bdd3"
+    }
+  },
+  "prior_fixed_shape": {
+    "shape_fixed": {
+      "coordinates_equal": true,
+      "actual_voxels": 1711800,
+      "reference_voxels": 1711800,
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.1487012456033988e-06,
+        "pcc": 0.9999999999992679,
+        "max_abs": 0.00054168701171875
+      }
+    },
+    "subdivisions_fixed": [
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 5.954842679505219e-07,
+          "pcc": 0.9999999999998125,
+          "max_abs": 0.000396728515625
+        },
+        "sign_mismatches": 0,
+        "decisions": 35920
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 6.550622761616988e-07,
+          "pcc": 0.9999999999997833,
+          "max_abs": 0.00037384033203125
+        },
+        "sign_mismatches": 0,
+        "decisions": 162008
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 9.054248266695413e-07,
+          "pcc": 0.9999999999995858,
+          "max_abs": 0.0001983642578125
+        },
+        "sign_mismatches": 1,
+        "decisions": 708192
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 7.975786509951537e-07,
+          "pcc": 0.9999999999996911,
+          "max_abs": 0.000179290771484375
+        },
+        "sign_mismatches": 0,
+        "decisions": 3109272
+      }
+    ],
+    "geometry_fixed": {
+      "vertices": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.0001459029499352e-06,
+        "pcc": 0.9999999999978887,
+        "max_abs": 1.239776611328125e-05
+      },
+      "edge_sign_mismatches": 0,
+      "edge_decisions": 5135400,
+      "quad_weights": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 3.3192899871010666e-06,
+        "pcc": 0.9999999999933938,
+        "max_abs": 0.000164031982421875
+      }
+    },
+    "captured_wide": {
+      "input_channels": 1024,
+      "output_channels": 4096,
+      "input_origin": "saved_latent",
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.3922503898048543e-07,
+        "pcc": 0.9999999999999576,
+        "max_abs": 0.000244140625
+      },
+      "atol": 0.02,
+      "rtol": 0.02,
+      "passed": true
+    }
+  },
+  "shape_predicted": {
+    "coordinates_equal": false,
+    "actual_voxels": 1711801,
+    "reference_voxels": 1711800,
+    "features": null,
+    "common_voxels": 1711798,
+    "missing_voxels": 2,
+    "extra_voxels": 3,
+    "common_features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.0020206256037654242,
+      "pcc": 0.9999977301933509,
+      "max_abs": 26.260061264038086
+    },
+    "common_rows_with_abs_error_over_1e_3": 765,
+    "common_edge_sign_mismatches": 11,
+    "common_edge_decisions": 5135394
+  },
+  "shape_stats": {
+    "topology_seconds": 6.32773804810131,
+    "stage_voxels": [
+      4490,
+      20251,
+      88524,
+      388658,
+      1711801
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 197.73247658502078
+  },
+  "subdivisions_predicted": [
+    {
+      "common_parents": 4490,
+      "extra_parents": 0,
+      "missing_parents": 0,
+      "common_sign_mismatches": 0
+    },
+    {
+      "common_parents": 20251,
+      "extra_parents": 0,
+      "missing_parents": 0,
+      "common_sign_mismatches": 0
+    },
+    {
+      "common_parents": 88524,
+      "extra_parents": 0,
+      "missing_parents": 0,
+      "common_sign_mismatches": 1
+    },
+    {
+      "common_parents": 388658,
+      "extra_parents": 0,
+      "missing_parents": 1,
+      "common_sign_mismatches": 4
+    }
+  ],
+  "memory_after_shape_release": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 18432000
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "texture_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 1711800,
+    "reference_voxels": 1711800,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 4.4004649617313133e-07,
+      "pcc": 0.9999999999999073,
+      "max_abs": 1.2993812561035156e-05
+    },
+    "common_voxels": 1711800,
+    "missing_voxels": 0,
+    "extra_voxels": 0,
+    "common_features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 4.4004649617313133e-07,
+      "pcc": 0.9999999999999073,
+      "max_abs": 1.2993812561035156e-05
+    },
+    "common_rows_with_abs_error_over_1e_3": 0
+  },
+  "texture_fixed_stats": {
+    "topology_seconds": 6.2228345811599866,
+    "stage_voxels": [
+      4490,
+      20251,
+      88524,
+      388659,
+      1711800
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 0,
+    "total_seconds": 189.68217760999687
+  },
+  "texture_predicted": {
+    "coordinates_equal": false,
+    "actual_voxels": 1711801,
+    "reference_voxels": 1711800,
+    "features": null,
+    "common_voxels": 1711798,
+    "missing_voxels": 2,
+    "extra_voxels": 3,
+    "common_features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 3.784736640242552e-06,
+      "pcc": 0.9999999999928523,
+      "max_abs": 0.0014943480491638184
+    },
+    "common_rows_with_abs_error_over_1e_3": 11
+  },
+  "texture_predicted_stats": {
+    "topology_seconds": 6.0781718928483315,
+    "stage_voxels": [
+      4490,
+      20251,
+      88524,
+      388658,
+      1711801
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 0,
+    "total_seconds": 189.755016658979
+  },
+  "chain_coordinates_equal": true
+}

@@ -57,6 +57,23 @@ def scene_compare(actual, expected, geometry=False):
     return result
 
 
+def scene_passed(report):
+    """Enforce the declared continuous, subdivision and edge gates together."""
+    fixed = report["prior_fixed_shape"]
+    return bool(
+        all(passed(report[k], report["gate"]) for k in
+            ("shape_predicted", "texture_fixed", "texture_predicted"))
+        and passed(fixed["shape_fixed"], report["gate"])
+        and report["chain_coordinates_equal"]
+        and fixed["captured_wide"]["passed"]
+        and len(fixed["subdivisions_fixed"]) == len(report["subdivisions_predicted"]) == 4
+        and all(s["sign_mismatches"] == 0 for s in fixed["subdivisions_fixed"])
+        and fixed["geometry_fixed"]["edge_sign_mismatches"] == 0
+        and report["shape_predicted"]["common_edge_sign_mismatches"] == 0
+        and all(s["common_sign_mismatches"] == s["missing_parents"] == s["extra_parents"] == 0
+                for s in report["subdivisions_predicted"]))
+
+
 def read_sparse(path):
     data = torch.load(path, map_location="cpu", weights_only=True)
     return SparseTensor(data["feats"], data["coords"])
@@ -163,9 +180,7 @@ def main():
             report["texture_predicted_stats"] = dict(tex._tenstorrent_backend.stats)
             report["chain_coordinates_equal"] = torch.equal(actual.coords, shape_actual.coords)
             save_sparse(args.output_dir / "texture_tt_predicted.pt", actual)
-            exact = all(passed(report[k], report["gate"]) for k in
-                        ("shape_predicted", "texture_fixed", "texture_predicted"))
-            report["status"] = "passed" if exact and report["chain_coordinates_equal"] else "numerical_failure"
+            report["status"] = "passed" if scene_passed(report) else "numerical_failure"
             phase("complete")
         except Exception as exc:
             report.update(status="runtime_failure", error=str(exc).split("backtrace:")[0],
