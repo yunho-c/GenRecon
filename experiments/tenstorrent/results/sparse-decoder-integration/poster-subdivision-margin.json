@@ -1,0 +1,26 @@
+{
+  "subdivision_decisions": 4015392,
+  "mismatches": [
+    {
+      "stage": 2,
+      "parent": [
+        0,
+        50,
+        124,
+        79
+      ],
+      "child_slot": 3,
+      "child": [
+        0,
+        101,
+        249,
+        158
+      ],
+      "tt_logit": -2.8565526008605957e-05,
+      "cpu_logit": 5.0067901611328125e-06,
+      "absolute_difference": 3.357231616973877e-05
+    }
+  ],
+  "gate": "exact signs; failed",
+  "scope": "TT shape execution under fixed CPU guides"
+}

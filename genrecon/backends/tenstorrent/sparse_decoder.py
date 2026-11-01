@@ -26,11 +26,19 @@ class TopologyCache:
     retains only the last layout at each stage, bounding cache growth over scenes.
     """
 
-    def __init__(self):
+    def __init__(self, max_cached_rows=262144):
+        if max_cached_rows < 0:
+            raise ValueError("max_cached_rows must be nonnegative")
         self.entries = {}
+        self.max_cached_rows = max_cached_rows
         self.device = None
         self.builds = 0
         self.hits = 0
+
+    def clear(self):
+        """Release device metadata, retaining cumulative hit/build counters."""
+        self.entries.clear()
+        self.device = None
 
     def get(self, coords, batch, spatial, kernel, dilation, stage, device, masked):
         from flex_gemm.tenstorrent import build_subm_neighbor_map, prepare_sparse_topology
@@ -45,7 +53,12 @@ class TopologyCache:
             return entry[2]
         mapping = build_subm_neighbor_map(coords, (batch, *spatial), kernel, dilation)
         top = prepare_sparse_topology(mapping, len(coords), device=device, masked=masked)
-        self.entries[key] = (signature, coords.clone(), top)
+        if len(coords) <= self.max_cached_rows:
+            self.entries[key] = (signature, coords.clone(), top)
+        else:
+            # Large final-stage maps otherwise retain hundreds of MB between
+            # forwards and fragment DRAM needed by full-width C2S activations.
+            self.entries.pop(key, None)
         self.builds += 1
         return top
 

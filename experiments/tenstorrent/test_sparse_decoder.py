@@ -116,6 +116,19 @@ def test_empty_children_and_parameter_invalidation(device):
         model.forward_features(x)
 
 
+def test_topology_cache_row_budget_and_clear(device):
+    cache = TopologyCache(max_cached_rows=1)
+    coords = torch.tensor([[0, 0, 0, 0], [0, 1, 0, 0]], dtype=torch.int32)
+    for _ in range(2):
+        cache.get(coords, 1, (2, 1, 1), (3, 3, 3), (1, 1, 1), 0, device, False)
+        assert not cache.entries
+    assert cache.builds == 2 and cache.hits == 0
+    cache.get(coords[:1], 1, (2, 1, 1), (3, 3, 3), (1, 1, 1), 0, device, False)
+    assert len(cache.entries) == 1
+    cache.clear()
+    assert not cache.entries and cache.device is None
+
+
 def test_accurate_linear_preserves_input_residual(device):
     import ttnn
     model, _ = problem()

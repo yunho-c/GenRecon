@@ -265,6 +265,7 @@ def main():
             save_sparse(args.output_dir / "texture_tt_fixed.pt", tex_fixed)
             phase("tt_shape_texture_chain")
             tex_free = tex(xtex, guide_subs=own_guides)
+            save_sparse(args.output_dir / "texture_tt_predicted.pt", tex_free)
             report["texture_predicted"] = compare(tex_free, tex_ref)
             report["chain_coordinates_equal"] = torch.equal(tex_free.coords, shape_free.coords)
             report["warm_seconds"] = {"shape": [], "texture": [],
