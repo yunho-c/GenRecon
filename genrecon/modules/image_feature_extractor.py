@@ -38,7 +38,11 @@ class DinoV3FeatureExtractor:
         hidden_states = self.model.embeddings(image, bool_masked_pos=None)
         position_embeddings = self.model.rope_embeddings(image)
 
-        for i, layer_module in enumerate(self.model.layer):
+        # Transformers 5 places the encoder layers under ``model``; older
+        # versions expose them directly. Preserve GenRecon's non-affine output
+        # normalization instead of substituting the HF model's learned norm.
+        encoder = getattr(self.model, "model", self.model)
+        for layer_module in encoder.layer:
             hidden_states = layer_module(
                 hidden_states,
                 position_embeddings=position_embeddings,
@@ -64,9 +68,9 @@ class DinoV3FeatureExtractor:
             image = [i.resize((self.image_size, self.image_size), Image.LANCZOS) for i in image]
             image = [np.array(i.convert("RGB")).astype(np.float32) / 255 for i in image]
             image = [torch.from_numpy(i).permute(2, 0, 1).float() for i in image]
-            image = torch.stack(image).cuda()
+            image = torch.stack(image).to(self.model.device)
             B, C, H, W = image.shape
-            image = self.transform(image).cuda()
+            image = self.transform(image)
             features = self.extract_features(image)  # [B*N, T, D]
             return features
         else:
@@ -75,7 +79,7 @@ class DinoV3FeatureExtractor:
         B, N, C, H, W = image.shape
         image = image.reshape(B * N, C, H, W)
 
-        image = self.transform(image).cuda()
+        image = self.transform(image).to(self.model.device)
         features = self.extract_features(image)  # [B*N, T, D]
 
         features = features.reshape(B, N, features.shape[1], features.shape[2])

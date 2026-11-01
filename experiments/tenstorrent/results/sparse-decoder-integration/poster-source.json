@@ -1,0 +1,19 @@
+{
+  "repo": "nerfstudioteam/datasets",
+  "revision": "461701c17e83c3f4d2481db32315aa7df703d2f8",
+  "source_url": "https://huggingface.co/datasets/nerfstudioteam/datasets/tree/main/poster",
+  "transforms_original_sha256": "444b54598e48567c8bf24d339dfff96ff63dfb0b29688de4091603b15fe92918",
+  "frame_selection": "filter original transforms to frames published in images_2, then eight evenly spaced sorted entries",
+  "frames_available": 100,
+  "selected": [
+    "poster/images_2/frame_00001.png",
+    "poster/images_2/frame_00029.png",
+    "poster/images_2/frame_00067.png",
+    "poster/images_2/frame_00101.png",
+    "poster/images_2/frame_00117.png",
+    "poster/images_2/frame_00165.png",
+    "poster/images_2/frame_00199.png",
+    "poster/images_2/frame_00217.png"
+  ],
+  "local_fixture_directory": "/home/user/tt-scratchpad/genrecon/poster-fixture/cpu-available"
+}
