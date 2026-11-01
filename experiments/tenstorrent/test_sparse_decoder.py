@@ -143,6 +143,19 @@ def test_accurate_feature_rearrangement_is_lossless(device):
     torch.testing.assert_close(ttnn.to_torch(actual), x.reshape(-1, 32)[indices], atol=0, rtol=0)
 
 
+@pytest.mark.parametrize("rows,channels,bf16", [(388659, 32, False), (1711800, 16, False), (388659, 32, True)])
+def test_large_channel_repetition_is_lossless(device, rows, channels, bf16):
+    import ttnn
+    from genrecon.backends.tenstorrent.precision import repeat_channels
+    x = torch.randn(rows, channels, generator=torch.Generator().manual_seed(401))
+    if bf16:
+        x = x.bfloat16()
+    xd = ttnn.from_torch(x, device=device, dtype=ttnn.bfloat16 if bf16 else ttnn.float32,
+                         layout=ttnn.TILE_LAYOUT)
+    actual = ttnn.to_torch(repeat_channels(xd, 4))
+    torch.testing.assert_close(actual, x.repeat_interleave(4, dim=1), atol=0, rtol=0)
+
+
 def test_accurate_linear_with_mixed_magnitudes(device):
     import ttnn
     from flex_gemm.tenstorrent.ops import _compute_config

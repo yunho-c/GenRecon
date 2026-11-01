@@ -259,11 +259,14 @@ class TenstorrentSparseDecoder:
                         h = self.conv(name + ".conv1", block.conv1, h, coords, batch, spatial, stage)
                         h = self.c2s(h, gather, block.out_channels * 8)
                         skip = self.c2s(residual, gather, block.channels)
-                        skip = ttnn.repeat_interleave(skip, block.out_channels // (block.channels // 8), dim=1)
+                        del residual
+                        from .precision import repeat_channels
+                        skip = repeat_channels(skip, block.out_channels // (block.channels // 8))
                         h = ttnn.silu(self.norm(name + ".norm2", h, block.norm2.eps))
                         h = self.conv(name + ".conv2", block.conv2, h, next_coords, batch,
                                       tuple(s * 2 for s in spatial), stage + 1)
                         h = ttnn.add(h, skip)
+                        del skip
                     else:
                         h = None
                     coords, spatial = next_coords, tuple(s * 2 for s in spatial)

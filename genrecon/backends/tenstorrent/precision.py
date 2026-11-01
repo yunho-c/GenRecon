@@ -1,6 +1,29 @@
 """FP32 device arithmetic for threshold-sensitive decoder paths."""
 
 
+def repeat_channels(x, repeats, row_chunk=16384):
+    """Repeat adjacent channels without a transpose page spanning all voxels.
+
+    The SDK implements last-axis repeat_interleave via transpose/concat. Its
+    row-major page grows with N and exceeds L1 for large scenes. Bound that
+    page while preserving TILE layout; the SDK's row-major transpose loses
+    low FP32 mantissa bits.
+    """
+    import ttnn
+    if repeats == 1:
+        return x
+    rows, channels = x.shape
+    outputs = []
+    for start in range(0, rows, row_chunk):
+        part = ttnn.slice(x, [start, 0], [min(start + row_chunk, rows), channels])
+        part = ttnn.repeat_interleave(part, repeats, dim=1)
+        outputs.append(part)
+    while len(outputs) > 1:
+        outputs = [ttnn.concat(outputs[i:i + 4], dim=0) if len(outputs[i:i + 4]) > 1
+                   else outputs[i] for i in range(0, len(outputs), 4)]
+    return outputs[0]
+
+
 def split_weight_digits(weight):
     """Four signed base-64 digits, with one power-of-two scale per output.
 
@@ -54,8 +77,10 @@ def digit_product(features, weights, feature_scale, weight_scale, product):
             if 0 <= j < 4:
                 value = product(features[i], weights[j])
                 subtotal = value if subtotal is None else ttnn.add(subtotal, value)
+                del value
         subtotal = ttnn.multiply(subtotal, 2. ** (-6 * order))
         result = subtotal if result is None else ttnn.add(result, subtotal)
+        del subtotal
     rows, channels = result.shape
     # Explicit expansion selects the accurate SFPU binary product path.
     scale = ttnn.multiply(ttnn.repeat(feature_scale, [1, channels]), weight_scale)
@@ -99,9 +124,12 @@ def layer_norm_fp32(x, weight=None, bias=None, *, epsilon=1e-6):
                        layout=ttnn.TILE_LAYOUT, device=x.device()))
     mean = ttnn.multiply(_sum_channels(x), scale)
     centered = ttnn.subtract(x, ttnn.repeat(mean, [1, channels]))
+    del mean
     variance = ttnn.multiply(_sum_channels(ttnn.multiply(centered, centered)), scale)
     inverse_std = ttnn.rsqrt(ttnn.add(variance, epsilon), fast_and_approximate_mode=False)
+    del variance
     result = ttnn.multiply(centered, ttnn.repeat(inverse_std, [1, channels]))
+    del centered, inverse_std
     if weight is not None:
         result = ttnn.multiply(result, ttnn.repeat(weight, [rows, 1]))
     if bias is not None:

@@ -96,6 +96,11 @@ def save_sparse(path, value):
     torch.save({"coords": value.coords, "feats": value.feats}, path)
 
 
+def save_guides(path, guides):
+    torch.save([{"coords": g.coords, "feats": g.feats, "shape": tuple(g.shape),
+                 "spatial_shape": tuple(g.spatial_shape)} for g in guides], path)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--checkpoint-dir", type=Path, default=Path.home() / "models/genrecon/trellis2/ckpts")
@@ -184,6 +189,7 @@ def main():
     report["cpu_shape_seconds"] = time.perf_counter() - start
     report["reference_stage_voxels"] = [len(g.coords) for g in guides] + [len(shape_ref.coords)]
     save_sparse(args.output_dir / "shape_reference.pt", shape_ref)
+    save_guides(args.output_dir / "reference_guides.pt", guides)
     phase("load_texture")
     tex = load_model(args.checkpoint_dir / "tex_dec_next_dc_f16c32_fp16")
     report["texture_parameters"] = sum(p.numel() for p in tex.parameters())
@@ -240,11 +246,13 @@ def main():
                     "edge_decisions": a[:, 3:6].numel(),
                     "quad_weights": metrics(torch.nn.functional.softplus(a[:, 6:]), torch.nn.functional.softplus(b[:, 6:]))}
             save_sparse(args.output_dir / "shape_tt_fixed.pt", shape_fixed)
+            save_guides(args.output_dir / "fixed_tt_guides.pt", predicted)
             phase("tt_shape_predicted_guides")
             shape_free, own_guides = shape.forward_features(xshape, return_subs=True)
             report["shape_predicted"] = compare(shape_free, shape_ref)
             report["shape_predicted_stats"] = dict(shape._tenstorrent_backend.stats)
             save_sparse(args.output_dir / "shape_tt_predicted.pt", shape_free)
+            save_guides(args.output_dir / "predicted_tt_guides.pt", own_guides)
             phase("prepare_texture")
             tex.enable_tenstorrent(device, algorithm=args.algorithm, row_chunk=args.row_chunk,
                                    precision=args.precision, topology_cache=cache)
