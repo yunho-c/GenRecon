@@ -209,3 +209,6 @@ __marimo__/
 # Results
 *.jpg
 /visualization
+
+# TTNN runtime diagnostics (curated probe evidence lives under experiments).
+/generated/

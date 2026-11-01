@@ -23,6 +23,7 @@ def __from_env():
         "spconv",
         "torchsparse",
         "flex_gemm",
+        "reference",
     ]:
         CONV = env_sparse_conv_backend
     if env_sparse_debug is not None:
@@ -36,7 +37,7 @@ def __from_env():
 __from_env()
 
 
-def set_conv_backend(backend: Literal["none", "spconv", "torchsparse", "flex_gemm"]):
+def set_conv_backend(backend: Literal["none", "spconv", "torchsparse", "flex_gemm", "reference"]):
     global CONV
     CONV = backend
 

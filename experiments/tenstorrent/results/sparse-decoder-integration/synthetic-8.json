@@ -1,0 +1,293 @@
+{
+  "status": "passed",
+  "phase": "complete",
+  "seed": 123,
+  "algorithm": "explicit_gemm",
+  "row_chunk": 256,
+  "precision": "accurate",
+  "watcher": "120",
+  "input_scope": "synthetic_gaussian_latent",
+  "input_path": null,
+  "gate": {
+    "relative_l2": 0.1,
+    "pcc": 0.99,
+    "coordinates": "exact",
+    "subdivision_signs": "exact",
+    "geometry_edge_signs": "exact",
+    "scope": "existing GenRecon numerical smoke gate, not reconstruction quality"
+  },
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "python": "3.10.19 (main, Jan 14 2026, 19:36:24) [Clang 21.1.4 ]"
+  },
+  "source": {
+    "commit": "ff7c4505861ce6b07caa3f71ac63ef2c619f5b68",
+    "dirty": true,
+    "sha256": {
+      "experiments/tenstorrent/sparse_decoder_probe.py": "0bbeebf6e4b826f9978ec866796bd7f5263670c85dc34aa89b7c2a84ffbf9319",
+      "genrecon/backends/tenstorrent/__init__.py": "1e299786b91f8491a4e0b21f2c8b4074aa9a60c63928d30d6450b131f0ae6465",
+      "genrecon/backends/tenstorrent/precision.py": "bc04b0f7157cf279286539cff72e01fd2bbbe679e57a2806d7196a37ecb2e4df",
+      "genrecon/backends/tenstorrent/sparse_decoder.py": "d9a4bbc29b76d97829ab7370838964ddef58409af84f8501971f0da4f189e71a",
+      "genrecon/models/sc_vaes/sparse_unet_vae.py": "22d7f4f48ab9d58012d20aa0aad849d1ee97c0f06e961756987cde7cc5946f8c",
+      "genrecon/modules/sparse/conv/conv_reference.py": "d08086879d00f5da539c428d672b1399bc6340d28c5b9a676b0ba79767be3a2c"
+    }
+  },
+  "flex_gemm": {
+    "commit": "8a6539aa349daa7fb0e6f3c3bf6d593821f046ea",
+    "dirty": false,
+    "sha256": {
+      "flex_gemm/tenstorrent/__init__.py": "ac4a5710c385f8a430e6ce2414290c5d515af7b73774fe388de6849e2594443d",
+      "flex_gemm/tenstorrent/conv.py": "389903b43e5246a94bfba678070a0b031da45c749de5e5c0484c20ac65c7f6c5",
+      "flex_gemm/tenstorrent/implicit.py": "baa8af46a7a5fb67fdcb8af48a99561434c7eb813ee3f5d50f7020dde426647d",
+      "flex_gemm/tenstorrent/kernels/compute.cpp": "62a17641703267248042b612b7a073513f9e353c64d246e39cf892c99e17ff8b",
+      "flex_gemm/tenstorrent/kernels/reader.cpp": "7ab92ff6db461c5ab72683010373c8054c3a95251b55df5aac9a0a6fda68fb2b",
+      "flex_gemm/tenstorrent/kernels/writer.cpp": "cab77fc929644c13dfd737c04fab920ed5b685b6c10aef0b06588a0720bc5ee5",
+      "flex_gemm/tenstorrent/masking.py": "32c66f47bd2caef0ec94e34c23e0ae09562206a47267cc490db304cf7f0d10b7",
+      "flex_gemm/tenstorrent/ops.py": "e50109b5870445c353da6b76ce64e24048f61ce289bb75703ff661ec14241560",
+      "flex_gemm/tenstorrent/reference.py": "1950a9c0b7e660955a3d7e4189ec07b3d0aae6238996607eab10419fee134ef5",
+      "flex_gemm/tenstorrent/resident.py": "89da59b410dbaa421faa81b56b50beff9971392e7033d7de24dcd3e16bc1d484"
+    }
+  },
+  "tt_metal": {
+    "commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+    "dirty": false,
+    "sha256": {}
+  },
+  "checkpoint_sha256": {
+    "shape_dec_next_dc_f16c32_fp16.json": "5f1b856dffce79466fb18f5f0eefc08f08c673b24b3c05b20359c0b6d318a209",
+    "shape_dec_next_dc_f16c32_fp16.safetensors": "e3b718d3e43e4f8780e9a24ac6fff231811a67e3b058e336e10fe654c911d581",
+    "tex_dec_next_dc_f16c32_fp16.json": "22074e4ab5b28e2b72d33a3fe61bf416134b89e12d0fc5c729f37da75da0c4d1",
+    "tex_dec_next_dc_f16c32_fp16.safetensors": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c"
+  },
+  "input_voxels": 8,
+  "generated_input_sha256": "15161c94266afe95c6bb73f2abbfb45fce8672c3b5d155b98e772c4d74c187e6",
+  "shape_parameters": 474231463,
+  "cpu_shape_seconds": 0.5955263319774531,
+  "reference_stage_voxels": [
+    8,
+    64,
+    167,
+    282,
+    732
+  ],
+  "texture_parameters": 474216006,
+  "cpu_texture_seconds": 0.5817171609960496,
+  "device": {
+    "id": 1,
+    "architecture": "Arch.WORMHOLE_B0",
+    "grid": [
+      8,
+      8
+    ]
+  },
+  "shape_prepare_seconds": 9.433882236015052,
+  "memory_after_shape_prepare": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 3835232256
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "captured_wide": {
+    "input_channels": 1024,
+    "output_channels": 4096,
+    "input_origin": "synthetic_gaussian_latent",
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 3.6502206976194887e-07,
+      "pcc": 0.9999999999999344,
+      "max_abs": 3.814697265625e-05
+    },
+    "atol": 0.02,
+    "rtol": 0.02,
+    "passed": true
+  },
+  "shape_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 732,
+    "reference_voxels": 732,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 7.884630895028534e-07,
+      "pcc": 0.9999999999995994,
+      "max_abs": 0.000125885009765625
+    }
+  },
+  "shape_fixed_stats": {
+    "topology_seconds": 0.3274466239963658,
+    "stage_voxels": [
+      8,
+      64,
+      167,
+      282,
+      732
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 20.427381513
+  },
+  "subdivisions_fixed": [
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 7.642723370632414e-07,
+        "pcc": 0.999999999995963,
+        "max_abs": 0.00011444091796875
+      },
+      "sign_mismatches": 0,
+      "decisions": 64
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.3564692285100708e-06,
+        "pcc": 0.9999999999988941,
+        "max_abs": 0.00017690658569335938
+      },
+      "sign_mismatches": 0,
+      "decisions": 512
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.6804603953235887e-06,
+        "pcc": 0.9999999999975663,
+        "max_abs": 5.602836608886719e-05
+      },
+      "sign_mismatches": 0,
+      "decisions": 1336
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.7388320368882436e-06,
+        "pcc": 0.999999999998135,
+        "max_abs": 4.011392593383789e-05
+      },
+      "sign_mismatches": 0,
+      "decisions": 2256
+    }
+  ],
+  "geometry_fixed": {
+    "vertices": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 7.894132421524112e-07,
+      "pcc": 0.9999999999984642,
+      "max_abs": 3.2186508178710938e-06
+    },
+    "edge_sign_mismatches": 0,
+    "edge_decisions": 2196,
+    "quad_weights": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 2.2067191720706646e-06,
+      "pcc": 0.9999999999930003,
+      "max_abs": 2.9087066650390625e-05
+    }
+  },
+  "shape_predicted": {
+    "coordinates_equal": true,
+    "actual_voxels": 732,
+    "reference_voxels": 732,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 7.884630895028534e-07,
+      "pcc": 0.9999999999995994,
+      "max_abs": 0.000125885009765625
+    }
+  },
+  "shape_predicted_stats": {
+    "topology_seconds": 0.0006603369838558137,
+    "stage_voxels": [
+      8,
+      64,
+      167,
+      282,
+      732
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 1.9872468559769914
+  },
+  "texture_prepare_seconds": 8.558439407031983,
+  "memory_after_both_prepare": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 7680928512
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "texture_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 732,
+    "reference_voxels": 732,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 4.2458521470287786e-07,
+      "pcc": 0.9999999999999049,
+      "max_abs": 1.1324882507324219e-06
+    }
+  },
+  "texture_fixed_stats": {
+    "topology_seconds": 0.0006759731913916767,
+    "stage_voxels": [
+      8,
+      64,
+      167,
+      282,
+      732
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 0,
+    "total_seconds": 1.9540005319868214
+  },
+  "texture_predicted": {
+    "coordinates_equal": true,
+    "actual_voxels": 732,
+    "reference_voxels": 732,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 4.2458521470287786e-07,
+      "pcc": 0.9999999999999049,
+      "max_abs": 1.1324882507324219e-06
+    }
+  },
+  "chain_coordinates_equal": true,
+  "warm_seconds": {
+    "shape": [
+      1.988063435012009,
+      1.9879740240285173,
+      1.9857175649958663
+    ],
+    "texture": [
+      1.955636257014703,
+      1.9542490600142628,
+      1.9543806600267999
+    ],
+    "scope": "complete decoder with CPU boundary transfers, subdivision selection and map lookup; resident weights; after initial execution"
+  },
+  "topology_cache": {
+    "builds": 5,
+    "hits": 396
+  }
+}

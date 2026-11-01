@@ -1,0 +1,180 @@
+{
+  "status": "numerical_failure",
+  "phase": "complete",
+  "seed": 123,
+  "algorithm": "explicit_gemm",
+  "row_chunk": 256,
+  "watcher": "disabled",
+  "input_scope": "synthetic_gaussian_latent",
+  "input_path": null,
+  "gate": {
+    "relative_l2": 0.1,
+    "pcc": 0.99,
+    "coordinates": "exact",
+    "scope": "existing GenRecon numerical smoke gate, not reconstruction quality"
+  },
+  "source_commit": "ff7c4505861ce6b07caa3f71ac63ef2c619f5b68",
+  "source_sha256": {
+    "experiments/tenstorrent/sparse_decoder_probe.py": "56158c2d03be42d1f3d3a0955476d98a36e7cad9bfadaef1439cfd54630c9a49",
+    "genrecon/models/sc_vaes/sparse_unet_vae.py": "22d7f4f48ab9d58012d20aa0aad849d1ee97c0f06e961756987cde7cc5946f8c",
+    "genrecon/backends/tenstorrent/sparse_decoder.py": "077af506984532ef5af4bc55051d34dcfb99047be7b2b34846b3b23b109a7d7f"
+  },
+  "input_voxels": 8,
+  "shape_parameters": 474231463,
+  "cpu_shape_seconds": 0.5743073420017026,
+  "reference_stage_voxels": [
+    8,
+    64,
+    167,
+    282,
+    732
+  ],
+  "texture_parameters": 474216006,
+  "cpu_texture_seconds": 0.552416511985939,
+  "shape_prepare_seconds": 1.4079887970001437,
+  "shape_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 732,
+    "reference_voxels": 732,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.007272885457933391,
+      "pcc": 0.9999735410829603,
+      "max_abs": 0.7838592529296875
+    }
+  },
+  "shape_fixed_stats": {
+    "topology_seconds": 0.3806182800908573,
+    "stage_voxels": [
+      8,
+      64,
+      167,
+      282,
+      732
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 93.16224621597212
+  },
+  "subdivisions_fixed": [
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.003270908803883482,
+        "pcc": 0.9999460860742243,
+        "max_abs": 0.6967811584472656
+      },
+      "sign_mismatches": 0,
+      "decisions": 64
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.015326779626254824,
+        "pcc": 0.9999277019188545,
+        "max_abs": 1.8243865966796875
+      },
+      "sign_mismatches": 2,
+      "decisions": 512
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.01628947194150582,
+        "pcc": 0.9998077921296229,
+        "max_abs": 0.7039813995361328
+      },
+      "sign_mismatches": 9,
+      "decisions": 1336
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.015443718769513183,
+        "pcc": 0.9998644025048116,
+        "max_abs": 0.37036705017089844
+      },
+      "sign_mismatches": 7,
+      "decisions": 2256
+    }
+  ],
+  "geometry_fixed": {
+    "vertices": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.00900159178238888,
+      "pcc": 0.9998323693997885,
+      "max_abs": 0.023904621601104736
+    },
+    "edge_sign_mismatches": 1,
+    "edge_decisions": 2196,
+    "quad_weights": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.022105317137603508,
+      "pcc": 0.9994235688989915,
+      "max_abs": 0.31940221786499023
+    }
+  },
+  "shape_predicted": {
+    "coordinates_equal": false,
+    "actual_voxels": 714,
+    "reference_voxels": 732,
+    "features": null
+  },
+  "shape_predicted_stats": {
+    "topology_seconds": 0.31281008396763355,
+    "stage_voxels": [
+      8,
+      64,
+      167,
+      284,
+      714
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 11.634205770038534
+  },
+  "texture_prepare_seconds": 1.3512633259524591,
+  "texture_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 732,
+    "reference_voxels": 732,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.008118675918053464,
+      "pcc": 0.999968823362681,
+      "max_abs": 0.027374982833862305
+    }
+  },
+  "texture_fixed_stats": {
+    "topology_seconds": 0.22662883281009272,
+    "stage_voxels": [
+      8,
+      64,
+      167,
+      282,
+      732
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 0,
+    "total_seconds": 0.27117048494983464
+  },
+  "texture_predicted": {
+    "coordinates_equal": false,
+    "actual_voxels": 714,
+    "reference_voxels": 732,
+    "features": null
+  },
+  "chain_coordinates_equal": true,
+  "topology_cache": {
+    "builds": 14,
+    "hits": 146
+  }
+}

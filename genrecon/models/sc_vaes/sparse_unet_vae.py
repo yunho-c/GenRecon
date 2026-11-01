@@ -252,12 +252,14 @@ class SparseResBlockC2S3d(nn.Module):
         self.updown = sp.SparseChannel2Spatial(2)
 
     def _forward(self, x: sp.SparseTensor, subdiv: sp.SparseTensor = None) -> sp.SparseTensor:
+        guide = subdiv
         if self.pred_subdiv:
             subdiv = self.to_subdiv(x)
         h = x.replace(self.norm1(x.feats))
         h = h.replace(F.silu(h.feats))
         h = self.conv1(h)
-        subdiv_binarized = subdiv.replace(subdiv.feats > 0) if subdiv is not None else None
+        selection = guide if guide is not None else subdiv
+        subdiv_binarized = selection.replace(selection.feats > 0) if selection is not None else None
         h = self.updown(h, subdiv_binarized)
         x = self.updown(x, subdiv_binarized)
         h = h.replace(self.norm2(h.feats))
@@ -502,6 +504,34 @@ class SparseUnetVaeDecoder(nn.Module):
         assert (
             return_subs == False or self.pred_subdiv == True
         ), "Only decoders with pred_subdiv=True can be used with return_subs"
+        return self.forward_features(x, guide_subs=guide_subs, return_subs=return_subs)
+
+    def enable_tenstorrent(self, device, **kwargs):
+        """Prepare an inference backend with resident TT weights and features.
+
+        Call after loading weights and selecting eval mode. Inputs/outputs use
+        CPU SparseTensor boundaries; coordinate planning stays on the host.
+        Re-enable after modifying parameters. The caller owns device lifetime.
+        """
+        from ...backends.tenstorrent.sparse_decoder import TenstorrentSparseDecoder
+        self._tenstorrent_backend = TenstorrentSparseDecoder(self, device, **kwargs)
+        return self
+
+    def disable_tenstorrent(self):
+        self._tenstorrent_backend = None
+        return self
+
+    def forward_features(self, x, guide_subs=None, return_subs=False):
+        """Neural decoder output before mesh extraction.
+
+        Fixed guides may also be supplied to a shape decoder for numerical
+        validation; returned subdivisions remain its own predicted logits.
+        """
+        backend = getattr(self, "_tenstorrent_backend", None)
+        if backend is not None:
+            return backend.run(x, guide_subs=guide_subs, return_subs=return_subs)
+        if guide_subs is not None and len(guide_subs) != len(self.blocks) - 1:
+            raise ValueError("one subdivision guide is required per upsampling stage")
 
         h = self.from_latent(x)
         h = h.type(self.dtype)
@@ -513,7 +543,7 @@ class SparseUnetVaeDecoder(nn.Module):
                     if self.pred_subdiv:
                         if self.training:
                             subs_gt.append(h.get_spatial_cache("subdivision"))
-                        h, sub = block(h)
+                        h, sub = block(h, subdiv=guide_subs[i] if guide_subs is not None else None)
                         subs.append(sub)
                     else:
                         h = block(h, subdiv=guide_subs[i] if guide_subs is not None else None)
@@ -532,6 +562,9 @@ class SparseUnetVaeDecoder(nn.Module):
 
     def upsample(self, x: sp.SparseTensor, upsample_times: int) -> torch.Tensor:
         assert self.pred_subdiv == True, "Only decoders with pred_subdiv=True can be used with upsampling"
+        backend = getattr(self, "_tenstorrent_backend", None)
+        if backend is not None:
+            return backend.run(x, stop_at=upsample_times)
 
         h = self.from_latent(x)
         h = h.type(self.dtype)

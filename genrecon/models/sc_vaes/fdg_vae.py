@@ -2,10 +2,8 @@ from typing import *
 
 import torch
 import torch.nn.functional as F
-from o_voxel.convert import flexible_dual_grid_to_mesh
 
 from ...modules import sparse as sp
-from ...representations import Mesh
 from .sparse_unet_vae import (
     SparseUnetVaeDecoder,
     SparseUnetVaeEncoder,
@@ -80,6 +78,10 @@ class FlexiDualGridVaeDecoder(SparseUnetVaeDecoder):
         self.resolution = resolution
 
     def forward(self, x: sp.SparseTensor, gt_intersected: sp.SparseTensor = None, **kwargs):
+        # Neural decoding is also used independently by CPU/TT backends.
+        from o_voxel.convert import flexible_dual_grid_to_mesh
+        from ...representations import Mesh
+
         decoded = super().forward(x, **kwargs)
         if self.training:
             h, subs_gt, subs = decoded

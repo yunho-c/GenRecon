@@ -1,0 +1,293 @@
+{
+  "status": "passed",
+  "phase": "complete",
+  "seed": 7,
+  "algorithm": "explicit_gemm",
+  "row_chunk": 64,
+  "precision": "accurate",
+  "watcher": "30",
+  "input_scope": "synthetic_gaussian_latent",
+  "input_path": null,
+  "gate": {
+    "relative_l2": 0.0001,
+    "pcc": 0.999999,
+    "coordinates": "exact",
+    "subdivision_signs": "exact",
+    "geometry_edge_signs": "exact",
+    "scope": "decoder numerical parity; real-scene reconstruction quality is separate"
+  },
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "python": "3.10.19 (main, Jan 14 2026, 19:36:24) [Clang 21.1.4 ]"
+  },
+  "source": {
+    "commit": "ff7c4505861ce6b07caa3f71ac63ef2c619f5b68",
+    "dirty": true,
+    "sha256": {
+      "experiments/tenstorrent/sparse_decoder_probe.py": "1c7933c6ba49b91b34831730ddb48926cafed42c15ead9efee57055c062ecf0f",
+      "genrecon/backends/tenstorrent/__init__.py": "1e299786b91f8491a4e0b21f2c8b4074aa9a60c63928d30d6450b131f0ae6465",
+      "genrecon/backends/tenstorrent/precision.py": "bc04b0f7157cf279286539cff72e01fd2bbbe679e57a2806d7196a37ecb2e4df",
+      "genrecon/backends/tenstorrent/sparse_decoder.py": "d9a4bbc29b76d97829ab7370838964ddef58409af84f8501971f0da4f189e71a",
+      "genrecon/models/sc_vaes/sparse_unet_vae.py": "22d7f4f48ab9d58012d20aa0aad849d1ee97c0f06e961756987cde7cc5946f8c",
+      "genrecon/modules/sparse/conv/conv_reference.py": "d08086879d00f5da539c428d672b1399bc6340d28c5b9a676b0ba79767be3a2c"
+    }
+  },
+  "flex_gemm": {
+    "commit": "51e179d19bab1247563ed307a10013ea321d25bb",
+    "dirty": false,
+    "sha256": {
+      "flex_gemm/tenstorrent/__init__.py": "ac4a5710c385f8a430e6ce2414290c5d515af7b73774fe388de6849e2594443d",
+      "flex_gemm/tenstorrent/conv.py": "389903b43e5246a94bfba678070a0b031da45c749de5e5c0484c20ac65c7f6c5",
+      "flex_gemm/tenstorrent/implicit.py": "baa8af46a7a5fb67fdcb8af48a99561434c7eb813ee3f5d50f7020dde426647d",
+      "flex_gemm/tenstorrent/kernels/compute.cpp": "62a17641703267248042b612b7a073513f9e353c64d246e39cf892c99e17ff8b",
+      "flex_gemm/tenstorrent/kernels/reader.cpp": "7ab92ff6db461c5ab72683010373c8054c3a95251b55df5aac9a0a6fda68fb2b",
+      "flex_gemm/tenstorrent/kernels/writer.cpp": "cab77fc929644c13dfd737c04fab920ed5b685b6c10aef0b06588a0720bc5ee5",
+      "flex_gemm/tenstorrent/masking.py": "32c66f47bd2caef0ec94e34c23e0ae09562206a47267cc490db304cf7f0d10b7",
+      "flex_gemm/tenstorrent/ops.py": "e50109b5870445c353da6b76ce64e24048f61ce289bb75703ff661ec14241560",
+      "flex_gemm/tenstorrent/reference.py": "1950a9c0b7e660955a3d7e4189ec07b3d0aae6238996607eab10419fee134ef5",
+      "flex_gemm/tenstorrent/resident.py": "ff02aaf696667a9f78f215cf143578785e09edd83c09520fd6abb11714bf2ca3"
+    }
+  },
+  "tt_metal": {
+    "commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+    "dirty": false,
+    "sha256": {}
+  },
+  "checkpoint_sha256": {
+    "shape_dec_next_dc_f16c32_fp16.json": "5f1b856dffce79466fb18f5f0eefc08f08c673b24b3c05b20359c0b6d318a209",
+    "shape_dec_next_dc_f16c32_fp16.safetensors": "e3b718d3e43e4f8780e9a24ac6fff231811a67e3b058e336e10fe654c911d581",
+    "tex_dec_next_dc_f16c32_fp16.json": "22074e4ab5b28e2b72d33a3fe61bf416134b89e12d0fc5c729f37da75da0c4d1",
+    "tex_dec_next_dc_f16c32_fp16.safetensors": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c"
+  },
+  "input_voxels": 32,
+  "generated_input_sha256": "4b2b62fb7ece2cba4bfceda2806778f5b65975f478d27c2358b8a8b90f118956",
+  "shape_parameters": 474231463,
+  "cpu_shape_seconds": 1.4476895080297254,
+  "reference_stage_voxels": [
+    32,
+    253,
+    598,
+    1032,
+    3100
+  ],
+  "texture_parameters": 474216006,
+  "cpu_texture_seconds": 1.4273764549870975,
+  "device": {
+    "id": 1,
+    "architecture": "Arch.WORMHOLE_B0",
+    "grid": [
+      8,
+      8
+    ]
+  },
+  "shape_prepare_seconds": 10.240952387975994,
+  "memory_after_shape_prepare": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 3835232256
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "captured_wide": {
+    "input_channels": 1024,
+    "output_channels": 4096,
+    "input_origin": "synthetic_gaussian_latent",
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 3.723653231785286e-07,
+      "pcc": 0.9999999999999318,
+      "max_abs": 4.57763671875e-05
+    },
+    "atol": 0.02,
+    "rtol": 0.02,
+    "passed": true
+  },
+  "shape_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 3100,
+    "reference_voxels": 3100,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 9.54384932009598e-07,
+      "pcc": 0.9999999999994325,
+      "max_abs": 0.00012969970703125
+    }
+  },
+  "shape_fixed_stats": {
+    "topology_seconds": 1.067134347918909,
+    "stage_voxels": [
+      32,
+      253,
+      598,
+      1032,
+      3100
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 11.76717435097089
+  },
+  "subdivisions_fixed": [
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.2575193055791133e-06,
+        "pcc": 0.9999999999968495,
+        "max_abs": 0.0002899169921875
+      },
+      "sign_mismatches": 0,
+      "decisions": 256
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.7513044680915534e-06,
+        "pcc": 0.999999999998199,
+        "max_abs": 0.0003337860107421875
+      },
+      "sign_mismatches": 0,
+      "decisions": 2024
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 2.425092349773895e-06,
+        "pcc": 0.9999999999952971,
+        "max_abs": 8.20159912109375e-05
+      },
+      "sign_mismatches": 0,
+      "decisions": 4784
+    },
+    {
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 2.8786913993791683e-06,
+        "pcc": 0.9999999999956308,
+        "max_abs": 6.580352783203125e-05
+      },
+      "sign_mismatches": 0,
+      "decisions": 8256
+    }
+  ],
+  "geometry_fixed": {
+    "vertices": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 1.141190509550181e-06,
+      "pcc": 0.9999999999968192,
+      "max_abs": 5.125999450683594e-06
+    },
+    "edge_sign_mismatches": 0,
+    "edge_decisions": 9300,
+    "quad_weights": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 2.489584287374109e-06,
+      "pcc": 0.9999999999931491,
+      "max_abs": 5.602836608886719e-05
+    }
+  },
+  "shape_predicted": {
+    "coordinates_equal": true,
+    "actual_voxels": 3100,
+    "reference_voxels": 3100,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 9.54384932009598e-07,
+      "pcc": 0.9999999999994325,
+      "max_abs": 0.00012969970703125
+    }
+  },
+  "shape_predicted_stats": {
+    "topology_seconds": 0.0012091111275367439,
+    "stage_voxels": [
+      32,
+      253,
+      598,
+      1032,
+      3100
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 5.696554915979505
+  },
+  "texture_prepare_seconds": 9.415368354995735,
+  "memory_after_both_prepare": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 7687400064
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "texture_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 3100,
+    "reference_voxels": 3100,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 5.825506295900406e-07,
+      "pcc": 0.9999999999998305,
+      "max_abs": 6.407499313354492e-06
+    }
+  },
+  "texture_fixed_stats": {
+    "topology_seconds": 0.0008977461257018149,
+    "stage_voxels": [
+      32,
+      253,
+      598,
+      1032,
+      3100
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 0,
+    "total_seconds": 5.662868239975069
+  },
+  "texture_predicted": {
+    "coordinates_equal": true,
+    "actual_voxels": 3100,
+    "reference_voxels": 3100,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 5.825506295900406e-07,
+      "pcc": 0.9999999999998305,
+      "max_abs": 6.407499313354492e-06
+    }
+  },
+  "chain_coordinates_equal": true,
+  "warm_seconds": {
+    "shape": [
+      5.698959417000879,
+      5.69812717201421,
+      5.697770087048411
+    ],
+    "texture": [
+      5.664123750000726,
+      5.668946665013209,
+      5.6630291100009345
+    ],
+    "scope": "complete decoder with CPU boundary transfers, subdivision selection and map lookup; resident weights; after initial execution"
+  },
+  "topology_cache": {
+    "builds": 5,
+    "hits": 396
+  }
+}
