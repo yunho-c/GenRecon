@@ -1,0 +1,773 @@
+{
+  "date": "2026-11-01",
+  "device": "One Wormhole B0 chip, PCIe device 3",
+  "scope": "Single pretrained shape-decoder convolutions; synthetic coordinates/features; CPU neighbor maps; no NVIDIA GPU",
+  "final_probe_sha256": "ac6d3450f3c70af49d6f0589c54b51c11f6170fda67632b14b8b849c6c45bfc8",
+  "results": [
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.0.0.conv",
+      "original_weight_shape": [
+        1024,
+        3,
+        3,
+        3,
+        1024
+      ],
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 257,
+      "batch_size": 2,
+      "spatial_side": 7,
+      "mean_present_neighbors": 8.214007377624512,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 28312576,
+      "inputs": [
+        {
+          "shape": [
+            257,
+            1024
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        {
+          "shape": [
+            257,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.04890690196771175,
+      "device_type": "TT",
+      "first_inference_seconds": 5.378079926013015,
+      "outputs": [
+        {
+          "shape": [
+            257,
+            1024
+          ],
+          "dtype": "torch.bfloat16",
+          "relative_l2_error": 0.002471930536145301,
+          "pcc": 1.0,
+          "max_abs_error": 0.23510360717773438,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        7.978277048096061,
+        7.793745957314968,
+        8.346758026164025
+      ],
+      "warm_latency_median_ms": 7.978277048096061,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "conv1024-bf16",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "f616f7b7a1b52cf891abdd6641c354d7fa249a8bb7cb21371ef48a12a282a82e"
+      },
+      "lowering": "im2col",
+      "math_fidelity_override": null,
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "full_im2col_bytes": 14211072
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.3.4.conv2",
+      "original_weight_shape": [
+        64,
+        3,
+        3,
+        3,
+        64
+      ],
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 257,
+      "batch_size": 2,
+      "spatial_side": 7,
+      "mean_present_neighbors": 8.214007377624512,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 110656,
+      "inputs": [
+        {
+          "shape": [
+            257,
+            64
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        {
+          "shape": [
+            257,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.0015011649811640382,
+      "device_type": "TT",
+      "first_inference_seconds": 11.81756823300384,
+      "outputs": [
+        {
+          "shape": [
+            257,
+            64
+          ],
+          "dtype": "torch.bfloat16",
+          "relative_l2_error": 0.004008718590962656,
+          "pcc": 0.9999966025352478,
+          "max_abs_error": 0.14770126342773438,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        1.9217259832657874,
+        1.9110260182060301,
+        2.1757070207968354
+      ],
+      "warm_latency_median_ms": 1.9217259832657874,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "conv64-bf16",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "f616f7b7a1b52cf891abdd6641c354d7fa249a8bb7cb21371ef48a12a282a82e"
+      },
+      "lowering": "im2col",
+      "math_fidelity_override": null,
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "full_im2col_bytes": 888192
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.3.4.conv2",
+      "original_weight_shape": [
+        64,
+        3,
+        3,
+        3,
+        64
+      ],
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 257,
+      "batch_size": 2,
+      "spatial_side": 7,
+      "mean_present_neighbors": 8.214007377624512,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 110656,
+      "inputs": [
+        {
+          "shape": [
+            257,
+            64
+          ],
+          "dtype": "torch.float32"
+        },
+        {
+          "shape": [
+            257,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.0014950950280763209,
+      "device_type": "TT",
+      "first_inference_seconds": 2.736360460985452,
+      "outputs": [
+        {
+          "shape": [
+            257,
+            64
+          ],
+          "dtype": "torch.float32",
+          "relative_l2_error": 0.004549146497512244,
+          "pcc": 0.9999961853027344,
+          "max_abs_error": 0.15177536010742188,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        4.378704994451255,
+        3.9827930158935487,
+        3.863163001369685
+      ],
+      "warm_latency_median_ms": 3.9827930158935487,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "conv64-fp32",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "f616f7b7a1b52cf891abdd6641c354d7fa249a8bb7cb21371ef48a12a282a82e"
+      },
+      "lowering": "im2col",
+      "math_fidelity_override": null,
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "full_im2col_bytes": 1776384
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.3.4.conv2",
+      "original_weight_shape": [
+        64,
+        3,
+        3,
+        3,
+        64
+      ],
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 4097,
+      "batch_size": 2,
+      "spatial_side": 18,
+      "mean_present_neighbors": 9.128386497497559,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 110656,
+      "inputs": [
+        {
+          "shape": [
+            4097,
+            64
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        {
+          "shape": [
+            4097,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.014749858994036913,
+      "device_type": "TT",
+      "first_inference_seconds": 9.240700484020635,
+      "outputs": [
+        {
+          "shape": [
+            4097,
+            64
+          ],
+          "dtype": "torch.bfloat16",
+          "relative_l2_error": 0.002472192930427078,
+          "pcc": 0.9999978542327881,
+          "max_abs_error": 0.11677932739257812,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        8.616857987362891,
+        8.633318997453898,
+        8.761618984863162
+      ],
+      "warm_latency_median_ms": 8.633318997453898,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "conv64-large-bf16",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "f616f7b7a1b52cf891abdd6641c354d7fa249a8bb7cb21371ef48a12a282a82e"
+      },
+      "lowering": "im2col",
+      "math_fidelity_override": null,
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "full_im2col_bytes": 14159232
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.0.4.conv1",
+      "original_weight_shape": [
+        4096,
+        3,
+        3,
+        3,
+        1024
+      ],
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 129,
+      "batch_size": 2,
+      "spatial_side": 6,
+      "mean_present_neighbors": 7.077519416809082,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 113250304,
+      "inputs": [
+        {
+          "shape": [
+            129,
+            1024
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        {
+          "shape": [
+            129,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.06713986303657293,
+      "device_type": "TT",
+      "first_inference_seconds": 8.630478573963046,
+      "outputs": [
+        {
+          "shape": [
+            129,
+            4096
+          ],
+          "dtype": "torch.bfloat16",
+          "relative_l2_error": 0.027963431794977792,
+          "pcc": 0.9998703598976135,
+          "max_abs_error": 3.8326568603515625,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        6.42440200317651,
+        6.306971015874296,
+        6.385840999428183
+      ],
+      "warm_latency_median_ms": 6.385840999428183,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "up1024-4096-bf16",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "f616f7b7a1b52cf891abdd6641c354d7fa249a8bb7cb21371ef48a12a282a82e"
+      },
+      "lowering": "im2col",
+      "math_fidelity_override": null,
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "full_im2col_bytes": 7133184
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.0.4.conv1",
+      "original_weight_shape": [
+        4096,
+        3,
+        3,
+        3,
+        1024
+      ],
+      "math_fidelity_override": "hifi3",
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 129,
+      "batch_size": 2,
+      "spatial_side": 6,
+      "mean_present_neighbors": 7.077519416809082,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 113250304,
+      "inputs": [
+        {
+          "shape": [
+            129,
+            1024
+          ],
+          "dtype": "torch.bfloat16"
+        },
+        {
+          "shape": [
+            129,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.07075219805119559,
+      "device_type": "TT",
+      "first_inference_seconds": 2.243107293965295,
+      "outputs": [
+        {
+          "shape": [
+            129,
+            4096
+          ],
+          "dtype": "torch.bfloat16",
+          "relative_l2_error": 0.028009675314091514,
+          "pcc": 0.9998684525489807,
+          "max_abs_error": 3.8326568603515625,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        7.5446650153025985,
+        7.922036980744451,
+        7.266443979460746
+      ],
+      "warm_latency_median_ms": 7.5446650153025985,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "up1024-4096-bfloat16-hifi3",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "bac353b92fb25a2ec3763162c28d16ce58d6848e052f1a1713b69044dca98825"
+      },
+      "lowering": "im2col",
+      "full_im2col_bytes": 7133184
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.0.4.conv1",
+      "original_weight_shape": [
+        4096,
+        3,
+        3,
+        3,
+        1024
+      ],
+      "math_fidelity_override": "hifi3",
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 129,
+      "batch_size": 2,
+      "spatial_side": 6,
+      "mean_present_neighbors": 7.077519416809082,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 113250304,
+      "inputs": [
+        {
+          "shape": [
+            129,
+            1024
+          ],
+          "dtype": "torch.float32"
+        },
+        {
+          "shape": [
+            129,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.08387458103243262,
+      "device_type": "TT",
+      "first_inference_seconds": 2.3630334489862435,
+      "outputs": [
+        {
+          "shape": [
+            129,
+            4096
+          ],
+          "dtype": "torch.float32",
+          "relative_l2_error": 0.028565739055784134,
+          "pcc": 0.9998658895492554,
+          "max_abs_error": 3.90283203125,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        9.214671037625521,
+        9.640393021982163,
+        9.455280960537493
+      ],
+      "warm_latency_median_ms": 9.455280960537493,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "up1024-4096-float32-hifi3",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "bac353b92fb25a2ec3763162c28d16ce58d6848e052f1a1713b69044dca98825"
+      },
+      "lowering": "im2col",
+      "full_im2col_bytes": 14266368
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.0.4.conv1",
+      "original_weight_shape": [
+        4096,
+        3,
+        3,
+        3,
+        1024
+      ],
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 129,
+      "batch_size": 2,
+      "spatial_side": 6,
+      "mean_present_neighbors": 7.077519416809082,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 113250304,
+      "inputs": [
+        {
+          "shape": [
+            129,
+            1024
+          ],
+          "dtype": "torch.float32"
+        },
+        {
+          "shape": [
+            129,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.08458054199581966,
+      "device_type": "TT",
+      "first_inference_seconds": 7.69032050401438,
+      "outputs": [
+        {
+          "shape": [
+            129,
+            4096
+          ],
+          "dtype": "torch.float32",
+          "relative_l2_error": 0.028531328826147187,
+          "pcc": 0.9998674988746643,
+          "max_abs_error": 3.9333791732788086,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        10.544085002038628,
+        10.587785975076258,
+        10.583095019683242
+      ],
+      "warm_latency_median_ms": 10.583095019683242,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "up1024-4096-fp32",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "f616f7b7a1b52cf891abdd6641c354d7fa249a8bb7cb21371ef48a12a282a82e"
+      },
+      "lowering": "im2col",
+      "math_fidelity_override": null,
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "full_im2col_bytes": 14266368
+    },
+    {
+      "case": "sparse_conv_explicit",
+      "status": "passed",
+      "phase": "complete",
+      "source_commit": "53fe580ca01ee670635b7032a461088c17963b4d",
+      "versions": {
+        "torch": "2.11.0+cpu",
+        "torch-xla": "2.9.0+git56f8e61",
+        "tt-forge": "1.4.0",
+        "pjrt-plugin-tt": "1.4.0"
+      },
+      "seed": 123,
+      "fullgraph": true,
+      "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+      "cpu_threads": 16,
+      "reference_precision": "float32",
+      "scope": "One pretrained convolution; synthetic features/coordinates; CPU neighbor map",
+      "checkpoint": "/home/user/models/genrecon/trellis2/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+      "checkpoint_layer": "blocks.0.4.conv1",
+      "original_weight_shape": [
+        4096,
+        3,
+        3,
+        3,
+        1024
+      ],
+      "math_fidelity_override": "hifi3",
+      "lowering": "offset_sum",
+      "reference_detail": "FP32 arithmetic after casting checkpoint weights and synthetic inputs to the requested probe dtype",
+      "cpu_dense_algebra_max_abs_error": 1.9073486328125e-06,
+      "active_voxels": 129,
+      "batch_size": 2,
+      "spatial_side": 6,
+      "mean_present_neighbors": 7.077519416809082,
+      "limitations": "No pruning/C2S/whole decoder or realistic scene benchmark; compiler peak memory not measured",
+      "parameters": 113250304,
+      "inputs": [
+        {
+          "shape": [
+            129,
+            1024
+          ],
+          "dtype": "torch.float32"
+        },
+        {
+          "shape": [
+            129,
+            27
+          ],
+          "dtype": "torch.int64"
+        }
+      ],
+      "cpu_seconds": 0.11157050699694082,
+      "device_type": "TT",
+      "first_inference_seconds": 7.786960432014894,
+      "outputs": [
+        {
+          "shape": [
+            129,
+            4096
+          ],
+          "dtype": "torch.float32",
+          "relative_l2_error": 0.003879027874675944,
+          "pcc": 0.9999973177909851,
+          "max_abs_error": 0.35887908935546875,
+          "all_finite": true,
+          "passed": true
+        }
+      ],
+      "warm_latency_ms": [
+        39.68115302268416,
+        29.19074904639274,
+        29.018217988777906
+      ],
+      "warm_latency_median_ms": 29.19074904639274,
+      "xla_executed_fallback_ops": [],
+      "xla_aten_counters": {},
+      "probe_name": "up1024-4096-fp32-offset-hifi3",
+      "source_files_sha256": {
+        "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+        "experiments/tenstorrent/run.py": "0914cba1ec5ffca71d44fed66dd8ec2344c4b83336d5334e32b5f20c5456bfb5",
+        "experiments/tenstorrent/sparse_conv_probe.py": "97b9d482d9b82c4efe5af33596b63422fc44c0c3373782355161478098f74982"
+      },
+      "full_im2col_bytes": 14266368
+    }
+  ]
+}

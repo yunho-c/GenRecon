@@ -32,6 +32,11 @@ decoder threshold decisions and end-to-end integration remain unverified.
 The sections below retain both successful results and the failures that defined
 the working compilation boundaries.
 
+A [follow-up sparse VAE feasibility study](SPARSE_VAE_FEASIBILITY.md) inspects the
+decoder architecture and non-CUDA prior art, and tests individual pretrained
+sparse convolutions through gather/GEMM on Wormhole. These operator probes pass
+without reported fallback; complete sparse VAE inference remains unverified.
+
 ## Environment and method
 
 - Device: one Wormhole B0 chip, PCIe device 3 (cloud environment describes n150).
