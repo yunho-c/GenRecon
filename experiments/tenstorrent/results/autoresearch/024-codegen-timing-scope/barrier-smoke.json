@@ -1,0 +1,73 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/010-codegen-validated",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "48cf2927a4a024450d4795e911b03210c6d8fb8b51fe8e956ca8d659aba228b4",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "dit_block",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0
+  },
+  "rope_mode": "stock",
+  "export_sha256": "fd2a218e71fdd92072aa2ecf4a4d4ae33c185193085fa4a956f8433d079c1180",
+  "ttnn_path": "/home/user/tt-metal/ttnn/ttnn/__init__.py",
+  "metal_commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+  "instrumented": false,
+  "flush_device_profiler": false,
+  "profiler_program_support_count": null,
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "activation_preparation_scope": "Generated loader reads files, converts dtype/layout and uploads activations; explicit device synchronization completes this before BEGIN/timer.",
+  "activation_preparation_seconds": [
+    {
+      "label": "GENRECON_FIRST",
+      "seconds": 0.007122315000742674
+    },
+    {
+      "label": "GENRECON_WARMUP_0",
+      "seconds": 0.0030860949773341417
+    },
+    {
+      "label": "GENRECON_WARMUP_1",
+      "seconds": 0.0029774049762636423
+    },
+    {
+      "label": "GENRECON_WARMUP_2",
+      "seconds": 0.0029671340016648173
+    },
+    {
+      "label": "GENRECON_MEASURED_0",
+      "seconds": 0.0021670909482054412
+    }
+  ],
+  "first_seconds": 1.4064498990192078,
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.004119607122183113,
+      "pcc": 0.9999920591289541,
+      "max_abs": 0.0503307580947876
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.004119607122183113,
+    "pcc": 0.9999920591289541,
+    "max_abs": 0.0503307580947876
+  },
+  "warm_seconds": [
+    0.019158463983330876
+  ],
+  "warm_median_seconds": 0.019158463983330876,
+  "output_sha256": "394ff124d28caa136de3c71943a8ed1092bc4eb68e534bc2506bbf9ad2e6a4b0"
+}

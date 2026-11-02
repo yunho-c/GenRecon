@@ -21,5 +21,34 @@
     "generated graph utils.py:77-89 calls ttnn.to_device when device is supplied",
     "codegen_probe.py infer: activation loader originally precedes signpost/timer",
     "Metal ttnn/cpp/ttnn-nanobind/device.cpp exposes synchronize_device(MeshDevice*)"
-  ]
+  ],
+  "hardware_barrier_validation": {
+    "status": "passed_smoke",
+    "captured_output_bitwise_equals_old_boundary": true,
+    "case": "dit_block",
+    "warm_forward_ms": 19.158463983330876,
+    "activation_preparation_seconds": [
+      {
+        "label": "GENRECON_FIRST",
+        "seconds": 0.007122315000742674
+      },
+      {
+        "label": "GENRECON_WARMUP_0",
+        "seconds": 0.0030860949773341417
+      },
+      {
+        "label": "GENRECON_WARMUP_1",
+        "seconds": 0.0029774049762636423
+      },
+      {
+        "label": "GENRECON_WARMUP_2",
+        "seconds": 0.0029671340016648173
+      },
+      {
+        "label": "GENRECON_MEASURED_0",
+        "seconds": 0.0021670909482054412
+      }
+    ],
+    "note": "Timing-scope correction and explicit preload barrier preserve the generated output. No performance-improvement claim from the small smoke."
+  }
 }
