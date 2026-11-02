@@ -1,0 +1,20 @@
+{
+  "status": "validated_unmasked_conversion",
+  "scope": "Unmasked inference conversion; original gated HF checkpoint hash is not verified. Masked-image use is unsupported. Default FP32 RoPE periods match Transformers; no BF16-period substitution.",
+  "source": {
+    "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
+    "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
+    "sha256": "45172f209c9583c40538afc26b60a07033e6fcc2e8c30228338e6b2e932e7941"
+  },
+  "strict_loading": true,
+  "official_conversion_smoke": "Passed at original atol=rtol=1e-3 for five class and five patch values",
+  "poster_feature_views": 8,
+  "poster_feature_max_relative_l2": 3.0823588377588007e-07,
+  "poster_feature_min_pcc": 0.9999999999999436,
+  "feature_scope": "Same public timm learned weights, FP32 periods and unmasked inputs resized to 512, original GenRecon non-affine output normalization. Full features compared, not ten-value smoke alone. This is not comparison to unavailable gated checkpoint or historical scene trajectories.",
+  "historical_checkpoint_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+  "converted_checkpoint_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+  "historical_file_hash_reproduced": false,
+  "decision": "Use explicit alternate checkpoint path for fresh paired scene experiments. Preserve distinct provenance; no original checkpoint file equivalence or masked-task claim.",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/convert_dino_timm.py --source-dir /path/to/timm-source --reference-image /path/to/canonical-COCO-cat.png --validation-images /path/to/eight/poster/images_2/*.png --output-dir /path/to/new-validated-checkpoint"
+}

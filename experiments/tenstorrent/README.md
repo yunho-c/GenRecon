@@ -410,6 +410,19 @@ environment, a CUDA-linked torchvision wheel caused `torchvision::nms` import
 failure; replacing it with the matching `torchvision==0.26.0+cpu` wheel from
 `https://download.pytorch.org/whl/cpu` restored preprocessing.
 
+For a separately identified DINO checkpoint from the pinned public timm release,
+install `timm==1.0.30` in the Forge environment and run `convert_dino_timm.py
+--help`. The tool downloads the pinned weights and license, checks their hash,
+maps every learned tensor with strict loading, restores zero Q/V biases, and
+requires the official reference-image smoke plus full 512-pixel feature
+comparisons against timm on supplied images. The
+[poster conversion evidence](results/autoresearch/015-dino-public-conversion/summary.json)
+records agreement on all eight views. Use its output through the fixture
+generator's explicit `--dino` argument. This is validated for unmasked GenRecon
+inference; the missing mask token is a zero placeholder, and the original gated
+checkpoint file hash is not reproduced. Historical scene outputs still need a
+fresh matched reference.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

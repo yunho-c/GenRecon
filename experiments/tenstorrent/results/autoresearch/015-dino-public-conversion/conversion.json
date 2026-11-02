@@ -1,0 +1,219 @@
+{
+  "status": "validated_unmasked_conversion",
+  "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
+  "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
+  "source_card": "https://huggingface.co/timm/vit_large_patch16_dinov3.lvd1689m",
+  "official_conversion_source": "https://github.com/huggingface/transformers/blob/main/src/transformers/models/dinov3_vit/convert_dinov3_vit_to_hf.py",
+  "script_sha256": "a84799b85b259fafa36d567694ab2dbfc65979d68662b0a191f21ae58308a75a",
+  "scope": "Unmasked inference conversion; original gated HF checkpoint hash is not verified. Masked-image use is unsupported. Default FP32 RoPE periods match Transformers; no BF16-period substitution.",
+  "restored_parameters": "Zero query/value biases and an unused zero mask-token placeholder. All public timm learned tensors mapped; strict loading required.",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torchvision": "0.26.0+cpu",
+    "transformers": "5.5.1",
+    "timm": "1.0.30",
+    "safetensors": "0.8.0"
+  },
+  "source_sha256": {
+    "config.json": "a71f705b0074e173540d0bdbd3aa940fa8d7d3c6c7f020a683004c46ca605b24",
+    "README.md": "952719599ab8c896ac9e0eadc53343a07f79d161e39dacdef6c4c08b69743e3f",
+    "LICENSE.md": "25d122eb8f5b880fd23c736fb6ea8018ee45c12237e00b8a86d14c653904999e",
+    "model.safetensors": "45172f209c9583c40538afc26b60a07033e6fcc2e8c30228338e6b2e932e7941"
+  },
+  "strict_loading": true,
+  "official_smoke": {
+    "actual": {
+      "cls": [
+        0.4846903085708618,
+        -0.5823068618774414,
+        0.4805745780467987,
+        0.592293381690979,
+        0.9452042579650879
+      ],
+      "patch": [
+        -0.21174557507038116,
+        -0.49089738726615906,
+        -0.2571948170661926,
+        0.10174915939569473,
+        0.15456508100032806
+      ]
+    },
+    "expected": {
+      "cls": [
+        0.484527,
+        -0.582214,
+        0.480636,
+        0.59204,
+        0.945166
+      ],
+      "patch": [
+        -0.211367,
+        -0.490863,
+        -0.257131,
+        0.101763,
+        0.154511
+      ]
+    },
+    "atol": 0.001,
+    "rtol": 0.001,
+    "reference_image_sha256": "cf6f3c4befa148732c7453e0de5afab00f682427435fead2d88b07a9615cdac2"
+  },
+  "feature_checks": [
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00001.png",
+      "image_sha256": "ceae28f8835d622e44b59eb1a6a9cde30df110b399b79efd7ea19ce07e7b0339",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 2.7826423056138347e-07,
+        "pcc": 0.9999999999999607,
+        "max_abs": 7.62939453125e-06
+      }
+    },
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00029.png",
+      "image_sha256": "cf525a74457c4ceb7a52ecdb1768d484e7fec00fae1db286abc2c1c586b31d20",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 2.759610421550352e-07,
+        "pcc": 0.9999999999999697,
+        "max_abs": 5.7220458984375e-06
+      }
+    },
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00067.png",
+      "image_sha256": "b07fb9492eec4c4506bdceb642c10651d500809ed1124c6a02d358660b926d8f",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 2.836254382228326e-07,
+        "pcc": 0.9999999999999654,
+        "max_abs": 9.775161743164062e-06
+      }
+    },
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00101.png",
+      "image_sha256": "26fb5ab5751d726b6d54e7de4a1e6c54b0affdad13806a6e161b471e2845c93e",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 2.9637953569406866e-07,
+        "pcc": 0.9999999999999485,
+        "max_abs": 5.7220458984375e-06
+      }
+    },
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00117.png",
+      "image_sha256": "6748e91d70084158d75a150b7c717caf8d663d835549dd2c38b86b2e2ecaf462",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 3.0823588377588007e-07,
+        "pcc": 0.9999999999999436,
+        "max_abs": 1.7642974853515625e-05
+      }
+    },
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00165.png",
+      "image_sha256": "22173a27b5e464a26d65281ee498dc7444b7a6a6b987f13df72ac811eb56ba45",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 2.846548952947692e-07,
+        "pcc": 0.9999999999999609,
+        "max_abs": 5.7220458984375e-06
+      }
+    },
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00199.png",
+      "image_sha256": "f2144c3a4853fc0936d9e4b5e6b640b9e9903eac46d1c9214991306595f5eeb6",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 2.7822052752598524e-07,
+        "pcc": 0.9999999999999649,
+        "max_abs": 9.059906005859375e-06
+      }
+    },
+    {
+      "image": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00217.png",
+      "image_sha256": "303da6cb2a1c7fca0a9727f769587b680344b04fdaff7ad63442c2dfe10343b5",
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "check": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.0001,
+        "min_pcc": 0.999999,
+        "relative_l2": 2.6641155468999176e-07,
+        "pcc": 0.9999999999999664,
+        "max_abs": 5.7220458984375e-06
+      }
+    }
+  ],
+  "converted_sha256": {
+    "config.json": "e3fa1b21d18021d08b20a91fb109f815ac707c20453cb1ef00ec71de858471d7",
+    "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179"
+  }
+}
