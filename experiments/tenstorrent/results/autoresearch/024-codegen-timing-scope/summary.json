@@ -1,0 +1,25 @@
+{
+  "status": "timing_scope_label_corrected",
+  "finding": "Generated load_activations_for__main calls utils.load_tensor with a device; utils.load_tensor uploads via ttnn.to_device. The bridge calls this loader before signposts/timer. Earlier reports incorrectly described full input-transfer inclusion.",
+  "correct_historical_scope": "Activation file loading, dtype/layout conversion and H2D are submitted before the forward window. Output D2H and synchronization are included. Without an explicit pre-window barrier, pending upload work may carry into the historical window. This is not the transfer-inclusive PJRT boundary.",
+  "future_boundary": "Synchronize the device after activation loading and before BEGIN/timer. Record loader/H2D/synchronization preparation time separately. Warm measured forwards have resident weights, const-eval cache and activations; output D2H is included. Profiler reads remain outside marked time.",
+  "affected_raw_reports": [
+    "experiments/tenstorrent/results/autoresearch/011-real-rope-profile/unrepaired-failure.json",
+    "experiments/tenstorrent/results/autoresearch/011-real-rope-profile/profile-execute.json",
+    "experiments/tenstorrent/results/autoresearch/011-real-rope-profile/repaired-execute.json",
+    "experiments/tenstorrent/results/autoresearch/016-profile-buffer-overflow/execute.json",
+    "experiments/tenstorrent/results/autoresearch/007-shape-codegen-6181/execute.json",
+    "experiments/tenstorrent/results/autoresearch/022-shape-profile-6181/execute.json",
+    "experiments/tenstorrent/results/autoresearch/003-profiling-infrastructure/011-shape-codegen-512-execute.json",
+    "experiments/tenstorrent/results/autoresearch/003-profiling-infrastructure/010-codegen-validated-execute.json",
+    "experiments/tenstorrent/results/autoresearch/003-profiling-infrastructure/012-profile-codegen-smoke-execute.json",
+    "experiments/tenstorrent/results/autoresearch/004-shape-profile-512/execute.json"
+  ],
+  "preservation": "Historical raw reports and hashes retained without rewriting. Derived summaries point to this correction. Device kernel grouping/findings and separate PJRT timings are unchanged.",
+  "source_audit": [
+    "generated graph main.py: load_activations_for__main passes MeshDevice to utils.load_tensor",
+    "generated graph utils.py:77-89 calls ttnn.to_device when device is supplied",
+    "codegen_probe.py infer: activation loader originally precedes signpost/timer",
+    "Metal ttnn/cpp/ttnn-nanobind/device.cpp exposes synchronize_device(MeshDevice*)"
+  ]
+}

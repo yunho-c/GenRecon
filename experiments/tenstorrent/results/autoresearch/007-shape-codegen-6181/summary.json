@@ -3,5 +3,6 @@
   "warm_median_seconds": 23.95968398998957,
   "relative_l2_vs_stock_cpu_fp32": 0.057010924803682875,
   "validation": "Three warm calls repeat outputs bitwise; all active rows retained; operator smoke gate passes. This does not validate a sampled trajectory or a reconstruction.",
-  "next": "Profile this original large layout and compare the opt-in real-RoPE candidate using identical seeded inputs and the same native runtime for each paired comparison."
+  "next": "Profile this original large layout and compare the opt-in real-RoPE candidate using identical seeded inputs and the same native runtime for each paired comparison.",
+  "timing_scope_correction": "See ../024-codegen-timing-scope/summary.json: activations upload before the window; historical records lacked an explicit preload barrier. This alternate boundary differs from transfer-inclusive PJRT."
 }

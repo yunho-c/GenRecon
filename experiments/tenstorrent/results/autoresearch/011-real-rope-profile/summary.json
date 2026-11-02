@@ -82,5 +82,6 @@
   },
   "finding": "Kernel duration sum drops from 2172.7ms to 603.6ms, while matrix-product duration remains 133.8/134.0ms. Large untilize, tilize, slice and binary costs largely disappear. Reshape is now the largest category (192.3ms). This validates the layout-cost cause of the speedup, not trajectory quality.",
   "compatibility_repair": "The first generated execution failed: Python omitted a CPU-hoisted si32-to-ui32 output cast declared in native IR. An explicit opt-in repair verifies the exact adjacent-pair indices and restores uint32 before embedding. Both failure and repaired artifacts are retained; no generated file or learned arithmetic was modified.",
-  "quality": "Repaired generated execution passes the local stock FP32 CPU forward smoke gate. Complete synthetic trajectories remain failures, as recorded separately; no production-default change."
+  "quality": "Repaired generated execution passes the local stock FP32 CPU forward smoke gate. Complete synthetic trajectories remain failures, as recorded separately; no production-default change.",
+  "timing_scope_correction": "See ../024-codegen-timing-scope/summary.json: activations upload before the window; historical records lacked an explicit preload barrier. This alternate boundary differs from transfer-inclusive PJRT."
 }

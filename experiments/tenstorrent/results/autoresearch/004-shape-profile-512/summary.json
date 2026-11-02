@@ -30,5 +30,6 @@
     ],
     "finding": "Without optimizer/OpModel validation, TTNN SDPA decomposition is unconditional. With validation, valid fused SDPA can be retained. Frontend IR already preserves BF16 attention composites."
   },
-  "next": "Measure real-pair RoPE separately at level 0; compare against unmodified stock CPU and PJRT baselines. Also measure level 1 and real-size 6181-token layouts. Do not promote on a forward smoke pass alone."
+  "next": "Measure real-pair RoPE separately at level 0; compare against unmodified stock CPU and PJRT baselines. Also measure level 1 and real-size 6181-token layouts. Do not promote on a forward smoke pass alone.",
+  "timing_scope_correction": "See ../024-codegen-timing-scope/summary.json: activations upload before the window; historical records lacked an explicit preload barrier. This alternate boundary differs from transfer-inclusive PJRT."
 }

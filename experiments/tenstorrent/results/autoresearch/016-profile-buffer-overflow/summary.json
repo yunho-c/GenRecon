@@ -14,5 +14,6 @@
     "tt_metal/impl/profiler/profiler_state_manager.cpp defines default support count 1000 and allocation scaling.",
     "ttnn/cpp/ttnn-nanobind/device.cpp exposes ReadDeviceProfiler(MeshDevice*)."
   ],
-  "next": "Retry in a fresh directory; reject any repeat dropped-marker warning or missing kernel durations."
+  "next": "Retry in a fresh directory; reject any repeat dropped-marker warning or missing kernel durations.",
+  "timing_scope_correction": "See ../024-codegen-timing-scope/summary.json: activations upload before the window; historical records lacked an explicit preload barrier. This alternate boundary differs from transfer-inclusive PJRT."
 }

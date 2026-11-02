@@ -30,5 +30,6 @@
   "shape_attention_lowering": "Final compiler IR contains 60 standalone softmax operations, no fused scaled_dot_product_attention. Not a measured attention timing claim.",
   "shape_boundary_validation": "Generated TTNN on alternate SDK: warm median 2.1871s, relative L2 0.068475 vs stock FP32 CPU; original PJRT: 2.2306s, relative L2 0.068079. Similar time/error, not bitwise-equivalent SDKs or boundaries.",
   "dit_block_profile": "151 measured device operations, 19.174ms signpost interval, 17.455ms sum of operation kernel durations. Compile and warmups excluded. Operation sums are not wall-time attribution.",
-  "next": "Full shape-flow capture launched; extend to occupancy, texture, 6181 tokens, both guidance conditions and original trajectories."
+  "next": "Full shape-flow capture launched; extend to occupancy, texture, 6181 tokens, both guidance conditions and original trajectories.",
+  "timing_scope_correction": "See ../024-codegen-timing-scope/summary.json: activations upload before the window; historical records lacked an explicit preload barrier. This alternate boundary differs from transfer-inclusive PJRT."
 }

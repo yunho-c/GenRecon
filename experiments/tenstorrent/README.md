@@ -285,6 +285,15 @@ the generated program. `--profile-markers` emits Tracy signposts that distinguis
 first inference, warmup and measured calls. The ordinary probe runner also
 supports these signposts.
 
+Generated execution preloads activations before the marked forward. The bridge
+now synchronizes after loading, records preparation separately, and times the
+resident-activation forward plus synchronized output D2H. This differs from
+`run.py`'s fresh-transfer PJRT timing. A
+[scope correction](results/autoresearch/024-codegen-timing-scope/summary.json)
+identifies earlier generated reports whose labels incorrectly included input
+transfer; raw data is retained, and pending upload work may have crossed their
+old boundary because there was no explicit preload barrier.
+
 The installed Forge wheel rejects device profiling because its Metal runtime
 was built without Tracy. The separate Metal build has Tracy enabled. Generated
 TTNN execution there is an **alternate boundary**, with potentially different

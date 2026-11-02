@@ -40,5 +40,6 @@
     "note": "Shape-dependent kernel choices, padding and fixed costs prevent simple linear/quadratic attribution. Different profiler buffer settings across sizes."
   },
   "quality": "First output passes stock FP32 CPU smoke and repeated generated outputs are exact. Complete shape trajectories still fail. Default unchanged.",
-  "reproduce": "Use codegen_probe.py execute on the pinned stock 6181 export, via python -m tracy -r --op-support-count 10000; pass --profile-markers --flush-device-profiler --runs 1 and fresh result/profile paths."
+  "reproduce": "Use codegen_probe.py execute on the pinned stock 6181 export, via python -m tracy -r --op-support-count 10000; pass --profile-markers --flush-device-profiler --runs 1 and fresh result/profile paths.",
+  "timing_scope_correction": "See ../024-codegen-timing-scope/summary.json: activations upload before the window; historical records lacked an explicit preload barrier. This alternate boundary differs from transfer-inclusive PJRT."
 }

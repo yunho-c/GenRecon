@@ -146,7 +146,8 @@ def main():
             report['profiler_program_support_count'] = os.environ.get('TT_METAL_PROFILER_PROGRAM_SUPPORT_COUNT')
             if args.flush_device_profiler and not report['instrumented']:
                 raise ValueError('Profiler flushing requires TT_METAL_DEVICE_PROFILER=1 and a profiling-enabled SDK')
-            report['timing_scope'] = 'Resident weights and compiler const-eval cache; disk activation loading excluded; input transfer, generated forward and synchronized CPU output included'
+            report['timing_scope'] = 'Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.'
+            report['activation_preparation_scope'] = 'Generated loader reads files, converts dtype/layout and uploads activations; explicit device synchronization completes this before BEGIN/timer.'
             if sha256(directory/'reference.pt') != export['reference_sha256']:
                 raise ValueError('Reference artifact changed')
             for name, digest in export['artifact_sha256'].items():
@@ -193,7 +194,11 @@ def main():
                     pass
 
             def infer(label):
+                start_prepare = time.perf_counter()
                 activations = module.load_activations_for__main()
+                ttnn.synchronize_device(device)
+                report.setdefault('activation_preparation_seconds', []).append({
+                    'label': label, 'seconds': time.perf_counter()-start_prepare})
                 signpost(label+'_BEGIN')
                 start = time.perf_counter()
                 outputs = module._main(activations, weights)
