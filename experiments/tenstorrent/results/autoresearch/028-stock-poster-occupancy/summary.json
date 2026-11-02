@@ -1,0 +1,45 @@
+{
+  "status": "numerical_mismatch",
+  "scope": "Original stock complex-RoPE pretrained occupancy model; original 12-step Euler/CFG sampler, 22 model evaluations, full 4096 latent tokens; real poster-image conditions. CPU projection/learned aggregation and dedicated seed-123 noise identical across both variants. Reference is stock FP32 CPU; TT retains pipeline mixed precision.",
+  "warm_forward_median_ms": 16575.12630202109,
+  "sampler_seconds": 364.93542624200927,
+  "first_forward_vs_fp32": [
+    {
+      "shape": [
+        1,
+        8,
+        16,
+        16,
+        16
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.03289396857897806,
+      "pcc": 0.9999158978462219,
+      "max_abs_error": 0.1771717071533203,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "final_vs_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.7479292497205647,
+    "pcc": 0.6775573469702676,
+    "max_abs": 4.060503363609314
+  },
+  "all_states_pass_smoke": false,
+  "fixture_identity_verified": true,
+  "recompiled_during_trajectory": false,
+  "fallback_ops": [],
+  "cpu_reference_sha256": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+  "cpu_reference_artifact": "../027-cpu-reference-cache/reference.pt.gz; independently computed references verified bitwise equal",
+  "timing_scope": "Resident weights and preuploaded conditions; input/output transfer, synchronized model calls, original CPU Euler/CFG arithmetic and instrumentation. Preparation, CPU reference, compilation/warmups and artifact I/O excluded.",
+  "finding": "Passing the first-forward gate (3.29% relative L2) does not predict sampled agreement: final latent error is 74.8%, PCC 0.678. Keep strict failed trajectory result. This includes pipeline BF16 vs FP32 precision differences as well as backend effects; it does not establish CUDA equivalence or decoded occupancy/mesh quality.",
+  "quality_next": "Compare candidate, inspect decoded occupancy under identical FP32 decoder, and calibrate CPU pipeline-precision trajectory on these real conditions before attributing all drift to TT kernels.",
+  "supervisor_note": "Original 1800s watchdog includes device wait. Only waiting Python supervisor stopped; native worker executed continuously. Supervisor resumed after native exit; no numerical/timing change. Snapshot records controller state at stock completion.",
+  "controller_source_sha256": "65e6ea9af87827ae12fa472abaa4733963212bd6a5709a2f18563357f3a1a18a",
+  "reproduce": "python experiments/tenstorrent/run.py --cases ss_flow --flow-inputs /path/to/poster-inputs/inputs.pt --sampler-trajectory --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 3 --timeout 3600 --output-dir /path/to/new-stock-poster"
+}

@@ -1,0 +1,21 @@
+{
+  "status": "extending_supervisor_deadlines",
+  "started_utc": "2026-11-02T23:23:28.258925+00:00",
+  "maximum_extension_seconds": 900,
+  "scope": "Only waiting Python timeout supervisors are stopped. Native workers are not stopped or changed. Resume each supervisor after its child exits, using verified subprocess wait-before-timeout behavior. Hard limit resumes watchdogs even if children remain live.",
+  "cases": [
+    {
+      "case": "031-ss-real-rope-poster",
+      "supervisor": 208219,
+      "worker": 208224,
+      "supervisor_stopped": true
+    },
+    {
+      "case": "032-ss-stock-poster",
+      "supervisor": 208220,
+      "worker": 208225,
+      "supervisor_stopped": false,
+      "resumed_utc": "2026-11-02T23:26:55.410746+00:00"
+    }
+  ]
+}

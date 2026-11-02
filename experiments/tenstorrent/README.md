@@ -513,6 +513,11 @@ computation, and cache loading is recorded separately. The
 matches both independently computed references bitwise. It can be restored from
 the committed manifest and compressed tensor file on a stateless machine. Use
 a generous `--timeout`, since the harness includes CPU setup and device wait.
+The [stock real-poster occupancy trajectory](results/autoresearch/028-stock-poster-occupancy/summary.json)
+fails its full FP32 check: 364.94 s for 22 forwards, final relative L2 0.748
+and PCC 0.678, despite a passing first forward. There is no reported fallback
+or trajectory recompilation. This comparison includes BF16/FP32 differences;
+decoded occupancy and CUDA-pipeline equivalence require separate assessment.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
