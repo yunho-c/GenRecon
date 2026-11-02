@@ -346,6 +346,15 @@ native IR declares but emitted Python omits. It verifies the exact 128 adjacent
 pair indices before applying the cast, records the repair, and leaves generated
 files and learned arithmetic unchanged. The option is off by default.
 
+For large generated profiles, `codegen_probe.py execute
+--flush-device-profiler` reads and resets device profiler buffers after each
+forward, outside the marked timing window. It requires an instrumented SDK.
+Also size Tracy's `--op-support-count` for all programs within one forward
+(10,000 is the initial large-shape retry setting). The default count of 1,000
+[overflowed on the 6,181-token profile](results/autoresearch/016-profile-buffer-overflow/summary.json);
+that failed capture is retained and rejected for kernel attribution. Reject
+captures containing dropped-marker warnings even if forward validation passes.
+
 Both runners accept an explicit `--math-fidelity` compiler option. Omission
 retains the SDK default. The [HiFi3 trajectory experiment](results/autoresearch/012-hifi3-trajectory/summary.json)
 failed the same numerical gates and increased final relative L2 error from

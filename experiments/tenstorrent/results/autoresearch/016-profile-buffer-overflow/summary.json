@@ -1,0 +1,18 @@
+{
+  "status": "profile_rejected_dropped_device_markers",
+  "scope": "Full pretrained shape, 6181 synthetic tokens, stock complex RoPE, generated TTNN alternate SDK. Forward itself passes smoke and exact repeat. Profiling postprocessing failed, so no kernel-attribution values accepted.",
+  "error": "Profiler DRAM buffers were full, markers were dropped; process_ops_logs.py asserts missing device data for Op 1073152.",
+  "default_program_support_count": 1000,
+  "retry_plan": {
+    "program_support_count": 10000,
+    "flush_device_profiler_after_each_forward": true,
+    "flush_timing": "Outside BEGIN/END signposts and synchronized forward timing. Each forward must still fit within profiler buffer capacity."
+  },
+  "retained": "Forward validation report, complete compressed console log and partial native device report. No accepted device-operation summary.",
+  "raw_scratch_trace_sha256": "6bdf34e39526a2240c994294842c58be8c9039ec87a0c3bc014571afa2f13487",
+  "runtime_source_audit": [
+    "tt_metal/impl/profiler/profiler_state_manager.cpp defines default support count 1000 and allocation scaling.",
+    "ttnn/cpp/ttnn-nanobind/device.cpp exposes ReadDeviceProfiler(MeshDevice*)."
+  ],
+  "next": "Retry in a fresh directory; reject any repeat dropped-marker warning or missing kernel durations."
+}

@@ -44,10 +44,14 @@ def main():
     p.add_argument('--threads', type=int, default=16)
     p.add_argument('--runs', type=int, default=3)
     p.add_argument('--profile-markers', action='store_true')
+    p.add_argument('--flush-device-profiler', action='store_true',
+                   help='Read/reset profiler buffers after each forward, outside marked timing; requires instrumented execute')
     p.add_argument('--repair-embedding-indices', action='store_true',
                    help='Explicitly restore the known omitted CPU-hoisted si32-to-ui32 cast for real-RoPE pair indices')
     p.add_argument('--result', type=Path, help='Execute report; must not exist')
     args = p.parse_args()
+    if args.flush_device_profiler and args.command != 'execute':
+        p.error('flush-device-profiler requires execute')
     if min(args.threads, args.runs) < 1:
         p.error('threads and runs must be positive')
     directory = args.directory.resolve()
@@ -138,6 +142,10 @@ def main():
                 report['metal_commit'] = subprocess.check_output(
                     ['git', '-C', metal_root, 'rev-parse', 'HEAD'], text=True).strip()
             report['instrumented'] = os.environ.get('TT_METAL_DEVICE_PROFILER') == '1'
+            report['flush_device_profiler'] = args.flush_device_profiler
+            report['profiler_program_support_count'] = os.environ.get('TT_METAL_PROFILER_PROGRAM_SUPPORT_COUNT')
+            if args.flush_device_profiler and not report['instrumented']:
+                raise ValueError('Profiler flushing requires TT_METAL_DEVICE_PROFILER=1 and a profiling-enabled SDK')
             report['timing_scope'] = 'Resident weights and compiler const-eval cache; disk activation loading excluded; input transfer, generated forward and synchronized CPU output included'
             if sha256(directory/'reference.pt') != export['reference_sha256']:
                 raise ValueError('Reference artifact changed')
@@ -194,6 +202,10 @@ def main():
                 actual = ttnn.to_torch(outputs[0]).float()
                 seconds = time.perf_counter()-start
                 signpost(label+'_END')
+                if args.flush_device_profiler:
+                    start_flush = time.perf_counter()
+                    ttnn.ReadDeviceProfiler(device)
+                    report.setdefault('profiler_flush_seconds', []).append(time.perf_counter()-start_flush)
                 ttnn.deallocate(outputs[0])
                 return actual, seconds
 
