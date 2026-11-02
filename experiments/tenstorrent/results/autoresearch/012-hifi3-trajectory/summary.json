@@ -1,0 +1,51 @@
+{
+  "scope": "Pretrained shape flow, 512 synthetic tokens, original 12-step sampler and LoRA, real-pair RoPE, compiler level 0. Only candidate math_fidelity explicitly changed to hifi3; baseline uses SDK default HiFi4. No scene-quality claim.",
+  "decision": "Reject HiFi3 as an accuracy fix. No production defaults changed.",
+  "hifi4_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.3825820592158971,
+    "pcc": 0.9254034312188536,
+    "max_abs": 3.4050293266773224
+  },
+  "hifi3_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.4215756728445475,
+    "pcc": 0.9093323335945803,
+    "max_abs": 4.051279067993164
+  },
+  "hifi3_forward": [
+    {
+      "shape": [
+        512,
+        32
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.06885973907143297,
+      "pcc": 0.9976575374603271,
+      "max_abs_error": 0.28150081634521484,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "hifi3_trajectory_seconds": 12.934704095008783,
+  "hifi3_recompiled_during_trajectory": false,
+  "hifi3_executed_fallback_ops": [],
+  "hifi3_fixture_identity_verified": true,
+  "limitation": "Baseline predates condition-identity fields, but fixture implementation, seed, input shapes, checkpoint and stock FP32 references match. CPU reference trajectories are checked separately. These errors include backend and precision differences; they are not reconstruction-quality scores.",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py --cases shape_flow_tensor --rope-mode real_pairs --math-fidelity hifi3 --optimization-level 0 --synthetic-trajectory --reference-precision float32 --cpu-threads 16 --runs 3 --timeout 1800 --output-dir /path/to/new-hifi3",
+  "cpu_reference_bitwise_matches_hifi4_baseline": {
+    "coords": true,
+    "noise": true,
+    "samples": true,
+    "pred_x_t": true,
+    "pred_x_0": true
+  }
+}

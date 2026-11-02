@@ -50,6 +50,7 @@ def worker(args):
         "requested_compile_options": {
             **({"optimization_level": args.optimization_level} if args.optimization_level is not None else {}),
             **({"enable_trace": "true"} if args.runtime_trace else {}),
+            **({"math_fidelity": args.math_fidelity} if args.math_fidelity is not None else {}),
         },
         "trace_region_size": args.trace_region_size if args.runtime_trace else None,
         "compile_options_note": "Explicit options submitted to XLA; omitted settings retain SDK/environment defaults.",
@@ -244,6 +245,7 @@ def main():
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--optimization-level", type=int, choices=(0, 1, 2), default=None)
+    parser.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
     parser.add_argument("--rope-mode", choices=("stock", "real_pairs"), default="stock")
     parser.add_argument('--synthetic-trajectory', action='store_true',
@@ -287,6 +289,8 @@ def main():
             command += ["--active-voxels", str(args.active_voxels)]
         if args.optimization_level is not None:
             command += ["--optimization-level", str(args.optimization_level)]
+        if args.math_fidelity is not None:
+            command += ['--math-fidelity', args.math_fidelity]
         if args.runtime_trace:
             command += ["--runtime-trace", "--trace-region-size", str(args.trace_region_size)]
         if args.profile_markers:

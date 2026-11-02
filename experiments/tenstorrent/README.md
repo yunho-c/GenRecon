@@ -346,6 +346,12 @@ native IR declares but emitted Python omits. It verifies the exact 128 adjacent
 pair indices before applying the cast, records the repair, and leaves generated
 files and learned arithmetic unchanged. The option is off by default.
 
+Both runners accept an explicit `--math-fidelity` compiler option. Omission
+retains the SDK default. The [HiFi3 trajectory experiment](results/autoresearch/012-hifi3-trajectory/summary.json)
+failed the same numerical gates and increased final relative L2 error from
+0.383 to 0.422 against the identical stock FP32 CPU trajectory. It is not an
+accuracy fix; defaults remain unchanged.
+
 Additional probes and CPU regression checks:
 
 ```bash

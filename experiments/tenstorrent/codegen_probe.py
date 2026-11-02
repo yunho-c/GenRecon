@@ -38,6 +38,7 @@ def main():
     p.add_argument('--checkpoints', type=Path, default=Path.home()/'models/genrecon')
     p.add_argument('--active-voxels', type=int)
     p.add_argument('--optimization-level', type=int, choices=(0, 1, 2), default=0)
+    p.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
     p.add_argument('--rope-mode', choices=('stock', 'real_pairs'), default='stock')
     p.add_argument('--seed', type=int, default=0)
     p.add_argument('--threads', type=int, default=16)
@@ -93,6 +94,8 @@ def main():
             model.eval()
             report.update(case=args.case, seed=args.seed, metadata=metadata,
                           compiler_options={'optimization_level': args.optimization_level})
+            if args.math_fidelity is not None:
+                report['compiler_options']['math_fidelity'] = args.math_fidelity
             phase('stock_cpu_reference')
             with torch.no_grad(), float32_reference(model):
                 expected = model(*inputs)
