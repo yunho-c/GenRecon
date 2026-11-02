@@ -43,6 +43,8 @@ def main():
     p.add_argument('--threads', type=int, default=16)
     p.add_argument('--runs', type=int, default=3)
     p.add_argument('--profile-markers', action='store_true')
+    p.add_argument('--repair-embedding-indices', action='store_true',
+                   help='Explicitly restore the known omitted CPU-hoisted si32-to-ui32 cast for real-RoPE pair indices')
     p.add_argument('--result', type=Path, help='Execute report; must not exist')
     args = p.parse_args()
     if min(args.threads, args.runs) < 1:
@@ -148,6 +150,24 @@ def main():
             spec = importlib.util.spec_from_file_location('generated_flow', graph/'main.py')
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
+            if args.repair_embedding_indices:
+                # The compiler IR types this CPU-hoisted identity as si32->ui32;
+                # emitted Python returns the si32 argument unchanged. Restore
+                # its declared output dtype, without changing generated files.
+                symbol = 'cpu_hoisted_const_eval_b6969c39'
+                original = getattr(module, symbol, None)
+                ir_text = '\n'.join(path.read_text() for path in (graph/'irs').glob('ttnn_*.mlir'))
+                if original is None or f'call @{symbol}' not in ir_text or 'tensor<128xui32' not in ir_text:
+                    raise ValueError('Expected real-RoPE CPU-hoisted index cast is absent')
+                def corrected_indices(arg):
+                    output = original(arg)
+                    values = ttnn.to_torch(output).reshape(-1).long()
+                    if not torch.equal(values, torch.arange(128) ^ 1):
+                        raise ValueError('Only the exact adjacent-pair index constant may be repaired')
+                    return ttnn.to_dtype(output, ttnn.uint32)
+                setattr(module, symbol, corrected_indices)
+                report['compatibility_repairs'] = [{'symbol': symbol, 'output_dtype': 'uint32',
+                    'reason': 'Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it.'}]
             expected = torch.load(directory/'reference.pt', weights_only=True)['expected']
             phase('waiting_for_device')
             lock = os.open('/tmp/genrecon-tt-pjrt.lock', os.O_CREAT | os.O_RDWR, 0o600)

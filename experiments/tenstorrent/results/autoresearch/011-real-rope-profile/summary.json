@@ -1,0 +1,86 @@
+{
+  "scope": "One marked warm full pretrained shape flow, 512 synthetic tokens, original LoRA, compiler level 0. Compare generated TTNN on the same profiling-enabled Metal revision before/after real RoPE; not direct PJRT wall-time attribution or scene quality.",
+  "baseline_wall_ms": 2211.391141,
+  "real_rope_wall_ms": 620.136573,
+  "baseline_kernel_sum_ms": 2172.662549,
+  "real_rope_kernel_sum_ms": 603.599593,
+  "baseline_device_operations": 4943,
+  "real_rope_device_operations": 4403,
+  "operation_kernel_ms_before_after": {
+    "BinaryNgDeviceOperation": [
+      520.012206,
+      106.131996
+    ],
+    "ConcatDeviceOperation": [
+      6.339539,
+      0.002985
+    ],
+    "EmbeddingsDeviceOperation": [
+      0,
+      6.078539
+    ],
+    "FillPadDeviceOperation": [
+      6.263896,
+      6.23031
+    ],
+    "LayerNormDeviceOperation": [
+      6.270092,
+      6.27535
+    ],
+    "MatmulDeviceOperation": [
+      133.824088,
+      133.978204
+    ],
+    "PermuteDeviceOperation": [
+      108.23042,
+      16.157679
+    ],
+    "ReduceDeviceOperation": [
+      7.77686,
+      7.754381
+    ],
+    "ReshapeViewDeviceOperation": [
+      300.549876,
+      192.275429
+    ],
+    "SliceDeviceOperation": [
+      294.51389,
+      16.889686
+    ],
+    "SoftmaxDeviceOperation": [
+      7.661349,
+      7.705839
+    ],
+    "TilizeDeviceOperation": [
+      0.065579,
+      0.065153
+    ],
+    "TilizeWithValPaddingDeviceOperation": [
+      214.684374,
+      0.182285
+    ],
+    "TransposeDeviceOperation": [
+      30.197664,
+      32.729872
+    ],
+    "TypecastDeviceOperation": [
+      47.502884,
+      34.572306
+    ],
+    "UnaryDeviceOperation": [
+      35.467327,
+      35.313183
+    ],
+    "UntilizeCodegenDeviceOperation": [
+      0,
+      1.256396
+    ],
+    "UntilizeWithUnpaddingDeviceOperation": [
+      453.302505,
+      0
+    ]
+  },
+  "finding": "Kernel duration sum drops from 2172.7ms to 603.6ms, while matrix-product duration remains 133.8/134.0ms. Large untilize, tilize, slice and binary costs largely disappear. Reshape is now the largest category (192.3ms). This validates the layout-cost cause of the speedup, not trajectory quality.",
+  "compatibility_repair": "The first generated execution failed: Python omitted a CPU-hoisted si32-to-ui32 output cast declared in native IR. An explicit opt-in repair verifies the exact adjacent-pair indices and restores uint32 before embedding. Both failure and repaired artifacts are retained; no generated file or learned arithmetic was modified.",
+  "quality": "Repaired generated execution passes the local stock FP32 CPU forward smoke gate. Complete synthetic trajectories remain failures, as recorded separately; no production-default change."
+}

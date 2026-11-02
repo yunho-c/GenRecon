@@ -338,6 +338,14 @@ avoiding this host's slow native BF16 products. Small native BF16 comparisons
 test the emulation. This is not a CUDA/TT kernel oracle and does not replace
 the original FP32 reference or acceptance gates.
 
+The [optimized full-flow profile](results/autoresearch/011-real-rope-profile/summary.json)
+retains both the failed original export execution and a validated compatibility
+repair. For this real-RoPE export, `codegen_probe.py execute
+--repair-embedding-indices` restores the CPU-hoisted unsigned index dtype that
+native IR declares but emitted Python omits. It verifies the exact 128 adjacent
+pair indices before applying the cast, records the repair, and leaves generated
+files and learned arithmetic unchanged. The option is off by default.
+
 Additional probes and CPU regression checks:
 
 ```bash

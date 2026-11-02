@@ -1,0 +1,55 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/019-shape-real-rope-codegen-512",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "cd003098a4a32780efeb337299ad7082dbfcfba8e0b88c8bb3090823152e4a48",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "shape_flow_tensor",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0
+  },
+  "rope_mode": "real_pairs",
+  "export_sha256": "8fe19c192a7e3e2c3e82508cbd5a8f9e3f3c8155a1531794a72a68e71bb9c983",
+  "ttnn_path": "/home/user/tt-metal/ttnn/ttnn/__init__.py",
+  "metal_commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+  "instrumented": true,
+  "timing_scope": "Resident weights and compiler const-eval cache; disk activation loading excluded; input transfer, generated forward and synchronized CPU output included",
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "first_seconds": 14.6949823150062,
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.06725520545653325,
+      "pcc": 0.9978514458039103,
+      "max_abs": 0.3817991614341736
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.06725520545653325,
+    "pcc": 0.9978514458039103,
+    "max_abs": 0.3817991614341736
+  },
+  "warm_seconds": [
+    0.619886984990444
+  ],
+  "warm_median_seconds": 0.619886984990444,
+  "output_sha256": "6c0112f4d5f77fed8a33de1001c50afb05b3acfbdd21ab14bd098277781c885d"
+}
