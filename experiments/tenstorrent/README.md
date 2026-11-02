@@ -536,6 +536,13 @@ finds IoU 0.913 between TT variants, and 0.509/0.514 for stock/candidate against
 the FP32 sampler. Those occupied-set changes prevent a preserved-quality claim.
 This is one crop's occupancy, not a reconstructed mesh or a TT decoder test.
 
+The [real-poster precision calibration](results/autoresearch/031-real-poster-precision/summary.json)
+finds 41.5% CPU pipeline-diagnostic latent drift against FP32, but occupancy IoU
+0.868 under the common decoder. TT still differs about 71% from that diagnostic
+and has occupancy IoU about 0.54 against it. Intended rounding alone does not
+explain the remaining gap. These errors are not additive, and the CPU diagnostic
+does not establish CUDA equivalence or relax any gate.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

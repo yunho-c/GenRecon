@@ -1,0 +1,94 @@
+{
+  "status": "completed_precision_calibration",
+  "scope": "CPU BF16-boundary/FP32-accumulation diagnostic, not native BF16, CUDA or TT execution; does not replace FP32 acceptance gates",
+  "input_scope": "Same real-poster conditions, dedicated seed-123 noise, pretrained weights and original 12-step occupancy sampler as paired TT runs. Strict fixture identity verified for every comparison.",
+  "cpu_forward_seconds": 32.18703611200908,
+  "cpu_trajectory_seconds": 693.1429797490127,
+  "final_comparisons": {
+    "cpu_precision_vs_fp32": {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.4146102409282001,
+      "pcc": 0.9123760827538276,
+      "max_abs": 3.6271893978118896
+    },
+    "stock_tt_vs_cpu_precision": {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.7118784023962852,
+      "pcc": 0.7121213934646606,
+      "max_abs": 3.526540160179138
+    },
+    "real_rope_tt_vs_cpu_precision": {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.7174221125093688,
+      "pcc": 0.7077490871045915,
+      "max_abs": 3.374002695083618
+    }
+  },
+  "occupancy_vs_fp32": {
+    "stock_tt": {
+      "actual_occupied": 4163,
+      "reference_occupied": 6464,
+      "intersection": 3585,
+      "union": 7042,
+      "iou": 0.5090883271797785,
+      "dice": 0.6746965277124306,
+      "false_positive": 578,
+      "false_negative": 2879
+    },
+    "real_rope_tt": {
+      "actual_occupied": 4241,
+      "reference_occupied": 6464,
+      "intersection": 3632,
+      "union": 7073,
+      "iou": 0.5135020500494839,
+      "dice": 0.6785614198972443,
+      "false_positive": 609,
+      "false_negative": 2832
+    },
+    "cpu_precision": {
+      "actual_occupied": 6510,
+      "reference_occupied": 6464,
+      "intersection": 6030,
+      "union": 6944,
+      "iou": 0.8683755760368663,
+      "dice": 0.9295514105133343,
+      "false_positive": 480,
+      "false_negative": 434
+    }
+  },
+  "stock_tt_vs_cpu_precision_occupancy": {
+    "actual_occupied": 4163,
+    "reference_occupied": 6510,
+    "intersection": 3741,
+    "union": 6932,
+    "iou": 0.539671090594345,
+    "dice": 0.7010212686217558,
+    "false_positive": 422,
+    "false_negative": 2769
+  },
+  "real_rope_tt_vs_cpu_precision_occupancy": {
+    "actual_occupied": 4241,
+    "reference_occupied": 6510,
+    "intersection": 3752,
+    "union": 6999,
+    "iou": 0.5360765823689099,
+    "dice": 0.6979815831085481,
+    "false_positive": 489,
+    "false_negative": 2758
+  },
+  "finding": "CPU BF16-boundary/FP32-product diagnostic differs 41.5% in final latent from FP32, but common FP32 decoder occupancy IoU is 0.868. Stock/real-RoPE TT differ 71.2%/71.7% from this diagnostic, with occupancy IoU only 0.540/0.536. A substantial mismatch persists against precision-aware references; do not explain all TT/FP32 drift as intended quantization. Errors are not additive components.",
+  "decision": "Keep numerical gates and candidate defaults unchanged. Isolate backend normalization/attention/MLP arithmetic with identical learned activations. CPU diagnostic remains neither a CUDA oracle nor direct reconstruction-quality proof.",
+  "reproduce": "python experiments/tenstorrent/precision_reference.py --stage ss --flow-inputs /path/to/poster-inputs/inputs.pt --threads 16 --output-dir /path/to/new; compare its trajectory to the sealed FP32 reference and both TT payloads, then use compare_occupancy.py with the same CPU decoder."
+}

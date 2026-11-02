@@ -1,0 +1,291 @@
+{
+  "status": "completed_diagnostic",
+  "phase": "complete",
+  "seed": 0,
+  "threads": 16,
+  "torch": "2.11.0+cpu",
+  "source_sha256": "6520d22c8e600b613bc7829b98f22d75d53e6a8207ac3b7c4dec23d7a2bca7c1",
+  "scope": "CPU BF16-boundary/FP32-accumulation diagnostic, not native BF16, CUDA or TT execution; does not replace FP32 acceptance gates",
+  "metadata": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/sparse_structure.pt",
+      "bytes": 2862971400,
+      "etag": "\"aaa57a08-65087c2a1eaab\"",
+      "sha256": "e18c1caddb2357dbf5839f0f7e1569c50d855fcb47e0871483d99c91a14e2bb7"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/ss_flow_img/genrecon.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "real posed-image conditioning; FP32 CPU projection/aggregation",
+    "blocks": 30,
+    "flow_inputs_sha256": "e3eaef1e783300a1afd82b5b74fefd105eeaadc0e20511dc75d8d802ee2fce50",
+    "flow_inputs_provenance": {
+      "conditioning_sha256": "904a8a94648431c467c5ef153075a402c2288f40cc96c4208737ad436e333ed8",
+      "conditioning_provenance_sha256": "a93f444ca197bf46a15ad632a3f8814f4ab11c12ff43b024caf4475a5faf6910",
+      "dino_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+      "dino_conversion": {
+        "report_sha256": "76473f73dba2b9c66473f68f3f2118b931f4499008f15fe4a5295bf4e9a75499",
+        "status": "validated_unmasked_conversion",
+        "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
+        "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
+        "scope": "Unmasked inference conversion; original gated HF checkpoint hash is not verified. Masked-image use is unsupported. Default FP32 RoPE periods match Transformers; no BF16-period substitution.",
+        "converted_sha256": {
+          "config.json": "e3fa1b21d18021d08b20a91fb109f815ac707c20453cb1ef00ec71de858471d7",
+          "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179"
+        }
+      },
+      "script_sha256": "0796c755195cd41f5dcecb9e723331ca2ce9d95bbdb32583e770b8796d71aa78",
+      "noise_seed": 123,
+      "projection_aggregation_precision": "stock FP32 CPU",
+      "projection_aggregation_seconds": 2.260966574016493
+    }
+  },
+  "forward_seconds": 32.18703611200908,
+  "trajectory": {
+    "seconds": 693.1429797490127,
+    "forwards": [
+      {
+        "seconds": 30.57081536302576,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 33.209738607052714,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 30.56939610396512,
+        "t": [
+          982.1428833007812
+        ]
+      },
+      {
+        "seconds": 31.928840830980334,
+        "t": [
+          982.1428833007812
+        ]
+      },
+      {
+        "seconds": 32.38733042398235,
+        "t": [
+          961.5384521484375
+        ]
+      },
+      {
+        "seconds": 32.86056792503223,
+        "t": [
+          961.5384521484375
+        ]
+      },
+      {
+        "seconds": 30.405711479019374,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 31.147719399014022,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 29.121890739013907,
+        "t": [
+          909.0908813476562
+        ]
+      },
+      {
+        "seconds": 31.37672958400799,
+        "t": [
+          909.0908813476562
+        ]
+      },
+      {
+        "seconds": 30.9796493150061,
+        "t": [
+          875.0
+        ]
+      },
+      {
+        "seconds": 31.76450827001827,
+        "t": [
+          875.0
+        ]
+      },
+      {
+        "seconds": 32.05108901602216,
+        "t": [
+          833.3333129882812
+        ]
+      },
+      {
+        "seconds": 32.48753021901939,
+        "t": [
+          833.3333129882812
+        ]
+      },
+      {
+        "seconds": 31.328098681988195,
+        "t": [
+          781.25
+        ]
+      },
+      {
+        "seconds": 31.40221286000451,
+        "t": [
+          781.25
+        ]
+      },
+      {
+        "seconds": 31.89256964600645,
+        "t": [
+          714.2857055664062
+        ]
+      },
+      {
+        "seconds": 31.271477229020093,
+        "t": [
+          714.2857055664062
+        ]
+      },
+      {
+        "seconds": 31.172790638986044,
+        "t": [
+          625.0
+        ]
+      },
+      {
+        "seconds": 32.31702465401031,
+        "t": [
+          625.0
+        ]
+      },
+      {
+        "seconds": 30.766796878015157,
+        "t": [
+          500.0
+        ]
+      },
+      {
+        "seconds": 32.09666118497262,
+        "t": [
+          312.5
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "step": 1,
+        "t": 1.0,
+        "t_prev": 0.9821428571428572,
+        "seconds": 63.78417013899889,
+        "forwards": 2
+      },
+      {
+        "step": 2,
+        "t": 0.9821428571428572,
+        "t_prev": 0.9615384615384615,
+        "seconds": 62.501147329981904,
+        "forwards": 2
+      },
+      {
+        "step": 3,
+        "t": 0.9615384615384615,
+        "t_prev": 0.9375,
+        "seconds": 65.25083611300215,
+        "forwards": 2
+      },
+      {
+        "step": 4,
+        "t": 0.9375,
+        "t_prev": 0.9090909090909092,
+        "seconds": 61.556282870005816,
+        "forwards": 2
+      },
+      {
+        "step": 5,
+        "t": 0.9090909090909092,
+        "t_prev": 0.875,
+        "seconds": 60.50143346504774,
+        "forwards": 2
+      },
+      {
+        "step": 6,
+        "t": 0.875,
+        "t_prev": 0.8333333333333334,
+        "seconds": 62.74707299703732,
+        "forwards": 2
+      },
+      {
+        "step": 7,
+        "t": 0.8333333333333334,
+        "t_prev": 0.7812500000000001,
+        "seconds": 64.54135181597667,
+        "forwards": 2
+      },
+      {
+        "step": 8,
+        "t": 0.7812500000000001,
+        "t_prev": 0.7142857142857144,
+        "seconds": 62.733040424005594,
+        "forwards": 2
+      },
+      {
+        "step": 9,
+        "t": 0.7142857142857144,
+        "t_prev": 0.625,
+        "seconds": 63.16714223800227,
+        "forwards": 2
+      },
+      {
+        "step": 10,
+        "t": 0.625,
+        "t_prev": 0.5000000000000001,
+        "seconds": 63.4926915949909,
+        "forwards": 2
+      },
+      {
+        "step": 11,
+        "t": 0.5000000000000001,
+        "t_prev": 0.3125000000000001,
+        "seconds": 30.76802251394838,
+        "forwards": 1
+      },
+      {
+        "step": 12,
+        "t": 0.3125000000000001,
+        "t_prev": 0.0,
+        "seconds": 32.097669508017134,
+        "forwards": 1
+      }
+    ],
+    "parameters": {
+      "steps": 12,
+      "guidance_strength": 7.5,
+      "guidance_rescale": 0.7,
+      "guidance_interval": [
+        0.6,
+        1.0
+      ],
+      "rescale_t": 5.0
+    },
+    "sampler_config_sha256": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0",
+    "scope": "One complete original 12-step trajectory, fixed noise and real posed-image conditioning; no reconstruction-quality assessment"
+  },
+  "promoted_ops": {
+    "aten::addmm": 5520,
+    "aten::mm": 6210,
+    "aten::_scaled_dot_product_flash_attention_for_cpu": 1380,
+    "aten::bmm": 690
+  },
+  "artifact_sha256": {
+    "forward.pt": "729b7c41a1186ab0cc238250121e671f6f561201cd2c9d9616cc87b3a40fa017",
+    "trajectory.pt": "dc6e675837c17aa2795eda0437d932ebf06ba45ce906b27947e2e115f618771d"
+  }
+}
