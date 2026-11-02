@@ -1,0 +1,77 @@
+{
+  "scope": "Complete pretrained flows with original LoRA and synthetic precomputed conditioning, compiler level 0, seed 0. Matched PJRT single-forward transfer-inclusive warm timings. No full-scene or trajectory-quality claim.",
+  "shape_active_voxels": 6181,
+  "matched_fields": {
+    "versions": true,
+    "checkpoint": true,
+    "seed": true,
+    "inputs": true,
+    "active_voxels": true,
+    "reference_precision": true,
+    "requested_compile_options": true,
+    "config": true,
+    "dtype": true,
+    "fullgraph": true
+  },
+  "shape_stock_median_ms": 23510.743459977675,
+  "shape_real_rope_median_ms": 6622.775233990978,
+  "shape_forward_speedup": 3.5499835989163966,
+  "shape_stock_output": [
+    {
+      "shape": [
+        6181,
+        32
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.06851287724729162,
+      "pcc": 0.9979127645492554,
+      "max_abs_error": 0.6266592741012573,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "shape_real_rope_output": [
+    {
+      "shape": [
+        6181,
+        32
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.06815176938460318,
+      "pcc": 0.997969925403595,
+      "max_abs_error": 0.5512564182281494,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "tex_active_voxels": 512,
+  "tex_real_rope_median_ms": 628.7405319744721,
+  "tex_real_rope_output": [
+    {
+      "shape": [
+        512,
+        32
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.07996013134189185,
+      "pcc": 0.9969804286956787,
+      "max_abs_error": 0.9346868991851807,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "tex_cpu_preparation_drift": [
+    0.0
+  ],
+  "executed_fallback_ops": {
+    "shape-stock": [],
+    "shape-real-rope": [],
+    "tex-real-rope": []
+  },
+  "decision": "Retain opt-in candidate, no production promotion: 512-token complete shape trajectories fail numerical gates. Texture result is a forward smoke only and lacks a matched texture stock timing in this experiment.",
+  "reproduce": [
+    "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py --cases shape_flow_tensor --active-voxels 6181 --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 5 --timeout 1800 --output-dir /path/to/new-stock",
+    "Repeat the shape command with --rope-mode real_pairs and a fresh output directory.",
+    "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py --cases tex_flow_tensor --rope-mode real_pairs --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 5 --timeout 1800 --output-dir /path/to/new-texture"
+  ]
+}

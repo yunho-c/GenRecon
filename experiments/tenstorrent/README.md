@@ -352,6 +352,12 @@ failed the same numerical gates and increased final relative L2 error from
 0.383 to 0.422 against the identical stock FP32 CPU trajectory. It is not an
 accuracy fix; defaults remain unchanged.
 
+The [matched larger-flow measurements](results/autoresearch/014-matched-larger-flow/summary.json)
+confirm 23.51 s stock versus 6.62 s real-pair RoPE for a 6,181-token shape
+forward on PJRT (3.55x). The texture candidate passes its local forward smoke
+at 0.629 s for 512 tokens. These use synthetic conditioning; the failed shape
+trajectory checks still prevent a quality-preserving optimization claim.
+
 Additional probes and CPU regression checks:
 
 ```bash

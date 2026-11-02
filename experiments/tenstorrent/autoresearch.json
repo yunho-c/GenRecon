@@ -15,7 +15,14 @@
     "results/autoresearch/004-shape-profile-512/summary.json",
     "results/autoresearch/005-shape-opt1-512/summary.json",
     "results/autoresearch/006-shape-real-rope-512/summary.json",
-    "results/autoresearch/007-shape-codegen-6181/summary.json"
+    "results/autoresearch/007-shape-codegen-6181/summary.json",
+    "results/autoresearch/008-larger-flow-real-rope/summary.json",
+    "results/autoresearch/009-shape-trajectories/summary.json",
+    "results/autoresearch/010-pipeline-precision-diagnostic/summary.json",
+    "results/autoresearch/011-real-rope-profile/summary.json",
+    "results/autoresearch/012-hifi3-trajectory/summary.json",
+    "results/autoresearch/013-poster-restoration/summary.json",
+    "results/autoresearch/014-matched-larger-flow/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -23,15 +30,20 @@
     "Prioritize profiling: full shape generated IR uses 60 standalone softmax operations and no fused SDPA. Measure before assigning bottleneck percentages.",
     "Full 512-token profile: matmuls are 6.16% of kernel-duration sums; complex RoPE pair tiling is the main identified avoidable cost.",
     "Opt-in real-pair RoPE is 3.56x faster for the complete pretrained 512-token shape flow, bitwise equal on FP32 CPU, slightly lower device error and no reported fallback. Keep production default unchanged pending larger shapes, trajectories and scene quality.",
-    "Whole-flow level 1 retains fused SDPA but gains only 4.4% at 512 tokens and raises relative error from 6.8% to 9.3%. Do not change the default."
+    "Whole-flow level 1 retains fused SDPA but gains only 4.4% at 512 tokens and raises relative error from 6.8% to 9.3%. Do not change the default.",
+    "Matched PJRT 6181-token shape forwards: stock 23.5107s vs real-pair RoPE 6.6228s (3.55x), no reported fallback. Texture 512-token real-pair forward is 0.6287s, without a matched stock texture timing in that experiment.",
+    "Original 12-step 512-token shape sampler is 46.86s stock vs 13.24s real-pair RoPE (3.54x), but both fail trajectory smoke: final relative L2 0.411/0.383 vs identical FP32 CPU. Candidate vs stock TT relative L2 is 0.323. Do not claim quality preservation or promote.",
+    "CPU diagnostic with BF16 boundaries and FP32 products yields 0.239 final relative L2 vs FP32, but TT vs diagnostic remains about 0.39. Precision differences alone do not explain the TT discrepancy; diagnostic is not a CUDA oracle.",
+    "Optimized generated profile on the same alternate Metal SDK reduces kernel sums 2172.7ms to 603.6ms; matrix products stay 133.8/134.0ms. Explicit index-dtype compatibility repair was needed and recorded. Reshape is now largest at 192.3ms.",
+    "HiFi3 fidelity trial worsens final relative L2 to 0.422 with no recompilation/fallback; reject as accuracy fix, retain default HiFi4.",
+    "Pinned poster images/cameras and occupancy decoder restored with matching hashes, view indices and crop. Original DINO source is gated; public timm release is downloaded but not yet verified as an equivalent replacement."
   ],
   "next_actions": [
-    "Revalidate live jobs/results under scratchpad autoresearch/017-shape-real-rope-6181 (PJRT larger-layout candidate), 018-ss-real-rope (4096-token occupancy candidate), and 019-shape-real-rope-codegen-512 (candidate profile export). A saved running status alone is not evidence of a live job.",
-    "Use the completed export 019 to execute and profile the candidate on the same Metal SDK as the original 512-token profile, then reconcile removed layout operations with the measured gain.",
-    "The stock 6181-token generated export/execute under 014 is complete at 23.96s warm. Capture a marked warm device profile using codegen_probe.py execute and preserve measured rows; compare shape/attention scaling with 512 tokens.",
-    "All three flow checkpoints are now restored under /home/user/models/genrecon. Extend profiling and the real-RoPE candidate to texture and both guidance conditions.",
-    "Add matched original 12-step trajectory comparisons against stock FP32 CPU and stock TT, starting with 512 synthetic tokens before expensive larger layouts. Restore posed image fixtures for downstream topology/geometry/material quality.",
-    "Investigate the original native sparse 607617024-byte OOM: the RoPE pair tensor [6181,12,64,32] in FP32 has exactly that size. This arithmetic match is a hypothesis, not proof of the failed allocation source.",
-    "Investigate a profiling-enabled build matching the Forge wheel native runtime. Current codegen profiling uses a different Metal revision; retain that limitation in attribution."
+    "Investigate numerical drift by block/operator under the original weights and matched synthetic inputs. Preserve stock FP32 and CPU mixed-precision diagnostic references and failed complete trajectories.",
+    "Test whether the fixed real-pair RoPE eliminates the native sparse 607617024-byte allocation failure. This size exactly matches padded RoPE [6181,12,64,32] FP32, but arithmetic alone is not proof. Validate original sparse CPU equivalence first.",
+    "Validate public timm DINOv3 weight conversion against official Transformers mapping and saved original evidence before using it to regenerate real-image conditioning. Preserve source/license/revision and any non-equivalence.",
+    "Extend device profiles to 6181-token shape and full occupancy/texture samplers, with marked measured forwards and explicit alternate-SDK limitations.",
+    "Restore real-image features and original trajectories before testing downstream topology/geometry/material quality. Keep the historical 21.85min component baseline distinct from new synthetic timings.",
+    "Investigate a profiling-enabled runtime matching the Forge wheel. Existing generated-code profiling uses a different Metal revision."
   ]
 }
