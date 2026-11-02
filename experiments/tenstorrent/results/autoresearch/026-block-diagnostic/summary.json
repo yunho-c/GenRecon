@@ -1,0 +1,183 @@
+{
+  "status": "completed_numerical_diagnostic",
+  "scope": "Full pretrained shape flow at 512 synthetic tokens, original LoRA, real-pair RoPE, level-0 PJRT. Numerical instrumentation only: no timing or reconstruction-quality claim.",
+  "cpu_capture_final_exact_to_original": true,
+  "all_prepared_cpu_states_exact_to_original": true,
+  "captured_final_bitwise_to_ordinary_tt": true,
+  "all_repeated_states_bitwise": true,
+  "executed_fallback_ops": [],
+  "selected_states": {
+    "input_layer": {
+      "tt_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0018731476312622577,
+        "pcc": 0.9999984644346186,
+        "max_abs": 0.045784950256347656
+      },
+      "tt_vs_cpu_precision_diagnostic": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.002018108992414048,
+        "pcc": 0.9999981789830511,
+        "max_abs": 0.0625
+      },
+      "cpu_precision_diagnostic_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0016592132182133405,
+        "pcc": 0.9999986235111374,
+        "max_abs": 0.03120136260986328
+      }
+    },
+    "block_00": {
+      "tt_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.019979542036531107,
+        "pcc": 0.9998684561991591,
+        "max_abs": 52.97265625
+      },
+      "tt_vs_cpu_precision_diagnostic": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.02048855711588204,
+        "pcc": 0.9998731668800417,
+        "max_abs": 50.25
+      },
+      "cpu_precision_diagnostic_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.009900214878466476,
+        "pcc": 0.9999518086622307,
+        "max_abs": 41.907989501953125
+      }
+    },
+    "block_14": {
+      "tt_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.030761236040968087,
+        "pcc": 0.9995346146012096,
+        "max_abs": 115.4779052734375
+      },
+      "tt_vs_cpu_precision_diagnostic": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.03662344546552524,
+        "pcc": 0.9993847879448612,
+        "max_abs": 128.0
+      },
+      "cpu_precision_diagnostic_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.017634885088020302,
+        "pcc": 0.999868505752226,
+        "max_abs": 49.97900390625
+      }
+    },
+    "block_29": {
+      "tt_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.019695334934972324,
+        "pcc": 0.9998502597788873,
+        "max_abs": 105.7109375
+      },
+      "tt_vs_cpu_precision_diagnostic": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.01945352032227845,
+        "pcc": 0.9998553204875815,
+        "max_abs": 96.0
+      },
+      "cpu_precision_diagnostic_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.008058476276931802,
+        "pcc": 0.9999674886013433,
+        "max_abs": 47.04150390625
+      }
+    },
+    "final": {
+      "tt_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.06691406440448987,
+        "pcc": 0.9977801825908912,
+        "max_abs": 0.31577765941619873
+      },
+      "tt_vs_cpu_precision_diagnostic": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.06801841704044807,
+        "pcc": 0.9976928668536513,
+        "max_abs": 0.27297699451446533
+      },
+      "cpu_precision_diagnostic_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.028845511098052286,
+        "pcc": 0.9995848329355278,
+        "max_abs": 0.14326508343219757
+      }
+    }
+  },
+  "finding": "The first block already has about 2.00% TT-vs-FP32 relative L2 and 2.05% vs CPU precision diagnostic, while input-layer error is only 0.187%. Error is not monotonic across the 30 blocks. Final hidden-state error is 1.97%, versus 6.69% in the 32-channel prediction. CPU precision diagnostic final error is 2.88%. These are not additive error components or proof of a faulty operator.",
+  "interpretation": "Capturing all block outputs leaves the ordinary TT final prediction bitwise unchanged, and repeated captured outputs are exact, so the observed states are accepted for localizing this execution. CPU precision diagnostic is not a CUDA/TT oracle. Full sampler quality gates remain unchanged and earlier shape trajectories fail.",
+  "retained_states": [
+    "input_layer",
+    "block_00",
+    "block_29",
+    "final"
+  ],
+  "representative_bundle_sha256": "0d469f04cb47a84acccf70eb51bdff8d78aead4b43410aca5d80e3d75e829659",
+  "full_artifacts": "Full state tensors stay outside Git; all raw hashes and all 32-state comparisons are in result.json. Script and fixed seed/checkpoint reproduce them.",
+  "next": "Isolate first-block suboperations and output normalization/projection with identical inputs, preserving observational-equivalence checks. Do not assume block error accumulates monotonically or change sampler schedules.",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/block_diagnostic.py --rope-mode real_pairs --seed 0 --threads 16 --output-dir /path/to/new-diagnostic"
+}

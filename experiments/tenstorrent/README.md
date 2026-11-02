@@ -347,6 +347,16 @@ avoiding this host's slow native BF16 products. Small native BF16 comparisons
 test the emulation. This is not a CUDA/TT kernel oracle and does not replace
 the original FP32 reference or acceptance gates.
 
+`block_diagnostic.py --output-dir /path/to/new-diagnostic` compares all shape-flow
+block outputs against stock FP32 and CPU pipeline-precision diagnostics. It
+accepts attribution only when the captured final TT output is bitwise equal to
+an ordinary compiled forward and every captured state repeats exactly. The
+[first full diagnostic](results/autoresearch/026-block-diagnostic/summary.json)
+passes those checks: first-block error is already about 2%, while final hidden
+error is 1.97% and prediction error is 6.69%. Error does not grow monotonically
+across blocks. This localizes the next investigation; it changes no numerical
+gates and establishes no sampled quality or speed improvement.
+
 The [optimized full-flow profile](results/autoresearch/011-real-rope-profile/summary.json)
 retains both the failed original export execution and a validated compatibility
 repair. For this real-RoPE export, `codegen_probe.py execute
