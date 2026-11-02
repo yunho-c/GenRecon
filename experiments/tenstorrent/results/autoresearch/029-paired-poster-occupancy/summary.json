@@ -1,0 +1,59 @@
+{
+  "status": "faster_but_failed_trajectory_gates",
+  "scope": "Paired real-poster occupancy sampler; same original pretrained weights/LoRA, all 4096 tokens, 12 original steps and 22 model evaluations, same CPU-generated image conditioning and dedicated seed-123 noise. Only real-pair RoPE changes.",
+  "matched_fields": {
+    "case": true,
+    "checkpoint": true,
+    "versions": true,
+    "seed": true,
+    "inputs": true,
+    "flow_inputs_sha256": true,
+    "requested_compile_options": true,
+    "config": true,
+    "dtype": true,
+    "lora_mode": true
+  },
+  "cpu_reference_trajectories_bitwise_equal": true,
+  "stock_sampler_seconds": 364.93542624200927,
+  "real_rope_sampler_seconds": 88.12095422000857,
+  "sampler_speedup": 4.141301345090834,
+  "stock_warm_forward_ms": 16575.12630202109,
+  "real_rope_warm_forward_ms": 4009.6320110023953,
+  "stock_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.7479292497205647,
+    "pcc": 0.6775573469702676,
+    "max_abs": 4.060503363609314
+  },
+  "real_rope_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.7487718740159082,
+    "pcc": 0.6772299777194757,
+    "max_abs": 4.076196074485779
+  },
+  "real_rope_vs_stock_tt_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29440332905504185,
+    "pcc": 0.956779344797975,
+    "max_abs": 2.8436633944511414
+  },
+  "candidate_all_states_match_stock_tt_smoke": false,
+  "candidate_recompiled_during_trajectory": false,
+  "candidate_fallback_ops": [],
+  "timing_scope": "Resident weights and preuploaded conditions; input/output transfer, synchronized model calls, original CPU Euler/CFG arithmetic and instrumentation. Preparation, CPU reference, compilation/warmups and artifact I/O excluded.",
+  "decision": "Do not promote to a quality-preserving default. Candidate is 4.14x faster over the full real-image sampler, but candidate-vs-stock TT final relative L2 is 29.4% and both TT variants are about 74.8% from FP32. Similar errors against FP32 do not imply agreement with each other.",
+  "next": "Decode both through the same CPU occupancy decoder and calibrate real-image CPU pipeline precision. Continue first-block operator diagnostics.",
+  "reproduce": "Repeat stock command in ../028-stock-poster-occupancy/summary.json with --rope-mode real_pairs and a new output directory. Reuse sealed stock CPU cache after strict identity validation to shorten setup."
+}

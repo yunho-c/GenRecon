@@ -522,6 +522,10 @@ fails its full FP32 check: 364.94 s for 22 forwards, final relative L2 0.748
 and PCC 0.678, despite a passing first forward. There is no reported fallback
 or trajectory recompilation. This comparison includes BF16/FP32 differences;
 decoded occupancy and CUDA-pipeline equivalence require separate assessment.
+The [paired real-RoPE run](results/autoresearch/029-paired-poster-occupancy/summary.json)
+finishes the same sampler in 88.12 s, a 4.14x speedup. It also fails FP32 gates,
+and its final latent differs 29.4% from stock TT. Similar error magnitudes
+against FP32 do not mean the TT variants agree. Keep the candidate experimental.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
