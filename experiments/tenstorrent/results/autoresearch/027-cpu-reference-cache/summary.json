@@ -1,0 +1,21 @@
+{
+  "status": "verified_immutable_stock_cpu_cache",
+  "scope": "Completed original FP32 12-step real-image occupancy reference, 22 model evaluations. Cached values are not a substitute backend oracle and numerical gates are unchanged.",
+  "independent_cpu_reference_runs_bitwise_equal": true,
+  "original_cpu_trajectory_seconds": 743.1169250549865,
+  "cache_load_validate_seconds": 0.07105267798760906,
+  "reference_sha256": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+  "guards": [
+    "artifact SHA256",
+    "original genrecon and model/reference source hashes",
+    "strict checkpoint/config/dtype identity",
+    "Torch/SDK versions, case, seed and input shapes/dtypes",
+    "exact positive/negative condition digests, noise, coordinates, texture concat and original sampler parameters/config",
+    "all 12 states and final sample finite FP32 with expected shape"
+  ],
+  "allowed_changes": "Experimental preparation and CLI code may change while stock reference math remains identical. Serialized input-file provenance/timings may differ; exact input tensor/config identity is mandatory. Original file hashes remain in source_report.",
+  "seal_boundary": "Trusted local CPU artifact snapshotted after CPU completion while its GPU run is pending. Manifest seals its hash and original source report; not a new GPU-quality result.",
+  "restore": "Copy manifest.json into a fresh external directory and decompress reference.pt.gz there as reference.pt. Pass that directory to run.py --cpu-trajectory-cache with --sampler-trajectory and --reference-precision float32.",
+  "regression_checks": "9 cache checks plus 4 sampler checks pass; broader preceding suite passed 89 tests and 2 subtests.",
+  "live_job_note": "Original 1800-second timeout includes CPU reference and device wait. Only waiting supervisors were suspended with a 900-second hard extension; native workers continue unchanged. Controller metadata will be retained with completed results."
+}

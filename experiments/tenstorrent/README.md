@@ -497,6 +497,23 @@ check both guidance conditions, noise and original sampler configuration.
 isolate the sampler from upstream TT feature/aggregation errors. Real-image
 inputs currently support `ss_flow`; sparse shape/texture fixtures remain future work.
 
+Avoid repeating long stock CPU trajectories with a sealed reference cache:
+
+```bash
+python -m experiments.tenstorrent.reference_cache \
+  --source-case /path/to/completed-cpu-run/ss_flow --output-dir /path/to/new-cache
+```
+
+Pass `--cpu-trajectory-cache /path/to/new-cache` to a new sampler run. The loader
+checks the artifact hash, original model/reference sources, strict checkpoint,
+versions and every actual fixture tensor/config. Experimental preparation can
+change; stock reference math cannot. Stored CPU durations describe the original
+computation, and cache loading is recorded separately. The
+[retained poster CPU reference](results/autoresearch/027-cpu-reference-cache/summary.json)
+matches both independently computed references bitwise. It can be restored from
+the committed manifest and compressed tensor file on a stateless machine. Use
+a generous `--timeout`, since the harness includes CPU setup and device wait.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

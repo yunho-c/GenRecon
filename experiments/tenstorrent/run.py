@@ -104,11 +104,16 @@ def worker(args):
             from trajectory import TrajectoryFixture, compare_trajectories
             trajectory = TrajectoryFixture(args.worker.split('_')[0], inputs, getattr(model, 'coords', None),
                 input_source='real posed-image' if args.flow_inputs is not None else 'synthetic')
-            result['phase'] = 'stock_cpu_trajectory'
+            result['phase'] = 'load_cpu_trajectory_cache' if args.cpu_trajectory_cache is not None else 'stock_cpu_trajectory'
             write_result(path, result)
-            with torch.no_grad(), float32_reference(model):
-                trajectory_reference, result['cpu_trajectory'] = trajectory.run(
-                    lambda x, t, cond: model(x, t, cond['context'], cond['projected']))
+            if args.cpu_trajectory_cache is not None:
+                from reference_cache import load_cache
+                trajectory_reference, result['cpu_trajectory'], result['cpu_trajectory_cache'] = load_cache(
+                    args.cpu_trajectory_cache, result, trajectory)
+            else:
+                with torch.no_grad(), float32_reference(model):
+                    trajectory_reference, result['cpu_trajectory'] = trajectory.run(
+                        lambda x, t, cond: model(x, t, cond['context'], cond['projected']))
             torch.save(trajectory_reference, args.output_dir/'trajectory-reference.pt')
         if args.lora_mode != "stock":
             from inference_lora import prepare_lora
@@ -258,6 +263,8 @@ def main():
                         help='Compare the complete original 12-step schedule against stock FP32 CPU (complete tensor flows only)')
     parser.add_argument('--flow-inputs', type=Path,
                         help='Prepared real-image occupancy inputs; currently requires ss_flow')
+    parser.add_argument('--cpu-trajectory-cache', type=Path,
+                        help='Sealed stock FP32 reference cache; strict model/fixture identity required')
     parser.add_argument("--active-voxels", type=int, default=None,
                         help="Synthetic sparse flow size; default 512. Not a real-scene fixture.")
     parser.add_argument("--runtime-trace", action="store_true")
@@ -275,6 +282,10 @@ def main():
         if any(case != 'ss_flow' for case in cases):
             parser.error('flow-inputs currently supports ss_flow only')
         args.flow_inputs = args.flow_inputs.resolve()
+    if args.cpu_trajectory_cache is not None:
+        if not args.synthetic_trajectory:
+            parser.error('cpu-trajectory-cache requires a sampler trajectory')
+        args.cpu_trajectory_cache = args.cpu_trajectory_cache.resolve()
     if args.synthetic_trajectory:
         cases = [args.worker] if args.worker else args.cases
         if args.reference_precision != 'float32' or any(case not in ('ss_flow', 'shape_flow_tensor', 'tex_flow_tensor') for case in cases):
@@ -300,6 +311,8 @@ def main():
             command += ['--synthetic-trajectory']
         if args.flow_inputs is not None:
             command += ['--flow-inputs', str(args.flow_inputs)]
+        if args.cpu_trajectory_cache is not None:
+            command += ['--cpu-trajectory-cache', str(args.cpu_trajectory_cache)]
         if args.active_voxels is not None:
             command += ["--active-voxels", str(args.active_voxels)]
         if args.optimization_level is not None:
