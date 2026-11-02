@@ -170,11 +170,16 @@ class OverlapReductionProbe(nn.Module):
         return (acc / self.counts[:,None])[self.inverse]
 
 
-def build_case(name, checkpoints):
+def build_case(name, checkpoints, active_voxels=None):
+    if active_voxels is not None and name not in (
+        "shape_flow_stock", "tex_flow_stock", "shape_flow_tensor", "tex_flow_tensor",
+        "shape_flow_cached", "tex_flow_cached",
+    ):
+        raise ValueError("active-voxels applies only to complete sparse flow probes")
     if name in ("ss_flow", "shape_flow_stock", "tex_flow_stock", "shape_flow_tensor", "tex_flow_tensor",
                 "ss_aggregator", "shape_aggregator", "tex_aggregator", "shape_flow_cached", "tex_flow_cached"):
         from flow_probes import build_flow_case
-        return build_flow_case(name, checkpoints)
+        return build_flow_case(name, checkpoints, active_voxels=active_voxels)
     meta = {"weights": "random", "input_kind": "seeded synthetic", "dtype": "float32"}
     if name in ("projection", "projection_indices", "projection_elementwise", "projection_cpu_indices"):
         points = torch.rand(256, 3) - 0.5

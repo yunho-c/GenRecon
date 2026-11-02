@@ -42,6 +42,8 @@ def worker(args):
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "versions": {name: importlib.metadata.version(name) for name in ("torch", "torch-xla", "tt-forge", "pjrt-plugin-tt")},
         "seed": args.seed, "fullgraph": True,
+        "lora_mode": args.lora_mode,
+        "requested_active_voxels": args.active_voxels,
         "requested_compile_options": {
             **({"optimization_level": args.optimization_level} if args.optimization_level is not None else {}),
             **({"enable_trace": "true"} if args.runtime_trace else {}),
@@ -70,7 +72,7 @@ def worker(args):
         torch.manual_seed(args.seed)
         result["phase"] = "build"
         write_result(path, result)
-        model, inputs, metadata = build_case(args.worker, args.checkpoint_dir)
+        model, inputs, metadata = build_case(args.worker, args.checkpoint_dir, active_voxels=args.active_voxels)
         model.eval()
         result.update(metadata)
         result["parameters"] = sum(p.numel() for p in model.parameters())
@@ -88,6 +90,18 @@ def worker(args):
             start = time.perf_counter()
             reference = [t.detach().cpu() for t in outputs(model(*reference_inputs))]
             result["cpu_seconds"] = time.perf_counter() - start
+        if args.lora_mode != "stock":
+            from inference_lora import prepare_lora
+            start = time.perf_counter()
+            result["prepared_lora_linears"] = prepare_lora(model, args.lora_mode)
+            result["lora_prepare_seconds"] = time.perf_counter() - start
+            result["reference_note"] = "Unmodified stock model; error includes LoRA preparation and device arithmetic"
+            context = float32_reference(model) if args.reference_precision == "float32" else nullcontext(model)
+            with torch.no_grad(), context:
+                candidate = outputs(model(*reference_inputs))
+                result["lora_cpu_relative_l2"] = [
+                    ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
+                    for ref, out in zip(reference, candidate, strict=True)]
         result["phase"] = "waiting_for_device"
         write_result(path, result)
         # Permit CPU references/downloads to overlap, but serialize our hardware
@@ -170,12 +184,17 @@ def main():
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--optimization-level", type=int, choices=(0, 1, 2), default=None)
+    parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
+    parser.add_argument("--active-voxels", type=int, default=None,
+                        help="Synthetic sparse flow size; default 512. Not a real-scene fixture.")
     parser.add_argument("--runtime-trace", action="store_true")
     parser.add_argument("--trace-region-size", type=int, default=10_000_000)
     parser.add_argument("--worker", help=argparse.SUPPRESS)
     args = parser.parse_args()
     if min(args.runs, args.timeout, args.cpu_threads, args.trace_region_size) < 1:
         parser.error("runs, timeout, cpu-threads and trace-region-size must be positive")
+    if args.active_voxels is not None and args.active_voxels < 1:
+        parser.error("active-voxels must be positive")
     args.output_dir = args.output_dir.resolve()
     args.checkpoint_dir = args.checkpoint_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -191,6 +210,9 @@ def main():
                    "--output-dir", str(dest), "--checkpoint-dir", str(args.checkpoint_dir),
                    "--runs", str(args.runs), "--seed", str(args.seed), "--cpu-threads", str(args.cpu_threads),
                    "--reference-precision", args.reference_precision]
+        command += ["--lora-mode", args.lora_mode]
+        if args.active_voxels is not None:
+            command += ["--active-voxels", str(args.active_voxels)]
         if args.optimization_level is not None:
             command += ["--optimization-level", str(args.optimization_level)]
         if args.runtime_trace:

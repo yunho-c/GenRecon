@@ -132,7 +132,7 @@ class SingleChunkSLatProbe(nn.Module):
         return self.out_layer(h)[0]
 
 
-def build_flow_case(name, checkpoints):
+def build_flow_case(name, checkpoints, active_voxels=None):
     stage = name.split("_")[0]
     model, config, metadata = load_model(stage, checkpoints)
     if name.endswith("aggregator"):
@@ -149,8 +149,16 @@ def build_flow_case(name, checkpoints):
         inputs = (torch.randn(1,8,16,16,16), torch.tensor([600.]),
             torch.randn(1,1029,1024), torch.randn(1,4096,1024))
         return DenseFlowProbe(model), inputs, metadata
-    xyz = torch.stack(torch.meshgrid(*[torch.arange(8)]*3,indexing="ij"),dim=-1).reshape(-1,3)
+    count = 512 if active_voxels is None else active_voxels
+    side = 8
+    while side**3 < count:
+        side += 1
+    if count < 1 or side > model.resolution:
+        raise ValueError("Requested synthetic coordinate grid exceeds model resolution")
+    indices = torch.arange(count)
+    xyz = torch.stack((indices // side**2, indices // side % side, indices % side), dim=-1)
     coords = torch.cat([torch.zeros(len(xyz),1,dtype=torch.int64),xyz],dim=-1).int()
+    metadata["active_voxels"] = len(coords)
     inputs = (torch.randn(len(coords), model.in_channels), torch.tensor([600.]),
         torch.randn(1,1029,1024), torch.randn(len(coords),1024))
     native = NativeSparseFlowProbe(model, coords)

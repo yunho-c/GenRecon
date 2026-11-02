@@ -255,6 +255,20 @@ optimization level. Compare identical cases, seeds, precision, CPU threads and
 timing boundaries in fresh directories. Trace capture happens during warmup.
 Neither compiler success nor an operator smoke pass establishes scene quality.
 
+Frozen inference LoRA candidates are available with `--lora-mode merged`,
+`lowrank`, or `frozen_delta`; the default remains `stock`. Preparation happens
+after strict checkpoint loading, dtype conversion and the **unmodified** CPU
+reference. Both candidate CPU drift and total device error against that stock
+reference are recorded. Merging and low-rank evaluation change rounding and
+are experimental, with no scene-quality acceptance implied. `frozen_delta`
+retains the two full-width projections but prepares the delta weight once.
+CPU tests exercise nonzero LoRA self/cross attention in FP32 and BF16.
+
+Complete shape/texture flow probes also accept `--active-voxels 6181` to test a
+larger synthetic active-token layout. This supplies synthetic noise, image/3D
+conditions and grid coordinates; matching a scene's token count does not make
+it a real-scene or reconstruction-quality benchmark.
+
 Additional probes and CPU regression checks:
 
 ```bash
