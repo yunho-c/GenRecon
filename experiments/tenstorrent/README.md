@@ -543,6 +543,20 @@ and has occupancy IoU about 0.54 against it. Intended rounding alone does not
 explain the remaining gap. These errors are not additive, and the CPU diagnostic
 does not establish CUDA equivalence or relax any gate.
 
+`attention_diagnostic.py` extracts pretrained first-block Q/K/V and compares
+stock attention with FP32 SDPA on identical tensors. It checks original CPU
+attention reconstruction, retains native BF16 CPU references, measures repeated
+PJRT outputs, and can export IR **after all measurements**. The
+[controlled experiment](results/autoresearch/033-isolated-attention-precision/summary.json)
+reduces self-attention error from 10.2% to 3.28%; cross-attention remains about
+1.8–1.9%. This is an isolated arithmetic result, not a full-model quality fix.
+
+Do not interleave `codegen_py` with inference: it changes process-global compile
+options and mutates the exported module. The
+[initial interleaved run](results/autoresearch/032-rejected-export-interleaving/summary.json)
+was rejected. Fresh export modules and a separate no-export process now verify
+that native results match bitwise.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

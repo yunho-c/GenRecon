@@ -1,0 +1,10 @@
+{
+  "status": "bitwise_equal_native_outputs",
+  "checks": {
+    "self_stock": true,
+    "self_fp32_sdpa": true,
+    "cross_stock": true,
+    "cross_fp32_sdpa": true
+  },
+  "fixture_digests_match": true
+}

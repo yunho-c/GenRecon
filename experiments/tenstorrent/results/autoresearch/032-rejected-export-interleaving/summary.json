@@ -1,0 +1,12 @@
+{
+  "status": "rejected_harness_backend_contamination",
+  "finding": "tt_torch.codegen_py sets process-global custom compile options backend=codegen_py and mutates module.compile(). Interleaved later inference emitted codegen placeholder outputs instead of executing ordinary TT. Repeated zero outputs and empty fallback counters did not validate the execution boundary. All inference attribution from this run is rejected.",
+  "source_audit": {
+    "path": "tt_torch/codegen.py:codegen_py",
+    "package": "tt-forge 1.4.0",
+    "sha256": "938d6d561a8327f34125b3639b9a2d7bee41ccafd0fa8b61e4be89d4b9f27672"
+  },
+  "fix": "Reset native options per measurement, finish every native measurement before export, and export fresh module objects. A separate no-export control must match all native outputs bitwise.",
+  "affected_scope": "Only the new interleaved attention experiment 041; existing export/execute bridge uses separate processes and is unaffected.",
+  "accepted_replacement": "../033-isolated-attention-precision/summary.json"
+}

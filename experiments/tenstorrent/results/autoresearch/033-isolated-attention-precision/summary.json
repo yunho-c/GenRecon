@@ -1,0 +1,102 @@
+{
+  "status": "controlled_isolated_attention_diagnostic",
+  "scope": "Compare attention arithmetic on identical pretrained first-block Q/K/V.\n\nIsolated self/cross attention, not a whole-flow latency or quality claim. The\nFP32 candidate promotes SDPA inputs/intermediates and restores the input dtype;\nweights, masks and attention scale are unchanged. Native CPU BF16 and a CPU\nprecision diagnostic are both retained as references.\n",
+  "checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+  "fixtures": {
+    "self": [
+      "ed32fbe58986457833248019d3449de6bba0ad1c13c8701a4eb40e9b9989555a",
+      "fad73dbde548dd00a5c661241c0046c9f14d1941eed100040bfb22141679f52e",
+      "6113947dc5851a6ee6a58abc960ece1e05ba3a12382fdd47e3eb1e3c07638fd6"
+    ],
+    "cross": [
+      "e62f54e5e0a7bfdfd4dc72735b98348c5ed93e5d5e539f642ef4144b01a03fef",
+      "2b6930d92112cc11ffa1c5bfddd0745122d07776d6e236c4511791f0b4de660c",
+      "e8916812fb458e4a088da16058b1f4df477c9fbad6f53663f1bdee23be5acf85"
+    ]
+  },
+  "cpu_projection_reconstruction_bitwise": true,
+  "export_order_control": {
+    "status": "bitwise_equal_native_outputs",
+    "checks": {
+      "self_stock": true,
+      "self_fp32_sdpa": true,
+      "cross_stock": true,
+      "cross_fp32_sdpa": true
+    },
+    "fixture_digests_match": true
+  },
+  "error_vs_cpu_precision_diagnostic": {
+    "self": {
+      "stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.10211904909253669,
+        "pcc": 0.9947887571305373,
+        "max_abs": 17.25
+      },
+      "fp32_sdpa": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0327705002862141,
+        "pcc": 0.9995761517990241,
+        "max_abs": 3.69140625
+      }
+    },
+    "cross": {
+      "stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.018000824108111234,
+        "pcc": 0.9999265876790882,
+        "max_abs": 0.0703125
+      },
+      "fp32_sdpa": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.01896071372156683,
+        "pcc": 0.9999326804617359,
+        "max_abs": 0.078125
+      }
+    }
+  },
+  "native_cpu_vs_precision_diagnostic": {
+    "self": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0008498919264587439,
+      "pcc": 0.9999996396963234,
+      "max_abs": 0.25
+    },
+    "cross": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0013409354475591524,
+      "pcc": 0.9999990985601748,
+      "max_abs": 0.0078125
+    }
+  },
+  "ir_observation": "Stock SDPA QK scores, scale, softmax and AV are BF16. Promoted SDPA uses FP32 throughout and casts output back to BF16; its frontend decomposes into pre-scaling both Q and K before matmul. Both use HiFi4 and FP32 destination accumulation.",
+  "finding": "Self-attention relative L2 falls 10.21% to 3.28%; cross-attention stays about 1.80%/1.90%. Native CPU BF16 differs only 0.085%/0.134% from the CPU precision diagnostic on these inputs. First-block arithmetic warrants investigation, but blanket SDPA promotion is not established as a quality fix.",
+  "limit": "Synthetic learned first-block Q/K/V, isolated operator boundary with canonical contiguous inputs. Does not prove exact full-flow operator attribution, sampler quality, CUDA equivalence or end-to-end performance.",
+  "next": "Test explicit FP32 QK matmul followed by scaling, avoiding promoted SDPA pre-scaling. Inspect scalar/softmax/matmul math on identical inputs before a full-flow change.",
+  "tests": "5 CPU checks cover original self/cross reconstruction with nonzero LoRA in FP32/BF16 and FP32-SDPA dtype restoration. Hardware outputs repeat bitwise and match the no-export control.",
+  "reproduce": "python experiments/tenstorrent/attention_diagnostic.py --export-ir --output-dir /path/to/new; repeat without --export-ir in another process and compare fixtures/outputs bitwise."
+}
