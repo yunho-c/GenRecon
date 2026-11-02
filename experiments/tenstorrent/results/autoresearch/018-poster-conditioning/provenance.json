@@ -1,0 +1,111 @@
+{
+  "status": "conditioning_ready",
+  "device": "cpu",
+  "precision": "float32",
+  "seed": 123,
+  "scope": "Posed-image features and cameras only; no flow sampling, decoder inputs or scene-quality validation",
+  "script_sha256": "a13dc2c338f379a7c9bc07dc024c20ed6456af39af6c70fa757bbc06c8e2f93f",
+  "transforms_sha256": "40d0baebf2a79c09992761cbb388ca65808a851cde662027fdd6157b261deaed",
+  "source_commit": "e003bb4a466e31786018e33d181e89705c6d5c89",
+  "source_sha256": {
+    "genrecon/modules/image_feature_extractor.py": "55e3d7294711cf6ab8275f315f709e3f9f6c2f45876a160e088e2d954a5e34d4",
+    "configs/pipelines/texture.json": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0",
+    "experiments/tenstorrent/flow_probes.py": "70ed38b0c2629586bf3f3e39acba09965b0c3b43372c69c4f3497c5b141aecae",
+    "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c"
+  },
+  "source_transforms": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/transforms_available.json",
+  "torch": "2.11.0+cpu",
+  "colmap_to_scene": [
+    [
+      3.2438553269939644e-17,
+      0.9999999999999998,
+      -2.5699032546058336e-17,
+      6.245004513516506e-17
+    ],
+    [
+      0.9999999999999998,
+      -3.206523589028629e-17,
+      1.6469733683525298e-16,
+      -6.245004513516506e-17
+    ],
+    [
+      8.921210082717957e-17,
+      1.1627713816888039e-17,
+      -0.9999999999999998,
+      3.469446951953614e-17
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "colmap_cameras_sha256": "5ae3b80bc0dec00c0bbd823ca2f804fc0534420522c388cfa847feb6d13a17fb",
+  "center": [
+    -0.14840045451805728,
+    0.7697914575284823,
+    -1.2254205646856013
+  ],
+  "extent": 19.499052366887362,
+  "cube_selection": "COLMAP 5%-95% bounds, 10% margin",
+  "points3d_sha256": "511189176ac3223f06f9064ed6a9e060992890a6f47d1fbba159f611e82ac3dd",
+  "phase": "complete",
+  "elapsed_seconds": 13.464919165009633,
+  "images": [
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00001.png",
+      "sha256": "ceae28f8835d622e44b59eb1a6a9cde30df110b399b79efd7ea19ce07e7b0339",
+      "frame_index": 0
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00029.png",
+      "sha256": "cf525a74457c4ceb7a52ecdb1768d484e7fec00fae1db286abc2c1c586b31d20",
+      "frame_index": 14
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00067.png",
+      "sha256": "b07fb9492eec4c4506bdceb642c10651d500809ed1124c6a02d358660b926d8f",
+      "frame_index": 28
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00101.png",
+      "sha256": "26fb5ab5751d726b6d54e7de4a1e6c54b0affdad13806a6e161b471e2845c93e",
+      "frame_index": 42
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00117.png",
+      "sha256": "6748e91d70084158d75a150b7c717caf8d663d835549dd2c38b86b2e2ecaf462",
+      "frame_index": 56
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00165.png",
+      "sha256": "22173a27b5e464a26d65281ee498dc7444b7a6a6b987f13df72ac811eb56ba45",
+      "frame_index": 70
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00199.png",
+      "sha256": "f2144c3a4853fc0936d9e4b5e6b640b9e9903eac46d1c9214991306595f5eeb6",
+      "frame_index": 84
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00217.png",
+      "sha256": "303da6cb2a1c7fca0a9727f769587b680344b04fdaff7ad63442c2dfe10343b5",
+      "frame_index": 99
+    }
+  ],
+  "dino_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+  "dino_config_sha256": "e3fa1b21d18021d08b20a91fb109f815ac707c20453cb1ef00ec71de858471d7",
+  "dino_conversion": {
+    "report_sha256": "76473f73dba2b9c66473f68f3f2118b931f4499008f15fe4a5295bf4e9a75499",
+    "status": "validated_unmasked_conversion",
+    "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
+    "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
+    "scope": "Unmasked inference conversion; original gated HF checkpoint hash is not verified. Masked-image use is unsupported. Default FP32 RoPE periods match Transformers; no BF16-period substitution.",
+    "converted_sha256": {
+      "config.json": "e3fa1b21d18021d08b20a91fb109f815ac707c20453cb1ef00ec71de858471d7",
+      "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179"
+    }
+  },
+  "conditioning_sha256": "904a8a94648431c467c5ef153075a402c2288f40cc96c4208737ad436e333ed8"
+}

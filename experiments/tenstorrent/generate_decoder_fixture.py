@@ -176,6 +176,8 @@ def main():
     p.add_argument("--threads", type=int, default=16)
     p.add_argument("--checkpoints", type=Path, default=Path.home() / "models/genrecon")
     p.add_argument("--dino", type=Path, default=Path.home() / "models/genrecon/dinov3-vitl16")
+    p.add_argument('--conditioning-only', action='store_true',
+                   help='Save posed-image features/cameras and stop before flow sampling')
     p.add_argument("--output-dir", type=Path, required=True)
     args = p.parse_args()
     if args.views < 1 or args.threads < 1 or ((args.center is None) != (args.extent is None)):
@@ -219,13 +221,26 @@ def main():
         phase("dino_features")
         dino = DinoV3FeatureExtractor(str(args.dino))
         report["dino_sha256"] = sha256(args.dino / "model.safetensors")
+        report['dino_config_sha256'] = sha256(args.dino / 'config.json')
+        conversion = args.dino / 'conversion.json'
+        if conversion.exists():
+            report['dino_conversion'] = {
+                'report_sha256': sha256(conversion),
+                **{key: value for key, value in json.loads(conversion.read_text()).items()
+                   if key in ('status', 'repo', 'revision', 'scope', 'converted_sha256')}}
         # Use the original extractor's exact preprocessing and layer path on CPU.
         with torch.no_grad():
             features = torch.cat([dino.extract_features(dino.transform(image[None])) for image in images])[None]
         torch.save({"features": features, "intrinsics": intrinsics, "extrinsics": extrinsics},
                    args.output_dir / "conditioning.pt")
+        report['conditioning_sha256'] = sha256(args.output_dir / 'conditioning.pt')
         del dino
         gc.collect()
+        if args.conditioning_only:
+            report.update(status='conditioning_ready',
+                          scope='Posed-image features and cameras only; no flow sampling, decoder inputs or scene-quality validation')
+            phase('complete')
+            return
         cfg = json.loads((ROOT / "configs/pipelines/texture.json").read_text())["args"]
         sampler = FlowEulerGuidanceIntervalSampler(sigma_min=1e-5)
         report["sampling"] = {key: cfg[key]["params"] for key in

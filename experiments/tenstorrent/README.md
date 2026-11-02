@@ -437,6 +437,13 @@ inference; the missing mask token is a zero placeholder, and the original gated
 checkpoint file hash is not reproduced. Historical scene outputs still need a
 fresh matched reference.
 
+`generate_decoder_fixture.py --conditioning-only` restores posed-image features
+and cameras without running the flow samplers. It records the DINO config,
+weights and conversion-report hashes and finishes as `conditioning_ready`,
+distinct from a sampled decoder fixture. The
+[fresh poster conditioning](results/autoresearch/018-poster-conditioning/summary.json)
+has shape `[1,8,1029,1024]` with finite values and the original crop.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

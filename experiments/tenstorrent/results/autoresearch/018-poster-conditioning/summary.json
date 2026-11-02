@@ -1,0 +1,32 @@
+{
+  "status": "conditioning_ready",
+  "scope": "Posed-image features and cameras only; no flow sampling, decoder inputs or scene-quality validation",
+  "feature_shape": [
+    1,
+    8,
+    1029,
+    1024
+  ],
+  "finite": true,
+  "conditioning_sha256": "904a8a94648431c467c5ef153075a402c2288f40cc96c4208737ad436e333ed8",
+  "checkpoint_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+  "checkpoint_origin": {
+    "report_sha256": "76473f73dba2b9c66473f68f3f2118b931f4499008f15fe4a5295bf4e9a75499",
+    "status": "validated_unmasked_conversion",
+    "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
+    "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
+    "scope": "Unmasked inference conversion; original gated HF checkpoint hash is not verified. Masked-image use is unsupported. Default FP32 RoPE periods match Transformers; no BF16-period substitution.",
+    "converted_sha256": {
+      "config.json": "e3fa1b21d18021d08b20a91fb109f815ac707c20453cb1ef00ec71de858471d7",
+      "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179"
+    }
+  },
+  "center": [
+    -0.14840045451805728,
+    0.7697914575284823,
+    -1.2254205646856013
+  ],
+  "extent": 19.499052366887362,
+  "next": "Build matched full sampler fixtures from these real-image features and the restored GenRecon checkpoints. No new sampled reconstruction or performance claim yet.",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/generate_decoder_fixture.py --transforms /path/to/source/transforms_available.json --image-dir /path/to/source/poster/images_2 --points3d /path/to/source/poster/colmap/sparse/0/points3D.bin --dino /path/to/validated-converted-dino --conditioning-only --output-dir /path/to/new-conditioning"
+}
