@@ -1,0 +1,34 @@
+{
+  "scope": "One marked warm forward of the complete pretrained 30-block shape flow, 512 synthetic active voxels, compiler-generated TTNN in the separate profiling-enabled Metal SDK. Not original PJRT wall-time attribution or scene quality.",
+  "measurements": {
+    "wall_ms": 2211.391141,
+    "summed_kernel_ms": 2172.662549,
+    "device_operations": 4943
+  },
+  "matrix_shape_groups": {
+    "mlp": {
+      "calls": 60,
+      "kernel_ms": 32.202181
+    },
+    "other_matrix_products": {
+      "calls": 277,
+      "kernel_ms": 70.673556
+    },
+    "attention_qk_or_av": {
+      "calls": 120,
+      "kernel_ms": 30.948350999999995
+    }
+  },
+  "shape_group_method": "Attention products require 12 logical heads on both operands. MLP products require weight logical dimensions 1536 and 8192, matching the model config. All remaining matmuls grouped separately. These omit surrounding attention/MLP operations.",
+  "finding": "Matrix products account for 6.16% of summed device kernel time. Layout movement and binary operations dominate; largest shape groups have logical [512,12,64,1 or 2], consistent with complex-pair RoPE expansion. This association is an inference from source/IR and tensor shapes; test an isolated real-valued RoPE rewrite to validate causality.",
+  "compiler_source_audit": {
+    "tt_mlir_commit": "6b2d83bbee7bc60e8521b814368d32785df6cd73",
+    "files": [
+      "lib/Dialect/TTNN/Pipelines/TTNNPipelines.cpp:400",
+      "lib/Dialect/TTNN/Transforms/Decomposition/TTNNDecompositionPass.cpp:35",
+      "lib/Dialect/TTNN/Transforms/Decomposition/SDPADecompositionPattern.cpp:94"
+    ],
+    "finding": "Without optimizer/OpModel validation, TTNN SDPA decomposition is unconditional. With validation, valid fused SDPA can be retained. Frontend IR already preserves BF16 attention composites."
+  },
+  "next": "Measure real-pair RoPE separately at level 0; compare against unmodified stock CPU and PJRT baselines. Also measure level 1 and real-size 6181-token layouts. Do not promote on a forward smoke pass alone."
+}

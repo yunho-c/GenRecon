@@ -1,0 +1,47 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/011-shape-codegen-512",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "e49b78873c00ff61e80e3409c31ddb2931c2d71dc4e914823bdc22ef8e089fdf",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "shape_flow_tensor",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0
+  },
+  "export_sha256": "466534a795af39083cb1269be84ccf8eafb91d8872097c4512b6b820d3c06690",
+  "ttnn_path": "/home/user/tt-metal/ttnn/ttnn/__init__.py",
+  "metal_commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+  "instrumented": true,
+  "timing_scope": "Resident weights and compiler const-eval cache; disk activation loading excluded; input transfer, generated forward and synchronized CPU output included",
+  "first_seconds": 94.5206049340195,
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.06847500183387019,
+      "pcc": 0.9977682929729074,
+      "max_abs": 0.37676286697387695
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.06847500183387019,
+    "pcc": 0.9977682929729074,
+    "max_abs": 0.37676286697387695
+  },
+  "warm_seconds": [
+    2.2112390249967575
+  ],
+  "warm_median_seconds": 2.2112390249967575,
+  "output_sha256": "71c989bf560648de5483ec386393f841239dfe3b10ed7a893304cef260c9172e"
+}
