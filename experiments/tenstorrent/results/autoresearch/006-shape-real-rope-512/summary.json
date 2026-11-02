@@ -1,0 +1,14 @@
+{
+  "scope": "Complete pretrained 30-block shape flow, 512 synthetic active voxels, level-0 PJRT, stock LoRA. Original and candidate use identical seeded tensors and a stock FP32 CPU reference. Resident weights; fresh input/output transfer and synchronization included.",
+  "baseline_report": "../002-shape-lora-512/005-shape-stock-512.json",
+  "baseline_ms": 2230.627632001415,
+  "real_pairs_ms": 627.3126209853217,
+  "speedup": 3.5558468893830986,
+  "prepared_cpu_relative_l2": [
+    0.0
+  ],
+  "baseline_relative_l2": 0.06807877501956724,
+  "real_pairs_relative_l2": 0.0669140757041272,
+  "finding": "Avoiding the complex-pair layout lowers a complete forward from 2.231s to 0.627s (3.56x) in this comparison. CPU preparation is bitwise equal at the model output; device relative error is slightly lower than baseline and no fallback is reported.",
+  "decision": "Retain as an opt-in execution candidate pending 6181-token, other-flow, matched-trajectory and real-scene quality validation. No production-default change and no end-to-end speedup claim."
+}
