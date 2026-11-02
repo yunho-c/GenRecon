@@ -1,0 +1,8 @@
+{
+  "directory": "/home/user/tt-scratchpad/genrecon/poster-ss-cpu-reference-cache-v2",
+  "manifest_sha256": "cb507a8892d571ed4ea176b8e43bfb725802cf252ee713d6ffd0702afee762c2",
+  "verified_checkpoint_sha256": "e18c1caddb2357dbf5839f0f7e1569c50d855fcb47e0871483d99c91a14e2bb7",
+  "reference_sha256": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+  "load_validate_seconds": 2.521936507022474,
+  "note": "Stock FP32 trajectory reused after strict identity/hash checks; stored CPU duration describes the original computation, not this run."
+}

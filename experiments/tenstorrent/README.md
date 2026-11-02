@@ -517,6 +517,9 @@ computation, and cache loading is recorded separately. The
 matches both independently computed references bitwise. It can be restored from
 the committed manifest and compressed tensor file on a stateless machine. Use
 a generous `--timeout`, since the harness includes CPU setup and device wait.
+Cache reuse also hashes the actual checkpoint file, so altered weights cannot
+pass with unchanged provenance metadata. Full validation took 2.52 s for the
+poster reference; the initial 70 ms measurement covered tensors/manifest only.
 The [stock real-poster occupancy trajectory](results/autoresearch/028-stock-poster-occupancy/summary.json)
 fails its full FP32 check: 364.94 s for 22 forwards, final relative L2 0.748
 and PCC 0.678, despite a passing first forward. There is no reported fallback

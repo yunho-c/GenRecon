@@ -3,7 +3,6 @@
   "scope": "Completed original FP32 12-step real-image occupancy reference, 22 model evaluations. Cached values are not a substitute backend oracle and numerical gates are unchanged.",
   "independent_cpu_reference_runs_bitwise_equal": true,
   "original_cpu_trajectory_seconds": 743.1169250549865,
-  "cache_load_validate_seconds": 0.07105267798760906,
   "reference_sha256": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
   "guards": [
     "artifact SHA256",
@@ -16,6 +15,10 @@
   "allowed_changes": "Experimental preparation and CLI code may change while stock reference math remains identical. Serialized input-file provenance/timings may differ; exact input tensor/config identity is mandatory. Original file hashes remain in source_report.",
   "seal_boundary": "Trusted local CPU artifact snapshotted after CPU completion while its GPU run is pending. Manifest seals its hash and original source report; not a new GPU-quality result.",
   "restore": "Copy manifest.json into a fresh external directory and decompress reference.pt.gz there as reference.pt. Pass that directory to run.py --cpu-trajectory-cache with --sampler-trajectory and --reference-precision float32.",
-  "regression_checks": "9 cache checks plus 4 sampler checks pass; broader preceding suite passed 89 tests and 2 subtests.",
-  "live_job_note": "Original 1800-second timeout includes CPU reference and device wait. Only waiting supervisors were suspended with a 900-second hard extension; native workers continue unchanged. Controller metadata will be retained with completed results."
+  "regression_checks": "10 cache checks and 4 sampler checks pass; preceding broader suite passed 89 tests and 2 subtests.",
+  "live_job_note": "Original 1800-second timeout includes CPU reference and device wait. Only waiting supervisors were suspended with a 900-second hard extension; native workers continue unchanged. Controller metadata will be retained with completed results.",
+  "initial_tensor_manifest_validation_seconds": 0.07105267798760906,
+  "cache_load_validate_seconds_with_checkpoint_rescan": 2.521936507022474,
+  "verified_physical_checkpoint_sha256": "e18c1caddb2357dbf5839f0f7e1569c50d855fcb47e0871483d99c91a14e2bb7",
+  "guard_update": "Cache reuse also rescans actual checkpoint bytes, rejecting modified weights even when provenance metadata is unchanged. Initial 70ms measurement excluded this additional guard; current full timing is recorded separately."
 }

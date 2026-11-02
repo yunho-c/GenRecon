@@ -108,8 +108,10 @@ def worker(args):
             write_result(path, result)
             if args.cpu_trajectory_cache is not None:
                 from reference_cache import load_cache
+                stem = {'ss': 'sparse_structure', 'shape': 'shape_slat', 'tex': 'texture_slat'}[trajectory.stage]
                 trajectory_reference, result['cpu_trajectory'], result['cpu_trajectory_cache'] = load_cache(
-                    args.cpu_trajectory_cache, result, trajectory)
+                    args.cpu_trajectory_cache, result, trajectory,
+                    checkpoint_path=args.checkpoint_dir / (stem + '.pt'))
             else:
                 with torch.no_grad(), float32_reference(model):
                     trajectory_reference, result['cpu_trajectory'] = trajectory.run(

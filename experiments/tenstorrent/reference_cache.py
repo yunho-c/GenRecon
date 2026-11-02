@@ -51,7 +51,7 @@ def create_cache(source_case, destination):
     return manifest
 
 
-def load_cache(directory, report, fixture):
+def load_cache(directory, report, fixture, *, checkpoint_path):
     import torch
     from experiments.tenstorrent.scene_sampling import features
     from experiments.tenstorrent.trajectory import tensor_digest
@@ -60,6 +60,9 @@ def load_cache(directory, report, fixture):
     manifest = json.loads((directory / 'manifest.json').read_text())
     if manifest.get('schema') != 1 or manifest['signature'] != signature(report):
         raise ValueError('CPU cache model/reference/checkpoint/version/input identity changed')
+    checkpoint_digest = sha256(checkpoint_path)
+    if checkpoint_digest != report['checkpoint']['sha256']:
+        raise ValueError('Loaded checkpoint bytes differ from recorded provenance')
     if sha256(directory / 'reference.pt') != manifest['reference_sha256']:
         raise ValueError('CPU cache artifact hash changed')
     payload = torch.load(directory / 'reference.pt', weights_only=True, map_location='cpu')
@@ -83,6 +86,7 @@ def load_cache(directory, report, fixture):
             raise ValueError('CPU cache states must be finite FP32 tensors of the expected shape')
     return payload, manifest['cpu_trajectory'], {
         'directory': str(directory.resolve()), 'manifest_sha256': sha256(directory / 'manifest.json'),
+        'verified_checkpoint_sha256': checkpoint_digest,
         'reference_sha256': manifest['reference_sha256'], 'load_validate_seconds': time.perf_counter()-start,
         'note': 'Stock FP32 trajectory reused after strict identity/hash checks; stored CPU duration describes the original computation, not this run.'}
 
