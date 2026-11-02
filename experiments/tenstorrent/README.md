@@ -315,6 +315,9 @@ preparation drift, and TT outputs are still compared against the stock model.
 The production implementation and probe default remain unchanged. Supported
 boundaries are dense fixed-layout flows/blocks and the active-token sequence
 adapter, with inference-only weights and immutable coordinates/phases.
+The same `--rope-mode real_pairs` option is available when exporting with
+`codegen_probe.py`; it retains the unmodified stock CPU reference and records
+preparation drift before generating an independently validated TTNN program.
 
 Additional probes and CPU regression checks:
 

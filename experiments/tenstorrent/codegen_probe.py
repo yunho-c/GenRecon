@@ -38,6 +38,7 @@ def main():
     p.add_argument('--checkpoints', type=Path, default=Path.home()/'models/genrecon')
     p.add_argument('--active-voxels', type=int)
     p.add_argument('--optimization-level', type=int, choices=(0, 1, 2), default=0)
+    p.add_argument('--rope-mode', choices=('stock', 'real_pairs'), default='stock')
     p.add_argument('--seed', type=int, default=0)
     p.add_argument('--threads', type=int, default=16)
     p.add_argument('--runs', type=int, default=3)
@@ -94,6 +95,14 @@ def main():
             with torch.no_grad(), float32_reference(model):
                 expected = model(*inputs)
             torch.save({'inputs': inputs, 'expected': expected}, directory/'reference.pt')
+            report['rope_mode'] = args.rope_mode
+            if args.rope_mode == 'real_pairs':
+                from experiments.tenstorrent.inference_rope import prepare_real_rope
+                report['prepared_rope_blocks'] = prepare_real_rope(model)
+                with torch.no_grad(), float32_reference(model):
+                    candidate = model(*inputs)
+                report['prepared_cpu_relative_l2'] = (
+                    (candidate.double()-expected.double()).norm()/expected.double().norm().clamp_min(1e-30)).item()
             phase('waiting_for_device')
             lock = os.open('/tmp/genrecon-tt-pjrt.lock', os.O_CREAT | os.O_RDWR, 0o600)
             fcntl.flock(lock, fcntl.LOCK_EX)
@@ -115,7 +124,8 @@ def main():
             if export.get('status') != 'exported_unvalidated':
                 raise ValueError('Export has not completed successfully')
             report.update(case=export['case'], seed=export['seed'],
-                          compiler_options=export['compiler_options'])
+                          compiler_options=export['compiler_options'],
+                          rope_mode=export.get('rope_mode', 'stock'))
             report['export_sha256'] = sha256(directory/'export.json')
             report['ttnn_path'] = ttnn.__file__
             metal_root = os.environ.get('TT_METAL_HOME')
