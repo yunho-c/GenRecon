@@ -269,6 +269,14 @@ larger synthetic active-token layout. This supplies synthetic noise, image/3D
 conditions and grid coordinates; matching a scene's token count does not make
 it a real-scene or reconstruction-quality benchmark.
 
+New staged scene runs enforce the local numerical smoke gates before reporting
+completion. This still does not validate the full sampled trajectory or mesh.
+`scene_pipeline.py --resume` now requires identical source/configuration content,
+checkpoint contents and execution settings, and verifies recorded stage inputs
+and outputs. Checkpoint fingerprinting is outside timed inference. Legacy reports
+without this identity require a fresh output directory; historical results are
+retained as originally measured.
+
 Additional probes and CPU regression checks:
 
 ```bash

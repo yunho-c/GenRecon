@@ -12,6 +12,11 @@ from pathlib import Path
 import subprocess
 import time
 
+if __package__:
+    from .experiment_identity import experiment_identity, validate_resume
+else:
+    from experiment_identity import experiment_identity, validate_resume
+
 ROOT = Path(__file__).resolve().parents[2]
 STAGES = ("dino", "ss", "ss_decode", "shape", "tex", "decode")
 
@@ -45,12 +50,20 @@ def main():
         p.error("block grouping requires --sparse-flow-layout native")
     args.output_dir.mkdir(parents=True, exist_ok=args.resume)
     report_path = args.output_dir / "result.json"
+    print("Fingerprinting source, settings and checkpoints (outside inference timing)", flush=True)
+    identity = experiment_identity(ROOT, {
+        "threads": args.threads, "flow_group_size": args.flow_group_size,
+        "sparse_flow_layout": args.sparse_flow_layout,
+        "forge_python": args.forge_python, "metal_python": args.metal_python,
+    }, args.checkpoints)
     report = json.loads(report_path.read_text()) if report_path.exists() else {
         "scope": "512, one bounded poster cube, single Wormhole chip, no mesh extraction",
         "fixture": str(args.fixture.resolve()), "seed": args.seed, "stages": {},
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "hardware": subprocess.check_output(["tt-smi", "-s"], text=True),
+        "experiment_identity": identity,
     }
+    validate_resume(report.get("experiment_identity"), identity)
     if report["fixture"] != str(args.fixture.resolve()) or report["seed"] != args.seed:
         raise ValueError("resume must use the same fixture and seed")
     report["status"] = "running"
@@ -67,9 +80,10 @@ def main():
         if stage_result.exists():
             old = json.loads(stage_result.read_text())
             if args.resume and old.get("status") == "completed":
-                # Resume may span code changes, whose exact hashes remain in
-                # each manifest, but it must not silently reuse changed data.
+                # Identity above checks source/settings/checkpoints; also check
+                # this stage's actual fixture and upstream tensor inputs.
                 inputs = dict(old.get("input_files_sha256", {}))
+                inputs.update(old.get("output_files_sha256", {}))
                 inputs.update({item["path"]: item["sha256"] for item in old.get("images", [])})
                 for path, expected in inputs.items():
                     if sha256(Path(path)) != expected:

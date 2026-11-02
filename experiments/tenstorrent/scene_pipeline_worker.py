@@ -82,14 +82,11 @@ def main():
         return torch.load(path, weights_only=True, map_location="cpu")
 
     def compare(actual, expected):
-        a, e = actual.double().reshape(-1), expected.double().reshape(-1)
-        if a.shape != e.shape:
-            return {"shape_match": False}
-        ac, ec = a - a.mean(), e - e.mean()
-        return {"finite": bool(torch.isfinite(a).all()),
-                "relative_l2": ((a-e).norm() / e.norm().clamp_min(1e-30)).item(),
-                "pcc": ((ac*ec).sum() / (ac.norm()*ec.norm()).clamp_min(1e-30)).item(),
-                "max_abs": (a-e).abs().max().item()}
+        from experiments.tenstorrent.validation import enforce_check
+        # Each stage's first-forward checks must pass before it can complete.
+        # Keep failed diagnostics in the report even when assignment is aborted.
+        name = f"{args.stage}:{len(report.get('numerical_checks', {})) + 1}"
+        return enforce_check(report, name, actual, expected)
 
     def timed(fn):
         start = time.perf_counter()
@@ -417,6 +414,10 @@ def main():
                 ss_decode()
             else:
                 decode()
+        report["validation_scope"] = "Local first-forward numerical smoke gates and finite outputs; full-trajectory and scene quality unverified"
+        report["output_files_sha256"] = {
+            str(path): sha256(path) for path in sorted(output.iterdir())
+            if path.is_file() and path.suffix in (".pt", ".npz")}
         report["status"] = "completed"
         phase("complete")
     except Exception as exc:
