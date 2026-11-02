@@ -1,0 +1,8 @@
+{
+  "torch": "2.11.0+cpu",
+  "torch-xla": "2.9.0+git56f8e61",
+  "tt-forge": "1.4.0",
+  "pjrt-plugin-tt": "1.4.0",
+  "transformers": "5.5.1",
+  "torchvision": "0.26.0"
+}

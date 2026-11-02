@@ -14,6 +14,15 @@ decision changes sign. See the [results and limitations](../experiments/tenstorr
 More scenes and a native mesh/material reference would help assess the practical
 effect; they are no longer needed just to establish real-input decoder execution.
 
+A subsequent [staged TT scene run](../experiments/tenstorrent/SCENE_PIPELINE_MEASUREMENTS.md)
+has now generated its own matched latent pair from the same eight images, using
+TT DINO and all three 12-step samplers. The pair is saved at
+`/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/decode/decoder_input.npz`
+with 6,181 active input voxels; both TT decoders complete through 2,402,851
+matching output voxels. This establishes the raw-output chain's execution.
+Matched full-trajectory CPU/CUDA results, additional scenes and native
+mesh/material references remain useful for reconstruction-quality validation.
+
 ## Minimum input: one matching shape/texture latent pair
 
 Please provide an uncompressed or compressed NumPy `.npz` containing:

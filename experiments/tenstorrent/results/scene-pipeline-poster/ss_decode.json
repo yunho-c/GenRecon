@@ -1,0 +1,53 @@
+{
+  "status": "completed",
+  "stage": "ss_decode",
+  "torch": "2.11.0+cpu",
+  "seed": 123,
+  "threads": 16,
+  "input_files_sha256": {
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/ss/latent.pt": "71b2e9dd9bafae010d9607d096dcf03589cd6c3d3004c8f97043c195c6a8efbc"
+  },
+  "source_commit": "b6412948b6fdc986eda6a85a5da1f0627641a540",
+  "source_sha256": {
+    "experiments/tenstorrent/scene_pipeline_worker.py": "2ea723130904cd3240c53f6eb23e660535c9f23a6697b028cdeb2eec94113e83",
+    "experiments/tenstorrent/scene_sampling.py": "100a20d7bbf1047d0c87b5500da7daec4823b0d7a78b005db8765b94c0ce8146",
+    "experiments/tenstorrent/flow_probes.py": "bece565eaf622aa0ebed5ddb04adf801a1651655ecc5fc949a1005daff89237e",
+    "configs/pipelines/texture.json": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0"
+  },
+  "phase": "complete",
+  "elapsed_seconds": 20.78948410897283,
+  "checkpoint_sha256": {
+    ".json": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5",
+    ".safetensors": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+  },
+  "model_load_seconds": 0.6037208769703284,
+  "cpu_reference_seconds": 1.0966270200442523,
+  "device_open_seconds": 0.3433884399710223,
+  "device_type": "TT",
+  "first_inference_seconds": 9.622435185010545,
+  "warm_seconds": [
+    2.9572287870105356,
+    2.960035418975167,
+    2.958587136003189
+  ],
+  "vs_cpu_fp32": {
+    "finite": true,
+    "relative_l2": 0.002951640485257817,
+    "pcc": 0.9999865477180163,
+    "max_abs": 4.390380859375
+  },
+  "occupancy_seconds": 0.003516811993904412,
+  "active_voxels": 6181,
+  "cpu_reference_voxels": 6181,
+  "coordinates_equal": false,
+  "logit_sign_disagreements": 22,
+  "warm_path_seconds": 2.962103947997093,
+  "executed_fallback_ops": [],
+  "aten_counters": {},
+  "dynamo_stats": {
+    "calls_captured": 180,
+    "unique_graphs": 1
+  },
+  "process_seconds": 27.12194967700634,
+  "returncode": 0
+}

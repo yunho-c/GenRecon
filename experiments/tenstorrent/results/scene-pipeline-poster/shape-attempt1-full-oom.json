@@ -1,0 +1,73 @@
+{
+  "status": "failed",
+  "stage": "shape",
+  "torch": "2.11.0+cpu",
+  "seed": 123,
+  "threads": 16,
+  "input_files_sha256": {
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/dino/conditioning.pt": "325daa255cbfdcc5949d5b15d109a1fb9a336b38b421403481e5bb3c4add8cc8",
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/ss_decode/sparse_structure.pt": "76fadc4e50ad32bebd9b6f4b837345eb17a00426ed3bfb9d36ed209f4b272600"
+  },
+  "source_commit": "b6412948b6fdc986eda6a85a5da1f0627641a540",
+  "source_sha256": {
+    "experiments/tenstorrent/scene_pipeline_worker.py": "2ea723130904cd3240c53f6eb23e660535c9f23a6697b028cdeb2eec94113e83",
+    "experiments/tenstorrent/scene_sampling.py": "100a20d7bbf1047d0c87b5500da7daec4823b0d7a78b005db8765b94c0ce8146",
+    "experiments/tenstorrent/flow_probes.py": "bece565eaf622aa0ebed5ddb04adf801a1651655ecc5fc949a1005daff89237e",
+    "configs/pipelines/texture.json": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0"
+  },
+  "phase": "compile_flow",
+  "elapsed_seconds": 358.24933893198613,
+  "sampling": {
+    "steps": 12,
+    "guidance_strength": 7.5,
+    "guidance_rescale": 0.5,
+    "guidance_interval": [
+      0.6,
+      1.0
+    ],
+    "rescale_t": 3.0
+  },
+  "model_load_seconds": 17.55084464099491,
+  "checkpoint": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/shape_slat.pt",
+      "bytes": 5410532174,
+      "etag": "\"1427e2b4e-6503179da85ac\"",
+      "sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/slat_flow_img2shape/genrecon_512.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "real poster images; TT-generated upstream conditioning/occupancy",
+    "blocks": 30
+  },
+  "active_voxels": 6181,
+  "projection_seconds": 0.031809896987397224,
+  "aggregator_cpu_reference_seconds": 2.169599373009987,
+  "device_open_seconds": 0.3439982240088284,
+  "device_type": "TT",
+  "aggregator_input_upload_seconds": 0.016214255010709167,
+  "aggregator_first_seconds": 26.241278448025696,
+  "aggregator_vs_cpu_fp32": {
+    "finite": true,
+    "relative_l2": 0.032919194135192904,
+    "pcc": 0.9995324749087253,
+    "max_abs": 1.0462608337402344
+  },
+  "aggregator_warm_seconds": [
+    0.3833621389931068,
+    0.38559407799039036,
+    0.3849750949884765
+  ],
+  "cpu_forward_seconds": 64.68947133002803,
+  "model_to_device_seconds": 0.11044672603020445,
+  "condition_upload_seconds": 0.0002476699883118272,
+  "error": "RuntimeError('Bad StatusOr access: INTERNAL: Error code: 13')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/scene_pipeline_worker.py\", line 378, in main\n    flow()\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/scene_pipeline_worker.py\", line 251, in flow\n    first, report[\"first_forward_seconds\"] = timed(lambda: forward(first_values, t, positive))\n                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/scene_pipeline_worker.py\", line 92, in timed\n    value = fn()\n            ^^^^\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/scene_pipeline_worker.py\", line 251, in <lambda>\n    first, report[\"first_forward_seconds\"] = timed(lambda: forward(first_values, t, positive))\n                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/scene_pipeline_worker.py\", line 249, in forward\n    return compiled(x.to(device), timestep.to(device), *conditions[id(cond)]).cpu().float()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/tt_torch/torch_overrides.py\", line 149, in __torch_function__\n    return func(*args, **(kwargs or {}))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Bad StatusOr access: INTERNAL: Error code: 13\n",
+  "process_seconds": 366.24212256696774,
+  "returncode": 1,
+  "runtime_allocation_error": "2026-11-02 06:00:00.980 | critical |          Always | TT_FATAL: Out of Memory: Not enough space to allocate 607617024 B DRAM buffer across 12 banks, where each bank needs to store 50634752 B, but bank size is 1072693184 B (allocated: 961707744 B, free: 110985440 B, largest free block: 36649472 B) (assert.hpp:104)",
+  "raw_log_sha256": "87c49d73035362e2ee9267110841328135d2e0f4226f39c14735ad673d2db360"
+}

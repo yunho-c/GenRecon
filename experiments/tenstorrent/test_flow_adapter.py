@@ -25,18 +25,19 @@ class TestFlowAdapter(unittest.TestCase):
         dense = ModulatedTransformerCrossBlock(96,32,4,use_rope=True,share_mod=True,
             qk_rms_norm=True,qk_rms_norm_cross=True).eval()
         dense.load_state_dict(sparse.state_dict(),strict=True)
-        xyz = [torch.randint(0,8,(n,3),dtype=torch.int32) for n in (3,5)]
-        coords = torch.cat([torch.cat([torch.full((len(c),1),i,dtype=torch.int32),c],1) for i,c in enumerate(xyz)])
-        features = [torch.randn(n,96) for n in (3,5)]
-        x = SparseTensor(torch.cat(features),coords)
-        context = torch.randn(2,7,32)
         with torch.no_grad():
-            for batch in (1,2):
-                mod = torch.randn(batch,576)
-                actual = sparse(x,mod,context).feats
-                expected = torch.cat([dense(features[i][None],mod[min(i,batch-1):min(i,batch-1)+1],
-                    context[i:i+1],RotaryPositionEmbedder(24,3)(xyz[i]))[0] for i in range(2)])
-                torch.testing.assert_close(actual,expected)
+            for sizes in ((17,), (3,5)):
+                xyz = [torch.randint(0,8,(n,3),dtype=torch.int32) for n in sizes]
+                coords = torch.cat([torch.cat([torch.full((len(c),1),i,dtype=torch.int32),c],1) for i,c in enumerate(xyz)])
+                features = [torch.randn(n,96) for n in sizes]
+                x = SparseTensor(torch.cat(features),coords)
+                context = torch.randn(len(sizes),7,32)
+                for batch in sorted({1,len(sizes)}):
+                    mod = torch.randn(batch,576)
+                    actual = sparse(x,mod,context).feats
+                    expected = torch.cat([dense(features[i][None],mod[min(i,batch-1):min(i,batch-1)+1],
+                        context[i:i+1],RotaryPositionEmbedder(24,3)(xyz[i]))[0] for i in range(len(sizes))])
+                    torch.testing.assert_close(actual,expected)
 
     def test_shape_and_preconcatenated_texture(self):
         torch.set_num_threads(4)

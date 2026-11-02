@@ -1,0 +1,11 @@
+diff --git a/genrecon/modules/sparse/transformer/modulated.py b/genrecon/modules/sparse/transformer/modulated.py
+--- a/genrecon/modules/sparse/transformer/modulated.py
++++ b/genrecon/modules/sparse/transformer/modulated.py
+@@ -80,3 +80,7 @@
+         batch = x.batch_boardcast_map
+         def broadcast(value):
++            if x.shape[0] == 1:
++                # A single chunk needs no batch gather. On tiled accelerators
++                # that gather can create [N,1,C] intermediates with 32x padding.
++                return torch.broadcast_to(value, x.feats.shape)
+             return torch.broadcast_to(value, x.shape)[batch]

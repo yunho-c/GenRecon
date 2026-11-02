@@ -1,0 +1,10 @@
+{
+  "actual_voxels": 6181,
+  "cpu_voxels": 6181,
+  "common": 6180,
+  "missing": 1,
+  "extra": 1,
+  "iou": 0.9996764801035264,
+  "logit_sign_disagreements": 22,
+  "comparison": "same TT-sampled latent; CPU FP32 occupancy decoder only"
+}

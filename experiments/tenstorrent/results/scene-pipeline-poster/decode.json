@@ -1,0 +1,54 @@
+{
+  "status": "completed",
+  "stage": "decode",
+  "torch": "2.11.0+cpu",
+  "seed": 123,
+  "threads": 16,
+  "input_files_sha256": {
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/shape/slat.pt": "39a577f7fb22040cb442e8f5fd318ef1ef9bdba6181ff67dd05cdcd9c32a4631",
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/tex/slat.pt": "152722828e27cf6470e3bb2a70139e901285a33ae5a7668418bf3d82b3eb7801"
+  },
+  "source_commit": "b6412948b6fdc986eda6a85a5da1f0627641a540",
+  "source_sha256": {
+    "experiments/tenstorrent/scene_pipeline_worker.py": "53fd855dca35d6f818daefa88644f0a5501f572fd2d90b3aee27a45d80dc0449",
+    "experiments/tenstorrent/scene_sampling.py": "100a20d7bbf1047d0c87b5500da7daec4823b0d7a78b005db8765b94c0ce8146",
+    "experiments/tenstorrent/grouped_flow.py": "2982e788ccb7a3b8a37b3cec1c81b801dd9f758535ee85347e83914bf974252b",
+    "genrecon/modules/sparse/transformer/modulated.py": "d32150ce4ad28e77f686e35d4d155f4fbcba6ad7d51a12b5c1f70a654155a8f1",
+    "experiments/tenstorrent/flow_probes.py": "bece565eaf622aa0ebed5ddb04adf801a1651655ecc5fc949a1005daff89237e",
+    "configs/pipelines/texture.json": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0"
+  },
+  "phase": "complete",
+  "elapsed_seconds": 249.49634226498893,
+  "device_open_seconds": 0.9252745499834418,
+  "precision": "bf16",
+  "warm_path_seconds": 23.490502650034614,
+  "shape": {
+    "checkpoint_sha256": "e3b718d3e43e4f8780e9a24ac6fff231811a67e3b058e336e10fe654c911d581",
+    "model_load_seconds": 0.5945272360113449,
+    "prepare_seconds": 1.362222706025932,
+    "first_seconds": 157.63385429402115,
+    "output_voxels": 2402851,
+    "warm_seconds": [
+      11.900806164019741,
+      11.97029983799439,
+      11.865932146029081
+    ],
+    "warm_median_seconds": 11.900806164019741
+  },
+  "texture": {
+    "checkpoint_sha256": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c",
+    "model_load_seconds": 0.3222407809807919,
+    "prepare_seconds": 1.3497582289855927,
+    "first_seconds": 11.59730857302202,
+    "output_voxels": 2402851,
+    "warm_seconds": [
+      11.589696486014873,
+      11.648873444995843,
+      11.574502739997115
+    ],
+    "warm_median_seconds": 11.589696486014873
+  },
+  "geometry_material_coordinates_equal": true,
+  "process_seconds": 251.9707662879955,
+  "returncode": 0
+}

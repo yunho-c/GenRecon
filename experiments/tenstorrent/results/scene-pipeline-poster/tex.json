@@ -1,0 +1,310 @@
+{
+  "status": "completed",
+  "stage": "tex",
+  "torch": "2.11.0+cpu",
+  "seed": 123,
+  "threads": 16,
+  "input_files_sha256": {
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/dino/conditioning.pt": "325daa255cbfdcc5949d5b15d109a1fb9a336b38b421403481e5bb3c4add8cc8",
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/ss_decode/sparse_structure.pt": "76fadc4e50ad32bebd9b6f4b837345eb17a00426ed3bfb9d36ed209f4b272600",
+    "/home/user/tt-scratchpad/genrecon/scene-pipeline-poster/shape/slat.pt": "39a577f7fb22040cb442e8f5fd318ef1ef9bdba6181ff67dd05cdcd9c32a4631"
+  },
+  "source_commit": "b6412948b6fdc986eda6a85a5da1f0627641a540",
+  "source_sha256": {
+    "experiments/tenstorrent/scene_pipeline_worker.py": "40d7a6ef27648b943dead8192617487c3454f1211955e8bef20dd33eb41e4596",
+    "experiments/tenstorrent/scene_sampling.py": "100a20d7bbf1047d0c87b5500da7daec4823b0d7a78b005db8765b94c0ce8146",
+    "experiments/tenstorrent/grouped_flow.py": "2982e788ccb7a3b8a37b3cec1c81b801dd9f758535ee85347e83914bf974252b",
+    "genrecon/modules/sparse/transformer/modulated.py": "d32150ce4ad28e77f686e35d4d155f4fbcba6ad7d51a12b5c1f70a654155a8f1",
+    "experiments/tenstorrent/flow_probes.py": "bece565eaf622aa0ebed5ddb04adf801a1651655ecc5fc949a1005daff89237e",
+    "configs/pipelines/texture.json": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0"
+  },
+  "phase": "complete",
+  "elapsed_seconds": 874.745867421967,
+  "sampling": {
+    "steps": 12,
+    "guidance_strength": 5.0,
+    "guidance_rescale": 0.0,
+    "guidance_interval": [
+      0.6,
+      0.9
+    ],
+    "rescale_t": 3.0
+  },
+  "model_load_seconds": 17.482761369028594,
+  "checkpoint": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/texture_slat.pt",
+      "bytes": 5410728782,
+      "etag": "\"142812b4e-65087b3c07d33\"",
+      "sha256": "28f99217a4fbcd04f36a5f576905975ae8b874ad63548d6ab8afdb96cf03ed47"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/slat_flow_imgshape2tex/genrecon_512.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "real poster images; TT-generated upstream conditioning/occupancy",
+    "blocks": 30
+  },
+  "active_voxels": 6181,
+  "projection_seconds": 0.03401787905022502,
+  "aggregator_cpu_reference_seconds": 1.8920472250320017,
+  "device_open_seconds": 0.36166586296167225,
+  "device_type": "TT",
+  "aggregator_input_upload_seconds": 0.015500733978115022,
+  "aggregator_first_seconds": 8.509312354959548,
+  "aggregator_vs_cpu_fp32": {
+    "finite": true,
+    "relative_l2": 0.027337675901003854,
+    "pcc": 0.9996622997441056,
+    "max_abs": 0.9749202728271484
+  },
+  "aggregator_warm_seconds": [
+    0.3828033059835434,
+    0.38463166303699836,
+    0.38177815201925114
+  ],
+  "sparse_flow_layout": "sequence",
+  "cpu_forward_seconds": 65.96607098000823,
+  "adapter_cpu_equivalence_seconds": 62.87183348200051,
+  "adapter_vs_native_cpu": {
+    "finite": true,
+    "relative_l2": 0.0,
+    "pcc": 1.0000000000000022,
+    "max_abs": 0.0
+  },
+  "model_to_device_seconds": 0.11028002499369904,
+  "flow_group_size": 0,
+  "compilation_boundary": "whole active-token sequence",
+  "condition_upload_seconds": 0.0002583309542387724,
+  "first_forward_seconds": 195.94796210800996,
+  "first_forward_vs_cpu_fp32": {
+    "finite": true,
+    "relative_l2": 0.036462270268919246,
+    "pcc": 0.9997592932158673,
+    "max_abs": 0.22783946990966797
+  },
+  "negative_warmup_seconds": 23.506453555019107,
+  "warm_forward_seconds": [
+    23.507589569024276,
+    23.506476914975792,
+    23.503736505983397
+  ],
+  "dynamo_before_sampling": {
+    "calls_captured": 3755,
+    "unique_graphs": 2
+  },
+  "sampler_seconds": 423.10559525399003,
+  "steps": [
+    {
+      "step": 1,
+      "t": 1.0,
+      "t_prev": 0.9705882352941178,
+      "seconds": 23.5098784280126,
+      "forwards": 1
+    },
+    {
+      "step": 2,
+      "t": 0.9705882352941178,
+      "t_prev": 0.9374999999999999,
+      "seconds": 23.504647249996196,
+      "forwards": 1
+    },
+    {
+      "step": 3,
+      "t": 0.9374999999999999,
+      "t_prev": 0.9,
+      "seconds": 23.49539606802864,
+      "forwards": 1
+    },
+    {
+      "step": 4,
+      "t": 0.9,
+      "t_prev": 0.8571428571428571,
+      "seconds": 47.00925013097003,
+      "forwards": 2
+    },
+    {
+      "step": 5,
+      "t": 0.8571428571428571,
+      "t_prev": 0.8076923076923076,
+      "seconds": 47.008095247030724,
+      "forwards": 2
+    },
+    {
+      "step": 6,
+      "t": 0.8076923076923076,
+      "t_prev": 0.75,
+      "seconds": 47.00438524503261,
+      "forwards": 2
+    },
+    {
+      "step": 7,
+      "t": 0.75,
+      "t_prev": 0.6818181818181819,
+      "seconds": 47.00648703397019,
+      "forwards": 2
+    },
+    {
+      "step": 8,
+      "t": 0.6818181818181819,
+      "t_prev": 0.6,
+      "seconds": 47.01900078804465,
+      "forwards": 2
+    },
+    {
+      "step": 9,
+      "t": 0.6,
+      "t_prev": 0.5,
+      "seconds": 47.01769442501245,
+      "forwards": 2
+    },
+    {
+      "step": 10,
+      "t": 0.5,
+      "t_prev": 0.3750000000000001,
+      "seconds": 23.510603673988953,
+      "forwards": 1
+    },
+    {
+      "step": 11,
+      "t": 0.3750000000000001,
+      "t_prev": 0.21428571428571436,
+      "seconds": 23.50978975102771,
+      "forwards": 1
+    },
+    {
+      "step": 12,
+      "t": 0.21428571428571436,
+      "t_prev": 0.0,
+      "seconds": 23.507854734023567,
+      "forwards": 1
+    }
+  ],
+  "forwards": [
+    {
+      "seconds": 23.507377689005807,
+      "t": [
+        1000.0
+      ]
+    },
+    {
+      "seconds": 23.503348565020133,
+      "t": [
+        970.5882568359375
+      ]
+    },
+    {
+      "seconds": 23.49375638301717,
+      "t": [
+        937.5
+      ]
+    },
+    {
+      "seconds": 23.502400443016086,
+      "t": [
+        900.0
+      ]
+    },
+    {
+      "seconds": 23.504031968011986,
+      "t": [
+        900.0
+      ]
+    },
+    {
+      "seconds": 23.50424382998608,
+      "t": [
+        857.1428833007812
+      ]
+    },
+    {
+      "seconds": 23.5011901690159,
+      "t": [
+        857.1428833007812
+      ]
+    },
+    {
+      "seconds": 23.503255427000113,
+      "t": [
+        807.6923217773438
+      ]
+    },
+    {
+      "seconds": 23.49812683899654,
+      "t": [
+        807.6923217773438
+      ]
+    },
+    {
+      "seconds": 23.50823884498095,
+      "t": [
+        750.0
+      ]
+    },
+    {
+      "seconds": 23.49514261900913,
+      "t": [
+        750.0
+      ]
+    },
+    {
+      "seconds": 23.509158597968053,
+      "t": [
+        681.8181762695312
+      ]
+    },
+    {
+      "seconds": 23.50652977899881,
+      "t": [
+        681.8181762695312
+      ]
+    },
+    {
+      "seconds": 23.50820374500472,
+      "t": [
+        600.0
+      ]
+    },
+    {
+      "seconds": 23.506416258984245,
+      "t": [
+        600.0
+      ]
+    },
+    {
+      "seconds": 23.508561395981815,
+      "t": [
+        500.0
+      ]
+    },
+    {
+      "seconds": 23.5078067239956,
+      "t": [
+        375.0
+      ]
+    },
+    {
+      "seconds": 23.505840647034347,
+      "t": [
+        214.2857208251953
+      ]
+    }
+  ],
+  "forward_count": 18,
+  "noise_seed": 125,
+  "dynamo_after_sampling": {
+    "calls_captured": 3755,
+    "unique_graphs": 2
+  },
+  "warm_path_seconds": 423.53817550395615,
+  "sampler_host_and_instrumentation_seconds": 0.03196532896254212,
+  "executed_fallback_ops": [],
+  "aten_counters": {},
+  "dynamo_stats": {
+    "calls_captured": 3755,
+    "unique_graphs": 2
+  },
+  "process_seconds": 882.6663304429967,
+  "returncode": 0
+}

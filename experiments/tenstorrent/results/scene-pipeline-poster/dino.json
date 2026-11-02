@@ -1,0 +1,96 @@
+{
+  "status": "completed",
+  "stage": "dino",
+  "torch": "2.11.0+cpu",
+  "seed": 123,
+  "threads": 16,
+  "input_files_sha256": {
+    "/home/user/tt-scratchpad/genrecon/poster-fixture/cpu-available/provenance.json": "4f994698b680a603623dfd04c3ef695fe4c50f3301a5c781250502f6d774141e",
+    "/home/user/tt-scratchpad/genrecon/poster-fixture/cpu-available/conditioning.pt": "904a8a94648431c467c5ef153075a402c2288f40cc96c4208737ad436e333ed8"
+  },
+  "source_commit": "b6412948b6fdc986eda6a85a5da1f0627641a540",
+  "source_sha256": {
+    "experiments/tenstorrent/scene_pipeline_worker.py": "dc9a70c29d15ead638172a92c68fa63d351c919b103fff99bd7e82fd8903a60e",
+    "experiments/tenstorrent/scene_sampling.py": "100a20d7bbf1047d0c87b5500da7daec4823b0d7a78b005db8765b94c0ce8146",
+    "experiments/tenstorrent/flow_probes.py": "bece565eaf622aa0ebed5ddb04adf801a1651655ecc5fc949a1005daff89237e",
+    "configs/pipelines/texture.json": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0"
+  },
+  "phase": "complete",
+  "elapsed_seconds": 40.09277971298434,
+  "preprocess_seconds": 0.3431724949623458,
+  "model_load_seconds": 0.36444502096856013,
+  "normalize_seconds": 0.010553436994086951,
+  "device_open_seconds": 0.3752140990109183,
+  "device_type": "TT",
+  "model_to_device_seconds": 0.048717522993683815,
+  "first_inference_seconds": 32.52691825700458,
+  "warm_views_seconds": 1.5502016309765168,
+  "view_seconds": [
+    0.19298701296793297,
+    0.19125962699763477,
+    0.19479958998272195,
+    0.1946754700038582,
+    0.19380311603890732,
+    0.19407604803564027,
+    0.19343652500538155,
+    0.19357892603147775
+  ],
+  "vs_saved_cpu_fp32": {
+    "finite": true,
+    "relative_l2": 0.013473571875032715,
+    "pcc": 0.9999092314277424,
+    "max_abs": 0.46659374237060547
+  },
+  "images": [
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00001.png",
+      "sha256": "ceae28f8835d622e44b59eb1a6a9cde30df110b399b79efd7ea19ce07e7b0339",
+      "frame_index": 0
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00029.png",
+      "sha256": "cf525a74457c4ceb7a52ecdb1768d484e7fec00fae1db286abc2c1c586b31d20",
+      "frame_index": 14
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00067.png",
+      "sha256": "b07fb9492eec4c4506bdceb642c10651d500809ed1124c6a02d358660b926d8f",
+      "frame_index": 28
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00101.png",
+      "sha256": "26fb5ab5751d726b6d54e7de4a1e6c54b0affdad13806a6e161b471e2845c93e",
+      "frame_index": 42
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00117.png",
+      "sha256": "6748e91d70084158d75a150b7c717caf8d663d835549dd2c38b86b2e2ecaf462",
+      "frame_index": 56
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00165.png",
+      "sha256": "22173a27b5e464a26d65281ee498dc7444b7a6a6b987f13df72ac811eb56ba45",
+      "frame_index": 70
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00199.png",
+      "sha256": "f2144c3a4853fc0936d9e4b5e6b640b9e9903eac46d1c9214991306595f5eeb6",
+      "frame_index": 84
+    },
+    {
+      "path": "/home/user/tt-scratchpad/genrecon/poster-fixture/source/poster/images_2/frame_00217.png",
+      "sha256": "303da6cb2a1c7fca0a9727f769587b680344b04fdaff7ad63442c2dfe10343b5",
+      "frame_index": 99
+    }
+  ],
+  "precision": "BF16, original FP32 RoPE frequencies",
+  "warm_path_seconds": 1.9039275629329495,
+  "executed_fallback_ops": [],
+  "aten_counters": {},
+  "dynamo_stats": {
+    "calls_captured": 1302,
+    "unique_graphs": 1
+  },
+  "process_seconds": 46.69411677098833,
+  "returncode": 0
+}

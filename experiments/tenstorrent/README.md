@@ -8,11 +8,19 @@ NVIDIA device is used. SfM/COLMAP and training are outside this investigation.
 
 ## Current outcome
 
-All three complete pretrained flow networks execute on TT without reported XLA
-fallback in these fixed-chunk, synthetic-input tests. The sparse flows use the
-original network forward, explicit modulation broadcasting and CPU-prepared
-RoPE/layout caches. **A complete image-to-mesh GenRecon pipeline is not yet
-running on TT.**
+The [real-scene staged pipeline](SCENE_PIPELINE_MEASUREMENTS.md) now completes
+DINO, all three original 12-step samplers and both VAE decoders on one n150
+Wormhole chip, producing matched raw geometry/material outputs. Its measured
+warm components sum to **21.85 minutes** for one 512-resolution poster chunk
+with 6,181 active latent voxels and 2.40 million decoded voxels. Sampling already
+includes all 61 guidance evaluations. Mesh extraction/export, n300 execution and
+the default 1024 cascade remain unmeasured/unintegrated.
+
+The earlier synthetic results below use the native sparse flow boundary. At
+6,181 real-scene tokens that boundary runs out of memory; the successful scene
+run uses the existing active-token sequence adapter, which matches the original
+sparse model exactly in FP32 CPU at the full scene size. All learned stages run
+on TT, with host projection/sampling/topology and isolated TT-XLA/TTNN processes.
 
 | Component | Current result |
 | --- | --- |
@@ -26,12 +34,12 @@ running on TT.**
 | Shape and texture sparse VAE decoders | Complete TTNN/FlexGEMM integration; synthetic parity passes. Real-image fixture executes through 1.71M voxels, but a near-zero subdivision decision breaks exact topology parity; see [integration](SPARSE_DECODER_INTEGRATION.md) |
 | Mesh extraction, processing and export | Original CUDA-dependent path needs CPU/TT replacements |
 
-The full flows' roughly 7–9% relative error passes the declared smoke gate;
-it does **not** establish reconstruction quality. GenRecon's DINO variant on TT,
-real image conditions and multi-step scene generation **on TT**, visual scene
-quality, and end-to-end image-to-mesh integration remain unverified. The exact
-DINOv3-L/512 configuration and all three samplers have run on CPU to generate a
-real-image decoder fixture; both TT decoders have now been evaluated on it.
+The synthetic flows' roughly 7–9% relative error passes the declared smoke gate;
+it does **not** establish reconstruction quality. The subsequent real-scene run
+measures about 3.3–3.7% first-forward flow error against FP32 CPU with matched
+inputs. Full-trajectory quality, visual scene quality, exact topology parity
+and end-to-end image-to-mesh integration remain unverified. DINOv3-L/512 and
+the complete samplers now run on TT in the staged harness.
 The ordinary [BF16 decoder path](BF16_SCENE_VALIDATION.md) now has full-fixture
 warm medians of 15.09 seconds for shape and 14.63 seconds for texture, with
 substantial additional topology/geometry differences from the FP32 reference.
@@ -64,11 +72,12 @@ fixture-generation path](../../docs/required-validation-data.md) are documented 
   learned paths; in particular, the aggregation MLP's normally zero-initialized
   final layer is randomized to avoid a trivial mean-only test.
 
-The user's prior DINO result is external to this repository:
+The user's earlier DINO result is external to this repository:
 `~/tt-scratchpad/dinov3-pretrained-check/result.json`. It reports pretrained
 **ViT-B at 224x224**, PCC 0.99961 versus FP32 CPU, and no fallback ops. GenRecon
-uses **ViT-L at 512x512**; that exact integration is not established by the B/224
-result and is not counted as verified here.
+uses **ViT-L at 512x512**. That exact GenRecon feature path has since been validated
+on TT, including all eight posed images in the staged scene experiment: 1.55 s
+total warm encoder execution and 1.35% relative L2 against saved FP32 features.
 
 ## Initial results (2026-10-31)
 
@@ -305,12 +314,13 @@ file lock. CPU reference work and downloads can overlap; TT workers cannot.
 
 ## Remaining investigation
 
-- Validate real projected conditions, occupancy threshold decisions, multi-step
-  sampling and scene quality on TT. Flow probes still use synthetic conditions;
-  decoder probes now include a CPU-generated real-image fixture.
-- Integrate explicit input/output dtypes, CPU-prepared coordinate/RoPE caches,
-  variable token counts and device transfers into the scene pipeline. The exact
-  DINOv3 ViT-L/512 configuration still needs verification.
+- Extend the successful single-cube staged run to a unified public pipeline,
+  actual n300 device placement/parallelism, and the default 1024 cascade.
+- Validate full sampled trajectories and scene quality across more scenes.
+  Local numerical checks and successful execution do not establish quality;
+  occupancy and VAE threshold differences remain.
+- Investigate the native sparse feature layout's real-size allocation failure;
+  the active-token sequence adapter is the measured working boundary.
 - Assess the decoder's real-input topology differences across more scenes and
   tune latency; the accurate mode currently offers no CPU speedup on the poster
   fixture. Replace the remaining mesh-processing extensions for a complete pipeline.

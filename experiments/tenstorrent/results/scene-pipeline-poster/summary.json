@@ -1,0 +1,69 @@
+{
+  "scope": "512, one bounded poster cube, single Wormhole chip, no mesh extraction",
+  "fixture": "/home/user/tt-scratchpad/genrecon/poster-fixture/cpu-available",
+  "seed": 123,
+  "source_commit": "b6412948b6fdc986eda6a85a5da1f0627641a540",
+  "hardware": "{\n    \"time\": \"2026-11-02T05:40:30.032439\",\n    \"host_info\": {\n        \"OS\": \"Linux\",\n        \"Distro\": \"Ubuntu 22.04.5 LTS\",\n        \"Kernel\": \"5.15.0-198-generic\",\n        \"Hostname\": \"app-093cae80-deployment-f4f4bf4b7-kdfc9\",\n        \"Platform\": \"x86_64\",\n        \"Python\": \"3.10.19\",\n        \"Memory\": \"1.96 TB\",\n        \"Driver\": \"TT-KMD 2.3.0\"\n    },\n    \"host_sw_vers\": {\n        \"tt_smi\": \"6.1.0\",\n        \"pyluwen\": \"0.8.5\",\n        \"tt_umd\": \"0.9.8\"\n    },\n    \"device_info\": [\n        {\n            \"smbus_telem\": {\n                \"ENUM_VERSION\": \"0xba5e0001\",\n                \"DEVICE_ID\": \"0x401e1e52\",\n                \"ASIC_RO\": \"0x2f2b1\",\n                \"ASIC_IDD\": \"0xe13\",\n                \"BOARD_ID_HIGH\": \"0x1000186\",\n                \"BOARD_ID_LOW\": \"0x11904012\",\n                \"ARC0_FW_VERSION\": \"0x22b0000\",\n                \"ARC1_FW_VERSION\": \"0x22b0000\",\n                \"ARC2_FW_VERSION\": \"0x0\",\n                \"ARC3_FW_VERSION\": \"0x22b0000\",\n                \"SPIBOOTROM_FW_VERSION\": \"0x30e0000\",\n                \"ETH_FW_VERSION\": \"0x75000\",\n                \"DM_BL_FW_VERSION\": \"0x81020000\",\n                \"DM_APP_FW_VERSION\": \"0x50c0000\",\n                \"DDR_STATUS\": \"0x2222222\",\n                \"ETH_STATUS0\": \"0x11111111\",\n                \"ETH_STATUS1\": \"0x11111111\",\n                \"PCIE_STATUS\": \"0x11040000\",\n                \"FAULTS\": \"0x0\",\n                \"ARC0_HEALTH\": \"0x5dabae6\",\n                \"ARC1_HEALTH\": \"0x225fd8f\",\n                \"ARC2_HEALTH\": \"0x0\",\n                \"ARC3_HEALTH\": \"0x3a583\",\n                \"FAN_SPEED\": \"0x36\",\n                \"AICLK\": \"0x3e801f4\",\n                \"AXICLK\": \"0x384\",\n                \"ARCCLK\": \"0x21c\",\n                \"THROTTLER\": \"0x0\",\n                \"VCORE\": \"0x2d0\",\n                \"ASIC_TEMPERATURE\": \"0x29c0252\",\n                \"VREG_TEMPERATURE\": \"0x0\",\n                \"BOARD_TEMPERATURE\": \"0x222424\",\n                \"TDP\": \"0x64000b\",\n                \"TDC\": \"0xf00010\",\n                \"VDD_LIMITS\": \"0x3e80320\",\n                \"THM_LIMITS\": \"0x53004b\",\n                \"WH_FW_DATE\": \"0x65070f29\",\n                \"ASIC_TMON0\": \"0x242a2425\",\n                \"ASIC_TMON1\": \"0x2425\",\n                \"MVDDQ_POWER\": \"0x190000\",\n                \"GDDR_TRAIN_TEMP0\": \"0x0\",\n                \"GDDR_TRAIN_TEMP1\": \"0x0\",\n                \"BOOT_DATE\": \"0x6b01163a\",\n                \"RT_SECONDS\": \"0x5ed7\",\n                \"ETH_DEBUG_STATUS0\": \"0xccddddcc\",\n                \"ETH_DEBUG_STATUS1\": \"0xccdddddd\",\n                \"TT_FLASH_VERSION\": \"0x30605\",\n                \"ETH_LOOPBACK_STATUS\": \"0x0\",\n                \"ETH_LIVE_STATUS\": \"0x0\",\n                \"FW_BUNDLE_VERSION\": \"0x130b0000\",\n                \"NUMBER_OF_TAGS\": null\n            },\n            \"board_info\": {\n                \"bus_id\": \"0000:25:00.0\",\n                \"board_type\": \"n150 L\",\n                \"board_id\": \"0100018611904012\",\n                \"coords\": \"(0, 0, 0, 0)\",\n                \"dram_status\": true,\n                \"dram_speed\": \"12G\",\n                \"pcie_speed\": 4,\n                \"pcie_width\": \"16\"\n            },\n            \"telemetry\": {\n                \"voltage\": \"0.72\",\n                \"current\": \" 16.0\",\n                \"power\": \" 11.0\",\n                \"aiclk\": \" 500\",\n                \"asic_temperature\": \"37.1\",\n                \"fan_speed\": \"54\",\n                \"heartbeat\": \"47795\"\n            },\n            \"firmwares\": {\n                \"fw_bundle_version\": \"19.11.0.0\",\n                \"tt_flash_version\": \"0.3.6.5\",\n                \"cm_fw\": \"2.43.0.0\",\n                \"cm_fw_date\": \"2026-05-07\",\n                \"eth_fw\": \"7.5.0\",\n                \"dm_bl_fw\": \"129.2.0.0\",\n                \"dm_app_fw\": \"5.12.0.0\",\n                \"gddr_fw\": \"N/A\"\n            },\n            \"limits\": {\n                \"vdd_min\": \"0.80\",\n                \"vdd_max\": \"1.00\",\n                \"tdp_limit\": \"100\",\n                \"tdc_limit\": \"240\",\n                \"asic_fmax\": \"1000\",\n                \"therm_trip_l1_limit\": \"83\",\n                \"thm_limit\": \"75\",\n                \"bus_peak_limit\": 0,\n                \"fan_rpm_limit\": 0\n            }\n        }\n    ],\n    \"processes\": []\n}\n",
+  "status": "completed",
+  "warm_component_sum_seconds": 1310.9940874679596,
+  "timing_note": "Warm component sum includes measured sampler loops and CPU projection/control. It excludes loading, compilation, CPU reference checks and interprocess files/startup. It is not a measured resident end-to-end pipeline or an n300 benchmark.",
+  "stage_reports": {
+    "dino": "dino.json",
+    "ss": "ss.json",
+    "ss_decode": "ss_decode.json",
+    "shape": "shape.json",
+    "tex": "tex.json",
+    "decode": "decode.json"
+  },
+  "warm_component_seconds": {
+    "dino": 1.9039275629329495,
+    "ss": 365.05613674101187,
+    "ss_decode": 2.962103947997093,
+    "shape": 494.04324106202694,
+    "tex": 423.53817550395615,
+    "decode": 23.490502650034614
+  },
+  "sampler_total_seconds": 1281.6997055999818,
+  "all_flow_evaluations": 61,
+  "successful_stage_process_sum_seconds": 2863.2791326600127,
+  "process_sum_note": "Includes CPU references, warmup/repeats, compilation and I/O; excludes failed attempts. Not production inference latency.",
+  "tt_metal_commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+  "flexgemm_commit": "6492d51f585b1c0cd8a6a1113acff1b529379174",
+  "watcher": "disabled",
+  "decoder_warm_repeats_bitwise_equal": true,
+  "initial_call_extra_seconds": {
+    "dino": 32.33393124403665,
+    "ss": 187.12645835697185,
+    "ss_decode": 6.663848049007356,
+    "shape": 193.9527147070039,
+    "tex": 180.56799424201017,
+    "decode": 145.74066021700855
+  },
+  "initial_call_extra_sum_seconds": 746.3856068160385,
+  "initial_cost_note": "Derived replacement of one warm call by the measured first call per network, including aggregators. Existing caches; checkpoint loading/startup/teardown remain separate. Not a measured cold end-to-end run.",
+  "xla_compile_samples": {
+    "dino": 1,
+    "ss": 2,
+    "ss_decode": 1,
+    "shape": 2,
+    "tex": 2
+  },
+  "output_files": {
+    "decoder_input.npz": {
+      "bytes": 1474526,
+      "sha256": "6f62d5a77923330962996c0782cc1be2c105971fd5acd4654c9880f892596cc0"
+    },
+    "shape.pt": {
+      "bytes": 105727253,
+      "sha256": "f91243fa73ffa36cf99758cf90873b5154df9e8b67bc7ae7262319e5112c0197"
+    },
+    "texture.pt": {
+      "bytes": 96115877,
+      "sha256": "3ecebe859aac3a11aa68874015d8e382bab906278d9dd56479c0a440481d1daf"
+    },
+    "guides.pt": {
+      "bytes": 34156351,
+      "sha256": "9135d62c5f38a78dd51e6bfaba3f67157fc114e09161f7e0eee3393d15e7d903"
+    }
+  }
+}
