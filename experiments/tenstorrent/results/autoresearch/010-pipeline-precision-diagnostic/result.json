@@ -1,0 +1,268 @@
+{
+  "status": "completed_diagnostic",
+  "phase": "complete",
+  "seed": 0,
+  "threads": 16,
+  "torch": "2.11.0+cpu",
+  "source_sha256": "2301b440f0cd9b513ca333089e4f99e48b48b081130cbcdb1ce82242712144ba",
+  "scope": "CPU BF16-boundary/FP32-accumulation diagnostic, not native BF16, CUDA or TT execution; does not replace FP32 acceptance gates",
+  "metadata": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/shape_slat.pt",
+      "bytes": 5410532174,
+      "etag": "\"1427e2b4e-6503179da85ac\"",
+      "sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/slat_flow_img2shape/genrecon_512.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "seeded synthetic",
+    "blocks": 30,
+    "active_voxels": 512,
+    "cpu_original_equivalence": "torch.testing.assert_close passed for all 30 sparse blocks and IO",
+    "cpu_original_equivalence_precision": "float32",
+    "adaptation": "single chunk active tokens as a dense sequence; all native sparse weights including LoRA preserved",
+    "host_work": "fixed coordinates and RoPE phases; precomputed image conditions"
+  },
+  "forward_seconds": 4.046451172966044,
+  "trajectory": {
+    "seconds": 87.60838276002323,
+    "forwards": [
+      {
+        "seconds": 4.012220059987158,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 4.047940787975676,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 4.084731741051655,
+        "t": [
+          970.5882568359375
+        ]
+      },
+      {
+        "seconds": 4.173881129012443,
+        "t": [
+          970.5882568359375
+        ]
+      },
+      {
+        "seconds": 4.125282893015537,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 4.092361246002838,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 4.175157930993009,
+        "t": [
+          900.0
+        ]
+      },
+      {
+        "seconds": 4.123971678956877,
+        "t": [
+          900.0
+        ]
+      },
+      {
+        "seconds": 4.436210874002427,
+        "t": [
+          857.1428833007812
+        ]
+      },
+      {
+        "seconds": 4.375128157029394,
+        "t": [
+          857.1428833007812
+        ]
+      },
+      {
+        "seconds": 4.37751646299148,
+        "t": [
+          807.6923217773438
+        ]
+      },
+      {
+        "seconds": 4.3993806969956495,
+        "t": [
+          807.6923217773438
+        ]
+      },
+      {
+        "seconds": 4.415173172019422,
+        "t": [
+          750.0
+        ]
+      },
+      {
+        "seconds": 4.24341848801123,
+        "t": [
+          750.0
+        ]
+      },
+      {
+        "seconds": 4.063773821981158,
+        "t": [
+          681.8181762695312
+        ]
+      },
+      {
+        "seconds": 4.170287626038771,
+        "t": [
+          681.8181762695312
+        ]
+      },
+      {
+        "seconds": 4.112866213021334,
+        "t": [
+          600.0
+        ]
+      },
+      {
+        "seconds": 4.0465177849982865,
+        "t": [
+          600.0
+        ]
+      },
+      {
+        "seconds": 4.016632029030006,
+        "t": [
+          500.0
+        ]
+      },
+      {
+        "seconds": 4.024042428995017,
+        "t": [
+          375.0
+        ]
+      },
+      {
+        "seconds": 4.047535848978441,
+        "t": [
+          214.2857208251953
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "step": 1,
+        "t": 1.0,
+        "t_prev": 0.9705882352941178,
+        "seconds": 8.067277889989782,
+        "forwards": 2
+      },
+      {
+        "step": 2,
+        "t": 0.9705882352941178,
+        "t_prev": 0.9374999999999999,
+        "seconds": 8.262624297989532,
+        "forwards": 2
+      },
+      {
+        "step": 3,
+        "t": 0.9374999999999999,
+        "t_prev": 0.9,
+        "seconds": 8.221720147994347,
+        "forwards": 2
+      },
+      {
+        "step": 4,
+        "t": 0.9,
+        "t_prev": 0.8571428571428571,
+        "seconds": 8.303109958011191,
+        "forwards": 2
+      },
+      {
+        "step": 5,
+        "t": 0.8571428571428571,
+        "t_prev": 0.8076923076923076,
+        "seconds": 8.815262119984254,
+        "forwards": 2
+      },
+      {
+        "step": 6,
+        "t": 0.8076923076923076,
+        "t_prev": 0.75,
+        "seconds": 8.780659248994198,
+        "forwards": 2
+      },
+      {
+        "step": 7,
+        "t": 0.75,
+        "t_prev": 0.6818181818181819,
+        "seconds": 8.662593238987029,
+        "forwards": 2
+      },
+      {
+        "step": 8,
+        "t": 0.6818181818181819,
+        "t_prev": 0.6,
+        "seconds": 8.238054607005324,
+        "forwards": 2
+      },
+      {
+        "step": 9,
+        "t": 0.6,
+        "t_prev": 0.5,
+        "seconds": 8.163366406981368,
+        "forwards": 2
+      },
+      {
+        "step": 10,
+        "t": 0.5,
+        "t_prev": 0.3750000000000001,
+        "seconds": 4.017755909007974,
+        "forwards": 1
+      },
+      {
+        "step": 11,
+        "t": 0.3750000000000001,
+        "t_prev": 0.21428571428571436,
+        "seconds": 4.025211118976586,
+        "forwards": 1
+      },
+      {
+        "step": 12,
+        "t": 0.21428571428571436,
+        "t_prev": 0.0,
+        "seconds": 4.048658718995284,
+        "forwards": 1
+      }
+    ],
+    "parameters": {
+      "steps": 12,
+      "guidance_strength": 7.5,
+      "guidance_rescale": 0.5,
+      "guidance_interval": [
+        0.6,
+        1.0
+      ],
+      "rescale_t": 3.0
+    },
+    "sampler_config_sha256": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0",
+    "scope": "One complete original 12-step synthetic trajectory, fixed noise/conditioning; not real-scene quality"
+  },
+  "promoted_ops": {
+    "aten::addmm": 5280,
+    "aten::mm": 6600,
+    "aten::_scaled_dot_product_flash_attention_for_cpu": 1320
+  },
+  "artifact_sha256": {
+    "forward.pt": "6f2f9b952c1e0d5d5c5bd15407e175854dad4cdf6fba941e6a6e7c4b1a38164b",
+    "trajectory.pt": "a86d86bc25faee880aa49c99c7ce86ffc2a3bcb73a751dce61522c9ad99059ea"
+  }
+}

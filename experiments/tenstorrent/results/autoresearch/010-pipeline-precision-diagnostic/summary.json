@@ -1,0 +1,38 @@
+{
+  "scope": "Diagnostic CPU evaluation of the same seeded 512-token shape trajectory at pipeline BF16 tensor boundaries with FP32 GEMM/attention accumulation; no native BF16, CUDA or TT kernel equivalence claim.",
+  "emulated_bf16_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.2392612170553199,
+    "pcc": 0.9712305153162948,
+    "max_abs": 2.839249312877655
+  },
+  "tt_vs_emulated_bf16_final": {
+    "stock_tt": {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.39703446261204167,
+      "pcc": 0.9199086708045007,
+      "max_abs": 4.55363392829895
+    },
+    "real_rope_tt": {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.3884345630422753,
+      "pcc": 0.9232985453879463,
+      "max_abs": 4.497074842453003
+    }
+  },
+  "finding": "The emulated trajectory differs 23.9% from FP32. Stock and optimized TT remain about 39.7% and 38.8% from this diagnostic, respectively. Mismatch persists against a precision-aware reference; investigate per-operation math and real conditions. This is not an additive error decomposition.",
+  "pairing_note": "Prior artifacts lack explicit condition digests. All runs use the same checkpoint, seed and construction recipe; noise/coordinates match. New diagnostic stores condition/config identity. These comparisons are numerical diagnostics, not accepted reconstruction quality.",
+  "decision": "Retain strict FP32 failures and keep real-RoPE opt-in. Do not reinterpret this diagnostic as a relaxed acceptance gate."
+}
