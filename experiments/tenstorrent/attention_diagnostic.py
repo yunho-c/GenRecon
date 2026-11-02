@@ -25,12 +25,18 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 
 class AttentionMath(nn.Module):
-    def __init__(self, fp32=False):
+    def __init__(self, fp32=False, postscale=False):
         super().__init__()
         self.fp32 = fp32
+        self.postscale = postscale
+        if postscale and not fp32:
+            raise ValueError('Post-matmul scaling experiment requires FP32 intermediates')
 
     def forward(self, q, k, v):
         from genrecon.modules.attention.full_attn import scaled_dot_product_attention
+        if self.postscale:
+            from genrecon.modules.attention.full_attn import _naive_sdpa
+            return _naive_sdpa(q.float(), k.float(), v.float()).to(q.dtype)
         if self.fp32:
             return scaled_dot_product_attention(q.float(), k.float(), v.float()).to(q.dtype)
         return scaled_dot_product_attention(q, k, v)
@@ -132,15 +138,18 @@ def main():
         del flow, inputs
         phase('cpu_references')
         references, report['cases'] = {}, {}
+        variants = (('stock', False, False), ('fp32_sdpa', True, False), ('fp32_postscale', True, True))
         for name, qkv in fixtures.items():
             with torch.no_grad():
                 native = AttentionMath()(*qkv)
                 with PipelinePrecisionMode():
                     diagnostic = AttentionMath()(*qkv)
                 fp32 = AttentionMath(True)(*qkv)
+                postscale = AttentionMath(True, True)(*qkv)
             report['cases'][name] = {'inputs': [{'shape': list(x.shape), 'dtype': str(x.dtype)} for x in qkv],
                                     'native_cpu_vs_precision_diagnostic': compare_tensors(native, diagnostic),
-                                    'fp32_cpu_vs_precision_diagnostic': compare_tensors(fp32, diagnostic)}
+                                    'fp32_cpu_vs_precision_diagnostic': compare_tensors(fp32, diagnostic),
+                                    'postscale_cpu_vs_precision_diagnostic': compare_tensors(postscale, diagnostic)}
             references[name] = {'native': native, 'diagnostic': diagnostic, 'fp32': fp32}
         torch.save(references, args.output_dir / 'references.pt')
         phase('waiting_for_device')
@@ -153,11 +162,11 @@ def main():
         outputs = {}
         for name, qkv in fixtures.items():
             device_inputs = tuple(value.to(device) for value in qkv)
-            for variant, promote in (('stock', False), ('fp32_sdpa', True)):
+            for variant, promote, postscale in variants:
                 label = name + '_' + variant
                 phase(label)
                 torch_xla.set_custom_compile_options({'optimization_level': 0})
-                module = AttentionMath(promote).eval()
+                module = AttentionMath(promote, postscale).eval()
                 compiled = torch.compile(module, backend='tt', fullgraph=True)
                 metrics.clear_all()
                 with torch.no_grad():
@@ -191,11 +200,11 @@ def main():
             report['codegen_ordering'] = 'All native measurements finish before any exports; fresh modules are exported and never measured.'
             report['codegen_helper_sha256'] = sha256(Path(tt_torch.codegen_py.__code__.co_filename))
             for name, qkv in fixtures.items():
-                for variant, promote in (('stock', False), ('fp32_sdpa', True)):
+                for variant, promote, postscale in variants:
                     label = name + '_' + variant
                     phase('export_ir_' + label)
                     with torch.no_grad():
-                        tt_torch.codegen_py(AttentionMath(promote).eval(), *qkv, compiler_options={'optimization_level': 0},
+                        tt_torch.codegen_py(AttentionMath(promote, postscale).eval(), *qkv, compiler_options={'optimization_level': 0},
                                             export_path=str(args.output_dir / (label + '-codegen')))
         report['artifacts_sha256'] = {path.name: sha256(path) for path in args.output_dir.glob('*.pt')}
         report['status'] = 'completed_isolated_attention_diagnostic'

@@ -556,6 +556,10 @@ options and mutates the exported module. The
 [initial interleaved run](results/autoresearch/032-rejected-export-interleaving/summary.json)
 was rejected. Fresh export modules and a separate no-export process now verify
 that native results match bitwise.
+The [explicit FP32 post-matmul scaling trial](results/autoresearch/034-attention-postscale/summary.json)
+reduces self-attention error to 2.72%, while cross-attention stays near 1.8%.
+Its baseline outputs and independent no-export control match bitwise. This
+remains an isolated diagnostic; no full-flow defaults or quality gates change.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning

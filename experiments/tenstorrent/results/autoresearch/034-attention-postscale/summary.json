@@ -1,0 +1,105 @@
+{
+  "status": "controlled_postscale_attention_diagnostic",
+  "scope": "Compare attention arithmetic on identical pretrained first-block Q/K/V.\n\nIsolated self/cross attention, not a whole-flow latency or quality claim. The\nFP32 candidate promotes SDPA inputs/intermediates and restores the input dtype;\nweights, masks and attention scale are unchanged. Native CPU BF16 and a CPU\nprecision diagnostic are both retained as references.\n",
+  "all_no_export_outputs_bitwise": {
+    "self_stock": true,
+    "self_fp32_sdpa": true,
+    "self_fp32_postscale": true,
+    "cross_stock": true,
+    "cross_fp32_sdpa": true,
+    "cross_fp32_postscale": true
+  },
+  "prior_baseline_outputs_bitwise_unchanged": true,
+  "fixtures_identical_to_previous": true,
+  "errors_vs_cpu_precision_diagnostic": {
+    "self": {
+      "stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.10211904909253669,
+        "pcc": 0.9947887571305373,
+        "max_abs": 17.25
+      },
+      "fp32_sdpa": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0327705002862141,
+        "pcc": 0.9995761517990241,
+        "max_abs": 3.69140625
+      },
+      "fp32_postscale": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.027169658603206817,
+        "pcc": 0.999741530048299,
+        "max_abs": 3.0
+      }
+    },
+    "cross": {
+      "stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.018000824108111234,
+        "pcc": 0.9999265876790882,
+        "max_abs": 0.0703125
+      },
+      "fp32_sdpa": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.01896071372156683,
+        "pcc": 0.9999326804617359,
+        "max_abs": 0.078125
+      },
+      "fp32_postscale": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.01824539772209445,
+        "pcc": 0.9999344250881236,
+        "max_abs": 0.078125
+      }
+    }
+  },
+  "postscale_cpu_vs_diagnostic": {
+    "self": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 9.134164041900623e-05,
+      "pcc": 0.9999999958286514,
+      "max_abs": 0.25
+    },
+    "cross": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 2.7976965522240834e-05,
+      "pcc": 0.9999999996075849,
+      "max_abs": 0.00390625
+    }
+  },
+  "finding": "Explicit FP32 QK matmul followed by scaling reduces self-attention error from promoted SDPA 3.28% to 2.72% (stock 10.21%). Cross-attention remains 1.82%, about stock 1.80%. This is a modest local improvement, not a full-flow accuracy fix.",
+  "next": "Capture QK product, scaled scores, softmax and AV under the same final-output equivalence guard. Use identical TT intermediate inputs in CPU reference suboperations to distinguish local arithmetic from propagated error.",
+  "reproduce": "python experiments/tenstorrent/attention_diagnostic.py --export-ir --output-dir /path/to/new; repeat without export in a separate process. All original fixtures are retained in ../033-isolated-attention-precision."
+}

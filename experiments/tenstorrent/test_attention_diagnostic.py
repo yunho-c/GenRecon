@@ -41,3 +41,16 @@ def test_fp32_sdpa_matches_cpu_precision_diagnostic_and_restores_dtype():
     actual = AttentionMath(True)(q, k, v)
     assert actual.dtype == torch.bfloat16
     torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+
+
+@pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
+def test_explicit_postscale_matches_fused_cpu_attention(dtype):
+    torch.manual_seed(41)
+    q, k, v = [torch.randn(1, 17, 4, 12).to(dtype) for _ in range(3)]
+    expected = AttentionMath(True)(q, k, v)
+    actual = AttentionMath(True, True)(q, k, v)
+    assert actual.dtype == dtype
+    tolerance = .002 if dtype == torch.bfloat16 else 2e-6
+    torch.testing.assert_close(actual, expected, rtol=tolerance, atol=tolerance)
+    with pytest.raises(ValueError, match='requires FP32'):
+        AttentionMath(False, True)
