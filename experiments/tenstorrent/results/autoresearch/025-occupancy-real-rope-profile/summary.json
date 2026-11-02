@@ -1,0 +1,74 @@
+{
+  "status": "complete_marked_occupancy_profile",
+  "scope": "Full pretrained 30-block occupancy flow, all 4096 latent tokens, synthetic precomputed conditioning, real-pair RoPE, original LoRA, level 0; compiler-generated TTNN alternate profiling-enabled Metal SDK. Not PJRT module wall attribution or scene quality.",
+  "device_operations": 4406,
+  "signpost_wall_ms": 4067.712135,
+  "summed_kernel_ms": 3967.43224,
+  "operation_kernel_ms": {
+    "ReshapeViewDeviceOperation": 1183.069513,
+    "MatmulDeviceOperation": 996.093619,
+    "BinaryNgDeviceOperation": 661.54216,
+    "UnaryDeviceOperation": 205.682423,
+    "PermuteDeviceOperation": 203.094208,
+    "TransposeDeviceOperation": 173.079279,
+    "SoftmaxDeviceOperation": 171.530506,
+    "TypecastDeviceOperation": 155.050299,
+    "SliceDeviceOperation": 71.563157,
+    "FillPadDeviceOperation": 44.452741,
+    "ReduceDeviceOperation": 37.261909,
+    "LayerNormDeviceOperation": 30.684752,
+    "EmbeddingsDeviceOperation": 25.28654,
+    "UntilizeDeviceOperation": 8.651014,
+    "TilizeWithValPaddingDeviceOperation": 0.196042,
+    "TilizeDeviceOperation": 0.191013,
+    "ConcatDeviceOperation": 0.003065
+  },
+  "operation_kernel_shares": {
+    "ReshapeViewDeviceOperation": 0.29819526621581316,
+    "MatmulDeviceOperation": 0.251067581938085,
+    "BinaryNgDeviceOperation": 0.16674315274506113,
+    "UnaryDeviceOperation": 0.05184270595129307,
+    "PermuteDeviceOperation": 0.05119034068241579,
+    "TransposeDeviceOperation": 0.043625011980040776,
+    "SoftmaxDeviceOperation": 0.043234640347632,
+    "TypecastDeviceOperation": 0.0390807680183594,
+    "SliceDeviceOperation": 0.018037650719902404,
+    "FillPadDeviceOperation": 0.011204410891211592,
+    "ReduceDeviceOperation": 0.009391945910083143,
+    "LayerNormDeviceOperation": 0.007734159059008907,
+    "EmbeddingsDeviceOperation": 0.0063735278816003165,
+    "UntilizeDeviceOperation": 0.002180507057632823,
+    "TilizeWithValPaddingDeviceOperation": 4.9412816184606094e-05,
+    "TilizeDeviceOperation": 4.8145245701789224e-05,
+    "ConcatDeviceOperation": 7.725399741168611e-07
+  },
+  "forward_vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.069473682071562,
+    "pcc": 0.9982539248424043,
+    "max_abs": 0.2524881809949875
+  },
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "profiler_program_support_count": 10000,
+  "profiler_flush_seconds_outside_window": [
+    3.061042070039548,
+    3.765898794052191,
+    4.05432108201785,
+    4.0568897890043445,
+    4.4340957250096835
+  ],
+  "timing_scope_correction": "See ../024-codegen-timing-scope/summary.json. Historical codegen loader uploads activations before the window without an explicit preload barrier; some pending transfer may carry in. New bridge separates synchronized preparation. Raw report retains original mislabeled scope.",
+  "finding": "After the RoPE rewrite, reshape remains the largest category (1183ms, 29.8% of kernel sums), followed by matrix products (996ms, 25.1%) and binary ops (662ms, 16.7%). Use exact shape groups before inferring attention/MLP module shares.",
+  "next_hypothesis": "Test head-first [batch,heads,tokens,dim] RoPE to avoid tiling the 12-head axis to 32 in current [batch,tokens,heads,dim]. Requires stock CPU equivalence, matched plain/observed TT arithmetic and complete trajectories; not yet implemented.",
+  "quality": "This local forward smoke passes. Paired full real-image occupancy trajectories are running separately; no promotion on this profile."
+}

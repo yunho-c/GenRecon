@@ -1,0 +1,64 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/033-ss-real-rope-codegen",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "562dd2d0decba9abf741986c5b59fb3cd7fa8c69b79d1466f2f3cebab1e710aa",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "ss_flow",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0
+  },
+  "rope_mode": "real_pairs",
+  "export_sha256": "782b3e32e62180a26e78536225079f97dbc4ce2c8a9d5c0b339a39584d16164b",
+  "ttnn_path": "/home/user/tt-metal/ttnn/ttnn/__init__.py",
+  "metal_commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+  "instrumented": true,
+  "flush_device_profiler": true,
+  "profiler_program_support_count": "10000",
+  "timing_scope": "Resident weights and compiler const-eval cache; disk activation loading excluded; input transfer, generated forward and synchronized CPU output included",
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "profiler_flush_seconds": [
+    3.061042070039548,
+    3.765898794052191,
+    4.05432108201785,
+    4.0568897890043445,
+    4.4340957250096835
+  ],
+  "first_seconds": 48.54463875701185,
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.069473682071562,
+      "pcc": 0.9982539248424043,
+      "max_abs": 0.2524881809949875
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.069473682071562,
+    "pcc": 0.9982539248424043,
+    "max_abs": 0.2524881809949875
+  },
+  "warm_seconds": [
+    4.067089431977365
+  ],
+  "warm_median_seconds": 4.067089431977365,
+  "output_sha256": "0f0973809913db2820f082c260438d62ba2c21b7724451b79f156a349ffb64e2"
+}

@@ -368,6 +368,11 @@ contains 4,973 complete device operations in the marked window: 23.58 s summed
 kernel time, with 9.68% matrix products and 2.38% standalone softmax. Large
 binary/untilize/slice groups still carry the padded complex-RoPE pair shapes.
 These kernel shares are not end-to-end attention/MLP or PJRT wall-time shares.
+The [full occupancy candidate profile](results/autoresearch/025-occupancy-real-rope-profile/summary.json)
+covers all 4,096 latent tokens and 30 blocks: 4,406 device operations and 3.97 s
+summed kernel time. Reshape now accounts for 29.8%, matrix products 25.1%, and
+binary operations 16.7%. Remaining layout changes need separate mathematical
+and trajectory checks; this profile establishes no reconstruction-quality result.
 
 Both runners accept an explicit `--math-fidelity` compiler option. Omission
 retains the SDK default. The [HiFi3 trajectory experiment](results/autoresearch/012-hifi3-trajectory/summary.json)
