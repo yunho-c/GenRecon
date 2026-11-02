@@ -1,0 +1,11 @@
+{
+  "scope": "Complete pretrained shape flow, 512 synthetic active voxels, stock LoRA and complex RoPE. Same seed, original FP32 CPU reference, mixed-precision PJRT, synchronized input/output transfers. One run per setting, five warm calls.",
+  "baseline_report": "../002-shape-lora-512/005-shape-stock-512.json",
+  "baseline_ms": 2230.627632001415,
+  "level1_ms": 2137.20303500304,
+  "speedup": 1.043713486958548,
+  "baseline_relative_l2": 0.06807877501956724,
+  "level1_relative_l2": 0.09267503379321136,
+  "lowering_evidence": "Hardware kernel inventory contains two SDPA compute specializations (self/cross shapes); baseline inventory used standalone softmax. The inventory lists compiled specializations, not per-call timing.",
+  "decision": "Keep default unchanged. Fused attention is operational and about 4.4% faster at this size, but total relative error increases substantially. The large RoPE layout cost remains the profiling priority. Operator smoke pass is not trajectory or scene-quality acceptance."
+}
