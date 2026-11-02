@@ -1,0 +1,28 @@
+{
+  "status": "passed_forward_smoke",
+  "scope": "Original native sparse pretrained shape flow with only fixed real-pair RoPE substituted, 6181 synthetic tokens, original LoRA, no sequence adapter or grid densification. Fullgraph PJRT, compiler level 0.",
+  "prepared_cpu_relative_l2": [
+    0.0
+  ],
+  "warm_latency_median_ms": 7860.225223994348,
+  "outputs": [
+    {
+      "shape": [
+        6181,
+        32
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.06852099439965682,
+      "pcc": 0.9979082942008972,
+      "max_abs_error": 0.6608389616012573,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "executed_fallback_ops": [],
+  "interpretation": "Native real-pair path completes at the same token count as the historical real-scene allocation failures. This supports the padded-complex-RoPE hypothesis, but old failures used real conditioning/coordinates: a fresh matched synthetic stock native control is pending. Do not claim exact attribution from different fixtures.",
+  "sequence_adapter_real_rope_median_ms": 6622.775233990978,
+  "sequence_comparison_scope": "Same synthetic construction, seed, checkpoint and compiler options. Native QKV packing/sparse layout remains slower. Only forward smoke, no native sparse complete trajectory yet.",
+  "quality_limit": "Complete synthetic sequence-adapter trajectories fail numerical gates. Native forward smoke is not evidence of sampled reconstruction quality. Defaults unchanged.",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py --cases shape_flow_cached --active-voxels 6181 --rope-mode real_pairs --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 3 --timeout 1800 --output-dir /path/to/new-native"
+}

@@ -373,6 +373,11 @@ original attention, QKV packing, LoRA and sparse block operations remain in
 place. It requires one prepared chunk and is not a dynamic sparse runtime.
 CPU regression checks cover full sparse blocks in FP32 and BF16 with nonzero
 LoRA, including preserved coordinates and layout.
+The [6,181-token native sparse experiment](results/autoresearch/017-native-sparse-real-rope/summary.json)
+passes the forward smoke at 7.86 s with zero FP32 preparation drift and no
+reported fallback. It is slower than the 6.62 s sequence candidate. A matched
+stock-native control is still needed to attribute the earlier real-scene OOM;
+coordinates/conditioning differ from those historical failures.
 
 Additional probes and CPU regression checks:
 
