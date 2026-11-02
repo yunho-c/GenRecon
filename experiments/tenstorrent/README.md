@@ -331,6 +331,13 @@ branches, concatenated shape features and sampler configuration. Explicit
 legacy-artifact inspection is diagnostic and reports missing identity checks.
 These are trajectory smoke checks on synthetic conditions, not mesh quality.
 
+`precision_reference.py --stage shape --active-voxels 512 --output-dir /path/to/new`
+adds a CPU-only mixed-precision diagnostic. It preserves BF16 tensor boundaries
+but evaluates BF16 GEMMs and CPU flash attention through FP32 accumulation,
+avoiding this host's slow native BF16 products. Small native BF16 comparisons
+test the emulation. This is not a CUDA/TT kernel oracle and does not replace
+the original FP32 reference or acceptance gates.
+
 Additional probes and CPU regression checks:
 
 ```bash
