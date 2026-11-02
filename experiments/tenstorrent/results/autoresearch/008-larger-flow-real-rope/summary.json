@@ -1,0 +1,26 @@
+{
+  "scope": "Complete pretrained flows, original LoRA and mixed precision, opt-in real-pair RoPE, level-0 PJRT, seeded synthetic inputs. Same stock FP32 CPU forward reference; weights resident, input/output transfers and synchronization included.",
+  "results": [
+    {
+      "case": "shape_flow_tensor",
+      "active_tokens": 6181,
+      "warm_ms": 6622.775233990978,
+      "relative_l2": 0.06815176938460318,
+      "prepared_cpu_relative_l2": [
+        0.0
+      ]
+    },
+    {
+      "case": "ss_flow",
+      "active_tokens": 4096,
+      "warm_ms": 4007.167535019107,
+      "relative_l2": 0.08590241908649597,
+      "prepared_cpu_relative_l2": [
+        0.0
+      ]
+    }
+  ],
+  "finding": "The complete shape flow executes at 6.623s for 6181 tokens; occupancy at 4.007s for 4096 tokens. Both are bitwise equal to stock at the FP32 CPU output, and report no fallback.",
+  "comparison_note": "The retained occupancy baseline is 16.582s with the same checkpoint/seed/shapes, giving a historical ratio of about 4.14x. A fresh paired PJRT stock 6181-token shape run has been launched; the completed 23.96s generated-TTNN baseline uses another SDK/boundary and is not a controlled denominator for the PJRT result.",
+  "quality": "Single-forward numerical smoke only; no full-trajectory, topology, scene or end-to-end performance acceptance."
+}
