@@ -1,0 +1,7 @@
+{
+  "scope": "Complete pretrained shape flow, 6181 synthetic grid coordinates and synthetic conditioning, original complex RoPE, generated TTNN on the separate Metal SDK. Same token count as the earlier poster run, not the same scene inputs or execution boundary.",
+  "warm_median_seconds": 23.95968398998957,
+  "relative_l2_vs_stock_cpu_fp32": 0.057010924803682875,
+  "validation": "Three warm calls repeat outputs bitwise; all active rows retained; operator smoke gate passes. This does not validate a sampled trajectory or a reconstruction.",
+  "next": "Profile this original large layout and compare the opt-in real-RoPE candidate using identical seeded inputs and the same native runtime for each paired comparison."
+}

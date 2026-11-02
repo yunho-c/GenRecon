@@ -11,19 +11,27 @@
   "completed_evidence": [
     "results/autoresearch/001-compiler-block/summary.json",
     "results/autoresearch/002-shape-lora-512/summary.json",
-    "results/autoresearch/003-profiling-infrastructure/summary.json"
+    "results/autoresearch/003-profiling-infrastructure/summary.json",
+    "results/autoresearch/004-shape-profile-512/summary.json",
+    "results/autoresearch/005-shape-opt1-512/summary.json",
+    "results/autoresearch/006-shape-real-rope-512/summary.json",
+    "results/autoresearch/007-shape-codegen-6181/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
     "Keep LoRA merging opt-in: single 512-token pretrained comparison is about 3% faster, with additional numerical drift.",
-    "Prioritize profiling: full shape generated IR uses 60 standalone softmax operations and no fused SDPA. Measure before assigning bottleneck percentages."
+    "Prioritize profiling: full shape generated IR uses 60 standalone softmax operations and no fused SDPA. Measure before assigning bottleneck percentages.",
+    "Full 512-token profile: matmuls are 6.16% of kernel-duration sums; complex RoPE pair tiling is the main identified avoidable cost.",
+    "Opt-in real-pair RoPE is 3.56x faster for the complete pretrained 512-token shape flow, bitwise equal on FP32 CPU, slightly lower device error and no reported fallback. Keep production default unchanged pending larger shapes, trajectories and scene quality.",
+    "Whole-flow level 1 retains fused SDPA but gains only 4.4% at 512 tokens and raises relative error from 6.8% to 9.3%. Do not change the default."
   ],
   "next_actions": [
-    "Inspect the full 512-token shape capture under scratchpad autoresearch/013-profile-shape-512. Revalidate its actual process handle/status; a saved path is not proof a job is live. Summarize only marked warm calls and preserve raw measured rows.",
-    "Extend shape capture to 6181 synthetic active tokens and distinguish attention score/value matmuls from learned projections using input shapes and compiler IR.",
-    "Restore occupancy/texture checkpoints with fetch_checkpoints.py, then profile complete flows and both positive/negative guidance conditions.",
-    "Investigate a profiling-enabled build matching the Forge wheel's exact native runtime. Current generated-TTNN profiling uses a different Metal revision; retain that limitation in attribution.",
-    "Test compiler levels/trace, fused attention preservation, fixed-conditioning reuse and LoRA variants separately using full-flow evidence.",
-    "Restore posed image fixtures and compare complete matched sampling trajectories, topology and geometry/material outputs before accepting production changes."
+    "Revalidate live jobs/results under scratchpad autoresearch/017-shape-real-rope-6181 (PJRT larger-layout candidate), 018-ss-real-rope (4096-token occupancy candidate), and 019-shape-real-rope-codegen-512 (candidate profile export). A saved running status alone is not evidence of a live job.",
+    "Use the completed export 019 to execute and profile the candidate on the same Metal SDK as the original 512-token profile, then reconcile removed layout operations with the measured gain.",
+    "The stock 6181-token generated export/execute under 014 is complete at 23.96s warm. Capture a marked warm device profile using codegen_probe.py execute and preserve measured rows; compare shape/attention scaling with 512 tokens.",
+    "All three flow checkpoints are now restored under /home/user/models/genrecon. Extend profiling and the real-RoPE candidate to texture and both guidance conditions.",
+    "Add matched original 12-step trajectory comparisons against stock FP32 CPU and stock TT, starting with 512 synthetic tokens before expensive larger layouts. Restore posed image fixtures for downstream topology/geometry/material quality.",
+    "Investigate the original native sparse 607617024-byte OOM: the RoPE pair tensor [6181,12,64,32] in FP32 has exactly that size. This arithmetic match is a hypothesis, not proof of the failed allocation source.",
+    "Investigate a profiling-enabled build matching the Forge wheel native runtime. Current codegen profiling uses a different Metal revision; retain that limitation in attribution."
   ]
 }
