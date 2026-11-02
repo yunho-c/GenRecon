@@ -1,0 +1,38 @@
+{
+  "scope": "Original complete 12-step shape sampler, 512 synthetic tokens, same seeded noise and positive/negative conditions; 21 forwards, original guidance/rescaling, stock FP32 CPU reference before any candidate preparation.",
+  "stock_seconds": 46.8595842870418,
+  "real_rope_seconds": 13.235738040006254,
+  "speedup": 3.5403831766241014,
+  "stock_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.4106043312745597,
+    "pcc": 0.9141148290750938,
+    "max_abs": 4.84288763999939
+  },
+  "real_rope_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.3825820592158971,
+    "pcc": 0.9254034312188536,
+    "max_abs": 3.4050293266773224
+  },
+  "real_rope_vs_stock_tt_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.32280337192032454,
+    "pcc": 0.9477839753584613,
+    "max_abs": 3.2909148931503296
+  },
+  "pairing": "Both workers used identical source fingerprints, seeds, checkpoints, versions, input layouts and sampler parameters. The two stock CPU reference trajectories are bitwise identical at every stored state. These first artifacts predate condition-digest fields; explicit legacy diagnostic comparison is used and reports that limitation.",
+  "decision": "Do not promote to production defaults. Full sampling is 3.54x faster, but both paths fail the strict FP32 trajectory smoke gate and optimized-vs-stock TT final relative L2 is 32.3%. These are synthetic conditions, not a scene-quality evaluation. Retain failures and investigate mixed-precision/backend effects and real conditions."
+}
