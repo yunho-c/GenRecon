@@ -303,6 +303,19 @@ It rejects incomplete device durations and preserves operation/input-shape
 groupings. Its percentages describe sums of operation kernel durations;
 they are not a decomposition of end-to-end wall time.
 
+The [complete 512-token shape profile](results/autoresearch/004-shape-profile-512/summary.json)
+measures 4,943 device operations. Matrix products are 6.16% of summed kernel
+duration; the largest shape groups correspond to the complex-pair RoPE layout
+with a last dimension of one or two. This prompted the experimental
+`--rope-mode real_pairs` probe option. It retains adjacent pair ordering and
+FP32 arithmetic but computes `x*cos + swap_adjacent(x)*signed_sin` without a
+`[..., head_dim/2, 2]` intermediate. Fixed sine/cosine tables are shared across
+blocks. Preparation occurs after the stock CPU reference; reports include CPU
+preparation drift, and TT outputs are still compared against the stock model.
+The production implementation and probe default remain unchanged. Supported
+boundaries are dense fixed-layout flows/blocks and the active-token sequence
+adapter, with inference-only weights and immutable coordinates/phases.
+
 Additional probes and CPU regression checks:
 
 ```bash

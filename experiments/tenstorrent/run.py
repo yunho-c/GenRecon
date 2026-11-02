@@ -43,6 +43,7 @@ def worker(args):
         "versions": {name: importlib.metadata.version(name) for name in ("torch", "torch-xla", "tt-forge", "pjrt-plugin-tt")},
         "seed": args.seed, "fullgraph": True,
         "lora_mode": args.lora_mode,
+        "rope_mode": args.rope_mode,
         "requested_active_voxels": args.active_voxels,
         "profile_markers": args.profile_markers,
         "requested_compile_options": {
@@ -101,6 +102,18 @@ def worker(args):
             with torch.no_grad(), context:
                 candidate = outputs(model(*reference_inputs))
                 result["lora_cpu_relative_l2"] = [
+                    ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
+                    for ref, out in zip(reference, candidate, strict=True)]
+        if args.rope_mode != "stock":
+            from inference_rope import prepare_real_rope
+            start = time.perf_counter()
+            result["prepared_rope_blocks"] = prepare_real_rope(model)
+            result["rope_prepare_seconds"] = time.perf_counter() - start
+            result["reference_note"] = "Unmodified stock model; error includes all preparation and device arithmetic"
+            context = float32_reference(model) if args.reference_precision == "float32" else nullcontext(model)
+            with torch.no_grad(), context:
+                candidate = outputs(model(*reference_inputs))
+                result["prepared_cpu_relative_l2"] = [
                     ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
                     for ref, out in zip(reference, candidate, strict=True)]
         result["phase"] = "waiting_for_device"
@@ -197,6 +210,7 @@ def main():
     parser.add_argument("--timeout", type=int, default=900)
     parser.add_argument("--optimization-level", type=int, choices=(0, 1, 2), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
+    parser.add_argument("--rope-mode", choices=("stock", "real_pairs"), default="stock")
     parser.add_argument("--active-voxels", type=int, default=None,
                         help="Synthetic sparse flow size; default 512. Not a real-scene fixture.")
     parser.add_argument("--runtime-trace", action="store_true")
@@ -225,6 +239,7 @@ def main():
                    "--runs", str(args.runs), "--seed", str(args.seed), "--cpu-threads", str(args.cpu_threads),
                    "--reference-precision", args.reference_precision]
         command += ["--lora-mode", args.lora_mode]
+        command += ["--rope-mode", args.rope_mode]
         if args.active_voxels is not None:
             command += ["--active-voxels", str(args.active_voxels)]
         if args.optimization_level is not None:
