@@ -294,6 +294,15 @@ results, and validate before attributing the original sampler's wall time.
 Clear inherited `LD_LIBRARY_PATH`/`PYTHONPATH` before launching the Forge Tracy
 wrapper: otherwise it can load incompatible libraries from the separate SDK.
 
+The first [profiling infrastructure evidence](results/autoresearch/003-profiling-infrastructure/summary.json)
+includes a representative `.tracy` capture, compressed operations CSV, marked
+warm-call summary, and complete shape-flow generated program/TTNN IR. Use
+`profile_report.py --csv /path/to/ops_perf_results.csv --output /path/to/new.json`
+to select `GENRECON_MEASURED_0` (or `--window` for another measured call).
+It rejects incomplete device durations and preserves operation/input-shape
+groupings. Its percentages describe sums of operation kernel durations;
+they are not a decomposition of end-to-end wall time.
+
 Additional probes and CPU regression checks:
 
 ```bash

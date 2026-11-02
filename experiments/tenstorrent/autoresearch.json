@@ -1,0 +1,29 @@
+{
+  "objective": "Continually optimize GenRecon performance on Tensix chips, starting with the available single Wormhole chip, with reproducible measurements and preserved quality.",
+  "persistence": "Commit and push each completed task to origin hardware/tenstorrent; preserve compact raw evidence and reproduction commands. Keep weights and large transient artifacts outside Git.",
+  "constraints": [
+    "Retain original 12-step schedules, guidance intervals/strength/rescaling, all active tokens and checkpoint architecture in execution-optimization comparisons.",
+    "Use the same seeded inputs and stock CPU reference across candidates. Report precision and execution boundary explicitly.",
+    "Local numerical smoke passes do not establish full-trajectory, topology, rendered reconstruction or mesh quality.",
+    "Keep TT-XLA and the separate TTNN runtime isolated and device access serialized.",
+    "Do not promote a candidate from operator smoke or synthetic forward timing alone. Validate matched trajectories and real-scene geometry/material quality."
+  ],
+  "completed_evidence": [
+    "results/autoresearch/001-compiler-block/summary.json",
+    "results/autoresearch/002-shape-lora-512/summary.json",
+    "results/autoresearch/003-profiling-infrastructure/summary.json"
+  ],
+  "decisions": [
+    "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
+    "Keep LoRA merging opt-in: single 512-token pretrained comparison is about 3% faster, with additional numerical drift.",
+    "Prioritize profiling: full shape generated IR uses 60 standalone softmax operations and no fused SDPA. Measure before assigning bottleneck percentages."
+  ],
+  "next_actions": [
+    "Inspect the full 512-token shape capture under scratchpad autoresearch/013-profile-shape-512. Revalidate its actual process handle/status; a saved path is not proof a job is live. Summarize only marked warm calls and preserve raw measured rows.",
+    "Extend shape capture to 6181 synthetic active tokens and distinguish attention score/value matmuls from learned projections using input shapes and compiler IR.",
+    "Restore occupancy/texture checkpoints with fetch_checkpoints.py, then profile complete flows and both positive/negative guidance conditions.",
+    "Investigate a profiling-enabled build matching the Forge wheel's exact native runtime. Current generated-TTNN profiling uses a different Metal revision; retain that limitation in attribution.",
+    "Test compiler levels/trace, fused attention preservation, fixed-conditioning reuse and LoRA variants separately using full-flow evidence.",
+    "Restore posed image fixtures and compare complete matched sampling trajectories, topology and geometry/material outputs before accepting production changes."
+  ]
+}

@@ -8,10 +8,12 @@ import argparse
 import fcntl
 import hashlib
 import importlib.util
+import importlib.metadata
 import json
 import os
 from pathlib import Path
 import statistics
+import subprocess
 import sys
 import time
 import traceback
@@ -77,6 +79,7 @@ def main():
         report['torch'] = torch.__version__
         if args.command == 'export':
             import tt_torch
+            report['pjrt_build'] = importlib.metadata.metadata('pjrt-plugin-tt').get('Summary')
             from experiments.tenstorrent.probes import build_case
             from experiments.tenstorrent.reference import float32_reference
             # Flow builders retain script-style imports from the probe directory.
@@ -115,6 +118,10 @@ def main():
                           compiler_options=export['compiler_options'])
             report['export_sha256'] = sha256(directory/'export.json')
             report['ttnn_path'] = ttnn.__file__
+            metal_root = os.environ.get('TT_METAL_HOME')
+            if metal_root:
+                report['metal_commit'] = subprocess.check_output(
+                    ['git', '-C', metal_root, 'rev-parse', 'HEAD'], text=True).strip()
             report['instrumented'] = os.environ.get('TT_METAL_DEVICE_PROFILER') == '1'
             report['timing_scope'] = 'Resident weights and compiler const-eval cache; disk activation loading excluded; input transfer, generated forward and synchronized CPU output included'
             if sha256(directory/'reference.pt') != export['reference_sha256']:
