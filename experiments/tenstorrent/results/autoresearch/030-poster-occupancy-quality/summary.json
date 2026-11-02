@@ -1,0 +1,58 @@
+{
+  "status": "completed_occupancy_diagnostic",
+  "scope": "Decode matched sampler latents with the same FP32 CPU occupancy decoder.\n\nIsolates sampler differences from TT decoder differences on one scene crop.\nReports numerical failures alongside occupancy overlap; no mesh-quality claim\nor automatic quality promotion from an IoU value.\n",
+  "decoder_precision": "Same official decoder, FP32 CPU for every latent; fixed zero threshold and original max-pool 2",
+  "decoder_sha256": {
+    ".json": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5",
+    ".safetensors": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+  },
+  "grid_shape": [
+    1,
+    1,
+    32,
+    32,
+    32
+  ],
+  "overlap_vs_fp32_reference": {
+    "stock_tt": {
+      "actual_occupied": 4163,
+      "reference_occupied": 6464,
+      "intersection": 3585,
+      "union": 7042,
+      "iou": 0.5090883271797785,
+      "dice": 0.6746965277124306,
+      "false_positive": 578,
+      "false_negative": 2879
+    },
+    "real_rope_tt": {
+      "actual_occupied": 4241,
+      "reference_occupied": 6464,
+      "intersection": 3632,
+      "union": 7073,
+      "iou": 0.5135020500494839,
+      "dice": 0.6785614198972443,
+      "false_positive": 609,
+      "false_negative": 2832
+    }
+  },
+  "stock_tt_vs_real_rope_tt": {
+    "actual_occupied": 4163,
+    "reference_occupied": 4241,
+    "intersection": 4010,
+    "union": 4394,
+    "iou": 0.9126081019572144,
+    "dice": 0.9543074726320799,
+    "false_positive": 153,
+    "false_negative": 231
+  },
+  "source_artifacts_sha256": {
+    "cpu_fp32": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+    "stock_tt": "ff53739c4906045211ed31b8bb442f451929244baace074564a7418ac8f8886f",
+    "real_rope_tt": "2e1cd790d3dbd9cc131be599421443032ed90965e83093fa8b8a4337dc423f36"
+  },
+  "finding": "With the identical FP32 CPU decoder, the candidate and stock TT occupancies overlap at IoU 0.913 (4010 intersecting / 4394 union voxels). Against FP32 sampler occupancy, stock IoU is 0.509 and candidate 0.514. The candidate changes occupied topology; the small one-scene improvement against FP32 is not evidence of preserved or improved reconstruction quality.",
+  "decision": "Keep both failed numerical trajectories visible and do not promote the speed optimization. Separate intended sampler precision from backend drift and assess geometry/material quality on more scenes.",
+  "limit": "Single original poster crop, occupancy only, no shape/texture decoding or mesh. These are sampler-input effects through a common decoder; TT decoder errors are excluded. No automatic IoU acceptance threshold.",
+  "validation": "3 occupancy metric regression checks pass; full actual decoder outputs are finite and boolean grids retained.",
+  "reproduce": "python experiments/tenstorrent/compare_occupancy.py --reference /path/to/stock-fp32-trajectory.pt --candidates stock_tt=/path/to/stock-tt.pt real_rope_tt=/path/to/real-rope-tt.pt --output-dir /path/to/new-occupancy-comparison"
+}

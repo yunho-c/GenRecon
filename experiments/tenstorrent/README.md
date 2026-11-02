@@ -526,6 +526,12 @@ The [paired real-RoPE run](results/autoresearch/029-paired-poster-occupancy/summ
 finishes the same sampler in 88.12 s, a 4.14x speedup. It also fails FP32 gates,
 and its final latent differs 29.4% from stock TT. Similar error magnitudes
 against FP32 do not mean the TT variants agree. Keep the candidate experimental.
+`compare_occupancy.py` decodes matched trajectories with the same official FP32
+CPU decoder to isolate sampler effects. The
+[poster occupancy check](results/autoresearch/030-poster-occupancy-quality/summary.json)
+finds IoU 0.913 between TT variants, and 0.509/0.514 for stock/candidate against
+the FP32 sampler. Those occupied-set changes prevent a preserved-quality claim.
+This is one crop's occupancy, not a reconstructed mesh or a TT decoder test.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
