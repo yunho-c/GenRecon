@@ -49,8 +49,32 @@ class RealRoPESelfAttention(nn.Module):
         return attn.to_out(h.reshape(batch, tokens, channels))
 
 
+class FixedSparseRealRoPE(nn.Module):
+    """RoPE-only replacement inside a fixed-coordinate native sparse probe.
+
+    The owning probe constructs every SparseTensor from its registered coords;
+    this wrapper does not implement dynamic or ragged coordinate preparation.
+    All sparse attention, QKV packing, normalization and LoRA stay original.
+    """
+    def __init__(self, rope):
+        super().__init__()
+        self.rope = rope
+        self.eval()
+
+    def forward(self, q, k=None):
+        if self.training:
+            raise RuntimeError('Prepared real RoPE is inference-only')
+        if q.shape[0] != 1 or (k is not None and k.shape[0] != 1):
+            raise ValueError('Fixed sparse RoPE requires one prepared chunk')
+        q_embed = q.replace(self.rope(q.feats.unsqueeze(0))[0])
+        if k is None:
+            return q_embed
+        return q_embed, k.replace(self.rope(k.feats.unsqueeze(0))[0])
+
+
 def prepare_real_rope(model):
     from genrecon.modules.attention import MultiHeadAttention
+    from genrecon.modules.sparse.attention import SparseMultiHeadAttention
     if model.training:
         raise ValueError('Real RoPE preparation requires model.eval()')
     count = 0
@@ -64,19 +88,31 @@ def prepare_real_rope(model):
         if blocks is None:
             block = getattr(owner, 'block', None)
             blocks = [block] if block is not None else []
+        fixed_sparse = getattr(owner, 'precompute_rope', False)
+        if fixed_sparse:
+            # NativeSparseFlowProbe alone owns phases and its fixed coords.
+            # Never infer fixed coordinates from an arbitrary sparse model.
+            if not hasattr(owner, 'coords') or not hasattr(owner, 'model'):
+                raise ValueError('Fixed sparse preparation requires a coordinate-owning probe')
+            blocks = owner.model.blocks
         shared_rope = None
         for block in blocks:
             attn = getattr(block, 'self_attn', None)
-            if not isinstance(attn, MultiHeadAttention) or not attn.use_rope:
+            supported = isinstance(attn, MultiHeadAttention) or (
+                fixed_sparse and isinstance(attn, SparseMultiHeadAttention))
+            if not supported or not attn.use_rope:
                 continue
             if attn._type != 'self' or attn.attn_mode != 'full':
-                raise ValueError('Only full dense active-token self-attention is supported')
+                raise ValueError('Only full fixed-layout self-attention is supported')
             if shared_rope is None:
                 shared_rope = RealPairRoPE(phases)
             if attn.head_dim != shared_rope.head_dim:
                 raise ValueError('Attention head dimension disagrees with prepared phases')
-            block.self_attn = RealRoPESelfAttention(attn, shared_rope)
+            if fixed_sparse:
+                attn.rope = FixedSparseRealRoPE(shared_rope)
+            else:
+                block.self_attn = RealRoPESelfAttention(attn, shared_rope)
             count += 1
     if not count:
-        raise ValueError('No supported fixed-layout dense RoPE attention found')
+        raise ValueError('No supported fixed-layout RoPE attention found')
     return count

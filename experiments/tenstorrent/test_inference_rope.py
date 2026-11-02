@@ -1,6 +1,7 @@
 import os
 os.environ['ATTN_BACKEND'] = 'sdpa'
 os.environ['SPARSE_CONV_BACKEND'] = 'none'
+os.environ['SPARSE_ATTN_BACKEND'] = 'sdpa'
 
 import pytest
 import torch
@@ -50,3 +51,38 @@ def test_changed_layout_rejected():
     rope = RealPairRoPE(torch.ones(17, 8, dtype=torch.complex64))
     with pytest.raises(ValueError, match='layout'):
         rope(torch.randn(1, 18, 4, 16))
+
+
+@pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
+def test_native_sparse_block_preserves_features_and_layout(dtype):
+    from genrecon.modules.sparse import SparseTensor
+    from genrecon.modules.sparse.transformer import ModulatedSparseTransformerCrossBlock
+    from experiments.tenstorrent.flow_probes import NativeSparseFlowProbe
+    torch.set_num_threads(4)
+    torch.manual_seed(21)
+    inner = nn.Module()
+    inner.blocks = nn.ModuleList([ModulatedSparseTransformerCrossBlock(48, 24, 4,
+        use_rope=True, share_mod=True, qk_rms_norm=True, qk_rms_norm_cross=True)])
+    block = inner.blocks[0]
+    for attn in (block.self_attn, block.cross_attn):
+        apply_lora_to_attention(attn, 4, 8)
+        for name, param in attn.named_parameters():
+            if 'lora_B' in name:
+                nn.init.normal_(param, std=.05)
+    inner.apply(lambda module: convert_module_to(module, dtype))
+    coords = torch.cat([torch.zeros(17, 1, dtype=torch.int32),
+                        torch.randint(0, 32, (17, 3), dtype=torch.int32)], 1)
+    probe = NativeSparseFlowProbe(inner, coords, precompute_rope=True).eval()
+    x = probe.sparse(torch.randn(17, 48).to(dtype))
+    mod, context = torch.randn(1, 288).to(dtype), torch.randn(1, 9, 24).to(dtype)
+    original_attention, original_qkv = block.self_attn, block.self_attn.to_qkv
+    with torch.no_grad():
+        expected = block(x, mod, context)
+        assert prepare_real_rope(probe) == 1
+        assert block.self_attn is original_attention
+        assert block.self_attn.to_qkv is original_qkv
+        actual = block(x, mod, context)
+    assert isinstance(actual, SparseTensor)
+    assert actual.coords is x.coords
+    assert actual.layout == x.layout
+    torch.testing.assert_close(actual.feats.float(), expected.feats.float(), rtol=2e-6, atol=2e-6)

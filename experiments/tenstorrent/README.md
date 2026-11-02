@@ -358,6 +358,13 @@ forward on PJRT (3.55x). The texture candidate passes its local forward smoke
 at 0.629 s for 512 tokens. These use synthetic conditioning; the failed shape
 trajectory checks still prevent a quality-preserving optimization claim.
 
+`--rope-mode real_pairs` also supports the fixed-coordinate native sparse
+`shape_flow_cached` / `tex_flow_cached` probes. This replaces only sparse RoPE;
+original attention, QKV packing, LoRA and sparse block operations remain in
+place. It requires one prepared chunk and is not a dynamic sparse runtime.
+CPU regression checks cover full sparse blocks in FP32 and BF16 with nonzero
+LoRA, including preserved coordinates and layout.
+
 Additional probes and CPU regression checks:
 
 ```bash
