@@ -1,0 +1,23 @@
+{
+  "hypothesis": "Frozen LoRA merging removes extra full-width activation projections.",
+  "scope": "Complete pretrained 30-block shape flow; 512 synthetic active voxels; identical seed 0, FP32 stock CPU reference, pipeline mixed precision on one exposed Wormhole chip; explicit optimization level 0. Fresh input/output transfers included, resident weights.",
+  "cases": [
+    {
+      "run": "005-shape-stock-512",
+      "median_ms": 2230.627632001415,
+      "relative_l2": 0.06807877501956724,
+      "cpu_preparation_relative_l2": null
+    },
+    {
+      "run": "006-shape-merged-512",
+      "median_ms": 2164.781672996469,
+      "relative_l2": 0.06934722714568277,
+      "cpu_preparation_relative_l2": [
+        0.003026277830455963
+      ]
+    }
+  ],
+  "speedup": 1.0304169052363616,
+  "decision": "Retain as opt-in research candidate. About 3% faster in this single comparison, with CPU preparation drift and slightly higher total error. No production-default change; no full-trajectory or scene-quality acceptance.",
+  "next": "Prioritize full-flow profiling and inspect attention lowering before more LoRA tuning."
+}
