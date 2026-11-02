@@ -1,0 +1,92 @@
+{
+  "scope": "Posthoc exact-coordinate comparison; geometry/material field diagnostics, not a rendered mesh quality assessment",
+  "input_voxels": 4490,
+  "actual_voxels": 1724799,
+  "reference_voxels": 1711800,
+  "common_voxels": 1704477,
+  "missing_voxels": 7323,
+  "extra_voxels": 20322,
+  "coordinate_iou": 0.9840398078195416,
+  "common_vertex_offsets": {
+    "shape_match": true,
+    "finite": true,
+    "relative_l2": 0.05564352773378188,
+    "pcc": 0.9934120566951513,
+    "max_abs": 1.1587827503681183
+  },
+  "common_vertex_offset_abs_error_voxel_units": {
+    "mean": 0.009557933546602726,
+    "p50": 0.0029022693634033203,
+    "p95": 0.03367131948471069,
+    "p99": 0.12891414761543274,
+    "max": 1.158782720565796
+  },
+  "positive_edge_set": {
+    "scope": "positive edge identifiers (voxel coordinate, axis) over the union of output coordinates; includes missing and extra voxels",
+    "actual_positive": 1882721,
+    "reference_positive": 1854181,
+    "true_positive": 1819938,
+    "false_positive": 62783,
+    "false_negative": 34243,
+    "precision": 0.9666530516205003,
+    "recall": 0.9815320079323432,
+    "iou": 0.9493855909657145
+  },
+  "common_quad_weights": {
+    "shape_match": true,
+    "finite": true,
+    "relative_l2": 0.106184194866716,
+    "pcc": 0.9932933179894707,
+    "max_abs": 12.016283988952637
+  },
+  "common_material_channels": {
+    "base_color_r": {
+      "mean": 0.002822370734065771,
+      "p50": 0.002265453338623047,
+      "p95": 0.006889171898365021,
+      "p99": 0.011675387620925903,
+      "max": 0.272513747215271
+    },
+    "base_color_g": {
+      "mean": 0.0024308122228831053,
+      "p50": 0.001856982707977295,
+      "p95": 0.006187736988067627,
+      "p99": 0.010807745158672333,
+      "max": 0.2683277726173401
+    },
+    "base_color_b": {
+      "mean": 0.0023146553430706263,
+      "p50": 0.0017896294593811035,
+      "p95": 0.005778856575489044,
+      "p99": 0.010287530720233917,
+      "max": 0.2727105915546417
+    },
+    "metallic": {
+      "mean": 0.002012034645304084,
+      "p50": 0.00177842378616333,
+      "p95": 0.0054038166999816895,
+      "p99": 0.006699882447719574,
+      "max": 0.022513926029205322
+    },
+    "roughness": {
+      "mean": 0.002157272305339575,
+      "p50": 0.0018263459205627441,
+      "p95": 0.005229830741882324,
+      "p99": 0.007165431976318359,
+      "max": 0.07168269157409668
+    },
+    "alpha": {
+      "mean": 0.001479563768953085,
+      "p50": 0.0008871555328369141,
+      "p95": 0.004104971885681152,
+      "p99": 0.005632743239402771,
+      "max": 0.03137493133544922
+    }
+  },
+  "material_transform": "original pipeline raw * 0.5 + 0.5, without clamping",
+  "raw_files_sha256": {
+    "shape_tt_predicted.pt": "0c862dffbc64392586e18082411e9488fd20c6779522b675db6aa8ef97765f20",
+    "texture_tt_predicted.pt": "206272a39cac9cd1baf3ec5d43e175aaa979a0339528fa5c70af4dfcba41c08e"
+  },
+  "raw_report_sha256": "5628a3206d67b857efe4d9030e3aefc225cd2d4777bbfff7eb76cab1d3ac6421"
+}

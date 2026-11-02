@@ -32,6 +32,9 @@ real image conditions and multi-step scene generation **on TT**, visual scene
 quality, and end-to-end image-to-mesh integration remain unverified. The exact
 DINOv3-L/512 configuration and all three samplers have run on CPU to generate a
 real-image decoder fixture; both TT decoders have now been evaluated on it.
+The ordinary [BF16 decoder path](BF16_SCENE_VALIDATION.md) now has full-fixture
+warm medians of 15.09 seconds for shape and 14.63 seconds for texture, with
+substantial additional topology/geometry differences from the FP32 reference.
 The sections below retain both successful results and the failures that defined
 the working compilation boundaries.
 

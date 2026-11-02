@@ -1,0 +1,483 @@
+{
+  "status": "numerical_failure",
+  "phase": "complete",
+  "precision": "bf16",
+  "algorithm": "explicit_gemm",
+  "row_chunk": 1024,
+  "input_voxels": 4490,
+  "input_scope": "saved_real_image_latent",
+  "original_input_sha256": "ec164c1e73ee3f9117068a45e2e75100f26345b25aba5f954ca6db91d3d69d41",
+  "reference_dir": "/home/user/tt-scratchpad/genrecon/sparse-decoder-poster-bounded",
+  "reference_manifest_sha256": "176bc05823ce4213956da22e37d9c918a537fb520677437aa46e71fb9b52e5f9",
+  "reference_files_sha256": {
+    "decoder_input.npz": "593adfea32242c0e7f664dfe08a7d6c6528ec06291101763157c912b0f00639e",
+    "shape_reference.pt": "d3a4c458a05d1e4efa6d82962b7a2132959db04650c26fa774d300bd9b20fb5d",
+    "texture_reference.pt": "432b5a3cdd52e90ee10f26502d4d24274aec3f4352806efa0c31ca932736af29",
+    "reference_guides.pt": "401522fa0f8bfbb8cb91ea60748da198e6b866da66e4a73e12c3fda4c893ebdf",
+    "shape_wide_input.pt": "d9dbec7db2dcdde98ba7e2189dd3b93ecab0e604c2419be412e17c016210e6cc"
+  },
+  "checkpoint_sha256": {
+    "shape_dec_next_dc_f16c32_fp16.json": "5f1b856dffce79466fb18f5f0eefc08f08c673b24b3c05b20359c0b6d318a209",
+    "shape_dec_next_dc_f16c32_fp16.safetensors": "e3b718d3e43e4f8780e9a24ac6fff231811a67e3b058e336e10fe654c911d581",
+    "tex_dec_next_dc_f16c32_fp16.json": "22074e4ab5b28e2b72d33a3fe61bf416134b89e12d0fc5c729f37da75da0c4d1",
+    "tex_dec_next_dc_f16c32_fp16.safetensors": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c"
+  },
+  "gate": {
+    "relative_l2": 0.0001,
+    "pcc": 0.999999,
+    "coordinates": "exact",
+    "subdivision_signs": "exact",
+    "geometry_edge_signs": "exact",
+    "scope": "decoder numerical parity; real-scene reconstruction quality is separate"
+  },
+  "threads": 16,
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "python": "3.10.19 (main, Jan 14 2026, 19:36:24) [Clang 21.1.4 ]"
+  },
+  "started_utc": "2026-11-02T04:50:13Z",
+  "fixed_shape_precision": "bf16",
+  "warm_repeats": 3,
+  "warm": {
+    "shape": {
+      "seconds": [
+        15.234922340023331,
+        15.064702173986007,
+        15.08990244398592
+      ],
+      "repeat_outputs_equal": true,
+      "median_seconds": 15.08990244398592,
+      "min_seconds": 15.064702173986007,
+      "max_seconds": 15.234922340023331
+    },
+    "texture": {
+      "seconds": [
+        14.630969066987745,
+        14.604997040994931,
+        14.65300897799898
+      ],
+      "repeat_outputs_equal": true,
+      "median_seconds": 14.630969066987745,
+      "min_seconds": 14.604997040994931,
+      "max_seconds": 14.65300897799898
+    }
+  },
+  "timing_scope": "complete calls including CPU boundary transfers, topology and output synchronization; excludes weight preparation, comparisons and artifact I/O",
+  "watcher": "30",
+  "scope": "saved CPU references; one decoder's weights resident at a time; all voxel rows retained",
+  "source": {
+    "commit": "7ab89ce7844f53393be5def057275f0266f8c2cc",
+    "dirty": true,
+    "sha256": {
+      "experiments/tenstorrent/sparse_decoder_scene_probe.py": "cb97660668b22c72487e1ba9899c13404451855a2e1dbf1521b38c842f93ab78",
+      "genrecon/backends/tenstorrent/__init__.py": "1e299786b91f8491a4e0b21f2c8b4074aa9a60c63928d30d6450b131f0ae6465",
+      "genrecon/backends/tenstorrent/precision.py": "fd73cf6890ad9fdf4399253ed3d8c3694407823befb6d3466bd5bede9303dd75",
+      "genrecon/backends/tenstorrent/sparse_decoder.py": "acd89654fb7fa194db0b18540f953178b787fb9960077ff37092925cf2ebc725"
+    }
+  },
+  "flex_gemm": {
+    "commit": "6492d51f585b1c0cd8a6a1113acff1b529379174",
+    "dirty": false,
+    "sha256": {
+      "flex_gemm/tenstorrent/__init__.py": "ac4a5710c385f8a430e6ce2414290c5d515af7b73774fe388de6849e2594443d",
+      "flex_gemm/tenstorrent/conv.py": "389903b43e5246a94bfba678070a0b031da45c749de5e5c0484c20ac65c7f6c5",
+      "flex_gemm/tenstorrent/implicit.py": "baa8af46a7a5fb67fdcb8af48a99561434c7eb813ee3f5d50f7020dde426647d",
+      "flex_gemm/tenstorrent/kernels/compute.cpp": "62a17641703267248042b612b7a073513f9e353c64d246e39cf892c99e17ff8b",
+      "flex_gemm/tenstorrent/kernels/reader.cpp": "7ab92ff6db461c5ab72683010373c8054c3a95251b55df5aac9a0a6fda68fb2b",
+      "flex_gemm/tenstorrent/kernels/writer.cpp": "cab77fc929644c13dfd737c04fab920ed5b685b6c10aef0b06588a0720bc5ee5",
+      "flex_gemm/tenstorrent/masking.py": "32c66f47bd2caef0ec94e34c23e0ae09562206a47267cc490db304cf7f0d10b7",
+      "flex_gemm/tenstorrent/ops.py": "e50109b5870445c353da6b76ce64e24048f61ce289bb75703ff661ec14241560",
+      "flex_gemm/tenstorrent/reference.py": "a0dc3709115acfb282ea9d472b63ed470e62421e478ab67d20b2387b8ea0bdd3",
+      "flex_gemm/tenstorrent/resident.py": "ff02aaf696667a9f78f215cf143578785e09edd83c09520fd6abb11714bf2ca3"
+    }
+  },
+  "tt_metal": {
+    "commit": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+    "dirty": false,
+    "sha256": {}
+  },
+  "prior_fixed_shape": {
+    "shape_fixed": {
+      "coordinates_equal": true,
+      "actual_voxels": 1711800,
+      "reference_voxels": 1711800,
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.1487012456033988e-06,
+        "pcc": 0.9999999999992679,
+        "max_abs": 0.00054168701171875
+      }
+    },
+    "subdivisions_fixed": [
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 5.954842679505219e-07,
+          "pcc": 0.9999999999998125,
+          "max_abs": 0.000396728515625
+        },
+        "sign_mismatches": 0,
+        "decisions": 35920
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 6.550622761616988e-07,
+          "pcc": 0.9999999999997833,
+          "max_abs": 0.00037384033203125
+        },
+        "sign_mismatches": 0,
+        "decisions": 162008
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 9.054248266695413e-07,
+          "pcc": 0.9999999999995858,
+          "max_abs": 0.0001983642578125
+        },
+        "sign_mismatches": 1,
+        "decisions": 708192
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 7.975786509951537e-07,
+          "pcc": 0.9999999999996911,
+          "max_abs": 0.000179290771484375
+        },
+        "sign_mismatches": 0,
+        "decisions": 3109272
+      }
+    ],
+    "geometry_fixed": {
+      "vertices": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.0001459029499352e-06,
+        "pcc": 0.9999999999978887,
+        "max_abs": 1.239776611328125e-05
+      },
+      "edge_sign_mismatches": 0,
+      "edge_decisions": 5135400,
+      "quad_weights": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 3.3192899871010666e-06,
+        "pcc": 0.9999999999933938,
+        "max_abs": 0.000164031982421875
+      }
+    },
+    "captured_wide": {
+      "input_channels": 1024,
+      "output_channels": 4096,
+      "input_origin": "saved_latent",
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 1.3922503898048543e-07,
+        "pcc": 0.9999999999999576,
+        "max_abs": 0.000244140625
+      },
+      "atol": 0.02,
+      "rtol": 0.02,
+      "passed": true
+    }
+  },
+  "device": {
+    "id": 1,
+    "architecture": "Arch.WORMHOLE_B0",
+    "grid": [
+      8,
+      8
+    ]
+  },
+  "shape_prepare_seconds": 1.7982245149905793,
+  "memory_after_shape_prepare": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 960356352
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "fixed_shape": {
+    "captured_wide": {
+      "input_channels": 1024,
+      "output_channels": 4096,
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.0026720210907196884,
+        "pcc": 0.9999964299900876,
+        "max_abs": 4.6578369140625
+      },
+      "atol": 0.02,
+      "rtol": 0.02,
+      "passed": false
+    },
+    "shape_fixed": {
+      "coordinates_equal": true,
+      "actual_voxels": 1711800,
+      "reference_voxels": 1711800,
+      "features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.01490856050051215,
+        "pcc": 0.999883939613653,
+        "max_abs": 7.077201843261719
+      },
+      "common_voxels": 1711800,
+      "missing_voxels": 0,
+      "extra_voxels": 0,
+      "common_features": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.01490856050051215,
+        "pcc": 0.999883939613653,
+        "max_abs": 7.077201843261719
+      },
+      "common_rows_with_abs_error_over_1e_3": 1711800,
+      "common_edge_sign_mismatches": 11795,
+      "common_edge_decisions": 5135400
+    },
+    "stats": {
+      "topology_seconds": 4.17681858810829,
+      "stage_voxels": [
+        4490,
+        20251,
+        88524,
+        388659,
+        1711800
+      ],
+      "feature_uploads": 1,
+      "subdivision_downloads": 4,
+      "total_seconds": 124.7661449110019
+    },
+    "subdivisions_fixed": [
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 0.0035513237339303712,
+          "pcc": 0.9999963697821866,
+          "max_abs": 2.270538330078125
+        },
+        "sign_mismatches": 1,
+        "decisions": 35920
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 0.008476685265810493,
+          "pcc": 0.9999900223017795,
+          "max_abs": 3.9089813232421875
+        },
+        "sign_mismatches": 16,
+        "decisions": 162008
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 0.016773916925325927,
+          "pcc": 0.9999392935257287,
+          "max_abs": 5.2157135009765625
+        },
+        "sign_mismatches": 1085,
+        "decisions": 708192
+      },
+      {
+        "features": {
+          "shape_match": true,
+          "finite": true,
+          "relative_l2": 0.021032142358570347,
+          "pcc": 0.9998903017465489,
+          "max_abs": 5.12067985534668
+        },
+        "sign_mismatches": 17912,
+        "decisions": 3109272
+      }
+    ],
+    "geometry_fixed": {
+      "vertices": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.011268996510218404,
+        "pcc": 0.9997391970865107,
+        "max_abs": 0.1533564329147339
+      },
+      "edge_sign_mismatches": 11795,
+      "edge_decisions": 5135400,
+      "quad_weights": {
+        "shape_match": true,
+        "finite": true,
+        "relative_l2": 0.03745735495786691,
+        "pcc": 0.9992080801570077,
+        "max_abs": 2.114168643951416
+      }
+    }
+  },
+  "shape_wall_seconds": 74.75692920997972,
+  "shape_predicted": {
+    "coordinates_equal": false,
+    "actual_voxels": 1724799,
+    "reference_voxels": 1711800,
+    "features": null,
+    "common_voxels": 1704477,
+    "missing_voxels": 7323,
+    "extra_voxels": 20322,
+    "common_features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.18479014303694666,
+      "pcc": 0.9809118379240551,
+      "max_abs": 102.35699272155762
+    },
+    "common_rows_with_abs_error_over_1e_3": 1704477,
+    "common_edge_sign_mismatches": 75636,
+    "common_edge_decisions": 5113431
+  },
+  "shape_stats": {
+    "topology_seconds": 4.135090249939822,
+    "stage_voxels": [
+      4490,
+      20250,
+      88523,
+      389338,
+      1724799
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 4,
+    "total_seconds": 74.75501940300455
+  },
+  "subdivisions_predicted": [
+    {
+      "common_parents": 4490,
+      "extra_parents": 0,
+      "missing_parents": 0,
+      "common_sign_mismatches": 1
+    },
+    {
+      "common_parents": 20250,
+      "extra_parents": 0,
+      "missing_parents": 1,
+      "common_sign_mismatches": 16
+    },
+    {
+      "common_parents": 88515,
+      "extra_parents": 8,
+      "missing_parents": 9,
+      "common_sign_mismatches": 1231
+    },
+    {
+      "common_parents": 388376,
+      "extra_parents": 962,
+      "missing_parents": 283,
+      "common_sign_mismatches": 25518
+    }
+  ],
+  "memory_after_shape_release": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 20791296
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "texture_prepare_seconds": 1.303562862041872,
+  "memory_after_texture_prepare": {
+    "dram": {
+      "banks": 12,
+      "capacity_bytes": 12849278208,
+      "allocated_bytes": 980877312
+    },
+    "l1": {
+      "banks": 64,
+      "capacity_bytes": 89182208,
+      "allocated_bytes": 0
+    }
+  },
+  "texture_fixed": {
+    "coordinates_equal": true,
+    "actual_voxels": 1711800,
+    "reference_voxels": 1711800,
+    "features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.00733308489861992,
+      "pcc": 0.9999734064917432,
+      "max_abs": 0.09669137001037598
+    },
+    "common_voxels": 1711800,
+    "missing_voxels": 0,
+    "extra_voxels": 0,
+    "common_features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.00733308489861992,
+      "pcc": 0.9999734064917432,
+      "max_abs": 0.09669137001037598
+    },
+    "common_rows_with_abs_error_over_1e_3": 1711643
+  },
+  "texture_fixed_stats": {
+    "topology_seconds": 4.992606076761149,
+    "stage_voxels": [
+      4490,
+      20251,
+      88524,
+      388659,
+      1711800
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 0,
+    "total_seconds": 14.59414648800157
+  },
+  "texture_wall_seconds": 14.682798091031145,
+  "texture_predicted": {
+    "coordinates_equal": false,
+    "actual_voxels": 1724799,
+    "reference_voxels": 1711800,
+    "features": null,
+    "common_voxels": 1704477,
+    "missing_voxels": 7323,
+    "extra_voxels": 20322,
+    "common_features": {
+      "shape_match": true,
+      "finite": true,
+      "relative_l2": 0.008588231680567538,
+      "pcc": 0.9999634062506417,
+      "max_abs": 0.5454211831092834
+    },
+    "common_rows_with_abs_error_over_1e_3": 1704344
+  },
+  "texture_predicted_stats": {
+    "topology_seconds": 4.891575747169554,
+    "stage_voxels": [
+      4490,
+      20250,
+      88523,
+      389338,
+      1724799
+    ],
+    "feature_uploads": 1,
+    "subdivision_downloads": 0,
+    "total_seconds": 14.671818771981634
+  },
+  "chain_coordinates_equal": true
+}

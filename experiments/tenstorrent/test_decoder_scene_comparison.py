@@ -33,6 +33,7 @@ def test_missing_extra_and_empty_voxels():
 @pytest.mark.parametrize("failure", [
     "fixed_subdivision", "predicted_subdivision", "fixed_edge", "predicted_edge",
     "missing_parent", "missing_stage", "wide", "chain", "continuous", "coordinates",
+    "fresh_fixed", "nondeterministic",
 ])
 def test_strict_gate_keeps_discrete_failures_even_with_small_feature_errors(failure):
     comparison = {"coordinates_equal": True,
@@ -72,4 +73,9 @@ def test_strict_gate_keeps_discrete_failures_even_with_small_feature_errors(fail
         report["texture_fixed"]["features"]["relative_l2"] = 1e-2
     elif failure == "coordinates":
         report["texture_predicted"]["coordinates_equal"] = False
+    elif failure == "fresh_fixed":
+        report["fixed_shape"] = copy.deepcopy(fixed)
+        report["fixed_shape"]["subdivisions_fixed"][0]["sign_mismatches"] = 1
+    elif failure == "nondeterministic":
+        report["warm"] = {"shape": {"repeat_outputs_equal": False}}
     assert not scene_passed(report)

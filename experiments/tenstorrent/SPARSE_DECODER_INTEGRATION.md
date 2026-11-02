@@ -143,7 +143,7 @@ complete shape/texture paths for explicit and masked split-K algorithms, ragged
 chunks, batches, changed-coordinate cache invalidation, empty children,
 parameter invalidation, FP32 normalization, cancellation, lossless C2S, and
 million-row FP32/BF16 channel repetition, and bounded cache retention.
-CPU validation tests: **12 passed** for coordinate intersection and enforcement
+CPU validation tests: **14 passed** for coordinate intersection and enforcement
 of all numerical/discrete gates; **2 passed** for fixture camera preprocessing.
 The main probe's `--sequential-weights --warm-repeats 0` mode also passed a
 fresh full pretrained eight-input run with exact topology and edge signs;
@@ -223,3 +223,11 @@ the outstanding issue is whole-decoder sensitivity to near-zero decisions.
 DL3DV generation still requires access to the official gated sample files.
 Broader scene quality, memory limits, and useful production latency remain to
 be established.
+
+The subsequent [full-scene BF16 benchmark](BF16_SCENE_VALIDATION.md) measured
+15.09/14.63-second warm shape/texture medians. Fixed-guide relative L2 errors are
+1.49%/0.733%; using BF16-predicted guides increases raw shape error to 18.48% on
+common voxels, with 7,323 missing voxels, 20,322 extra voxels, and 75,636 common
+edge-sign differences. The ordinary BF16 path therefore executes much faster,
+but also fails strict parity. The earlier accurate-mode calls were not measured
+as a matching warm benchmark.
