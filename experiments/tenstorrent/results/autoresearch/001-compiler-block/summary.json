@@ -1,0 +1,47 @@
+{
+  "hypothesis": "Explicit compiler optimization levels and trace replay improve flow inference.",
+  "scope": "Single random-weight FP32 dense DiT block, 64 active tokens, width 1536, 12 heads, 1029 context tokens; synchronized input/output transfers included. No trained LoRA. Single exposed Wormhole chip.",
+  "cases": [
+    {
+      "run": "001-opt0",
+      "report": "001-opt0.json",
+      "options": {
+        "optimization_level": 0
+      },
+      "median_ms": 20.93251800397411,
+      "relative_l2": 0.012078806022444799
+    },
+    {
+      "run": "002-opt1",
+      "report": "002-opt1.json",
+      "options": {
+        "optimization_level": 1
+      },
+      "median_ms": 21.40989003237337,
+      "relative_l2": 0.01220579340526033
+    },
+    {
+      "run": "003-opt2",
+      "report": "003-opt2.json",
+      "options": {
+        "optimization_level": 2
+      },
+      "median_ms": 20.842914993409067,
+      "relative_l2": 0.007085555356258893
+    },
+    {
+      "run": "004-opt0-trace",
+      "report": "004-opt0-trace.json",
+      "options": {
+        "optimization_level": 0,
+        "enable_trace": "true"
+      },
+      "median_ms": 19.889900053385645,
+      "relative_l2": 0.012078806022444799
+    }
+  ],
+  "timing_method": "Five calls after first inference and one warmup. Single process per configuration, hardware access serialized. Compilation/kernel caches not cleared.",
+  "decision": "No default change. Levels 0/1/2 are within observed timing noise at this small shape. Trace replay is about 5% faster in this one comparison; needs full-flow confirmation.",
+  "quality_scope": "Operator smoke gate only; no trajectory or scene-quality claim.",
+  "next": "Compare stock/merged pretrained complete shape flow, then real-size synthetic token counts and matched trajectories."
+}
