@@ -53,8 +53,11 @@ def main():
     p.add_argument('--threads', type=int, default=16)
     p.add_argument('--seed', type=int, default=0)
     p.add_argument('--checkpoints', type=Path, default=Path.home()/'models/genrecon')
+    p.add_argument('--flow-inputs', type=Path, help='Prepared real-image inputs; currently supports --stage ss')
     p.add_argument('--output-dir', type=Path, required=True)
     args = p.parse_args()
+    if args.flow_inputs is not None and args.stage != 'ss':
+        p.error('flow-inputs currently supports ss only')
     os.environ.update(ATTN_BACKEND='sdpa', SPARSE_ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
     sys.path.insert(0, str(ROOT))
     sys.path.insert(0, str(Path(__file__).parent))
@@ -73,9 +76,14 @@ def main():
         case = {'ss':'ss_flow','shape':'shape_flow_tensor','tex':'tex_flow_tensor'}[args.stage]
         model, inputs, metadata = build_case(case,args.checkpoints,
             active_voxels=None if args.stage=='ss' else args.active_voxels)
+        if args.flow_inputs is not None:
+            from experiments.tenstorrent.prepare_ss_inputs import load_ss_inputs
+            inputs, fixture_metadata = load_ss_inputs(args.flow_inputs, inputs, metadata['checkpoint']['sha256'])
+            metadata.update(fixture_metadata)
         model.eval()
         report['metadata'] = metadata
-        fixture = TrajectoryFixture(args.stage,inputs,getattr(model,'coords',None))
+        fixture = TrajectoryFixture(args.stage,inputs,getattr(model,'coords',None),
+            input_source='real posed-image' if args.flow_inputs is not None else 'synthetic')
         report['phase'] = 'emulated_pipeline_forward_and_trajectory'
         save()
         mode = PipelinePrecisionMode()

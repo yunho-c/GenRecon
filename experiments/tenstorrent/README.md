@@ -346,6 +346,10 @@ but evaluates BF16 GEMMs and CPU flash attention through FP32 accumulation,
 avoiding this host's slow native BF16 products. Small native BF16 comparisons
 test the emulation. This is not a CUDA/TT kernel oracle and does not replace
 the original FP32 reference or acceptance gates.
+For the same real-poster occupancy fixture, use `precision_reference.py --stage
+ss --flow-inputs /path/to/poster-inputs/inputs.pt --output-dir /path/to/new`.
+This calibrates intended tensor-rounding drift before assigning all observed
+TT/FP32 trajectory differences to backend kernels. It remains a CPU diagnostic.
 
 `block_diagnostic.py --output-dir /path/to/new-diagnostic` compares all shape-flow
 block outputs against stock FP32 and CPU pipeline-precision diagnostics. It
