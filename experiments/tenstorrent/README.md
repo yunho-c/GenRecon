@@ -319,6 +319,18 @@ The same `--rope-mode real_pairs` option is available when exporting with
 `codegen_probe.py`; it retains the unmodified stock CPU reference and records
 preparation drift before generating an independently validated TTNN program.
 
+Complete tensor-flow probes support `--synthetic-trajectory` together with
+`--reference-precision float32`. This runs the original 12-step Euler/CFG
+schedule against the unmodified CPU model before preparing any candidate, then
+executes the same noise and conditioning on TT. Dense occupancy, single-chunk
+shape and preconcatenated texture are supported. Texture shape channels remain
+fixed throughout sampling. Reports check every predicted state and final latent,
+record graph-counter changes, and save `trajectory-reference.pt` and
+`trajectory-tt.pt` with hashes. New artifacts also fingerprint both conditioning
+branches, concatenated shape features and sampler configuration. Explicit
+legacy-artifact inspection is diagnostic and reports missing identity checks.
+These are trajectory smoke checks on synthetic conditions, not mesh quality.
+
 Additional probes and CPU regression checks:
 
 ```bash

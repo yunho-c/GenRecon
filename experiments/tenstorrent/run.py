@@ -46,6 +46,7 @@ def worker(args):
         "rope_mode": args.rope_mode,
         "requested_active_voxels": args.active_voxels,
         "profile_markers": args.profile_markers,
+        "synthetic_trajectory": args.synthetic_trajectory,
         "requested_compile_options": {
             **({"optimization_level": args.optimization_level} if args.optimization_level is not None else {}),
             **({"enable_trace": "true"} if args.runtime_trace else {}),
@@ -92,6 +93,16 @@ def worker(args):
             start = time.perf_counter()
             reference = [t.detach().cpu() for t in outputs(model(*reference_inputs))]
             result["cpu_seconds"] = time.perf_counter() - start
+        trajectory = None
+        if args.synthetic_trajectory:
+            from trajectory import TrajectoryFixture, compare_trajectories
+            trajectory = TrajectoryFixture(args.worker.split('_')[0], inputs, getattr(model, 'coords', None))
+            result['phase'] = 'stock_cpu_trajectory'
+            write_result(path, result)
+            with torch.no_grad(), float32_reference(model):
+                trajectory_reference, result['cpu_trajectory'] = trajectory.run(
+                    lambda x, t, cond: model(x, t, cond['context'], cond['projected']))
+            torch.save(trajectory_reference, args.output_dir/'trajectory-reference.pt')
         if args.lora_mode != "stock":
             from inference_lora import prepare_lora
             start = time.perf_counter()
@@ -181,12 +192,36 @@ def worker(args):
             signpost(f"GENRECON_MEASURED_{repeat}_END")
         result["warm_latency_ms"] = latencies
         result["warm_latency_median_ms"] = statistics.median(latencies)
+        if trajectory is not None:
+            device_conditions = {id(cond): tuple(cond[key].to(device) for key in ('context', 'projected'))
+                                 for cond in (trajectory.positive, trajectory.negative)}
+            def trajectory_forward(x, t, cond):
+                return compiled(x.to(device), t.to(device), *device_conditions[id(cond)]).cpu().float()
+            # Exercise the negative branch before timing; shapes must stay fixed.
+            with torch.no_grad():
+                trajectory_forward(inputs[0], inputs[1], trajectory.negative)
+            result['phase'] = 'device_trajectory'
+            write_result(path, result)
+            result['dynamo_before_trajectory'] = dict(torch._dynamo.utils.counters['stats'])
+            with torch.no_grad():
+                trajectory_actual, result['device_trajectory'] = trajectory.run(trajectory_forward)
+            result['dynamo_after_trajectory'] = dict(torch._dynamo.utils.counters['stats'])
+            result['recompiled_during_trajectory'] = result['dynamo_after_trajectory'] != result['dynamo_before_trajectory']
+            result['device_trajectory']['timing_scope'] = 'Resident weights and preuploaded conditions; input/output transfer, synchronized model calls, original CPU Euler/CFG arithmetic and instrumentation. Preparation, CPU reference, compilation/warmups and artifact I/O excluded.'
+            result['trajectory_vs_stock_cpu_fp32'] = compare_trajectories(trajectory_actual, trajectory_reference)
+            torch.save(trajectory_actual, args.output_dir/'trajectory-tt.pt')
+            result['trajectory_artifacts_sha256'] = {name: hashlib.sha256((args.output_dir/name).read_bytes()).hexdigest()
+                for name in ('trajectory-reference.pt', 'trajectory-tt.pt')}
         result["xla_executed_fallback_ops"] = list(metrics.executed_fallback_ops())
         result["xla_aten_counters"] = {n: metrics.counter_value(n) for n in metrics.counter_names() if n.startswith("aten::")}
         (args.output_dir / "xla_metrics.txt").write_text(metrics.metrics_report())
         passed = all(c["passed"] for c in comparisons)
+        if trajectory is not None:
+            passed = passed and result['trajectory_vs_stock_cpu_fp32']['all_states_pass_smoke']
         fallbacks = result["xla_executed_fallback_ops"] or result["xla_aten_counters"]
         result["status"] = ("passed" if not fallbacks else "passed_with_fallbacks") if passed else "numerical_mismatch"
+        if trajectory is not None and result['recompiled_during_trajectory']:
+            result['status'] = 'compiled_during_trajectory'
         result["phase"] = "complete"
     except Exception as exc:
         result.update(status="failed", exception_type=type(exc).__name__, error=str(exc))
@@ -211,6 +246,8 @@ def main():
     parser.add_argument("--optimization-level", type=int, choices=(0, 1, 2), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
     parser.add_argument("--rope-mode", choices=("stock", "real_pairs"), default="stock")
+    parser.add_argument('--synthetic-trajectory', action='store_true',
+                        help='Compare the complete original 12-step schedule against stock FP32 CPU (complete tensor flows only)')
     parser.add_argument("--active-voxels", type=int, default=None,
                         help="Synthetic sparse flow size; default 512. Not a real-scene fixture.")
     parser.add_argument("--runtime-trace", action="store_true")
@@ -223,6 +260,10 @@ def main():
         parser.error("runs, timeout, cpu-threads and trace-region-size must be positive")
     if args.active_voxels is not None and args.active_voxels < 1:
         parser.error("active-voxels must be positive")
+    if args.synthetic_trajectory:
+        cases = [args.worker] if args.worker else args.cases
+        if args.reference_precision != 'float32' or any(case not in ('ss_flow', 'shape_flow_tensor', 'tex_flow_tensor') for case in cases):
+            parser.error('synthetic trajectories require FP32 reference and ss_flow/shape_flow_tensor/tex_flow_tensor')
     args.output_dir = args.output_dir.resolve()
     args.checkpoint_dir = args.checkpoint_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -240,6 +281,8 @@ def main():
                    "--reference-precision", args.reference_precision]
         command += ["--lora-mode", args.lora_mode]
         command += ["--rope-mode", args.rope_mode]
+        if args.synthetic_trajectory:
+            command += ['--synthetic-trajectory']
         if args.active_voxels is not None:
             command += ["--active-voxels", str(args.active_voxels)]
         if args.optimization_level is not None:

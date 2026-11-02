@@ -119,6 +119,7 @@ class SingleChunkSLatProbe(nn.Module):
             block.load_state_dict(original.state_dict(), strict=True, assign=True)
             self.blocks.append(block)
         self.register_buffer("phases", RotaryPositionEmbedder(model.model_channels//model.num_heads,3)(coords[:,1:]))
+        self.register_buffer("coords", coords.clone())
 
     def forward(self, x, t, context, projected):
         h = self.input_layer(x).unsqueeze(0).to(self.dtype)
