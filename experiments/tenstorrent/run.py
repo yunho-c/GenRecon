@@ -44,6 +44,7 @@ def worker(args):
         "seed": args.seed, "fullgraph": True,
         "lora_mode": args.lora_mode,
         "requested_active_voxels": args.active_voxels,
+        "profile_markers": args.profile_markers,
         "requested_compile_options": {
             **({"optimization_level": args.optimization_level} if args.optimization_level is not None else {}),
             **({"enable_trace": "true"} if args.runtime_trace else {}),
@@ -116,6 +117,11 @@ def worker(args):
         result["device_type"] = xr.device_type()
         model.to(device)
         compiled = torch.compile(model, backend="tt", fullgraph=True)
+        if args.profile_markers:
+            from tracy import signpost
+        else:
+            def signpost(label):
+                pass
         metrics.clear_all()
         result["phase"] = "compile_and_first_inference"
         write_result(path, result)
@@ -124,9 +130,11 @@ def worker(args):
             with torch.no_grad():
                 return [t.cpu() for t in outputs(compiled(*(t.to(device) for t in inputs)))]
 
+        signpost("GENRECON_FIRST_BEGIN")
         start = time.perf_counter()
         actual = infer()
         result["first_inference_seconds"] = time.perf_counter() - start
+        signpost("GENRECON_FIRST_END")
         result["phase"] = "comparison"
         write_result(path, result)
         comparisons = []
@@ -148,12 +156,16 @@ def worker(args):
                 item["passed"] = finite and error <= 0.1 and (pcc is None or pcc >= 0.99)
             comparisons.append(item)
         result["outputs"] = comparisons
+        signpost("GENRECON_WARMUP_BEGIN")
         infer()  # warmup
+        signpost("GENRECON_WARMUP_END")
         latencies = []
-        for _ in range(args.runs):
+        for repeat in range(args.runs):
+            signpost(f"GENRECON_MEASURED_{repeat}_BEGIN")
             start = time.perf_counter()
             infer()
             latencies.append((time.perf_counter() - start) * 1000)
+            signpost(f"GENRECON_MEASURED_{repeat}_END")
         result["warm_latency_ms"] = latencies
         result["warm_latency_median_ms"] = statistics.median(latencies)
         result["xla_executed_fallback_ops"] = list(metrics.executed_fallback_ops())
@@ -188,6 +200,8 @@ def main():
     parser.add_argument("--active-voxels", type=int, default=None,
                         help="Synthetic sparse flow size; default 512. Not a real-scene fixture.")
     parser.add_argument("--runtime-trace", action="store_true")
+    parser.add_argument("--profile-markers", action="store_true",
+                        help="Emit Tracy signposts around first/warmup/measured synchronized forwards")
     parser.add_argument("--trace-region-size", type=int, default=10_000_000)
     parser.add_argument("--worker", help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -217,6 +231,8 @@ def main():
             command += ["--optimization-level", str(args.optimization_level)]
         if args.runtime_trace:
             command += ["--runtime-trace", "--trace-region-size", str(args.trace_region_size)]
+        if args.profile_markers:
+            command += ["--profile-markers"]
         print(f"Running {case}; log: {dest / 'run.log'}", flush=True)
         with (dest / "run.log").open("w") as log:
             try:

@@ -277,6 +277,23 @@ and outputs. Checkpoint fingerprinting is outside timed inference. Legacy report
 without this identity require a fresh output directory; historical results are
 retained as originally measured.
 
+`codegen_probe.py export --case shape_flow_tensor --directory /path/to/new-export`
+runs under the Forge Python and preserves the generated TTNN program, compiler
+IR, tensor hashes and stock FP32 reference. Run `codegen_probe.py execute
+--directory /path/to/export` under a separate Metal Python to validate and time
+the generated program. `--profile-markers` emits Tracy signposts that distinguish
+first inference, warmup and measured calls. The ordinary probe runner also
+supports these signposts.
+
+The installed Forge wheel rejects device profiling because its Metal runtime
+was built without Tracy. The separate Metal build has Tracy enabled. Generated
+TTNN execution there is an **alternate boundary**, with potentially different
+numerics and host dispatch behavior; it is not a measured replacement for PJRT.
+Use it for lowering inspection and device profiling, retain both runtimes'
+results, and validate before attributing the original sampler's wall time.
+Clear inherited `LD_LIBRARY_PATH`/`PYTHONPATH` before launching the Forge Tracy
+wrapper: otherwise it can load incompatible libraries from the separate SDK.
+
 Additional probes and CPU regression checks:
 
 ```bash
