@@ -1,6 +1,6 @@
 {
   "status": "validated_unmasked_conversion",
-  "scope": "Unmasked inference conversion; original gated HF checkpoint hash is not verified. Masked-image use is unsupported. Default FP32 RoPE periods match Transformers; no BF16-period substitution.",
+  "scope": "Unmasked GenRecon features validated; serialized weights exactly match the historical Facebook checkpoint SHA256, including restored zero biases and mask token. Config follows official Transformers conversion, not a historical config-file hash. Current software versions still require fresh paired scene validation.",
   "source": {
     "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
     "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
@@ -14,7 +14,8 @@
   "feature_scope": "Same public timm learned weights, FP32 periods and unmasked inputs resized to 512, original GenRecon non-affine output normalization. Full features compared, not ten-value smoke alone. This is not comparison to unavailable gated checkpoint or historical scene trajectories.",
   "historical_checkpoint_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
   "converted_checkpoint_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
-  "historical_file_hash_reproduced": false,
-  "decision": "Use explicit alternate checkpoint path for fresh paired scene experiments. Preserve distinct provenance; no original checkpoint file equivalence or masked-task claim.",
-  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/convert_dino_timm.py --source-dir /path/to/timm-source --reference-image /path/to/canonical-COCO-cat.png --validation-images /path/to/eight/poster/images_2/*.png --output-dir /path/to/new-validated-checkpoint"
+  "historical_file_hash_reproduced": true,
+  "decision": "Weights file is exactly recovered from public timm release. Use fresh paired scene references with current software; no historical config-file hash verification.",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/convert_dino_timm.py --source-dir /path/to/timm-source --reference-image /path/to/canonical-COCO-cat.png --validation-images /path/to/eight/poster/images_2/*.png --output-dir /path/to/new-validated-checkpoint",
+  "correction": "Historical hash comparison was initially omitted. Direct disk verification in ../020-dino-exact-restoration confirms exact equality. Raw initial report retains its then-unverified scope."
 }

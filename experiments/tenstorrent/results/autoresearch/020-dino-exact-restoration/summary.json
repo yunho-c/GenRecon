@@ -1,0 +1,16 @@
+{
+  "status": "historical_dino_weights_restored_exactly",
+  "restored_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+  "historical_expected_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+  "exact_match": true,
+  "scope": "Unmasked GenRecon features validated; serialized weights exactly match the historical Facebook checkpoint SHA256, including restored zero biases and mask token. Config follows official Transformers conversion, not a historical config-file hash. Current software versions still require fresh paired scene validation.",
+  "source": {
+    "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
+    "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
+    "weights_sha256": "45172f209c9583c40538afc26b60a07033e6fcc2e8c30228338e6b2e932e7941"
+  },
+  "validation": "Pinned public source hash, strict full state loading, official class/patch smoke, all eight 512px GenRecon feature comparisons against timm, and final SHA256 agreement with original saved weights.",
+  "correction": "Initial summary 015 conservatively declared file-hash recovery false without comparing its identical hashes. Direct disk hashing now verifies exact equality; summary 015 is corrected. Its raw preliminary report remains preserved.",
+  "software_limit": "Historical config-file hash is unavailable; config follows official conversion. Current Transformers version differs from the earlier fixture environment, so fresh matched trajectories remain required.",
+  "restored_default_directory": "/home/user/models/genrecon/dinov3-vitl16"
+}

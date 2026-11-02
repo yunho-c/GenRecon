@@ -431,11 +431,13 @@ maps every learned tensor with strict loading, restores zero Q/V biases, and
 requires the official reference-image smoke plus full 512-pixel feature
 comparisons against timm on supplied images. The
 [poster conversion evidence](results/autoresearch/015-dino-public-conversion/summary.json)
-records agreement on all eight views. Use its output through the fixture
-generator's explicit `--dino` argument. This is validated for unmasked GenRecon
-inference; the missing mask token is a zero placeholder, and the original gated
-checkpoint file hash is not reproduced. Historical scene outputs still need a
-fresh matched reference.
+records agreement on all eight views. The
+[final restoration](results/autoresearch/020-dino-exact-restoration/summary.json)
+also reproduces the original DINO weights-file SHA256 exactly, including the
+restored zero biases and mask token. The initial summary omitted this comparison
+and has been corrected. The default local DINO path is restored. Config follows
+official conversion; its historical file hash is unavailable, and current
+software versions still require fresh paired scene references.
 
 `generate_decoder_fixture.py --conditioning-only` restores posed-image features
 and cameras without running the flow samplers. It records the DINO config,

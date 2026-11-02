@@ -1,8 +1,8 @@
 """Restore unmasked DINOv3 ViT-L16 inference from the pinned public timm release.
 
-This creates a separately identified Transformers checkpoint, not a byte-identical
-copy of the historical gated Facebook file. The omitted mask token is a zero
-placeholder and must not be used for masked-image inference.
+The tool validates unmasked features and checks whether serialization reproduces
+the historical Facebook weights-file hash. The omitted mask token is restored
+as zero; exact file-hash agreement verifies that value as well as learned weights.
 """
 import argparse
 import hashlib
@@ -15,6 +15,7 @@ import traceback
 REPO = 'timm/vit_large_patch16_dinov3.lvd1689m'
 REVISION = '30c1109559f65dea34316b0d4842d35c5771fe11'
 WEIGHTS_SHA256 = '45172f209c9583c40538afc26b60a07033e6fcc2e8c30228338e6b2e932e7941'
+HISTORICAL_SHA256 = 'dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179'
 CAT_SHA256 = 'cf6f3c4befa148732c7453e0de5afab00f682427435fead2d88b07a9615cdac2'
 CAT_URL = 'https://raw.githubusercontent.com/huggingface/transformers/main/tests/fixtures/tests_samples/COCO/000000039769.png'
 CONVERSION_URL = 'https://github.com/huggingface/transformers/blob/main/src/transformers/models/dinov3_vit/convert_dinov3_vit_to_hf.py'
@@ -167,6 +168,12 @@ def main():
         model.save_pretrained(args.output_dir)
         report['converted_sha256'] = {name: sha256(args.output_dir / name)
                                       for name in ('config.json', 'model.safetensors')}
+        report['historical_expected_sha256'] = HISTORICAL_SHA256
+        report['historical_evidence'] = 'results/sparse-decoder-integration/poster-cpu-fixture.json:dino_sha256'
+        report['historical_file_hash_reproduced'] = (
+            report['converted_sha256']['model.safetensors'] == HISTORICAL_SHA256)
+        if report['historical_file_hash_reproduced']:
+            report['scope'] = 'Unmasked GenRecon features validated; serialized weights exactly match the historical Facebook checkpoint SHA256, including restored zero biases and mask token. Config follows official Transformers conversion, not a historical config-file hash. Current software versions still require fresh paired scene validation.'
         report['status'] = 'validated_unmasked_conversion'
         save()
         print(report['status'], args.output_dir, flush=True)
