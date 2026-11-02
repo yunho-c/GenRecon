@@ -1,0 +1,33 @@
+{
+  "status": "restored_scene_inputs",
+  "repo": "nerfstudioteam/datasets",
+  "revision": "461701c17e83c3f4d2481db32315aa7df703d2f8",
+  "source_directory": "/home/user/tt-scratchpad/genrecon/poster-fixture/source",
+  "script_sha256": "fefe0f526a08db40e7d9e785e72e527a808cc1d55a775261c7d90b1d7f76f6af",
+  "frames_available": 100,
+  "selected": [
+    "poster/images_2/frame_00001.png",
+    "poster/images_2/frame_00029.png",
+    "poster/images_2/frame_00067.png",
+    "poster/images_2/frame_00101.png",
+    "poster/images_2/frame_00117.png",
+    "poster/images_2/frame_00165.png",
+    "poster/images_2/frame_00199.png",
+    "poster/images_2/frame_00217.png"
+  ],
+  "files_sha256": {
+    "poster/images_2/frame_00001.png": "ceae28f8835d622e44b59eb1a6a9cde30df110b399b79efd7ea19ce07e7b0339",
+    "poster/images_2/frame_00029.png": "cf525a74457c4ceb7a52ecdb1768d484e7fec00fae1db286abc2c1c586b31d20",
+    "poster/images_2/frame_00067.png": "b07fb9492eec4c4506bdceb642c10651d500809ed1124c6a02d358660b926d8f",
+    "poster/images_2/frame_00101.png": "26fb5ab5751d726b6d54e7de4a1e6c54b0affdad13806a6e161b471e2845c93e",
+    "poster/images_2/frame_00117.png": "6748e91d70084158d75a150b7c717caf8d663d835549dd2c38b86b2e2ecaf462",
+    "poster/images_2/frame_00165.png": "22173a27b5e464a26d65281ee498dc7444b7a6a6b987f13df72ac811eb56ba45",
+    "poster/images_2/frame_00199.png": "f2144c3a4853fc0936d9e4b5e6b640b9e9903eac46d1c9214991306595f5eeb6",
+    "poster/images_2/frame_00217.png": "303da6cb2a1c7fca0a9727f769587b680344b04fdaff7ad63442c2dfe10343b5",
+    "poster/transforms.json": "444b54598e48567c8bf24d339dfff96ff63dfb0b29688de4091603b15fe92918",
+    "poster/colmap/sparse/0/images.bin": "5ae3b80bc0dec00c0bbd823ca2f804fc0534420522c388cfa847feb6d13a17fb",
+    "poster/colmap/sparse/0/points3D.bin": "511189176ac3223f06f9064ed6a9e060992890a6f47d1fbba159f611e82ac3dd"
+  },
+  "filtered_transforms_sha256": "40d0baebf2a79c09992761cbb388ca65808a851cde662027fdd6157b261deaed",
+  "scope": "Images, cameras and sparse COLMAP points only. No DINO features, flow samples or scene-quality validation."
+}

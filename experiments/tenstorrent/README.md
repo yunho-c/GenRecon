@@ -379,6 +379,24 @@ to finish the slow university-host download), validates byte ranges against the
 source size/ETag, retains completed chunks for resume, and records SHA256.
 Weights and large compiler artifacts are kept outside the repository.
 
+Restore the pinned public poster inputs on a fresh machine with:
+
+```bash
+/home/user/tt-forge-venv/bin/python experiments/tenstorrent/restore_poster_inputs.py \
+  --source-dir "$HOME/tt-scratchpad/genrecon/poster-fixture/source" \
+  --report "$HOME/tt-scratchpad/genrecon/poster-fixture/restoration.json"
+```
+
+The script downloads the eight selected images and COLMAP inputs, preserves
+all 100 published camera frames, and verifies source hashes and view selection.
+Use `source/transforms_available.json` for the filtered camera file. The
+[restoration evidence](results/autoresearch/013-poster-restoration/summary.json)
+also verifies the original crop and official occupancy-decoder hashes. DINO
+features and sampled latents are separate prerequisites. In the Forge CPU
+environment, a CUDA-linked torchvision wheel caused `torchvision::nms` import
+failure; replacing it with the matching `torchvision==0.26.0+cpu` wheel from
+`https://download.pytorch.org/whl/cpu` restored preprocessing.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

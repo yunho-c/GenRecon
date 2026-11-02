@@ -1,0 +1,47 @@
+{
+  "status": "restored_and_verified_scene_sources",
+  "scope": "Eight original public poster images, 100-frame camera inventory, COLMAP crop alignment and official occupancy decoder restored. Image hashes, frame selection and crop match original evidence. No new sampled latents or quality validation.",
+  "validation": {
+    "images_sha256_equal": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "selected_frame_indices_equal": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "center_max_abs_difference": 0.0,
+    "extent_abs_difference": 0.0,
+    "colmap_to_scene_max_abs_difference": 1.0408340855860843e-16,
+    "input_image_shape": [
+      8,
+      3,
+      512,
+      512
+    ]
+  },
+  "occupancy_decoder": {
+    "repo": "microsoft/TRELLIS-image-large",
+    "revision": "25e0d31ffbebe4b5a97464dd851910efc3002d96",
+    "stem": "ckpts/ss_dec_conv3d_16l8_fp16",
+    "sha256": {
+      ".json": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5",
+      ".safetensors": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+    },
+    "both_files_match_original": true
+  },
+  "dino_status": "Original Facebook HF source remains gated in this environment. Public timm release downloaded separately for equivalence investigation; no substitute promoted.",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/restore_poster_inputs.py --source-dir /path/to/source --report /path/to/new-restoration.json"
+}
