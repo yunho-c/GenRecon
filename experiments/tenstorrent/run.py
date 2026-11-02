@@ -31,6 +31,8 @@ def worker(args):
     for name in ("TT_METAL_HOME", "LD_LIBRARY_PATH", "PYTHONPATH"):
         os.environ.pop(name, None)
     os.environ["PJRT_DEVICE"] = "TT"
+    if args.runtime_trace:
+        os.environ["TT_RUNTIME_TRACE_REGION_SIZE"] = str(args.trace_region_size)
     os.environ["ATTN_BACKEND"] = "sdpa"
     os.environ["SPARSE_CONV_BACKEND"] = "none"
     os.environ.setdefault("OMP_NUM_THREADS", "4")
@@ -40,6 +42,12 @@ def worker(args):
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "versions": {name: importlib.metadata.version(name) for name in ("torch", "torch-xla", "tt-forge", "pjrt-plugin-tt")},
         "seed": args.seed, "fullgraph": True,
+        "requested_compile_options": {
+            **({"optimization_level": args.optimization_level} if args.optimization_level is not None else {}),
+            **({"enable_trace": "true"} if args.runtime_trace else {}),
+        },
+        "trace_region_size": args.trace_region_size if args.runtime_trace else None,
+        "compile_options_note": "Explicit options submitted to XLA; omitted settings retain SDK/environment defaults.",
         "source_files_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
             for folder in (ROOT / "genrecon", ROOT / "experiments/tenstorrent")
             for p in sorted(folder.rglob("*.py"))},
@@ -90,6 +98,7 @@ def worker(args):
         write_result(path, result)
         device = torch_xla.device()
         assert xr.device_type() == "TT", "This probe requires a real TT PJRT device"
+        torch_xla.set_custom_compile_options(result["requested_compile_options"])
         result["device_type"] = xr.device_type()
         model.to(device)
         compiled = torch.compile(model, backend="tt", fullgraph=True)
@@ -116,6 +125,7 @@ def worker(args):
             else:
                 a, b = ref.float().flatten(), out.float().flatten()
                 finite = bool(torch.isfinite(b).all() and torch.isfinite(a).all())
+                error, pcc = None, None
                 if finite:
                     error = (a - b).norm().item() / max(a.norm().item(), 1e-12)
                     pcc = torch.corrcoef(torch.stack((a, b)))[0, 1].item() if a.std() > 0 and b.std() > 0 else None
@@ -136,7 +146,8 @@ def worker(args):
         result["xla_aten_counters"] = {n: metrics.counter_value(n) for n in metrics.counter_names() if n.startswith("aten::")}
         (args.output_dir / "xla_metrics.txt").write_text(metrics.metrics_report())
         passed = all(c["passed"] for c in comparisons)
-        result["status"] = ("passed" if not result["xla_executed_fallback_ops"] else "passed_with_fallbacks") if passed else "numerical_mismatch"
+        fallbacks = result["xla_executed_fallback_ops"] or result["xla_aten_counters"]
+        result["status"] = ("passed" if not fallbacks else "passed_with_fallbacks") if passed else "numerical_mismatch"
         result["phase"] = "complete"
     except Exception as exc:
         result.update(status="failed", exception_type=type(exc).__name__, error=str(exc))
@@ -158,10 +169,13 @@ def main():
     parser.add_argument("--reference-precision", choices=("native", "float32"), default="native")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--timeout", type=int, default=900)
+    parser.add_argument("--optimization-level", type=int, choices=(0, 1, 2), default=None)
+    parser.add_argument("--runtime-trace", action="store_true")
+    parser.add_argument("--trace-region-size", type=int, default=10_000_000)
     parser.add_argument("--worker", help=argparse.SUPPRESS)
     args = parser.parse_args()
-    if args.runs < 1 or args.timeout < 1 or args.cpu_threads < 1:
-        parser.error("runs, timeout and cpu-threads must be positive")
+    if min(args.runs, args.timeout, args.cpu_threads, args.trace_region_size) < 1:
+        parser.error("runs, timeout, cpu-threads and trace-region-size must be positive")
     args.output_dir = args.output_dir.resolve()
     args.checkpoint_dir = args.checkpoint_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -177,6 +191,10 @@ def main():
                    "--output-dir", str(dest), "--checkpoint-dir", str(args.checkpoint_dir),
                    "--runs", str(args.runs), "--seed", str(args.seed), "--cpu-threads", str(args.cpu_threads),
                    "--reference-precision", args.reference_precision]
+        if args.optimization_level is not None:
+            command += ["--optimization-level", str(args.optimization_level)]
+        if args.runtime_trace:
+            command += ["--runtime-trace", "--trace-region-size", str(args.trace_region_size)]
         print(f"Running {case}; log: {dest / 'run.log'}", flush=True)
         with (dest / "run.log").open("w") as log:
             try:

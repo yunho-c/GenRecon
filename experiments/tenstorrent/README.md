@@ -246,6 +246,15 @@ even after a Python exception, child-process crash or timeout. The parent return
 nonzero if any case fails, differs numerically, or uses reported fallback ops.
 Inspect each result, not just a compiler success message.
 
+Compiler-performance experiments can explicitly select `--optimization-level
+0`, `1`, or `2`, and optionally `--runtime-trace` (with
+`--trace-region-size`, default 10 MB). These options are passed to each isolated
+worker before compilation. Reports preserve the submitted XLA options; omitted
+settings retain the SDK/environment defaults and are not evidence of an effective
+optimization level. Compare identical cases, seeds, precision, CPU threads and
+timing boundaries in fresh directories. Trace capture happens during warmup.
+Neither compiler success nor an operator smoke pass establishes scene quality.
+
 Additional probes and CPU regression checks:
 
 ```bash
