@@ -354,6 +354,11 @@ Also size Tracy's `--op-support-count` for all programs within one forward
 [overflowed on the 6,181-token profile](results/autoresearch/016-profile-buffer-overflow/summary.json);
 that failed capture is retained and rejected for kernel attribution. Reject
 captures containing dropped-marker warnings even if forward validation passes.
+The [successful 6,181-token capture](results/autoresearch/022-shape-profile-6181/summary.json)
+contains 4,973 complete device operations in the marked window: 23.58 s summed
+kernel time, with 9.68% matrix products and 2.38% standalone softmax. Large
+binary/untilize/slice groups still carry the padded complex-RoPE pair shapes.
+These kernel shares are not end-to-end attention/MLP or PJRT wall-time shares.
 
 Both runners accept an explicit `--math-fidelity` compiler option. Omission
 retains the SDK default. The [HiFi3 trajectory experiment](results/autoresearch/012-hifi3-trajectory/summary.json)

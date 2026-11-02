@@ -22,7 +22,15 @@
     "results/autoresearch/011-real-rope-profile/summary.json",
     "results/autoresearch/012-hifi3-trajectory/summary.json",
     "results/autoresearch/013-poster-restoration/summary.json",
-    "results/autoresearch/014-matched-larger-flow/summary.json"
+    "results/autoresearch/014-matched-larger-flow/summary.json",
+    "results/autoresearch/015-dino-public-conversion/summary.json",
+    "results/autoresearch/016-profile-buffer-overflow/summary.json",
+    "results/autoresearch/017-native-sparse-real-rope/summary.json",
+    "results/autoresearch/018-poster-conditioning/summary.json",
+    "results/autoresearch/019-poster-ss-inputs/summary.json",
+    "results/autoresearch/020-dino-exact-restoration/summary.json",
+    "results/autoresearch/021-native-sparse-control/summary.json",
+    "results/autoresearch/022-shape-profile-6181/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -36,14 +44,16 @@
     "CPU diagnostic with BF16 boundaries and FP32 products yields 0.239 final relative L2 vs FP32, but TT vs diagnostic remains about 0.39. Precision differences alone do not explain the TT discrepancy; diagnostic is not a CUDA oracle.",
     "Optimized generated profile on the same alternate Metal SDK reduces kernel sums 2172.7ms to 603.6ms; matrix products stay 133.8/134.0ms. Explicit index-dtype compatibility repair was needed and recorded. Reshape is now largest at 192.3ms.",
     "HiFi3 fidelity trial worsens final relative L2 to 0.422 with no recompilation/fallback; reject as accuracy fix, retain default HiFi4.",
-    "Pinned poster images/cameras and occupancy decoder restored with matching hashes, view indices and crop. Original DINO source is gated; public timm release is downloaded but not yet verified as an equivalent replacement."
+    "Original DINO weights are recovered exactly: conversion from pinned public timm release produces SHA256 dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179, matching original evidence. Strict load, official smoke and all eight 512px public-timm feature comparisons pass. Default local path restored. Historical config hash/software behavior is not established; fresh paired references remain required.",
+    "Poster image/camera hashes, original crop and occupancy decoder are restored. New finite conditioning [1,8,1029,1024] and independently seeded occupancy inputs are prepared. Projection and learned aggregation use FP32 CPU to isolate sampler errors from upstream TT drift.",
+    "Matched native sparse 6181-token control fails on exact 607617024-byte allocation; real-pair RoPE alone passes at 7.860s with zero FP32 CPU preparation drift and no reported fallback. Failure is contiguous DRAM-bank fragmentation despite adequate aggregate free space. Full native trajectory quality remains untested.",
+    "Full stock 6181-token generated profile is complete after increasing program capacity to 10000 and reading profiler buffers between forwards outside timing. 4973 measured device ops, 23.58s kernel sum, 9.68% matmul and 2.38% standalone softmax. Padded complex-pair layouts still dominate; these are kernel sums, not module wall attribution. Default-buffer overflow capture rejected and retained."
   ],
   "next_actions": [
-    "Investigate numerical drift by block/operator under the original weights and matched synthetic inputs. Preserve stock FP32 and CPU mixed-precision diagnostic references and failed complete trajectories.",
-    "Test whether the fixed real-pair RoPE eliminates the native sparse 607617024-byte allocation failure. This size exactly matches padded RoPE [6181,12,64,32] FP32, but arithmetic alone is not proof. Validate original sparse CPU equivalence first.",
-    "Validate public timm DINOv3 weight conversion against official Transformers mapping and saved original evidence before using it to regenerate real-image conditioning. Preserve source/license/revision and any non-equivalence.",
-    "Extend device profiles to 6181-token shape and full occupancy/texture samplers, with marked measured forwards and explicit alternate-SDK limitations.",
-    "Restore real-image features and original trajectories before testing downstream topology/geometry/material quality. Keep the historical 21.85min component baseline distinct from new synthetic timings.",
+    "Finish and compare live real-image original 12-step occupancy trajectories: scratchpad autoresearch/031-ss-real-rope-poster and 032-ss-stock-poster. Both use poster-ss-inputs-attempt3/inputs.pt with identical noise, conditions, checkpoint and schedule. Verify actual live processes/results; saved running status is not sufficient.",
+    "Investigate per-block/operator numerical drift against stock FP32 and CPU mixed-precision diagnostics. Keep failures, original 12-step schedules and strict gates; do not promote speedups on forward smoke alone.",
+    "Use restored real-image occupancy trajectories to construct matched native/sequence shape and texture sampler fixtures and downstream topology/geometry/material checks. Keep the historical 21.85min component baseline distinct from synthetic results.",
+    "Profile optimized 6181-token shape and full occupancy/texture forwards to quantify the remaining reshape/layout costs, with complete marked device rows, adequate profiler capacity and explicit alternate-SDK limitations.",
     "Investigate a profiling-enabled runtime matching the Forge wheel. Existing generated-code profiling uses a different Metal revision."
   ]
 }

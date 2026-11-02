@@ -1,0 +1,44 @@
+{
+  "status": "complete_marked_profile_no_dropped_markers",
+  "scope": "One marked warm full pretrained shape forward, 6181 synthetic active tokens, stock complex RoPE, compiler level 0, generated TTNN alternate profiling-enabled Metal SDK. No direct PJRT wall attribution or reconstruction-quality claim.",
+  "wall_ms": 23967.391643,
+  "kernel_sum_ms": 23578.499806,
+  "device_operations": 4973,
+  "operation_kernel_ms": {
+    "BinaryNgDeviceOperation": 5624.517568,
+    "UntilizeWithUnpaddingDeviceOperation": 5316.191699,
+    "SliceDeviceOperation": 3266.387288,
+    "ReshapeViewDeviceOperation": 2789.618605,
+    "MatmulDeviceOperation": 2282.289797,
+    "TilizeWithValPaddingDeviceOperation": 1717.089401,
+    "PermuteDeviceOperation": 893.73476,
+    "SoftmaxDeviceOperation": 561.727394,
+    "TypecastDeviceOperation": 387.006121,
+    "UnaryDeviceOperation": 299.630922,
+    "TransposeDeviceOperation": 207.604628,
+    "ConcatDeviceOperation": 68.941106,
+    "FillPadDeviceOperation": 66.329543,
+    "ReduceDeviceOperation": 53.427074,
+    "LayerNormDeviceOperation": 44.0039
+  },
+  "matmul_share": 0.09679537781361423,
+  "softmax_share": 0.02382371222180377,
+  "profiler_program_support_count": 10000,
+  "profiler_flush_seconds_outside_windows": [
+    3.2481039529666305,
+    3.4396840929985046,
+    3.495045015006326,
+    3.489783672033809,
+    4.202588262967765
+  ],
+  "profiling_dropped_markers": false,
+  "finding": "Layout and binary costs dominate at real token count too. Top shape groups include [6181,12,64,1/2] with a padded trailing width 32, matching complex-pair RoPE. Matrix products are 9.68% and standalone softmax 2.38% of summed kernel durations; these are not module end-to-end shares.",
+  "scaling_from_512": {
+    "token_ratio": 12.072265625,
+    "kernel_sum_ratio": 10.852352481913195,
+    "matmul_kernel_sum_ratio": 17.05440202215314,
+    "note": "Shape-dependent kernel choices, padding and fixed costs prevent simple linear/quadratic attribution. Different profiler buffer settings across sizes."
+  },
+  "quality": "First output passes stock FP32 CPU smoke and repeated generated outputs are exact. Complete shape trajectories still fail. Default unchanged.",
+  "reproduce": "Use codegen_probe.py execute on the pinned stock 6181 export, via python -m tracy -r --op-support-count 10000; pass --profile-markers --flush-device-profiler --runs 1 and fresh result/profile paths."
+}
