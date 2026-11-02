@@ -1,0 +1,10 @@
+{
+  "repo": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+  "revision": "ea8dc2863c51be0a264bab82070e3e8836b02d51",
+  "status": "restored_from_authorized_original_source",
+  "files_sha256": {
+    "config.json": "135ecd23e34a70b6fbed8b083fdecb319b7e3a54e3d849258bbe4ddcf1783bb5",
+    "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+    "preprocessor_config.json": "960c41d1f3a7778b936365769a2d90550b318a6c0a53a0296957adacfe5e0dd7"
+  }
+}

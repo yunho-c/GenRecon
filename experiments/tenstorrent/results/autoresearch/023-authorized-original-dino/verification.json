@@ -1,0 +1,29 @@
+{
+  "repo": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+  "revision": "ea8dc2863c51be0a264bab82070e3e8836b02d51",
+  "status": "authorized_original_matches_restored_weights_config_and_features",
+  "files_sha256": {
+    "config.json": "135ecd23e34a70b6fbed8b083fdecb319b7e3a54e3d849258bbe4ddcf1783bb5",
+    "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+    "preprocessor_config.json": "960c41d1f3a7778b936365769a2d90550b318a6c0a53a0296957adacfe5e0dd7"
+  },
+  "script_sha256": "c6c2319b4bd36e32035197f8c400c3ffb3841f74586560ebeb9546d985fe51ac",
+  "weights_equal": true,
+  "effective_configs_equal": true,
+  "effective_config_differences": {},
+  "features_vs_existing_fixture": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 1e-06,
+    "min_pcc": 0.999999,
+    "relative_l2": 0.0,
+    "pcc": 0.9999999999999291,
+    "max_abs": 0.0
+  },
+  "features_bitwise_equal": true,
+  "cameras_bitwise_equal": true,
+  "feature_tensor_sha256": "9466ac07ea8739894a38b25aa3f134b388b7bef01f4f11110307e91c35b79393",
+  "existing_conditioning_sha256": "904a8a94648431c467c5ef153075a402c2288f40cc96c4208737ad436e333ed8",
+  "scope": "Canonical pinned original source downloaded using user-authorized HF login. All effective config fields match converted checkpoint; features for all eight original cropped views and camera tensors are bitwise equal to the already-running matched sampler fixture. No need to replace those inputs."
+}

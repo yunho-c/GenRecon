@@ -1,0 +1,30 @@
+{
+  "status": "authorized_original_matches_restored_weights_config_and_features",
+  "scope": "Canonical pinned original source downloaded using user-authorized HF login. All effective config fields match converted checkpoint; features for all eight original cropped views and camera tensors are bitwise equal to the already-running matched sampler fixture. No need to replace those inputs.",
+  "original_source": {
+    "repo": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+    "revision": "ea8dc2863c51be0a264bab82070e3e8836b02d51",
+    "files_sha256": {
+      "config.json": "135ecd23e34a70b6fbed8b083fdecb319b7e3a54e3d849258bbe4ddcf1783bb5",
+      "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+      "preprocessor_config.json": "960c41d1f3a7778b936365769a2d90550b318a6c0a53a0296957adacfe5e0dd7"
+    }
+  },
+  "effective_config_fields_match": true,
+  "ignored_config_fields": [
+    "_name_or_path",
+    "transformers_version"
+  ],
+  "poster_features_bitwise_match": true,
+  "poster_cameras_bitwise_match": true,
+  "existing_sampler_fixture_remains_valid": true,
+  "feature_shape": [
+    1,
+    8,
+    1029,
+    1024
+  ],
+  "feature_relative_l2": 0.0,
+  "feature_tensor_sha256": "9466ac07ea8739894a38b25aa3f134b388b7bef01f4f11110307e91c35b79393",
+  "decision": "Canonical weights/config/preprocessing source now available. Already-running matched sampler fixtures are verified equivalent and continue unchanged. No historical end-to-end quality claim from asset equivalence alone."
+}

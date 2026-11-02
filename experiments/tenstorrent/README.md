@@ -447,6 +447,13 @@ and has been corrected. The default local DINO path is restored. Config follows
 official conversion; its historical file hash is unavailable, and current
 software versions still require fresh paired scene references.
 
+After authorized HF login, the
+[canonical Facebook source check](results/autoresearch/023-authorized-original-dino/summary.json)
+downloaded the pinned original weights, config and preprocessing config. Every
+effective model-config field matches the conversion, and all eight cropped
+poster features plus camera tensors are bitwise identical to the prepared
+sampler fixture. The ongoing paired sampler runs can therefore keep those inputs.
+
 `generate_decoder_fixture.py --conditioning-only` restores posed-image features
 and cameras without running the flow samplers. It records the DINO config,
 weights and conversion-report hashes and finishes as `conditioning_ready`,
