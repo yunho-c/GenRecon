@@ -1,0 +1,66 @@
+{
+  "status": "prepared_flow_inputs",
+  "stage": "ss",
+  "checkpoint": {
+    "url": "https://kaldir.vc.cit.tum.de/genrecon/sparse_structure.pt",
+    "bytes": 2862971400,
+    "etag": "\"aaa57a08-65087c2a1eaab\"",
+    "sha256": "e18c1caddb2357dbf5839f0f7e1569c50d855fcb47e0871483d99c91a14e2bb7"
+  },
+  "provenance": {
+    "conditioning_sha256": "904a8a94648431c467c5ef153075a402c2288f40cc96c4208737ad436e333ed8",
+    "conditioning_provenance_sha256": "a93f444ca197bf46a15ad632a3f8814f4ab11c12ff43b024caf4475a5faf6910",
+    "dino_sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+    "dino_conversion": {
+      "report_sha256": "76473f73dba2b9c66473f68f3f2118b931f4499008f15fe4a5295bf4e9a75499",
+      "status": "validated_unmasked_conversion",
+      "repo": "timm/vit_large_patch16_dinov3.lvd1689m",
+      "revision": "30c1109559f65dea34316b0d4842d35c5771fe11",
+      "scope": "Unmasked inference conversion; original gated HF checkpoint hash is not verified. Masked-image use is unsupported. Default FP32 RoPE periods match Transformers; no BF16-period substitution.",
+      "converted_sha256": {
+        "config.json": "e3fa1b21d18021d08b20a91fb109f815ac707c20453cb1ef00ec71de858471d7",
+        "model.safetensors": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179"
+      }
+    },
+    "script_sha256": "0796c755195cd41f5dcecb9e723331ca2ce9d95bbdb32583e770b8796d71aa78",
+    "noise_seed": 123,
+    "projection_aggregation_precision": "stock FP32 CPU",
+    "projection_aggregation_seconds": 2.260966574016493
+  },
+  "inputs_sha256": "e3eaef1e783300a1afd82b5b74fefd105eeaadc0e20511dc75d8d802ee2fce50",
+  "inputs": [
+    {
+      "shape": [
+        1,
+        8,
+        16,
+        16,
+        16
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1,
+        4096,
+        1024
+      ],
+      "dtype": "torch.float32"
+    }
+  ],
+  "scope": "Prepare matched occupancy-flow noise and original real-image conditioning.\n\nDINO features, projection and learned aggregation run on FP32 CPU. The saved\ninputs isolate flow/sampler accuracy from upstream TT errors. No sampling or\nreconstruction-quality validation is performed here.\n"
+}

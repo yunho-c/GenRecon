@@ -444,6 +444,18 @@ distinct from a sampled decoder fixture. The
 [fresh poster conditioning](results/autoresearch/018-poster-conditioning/summary.json)
 has shape `[1,8,1029,1024]` with finite values and the original crop.
 
+`prepare_ss_inputs.py --conditioning-dir /path/to/conditioning --output-dir
+/path/to/new-inputs` applies the original FP32 CPU projection and learned
+aggregation, then saves independent seed-123 occupancy noise. Run the matched
+inputs with `run.py --cases ss_flow --flow-inputs /path/to/new-inputs/inputs.pt
+--sampler-trajectory --reference-precision float32`. Repeat with
+`--rope-mode real_pairs` in a fresh directory. The loader enforces checkpoint
+identity, supported tensor shapes/dtypes and finite values; trajectory artifacts
+check both guidance conditions, noise and original sampler configuration.
+[Prepared poster inputs](results/autoresearch/019-poster-ss-inputs/summary.json)
+isolate the sampler from upstream TT feature/aggregation errors. Real-image
+inputs currently support `ss_flow`; sparse shape/texture fixtures remain future work.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

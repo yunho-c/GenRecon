@@ -1,0 +1,44 @@
+{
+  "status": "prepared_matched_real_image_ss_inputs",
+  "scope": "Prepare matched occupancy-flow noise and original real-image conditioning.\n\nDINO features, projection and learned aggregation run on FP32 CPU. The saved\ninputs isolate flow/sampler accuracy from upstream TT errors. No sampling or\nreconstruction-quality validation is performed here.\n",
+  "inputs": [
+    {
+      "shape": [
+        1,
+        8,
+        16,
+        16,
+        16
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1,
+        4096,
+        1024
+      ],
+      "dtype": "torch.float32"
+    }
+  ],
+  "inputs_sha256": "e3eaef1e783300a1afd82b5b74fefd105eeaadc0e20511dc75d8d802ee2fce50",
+  "noise_seed": 123,
+  "dino_weights_match_historical": true,
+  "conditioning_boundary": "Real-image DINO features, original projection and learned aggregation on FP32 CPU. Both TT variants receive identical inputs; upstream TT errors excluded. Separate dedicated seed-123 noise generator. Original sampler/CFG parameters unchanged.",
+  "artifact_note": "Large conditioning inputs stay outside Git and are regenerated from pinned sources. Sampler condition/noise identity is hashed and checked for every trajectory.",
+  "reproduce": "python experiments/tenstorrent/prepare_ss_inputs.py --conditioning-dir /path/to/conditioning --output-dir /path/to/new-inputs; then run.py --cases ss_flow --flow-inputs /path/to/new-inputs/inputs.pt --sampler-trajectory --reference-precision float32 --cpu-threads 16 --optimization-level 0 --output-dir /path/to/new-run"
+}

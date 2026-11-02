@@ -46,7 +46,8 @@ def worker(args):
         "rope_mode": args.rope_mode,
         "requested_active_voxels": args.active_voxels,
         "profile_markers": args.profile_markers,
-        "synthetic_trajectory": args.synthetic_trajectory,
+        "synthetic_trajectory": args.synthetic_trajectory and args.flow_inputs is None,
+        "sampler_trajectory": args.synthetic_trajectory,
         "requested_compile_options": {
             **({"optimization_level": args.optimization_level} if args.optimization_level is not None else {}),
             **({"enable_trace": "true"} if args.runtime_trace else {}),
@@ -78,6 +79,10 @@ def worker(args):
         write_result(path, result)
         model, inputs, metadata = build_case(args.worker, args.checkpoint_dir, active_voxels=args.active_voxels)
         model.eval()
+        if args.flow_inputs is not None:
+            from prepare_ss_inputs import load_ss_inputs
+            inputs, fixture_metadata = load_ss_inputs(args.flow_inputs, inputs, metadata['checkpoint']['sha256'])
+            metadata.update(fixture_metadata)
         result.update(metadata)
         result["parameters"] = sum(p.numel() for p in model.parameters())
         result["inputs"] = [{"shape": list(t.shape), "dtype": str(t.dtype)} for t in inputs]
@@ -97,7 +102,8 @@ def worker(args):
         trajectory = None
         if args.synthetic_trajectory:
             from trajectory import TrajectoryFixture, compare_trajectories
-            trajectory = TrajectoryFixture(args.worker.split('_')[0], inputs, getattr(model, 'coords', None))
+            trajectory = TrajectoryFixture(args.worker.split('_')[0], inputs, getattr(model, 'coords', None),
+                input_source='real posed-image' if args.flow_inputs is not None else 'synthetic')
             result['phase'] = 'stock_cpu_trajectory'
             write_result(path, result)
             with torch.no_grad(), float32_reference(model):
@@ -248,8 +254,10 @@ def main():
     parser.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
     parser.add_argument("--rope-mode", choices=("stock", "real_pairs"), default="stock")
-    parser.add_argument('--synthetic-trajectory', action='store_true',
+    parser.add_argument('--synthetic-trajectory', '--sampler-trajectory', action='store_true',
                         help='Compare the complete original 12-step schedule against stock FP32 CPU (complete tensor flows only)')
+    parser.add_argument('--flow-inputs', type=Path,
+                        help='Prepared real-image occupancy inputs; currently requires ss_flow')
     parser.add_argument("--active-voxels", type=int, default=None,
                         help="Synthetic sparse flow size; default 512. Not a real-scene fixture.")
     parser.add_argument("--runtime-trace", action="store_true")
@@ -262,10 +270,15 @@ def main():
         parser.error("runs, timeout, cpu-threads and trace-region-size must be positive")
     if args.active_voxels is not None and args.active_voxels < 1:
         parser.error("active-voxels must be positive")
+    if args.flow_inputs is not None:
+        cases = [args.worker] if args.worker else args.cases
+        if any(case != 'ss_flow' for case in cases):
+            parser.error('flow-inputs currently supports ss_flow only')
+        args.flow_inputs = args.flow_inputs.resolve()
     if args.synthetic_trajectory:
         cases = [args.worker] if args.worker else args.cases
         if args.reference_precision != 'float32' or any(case not in ('ss_flow', 'shape_flow_tensor', 'tex_flow_tensor') for case in cases):
-            parser.error('synthetic trajectories require FP32 reference and ss_flow/shape_flow_tensor/tex_flow_tensor')
+            parser.error('sampler trajectories require FP32 reference and ss_flow/shape_flow_tensor/tex_flow_tensor')
     args.output_dir = args.output_dir.resolve()
     args.checkpoint_dir = args.checkpoint_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -285,6 +298,8 @@ def main():
         command += ["--rope-mode", args.rope_mode]
         if args.synthetic_trajectory:
             command += ['--synthetic-trajectory']
+        if args.flow_inputs is not None:
+            command += ['--flow-inputs', str(args.flow_inputs)]
         if args.active_voxels is not None:
             command += ["--active-voxels", str(args.active_voxels)]
         if args.optimization_level is not None:

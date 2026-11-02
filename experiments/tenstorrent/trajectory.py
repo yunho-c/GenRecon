@@ -1,4 +1,4 @@
-"""Matched synthetic trajectories using the original Euler/CFG samplers."""
+"""Matched fixed-input trajectories using the original Euler/CFG samplers."""
 import hashlib
 import json
 from pathlib import Path
@@ -21,9 +21,10 @@ def tensor_digest(value):
 
 
 class TrajectoryFixture:
-    def __init__(self, stage, inputs, coords=None):
+    def __init__(self, stage, inputs, coords=None, *, input_source='synthetic'):
         family = {'ss': 'sparse_structure', 'shape': 'shape_slat', 'tex': 'tex_slat'}[stage]
         self.stage = stage
+        self.input_source = input_source
         spec = json.loads(CONFIG.read_text())['args'][family+'_sampler']
         self.params = spec['params']
         self.sigma_min = spec['args']['sigma_min']
@@ -36,7 +37,7 @@ class TrajectoryFixture:
         values = inputs[0].detach().cpu().clone()
         if stage == 'ss':
             if values.shape[0] != 1:
-                raise ValueError('Only one synthetic chunk is supported')
+                raise ValueError('Only one fixed chunk is supported')
             self.noise = values
         else:
             if self.coords is None or len(self.coords) != len(values) or torch.any(self.coords[:, 0] != 0):
@@ -69,7 +70,7 @@ class TrajectoryFixture:
                    'pred_x_0': [features(x) for x in result.pred_x_0]}
         measurements = {'seconds': seconds, 'forwards': adapter.calls, 'steps': sampler.steps,
                         'parameters': self.params, 'sampler_config_sha256': self.config_sha256,
-                        'scope': 'One complete original 12-step synthetic trajectory, fixed noise/conditioning; not real-scene quality'}
+                        'scope': f'One complete original 12-step trajectory, fixed noise and {self.input_source} conditioning; no reconstruction-quality assessment'}
         return payload, measurements
 
 
