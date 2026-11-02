@@ -30,7 +30,15 @@
     "results/autoresearch/019-poster-ss-inputs/summary.json",
     "results/autoresearch/020-dino-exact-restoration/summary.json",
     "results/autoresearch/021-native-sparse-control/summary.json",
-    "results/autoresearch/022-shape-profile-6181/summary.json"
+    "results/autoresearch/022-shape-profile-6181/summary.json",
+    "results/autoresearch/023-authorized-original-dino/summary.json",
+    "results/autoresearch/024-codegen-timing-scope/summary.json",
+    "results/autoresearch/025-occupancy-real-rope-profile/summary.json",
+    "results/autoresearch/026-block-diagnostic/summary.json",
+    "results/autoresearch/027-cpu-reference-cache/summary.json",
+    "results/autoresearch/028-stock-poster-occupancy/summary.json",
+    "results/autoresearch/029-paired-poster-occupancy/summary.json",
+    "results/autoresearch/030-poster-occupancy-quality/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -44,16 +52,34 @@
     "CPU diagnostic with BF16 boundaries and FP32 products yields 0.239 final relative L2 vs FP32, but TT vs diagnostic remains about 0.39. Precision differences alone do not explain the TT discrepancy; diagnostic is not a CUDA oracle.",
     "Optimized generated profile on the same alternate Metal SDK reduces kernel sums 2172.7ms to 603.6ms; matrix products stay 133.8/134.0ms. Explicit index-dtype compatibility repair was needed and recorded. Reshape is now largest at 192.3ms.",
     "HiFi3 fidelity trial worsens final relative L2 to 0.422 with no recompilation/fallback; reject as accuracy fix, retain default HiFi4.",
-    "Original DINO weights are recovered exactly: conversion from pinned public timm release produces SHA256 dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179, matching original evidence. Strict load, official smoke and all eight 512px public-timm feature comparisons pass. Default local path restored. Historical config hash/software behavior is not established; fresh paired references remain required.",
     "Poster image/camera hashes, original crop and occupancy decoder are restored. New finite conditioning [1,8,1029,1024] and independently seeded occupancy inputs are prepared. Projection and learned aggregation use FP32 CPU to isolate sampler errors from upstream TT drift.",
     "Matched native sparse 6181-token control fails on exact 607617024-byte allocation; real-pair RoPE alone passes at 7.860s with zero FP32 CPU preparation drift and no reported fallback. Failure is contiguous DRAM-bank fragmentation despite adequate aggregate free space. Full native trajectory quality remains untested.",
-    "Full stock 6181-token generated profile is complete after increasing program capacity to 10000 and reading profiler buffers between forwards outside timing. 4973 measured device ops, 23.58s kernel sum, 9.68% matmul and 2.38% standalone softmax. Padded complex-pair layouts still dominate; these are kernel sums, not module wall attribution. Default-buffer overflow capture rejected and retained."
+    "Full stock 6181-token generated profile is complete after increasing program capacity to 10000 and reading profiler buffers between forwards outside timing. 4973 measured device ops, 23.58s kernel sum, 9.68% matmul and 2.38% standalone softmax. Padded complex-pair layouts still dominate; these are kernel sums, not module wall attribution. Default-buffer overflow capture rejected and retained.",
+    "Authorized direct Facebook DINO source is restored after user HF login. Weights match the historical SHA256; all effective config fields match the public conversion, and all eight cropped poster features/cameras are bitwise equal to the prepared real-image sampler fixture.",
+    "Generated-code timing labels were corrected: activation loader uploads before the forward window. New explicit preload synchronization and separate preparation timing are hardware-validated with bitwise unchanged output. Historical raw reports remain intact with a linked scope correction; separate PJRT timings include fresh transfers.",
+    "Full occupancy candidate profile: 4096 tokens, 30 blocks, 4406 measured device ops, 3.97s kernel sum. Reshape is 29.8%, matmul 25.1%, binary 16.7%. This alternate SDK profile is not module wall-time attribution or quality evidence.",
+    "All 32 captured shape states preserve exact ordinary TT final output and repeat exactly. First block already has about 2% error, nonmonotonic over depth; final hidden error 1.97% vs prediction 6.69%. Isolate first-block suboperations and output head rather than assuming monotonic accumulation.",
+    "Completed real-poster occupancy sampler: stock 364.935s vs real-pair 88.121s, 4.141x over the same 12 steps and 22 forwards. Both fail FP32 trajectory gates at about 74.8% relative L2; candidate-vs-stock TT is 29.4%. No fallback or trajectory recompilation. No quality-preserving promotion.",
+    "Common FP32 CPU occupancy decoder isolates sampler effects: 6464 occupied reference voxels, 4163 stock TT, 4241 candidate. Stock/candidate IoU vs FP32 is 0.509/0.514; TT variants IoU is 0.913. One-crop topology changes prevent preserved-quality claims; this is not mesh/CUDA equivalence.",
+    "Both independently computed real-image stock FP32 CPU references are bitwise equal. Sealed cache retains original model/reference source and exact fixture identity; physical checkpoint bytes are rescanned on reuse. Full validation 2.52s vs original 743s CPU trajectory. Initial 70ms tensor/manifest-only validation excluded checkpoint rescan.",
+    "Validation passed: preceding 89-test CPU regression suite plus 2 subtests; 10 cache and 4 sampler checks; 3 occupancy-metric checks; 9 precision/input checks. Hardware numerical diagnostics retain failed quality gates explicitly."
   ],
   "next_actions": [
-    "Finish and compare live real-image original 12-step occupancy trajectories: scratchpad autoresearch/031-ss-real-rope-poster and 032-ss-stock-poster. Both use poster-ss-inputs-attempt3/inputs.pt with identical noise, conditions, checkpoint and schedule. Verify actual live processes/results; saved running status is not sufficient.",
-    "Investigate per-block/operator numerical drift against stock FP32 and CPU mixed-precision diagnostics. Keep failures, original 12-step schedules and strict gates; do not promote speedups on forward smoke alone.",
-    "Use restored real-image occupancy trajectories to construct matched native/sequence shape and texture sampler fixtures and downstream topology/geometry/material checks. Keep the historical 21.85min component baseline distinct from synthetic results.",
-    "Profile optimized 6181-token shape and full occupancy/texture forwards to quantify the remaining reshape/layout costs, with complete marked device rows, adequate profiler capacity and explicit alternate-SDK limitations.",
-    "Investigate a profiling-enabled runtime matching the Forge wheel. Existing generated-code profiling uses a different Metal revision."
-  ]
+    "Finish live CPU pipeline-precision calibration at scratchpad autoresearch/039-ss-precision-poster. Check actual process as well as report; saved running status alone is insufficient. Compare all 12 states with sealed FP32 cache and both real-image TT payloads under strict fixture identity, then decode the CPU diagnostic through the same occupancy decoder. It is not a CUDA oracle and does not relax gates.",
+    "Isolate first-block normalization, attention, MLP and output normalization/projection using identical inputs. Preserve captured-final equivalence checks. Test whether explicit FP32 attention score/softmax intermediates improve agreement without altering weights or outer BF16 boundaries; this is an untested precision hypothesis, not an established error cause.",
+    "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
+    "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
+    "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
+    "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
+  ],
+  "live_experiments": [
+    {
+      "name": "039-ss-precision-poster",
+      "purpose": "CPU-only BF16-boundary/FP32-product calibration on the same real-image inputs",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/039-ss-precision-poster",
+      "status_at_last_check": "running emulated_pipeline_forward_and_trajectory",
+      "note": "Verify actual live process before treating as active or retrying."
+    }
+  ],
+  "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
