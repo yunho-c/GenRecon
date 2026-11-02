@@ -1,0 +1,50 @@
+{
+  "status": "matched_stock_fails_candidate_passes",
+  "scope": "Same pretrained native sparse shape flow, fixed 6181 synthetic active tokens, strict original LoRA, seed, checkpoint, SDK and level-0 compiler options. Only real-pair RoPE is prepared in candidate. No sequence adapter or schedule change.",
+  "matched_fields": {
+    "case": true,
+    "versions": true,
+    "checkpoint": true,
+    "seed": true,
+    "inputs": true,
+    "active_voxels": true,
+    "reference_precision": true,
+    "requested_compile_options": true,
+    "config": true,
+    "dtype": true,
+    "fullgraph": true,
+    "lora_mode": true,
+    "model_and_preparation_sources": true
+  },
+  "stock_result": "DRAM allocation failure for 607617024 bytes across 12 banks",
+  "bank_state_at_failure": {
+    "bank_size_bytes": 1072693184,
+    "allocated_bytes": 952360288,
+    "free_bytes": 120332896,
+    "largest_free_block_bytes": 43761312,
+    "required_contiguous_bytes_per_bank": 50634752
+  },
+  "candidate_warm_median_ms": 7860.225223994348,
+  "candidate_fp32_preparation_relative_l2": [
+    0.0
+  ],
+  "candidate_outputs": [
+    {
+      "shape": [
+        6181,
+        32
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.06852099439965682,
+      "pcc": 0.9979082942008972,
+      "max_abs_error": 0.6608389616012573,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "candidate_fallback_ops": [],
+  "interpretation": "An isolated matched native control reproduces the exact historical allocation size. Real-pair RoPE alone is sufficient to avoid it in this case. Padding [6181,12,64,2] to a 32-wide trailing axis in FP32 gives exactly 607617024 bytes. The failed allocator had enough aggregate free space, but its largest contiguous block per bank was too small; this is not merely total DRAM exhaustion.",
+  "limit": "The exact allocation operator is inferred from source, shape arithmetic and the isolated successful rewrite; no allocator stack trace names the tensor. Full sampled quality remains unvalidated and prior synthetic shape trajectories fail.",
+  "candidate_evidence": "../017-native-sparse-real-rope/result.json",
+  "reproduce_stock": "python experiments/tenstorrent/run.py --cases shape_flow_cached --active-voxels 6181 --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 3 --timeout 1800 --output-dir /path/to/new-stock-native"
+}

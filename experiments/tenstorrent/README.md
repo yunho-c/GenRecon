@@ -375,9 +375,12 @@ CPU regression checks cover full sparse blocks in FP32 and BF16 with nonzero
 LoRA, including preserved coordinates and layout.
 The [6,181-token native sparse experiment](results/autoresearch/017-native-sparse-real-rope/summary.json)
 passes the forward smoke at 7.86 s with zero FP32 preparation drift and no
-reported fallback. It is slower than the 6.62 s sequence candidate. A matched
-stock-native control is still needed to attribute the earlier real-scene OOM;
-coordinates/conditioning differ from those historical failures.
+reported fallback. It is slower than the 6.62 s sequence candidate. The
+[matched stock-native control](results/autoresearch/021-native-sparse-control/summary.json)
+fails on the exact historical 607,617,024-byte allocation. Real-pair RoPE alone
+avoids this failure. The allocator had sufficient aggregate free space but
+insufficient contiguous space per DRAM bank. Shape arithmetic identifies the
+padded complex-pair tensor as the likely source; no allocator stack trace names it.
 
 Additional probes and CPU regression checks:
 
