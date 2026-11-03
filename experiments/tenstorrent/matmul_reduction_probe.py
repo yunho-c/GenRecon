@@ -7,6 +7,7 @@ Active-terms mode retains one K2 matrix graph and changes only input values,
 isolating the two products and reversing their order without recompilation.
 Mantissa-split mode separates each BF16-representable operand into a six-fraction-
 bit high part and an exact residual on CPU, then measures each native product.
+Power-two mode measures 1 +/- 2**(-s), s=0..31, through one unchanged K2 graph.
 This is a synthetic mechanism diagnostic, not learned-model attribution.
 """
 import argparse
@@ -28,7 +29,7 @@ sys.path.insert(0, str(ROOT))
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
-    parser.add_argument('--mode', choices=('reduction', 'active_terms', 'mantissa_split'), default='reduction')
+    parser.add_argument('--mode', choices=('reduction', 'active_terms', 'mantissa_split', 'power_two'), default='reduction')
     parser.add_argument('--matmul-mode', choices=('fp32', 'bf16', 'bf16_fp32'), default='fp32')
     parser.add_argument('--lengths', type=int, nargs='+', choices=(1, 2, 4, 8, 16, 32, 64, 128),
                         default=[1, 2, 4, 8, 16, 32, 64, 128])
@@ -79,6 +80,16 @@ def main():
                      'reversed_k2': (a.flip(-1).contiguous(), b.flip(0).contiguous()),
                      'positive_products': (a.abs(), b.abs()),
                      'integer_values': ((a*16).round(), (b*16).round())}
+        elif args.mode == 'power_two':
+            shifts = torch.arange(512) % 32
+            a = torch.stack((torch.ones(512), torch.pow(2., -shifts.float())), dim=1)
+            b = torch.stack((torch.ones(512), torch.cat((torch.ones(256), -torch.ones(256)))))
+            first, second = b.clone(), b.clone()
+            first[1] = 0; second[0] = 0
+            negative = b.clone(); negative[0] = -1
+            cases = {'full_k2': (a, b), 'first_only': (a, first), 'second_only': (a, second),
+                     'reversed_k2': (a.flip(-1).contiguous(), b.flip(0).contiguous()),
+                     'negative_base': (a, negative), 'scaled_up': (a*65536, b), 'scaled_down': (a/65536, b)}
         else:
             cases = {}
             for length in args.lengths:
@@ -144,7 +155,7 @@ def main():
             row['dynamo_after'] = dict(torch._dynamo.utils.counters['stats'])
             row['xla_compile_samples'] = {key: metrics.metric_data(key)[0] for key in metrics.metric_names() if 'Compile' in key and 'Cached' not in key}
             report['cases'][name] = row
-            value_only_case = (args.mode == 'active_terms' and name != 'full_k2') or (
+            value_only_case = (args.mode in ('active_terms', 'power_two') and name != 'full_k2') or (
                 args.mode == 'mantissa_split' and not name.endswith('_full'))
             if value_only_case and (
                     row['dynamo_before'] != row['dynamo_after'] or any(row['xla_compile_samples'].values())):
@@ -161,14 +172,27 @@ def main():
                 raise ValueError('Explicit BF16-source/FP32-output policy was not retained in native IR')
             outputs[name] = value
             (args.output_dir/(label+'-metrics.txt')).write_text(metrics.metrics_report())
-        if args.mode == 'active_terms':
+        if args.mode in ('active_terms', 'power_two'):
             isolated = outputs['first_only']+outputs['second_only']
             report['controls'] = {
                 'native_full_vs_cpu_sum_of_isolated_native_products': compare_tensors(outputs['full_k2'], isolated),
                 'isolated_native_sum_vs_cpu_full': compare_tensors(isolated, cases['full_k2'][0]@cases['full_k2'][1]),
-                'full_vs_reversed_native': compare_tensors(outputs['full_k2'], outputs['reversed_k2']),
-                'first_zero_operand_bitwise': torch.equal(outputs['first_only'], outputs['first_only_zero_a']),
-                'second_zero_operand_bitwise': torch.equal(outputs['second_only'], outputs['second_only_zero_a'])}
+                'full_vs_reversed_native': compare_tensors(outputs['full_k2'], outputs['reversed_k2'])}
+            if args.mode == 'active_terms':
+                report['controls'].update(
+                    first_zero_operand_bitwise=torch.equal(outputs['first_only'], outputs['first_only_zero_a']),
+                    second_zero_operand_bitwise=torch.equal(outputs['second_only'], outputs['second_only_zero_a']))
+            else:
+                report['controls']['common_scale_up_bitwise'] = torch.equal(outputs['scaled_up']/65536, outputs['full_k2'])
+                report['controls']['common_scale_down_bitwise'] = torch.equal(outputs['scaled_down']*65536, outputs['full_k2'])
+                report['exponent_grid'] = {}
+                expected = cases['full_k2'][0]@cases['full_k2'][1]
+                for shift in range(32):
+                    mask = shifts == shift
+                    report['exponent_grid'][str(shift)] = {
+                        'cpu_positive': expected[shift, 0].item(), 'cpu_negative': expected[shift, 256].item(),
+                        'native_positive': torch.unique(outputs['full_k2'][mask, :256]).tolist(),
+                        'native_negative': torch.unique(outputs['full_k2'][mask, 256:]).tolist()}
         if args.mode == 'mantissa_split':
             report['controls'] = {}
             for length in args.lengths:
@@ -190,7 +214,8 @@ def main():
         report['outputs_sha256'] = sha256(args.output_dir/'outputs.pt')
         report['status'] = {'reduction': 'completed_native_reduction_diagnostic',
                             'active_terms': 'completed_native_active_term_control',
-                            'mantissa_split': 'completed_native_mantissa_split_control'}[args.mode]
+                            'mantissa_split': 'completed_native_mantissa_split_control',
+                            'power_two': 'completed_native_power_two_control'}[args.mode]
         phase('complete')
     except Exception as exc:
         report.update(status='failed', error=repr(exc), traceback=traceback.format_exc())
