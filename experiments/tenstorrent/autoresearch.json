@@ -64,7 +64,8 @@
     "results/autoresearch/053-prepared-cpu-fp32-control/summary.json",
     "results/autoresearch/054-fp32-rope-lookup-loss/summary.json",
     "results/autoresearch/055-rejected-cast-roundtrip-split/summary.json",
-    "results/autoresearch/056-compensated-fp32-lookup/summary.json"
+    "results/autoresearch/056-compensated-fp32-lookup/summary.json",
+    "results/autoresearch/058-compensated-prepared-cpu-control/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -113,7 +114,8 @@
     "Prepared CPU final relative L2 vs stock is0.00010576 (0.0106%) and every original state passes existing gates. TT differs0.29359 from the same prepared CPU trajectory.114 critical model/reference/helper source hashes match native run068, and physical checkpoint hash is verified. The large native drift is not explained by the small helper algebra difference observed on CPU.",
     "Native flattened FP32 RoPE output equals a CPU counterfactual rounding only the gathered partner to BF16 bitwise at both 512 and 4096 tokens. Native IR explicitly casts the lookup table to BF16 and the result back to FP32. Relative L2 is about0.000588/0.000675. This proves a local lookup loss on these seeded inputs, not its contribution to complete sampler error.",
     "Simple three-payload FP32-to-BF16 residual splitting fails on hardware: final native IR subtracts each value from itself, eliminating the rounding residual, although frontend StableHLO preserves the down/up casts and CPU math is exact. Native output retains the old lookup error. Reject this implementation; a BF16 multiply between casts is tested separately.",
-    "Three BF16 payloads with a BF16 multiply-by-three between down/up casts preserve nonzero residuals in native IR. Integrated native outputs match the compensated CPU formula and an independent prototype process bitwise at512/4096. Relative L2 vs original FP32 rotation falls to1.06e-8/1.21e-8, with max error4.77e-7. The method costs extra kernel time and is validated only for normal activation ranges, not arbitrary FP32 extremes. Complete sampler effects remain unmeasured."
+    "Three BF16 payloads with a BF16 multiply-by-three between down/up casts preserve nonzero residuals in native IR. Integrated native outputs match the compensated CPU formula and an independent prototype process bitwise at512/4096. Relative L2 vs original FP32 rotation falls to1.06e-8/1.21e-8, with max error4.77e-7. The method costs extra kernel time and is validated only for normal activation ranges, not arbitrary FP32 extremes. Complete sampler effects remain unmeasured.",
+    "Complete compensated FP32 CPU control passes every original state gate with final relative L2 0.0000642969 (0.00643%) against stock. All shared model/helper source hashes match both pending native experiments, and physical checkpoint SHA256 is verified. Native execution comparisons are pending; this is not a CUDA oracle."
   ],
   "next_actions": [
     "Validate compensated FP32 gather in the complete original shape sampler, including an identically prepared CPU trajectory. Compare against original stock reference and prior FP32-device control; report changed layout and gather together. No default promotion from kernel evidence.",
@@ -128,13 +130,6 @@
       "status": "launched",
       "source_commit": "00271fb",
       "note": "Original12steps/21forwards; native IR, same sealed stock CPU reference, all strict gates retained."
-    },
-    {
-      "name": "prepared compensated CPU control",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/076-prepared-compensated-cpu",
-      "status": "launched",
-      "source_commit": "00271fb",
-      "note": "Complete identical prepared FP32 CPU model; separate helper algebra from native error."
     },
     {
       "name": "matched flat FP32 shape control",

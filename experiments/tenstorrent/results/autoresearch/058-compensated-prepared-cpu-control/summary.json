@@ -1,0 +1,22 @@
+{
+  "status": "completed_full_prepared_cpu_control_native_comparison_pending",
+  "scope": "Original shape51212steps/21forwards, compensated head-first flattened RoPE and FP32 reciprocal attention, promoted already-quantized learned weights, original stock FP32 acceptance reference.",
+  "cpu_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 6.429689582836327e-05,
+    "pcc": 0.9999999979277862,
+    "max_abs": 0.0014427900314331055
+  },
+  "cpu_all_states_pass_gates": true,
+  "source_hash_counts": {
+    "candidate": 163,
+    "control": 163
+  },
+  "verified_checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+  "finding": "Complete compensated FP32 CPU control passes every original state gate with final relative L2 0.0000642969 (0.00643%) against stock. All shared model/helper source hashes match both pending native experiments, and physical checkpoint SHA256 is verified. Native execution comparisons are pending; this is not a CUDA oracle.",
+  "reproduce": "precision_reference.py --stage shape --precision float32 --rope-mode real_pairs_fp32_split --attention-mode fp32_reciprocal --threads 16 --output-dir <new>"
+}
