@@ -977,3 +977,15 @@ scaling by `2**16` or `2**-16` preserve native behavior. All seven value-only
 cases avoid compilation/fallback. This demonstrates native combination loss;
 it does not identify an internal instruction or establish a kernel remedy.
 Reproduce with `matmul_reduction_probe.py --mode power_two --output-dir <new>`.
+
+The [canonical TTNN kernel binding](results/autoresearch/081-canonical-kernel-binding/summary.json)
+links the exact K2 control to `bmm_large_block_zm_fused_bias_activation` through
+Inspector operation/workload/program records. The standalone TTNN libraries
+match the Forge wheel's RECORD hashes, and default/full-sync/precise outputs
+match PJRT bitwise. Generated headers verify HiFi4, FP32 destination mode and
+the changed synchronization/approximation flags. Compiler argument7 is1, so the
+kernel's outer spill/reload branch is inactive in this control. A requested
+packer flag is also inactive for one block; no enabled-packer claim follows.
+Raw Inspector records, compiler commands, descriptors and ELF hashes are retained.
+Standalone TTNN and PJRT remain distinct execution/build boundaries even when
+they ship in the same package and use the same source revision.

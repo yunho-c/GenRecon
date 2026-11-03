@@ -1,0 +1,53 @@
+- mesh_workload_created:
+    mesh_workload_id: 0
+    timestamp_ns: 1793684402403118377
+- mesh_workload_add_program:
+    mesh_workload_id: 0
+    program_id: 2
+    timestamp_ns: 1793684402404770154
+    coordinates:
+      - [0, 0]
+- runtime_entry:
+    mesh_workload_id: 0
+    runtime_id: 1
+    name: MatmulDeviceOperation
+    parameters: '[0]: TensorSpec(logical_shape=Shape([512, 2]),tensor_layout=TensorLayout(dtype=DataType::FLOAT32,page_config=PageConfig(config=TilePageConfig(tile=Tile(tile_shape={32, 32},face_shape={16, 16},num_faces=4))),memory_config=MemoryConfig(memory_layout=TensorMemoryLayout::INTERLEAVED,buffer_type=BufferType::DRAM,shard_spec=std::nullopt,nd_shard_spec=std::nullopt,created_with_nd_shard_spec=0),alignment=Alignment([32, 32]))), [1]: TensorSpec(logical_shape=Shape([2, 512]),tensor_layout=TensorLayout(dtype=DataType::FLOAT32,page_config=PageConfig(config=TilePageConfig(tile=Tile(tile_shape={32, 32},face_shape={16, 16},num_faces=4))),memory_config=MemoryConfig(memory_layout=TensorMemoryLayout::INTERLEAVED,buffer_type=BufferType::DRAM,shard_spec=std::nullopt,nd_shard_spec=std::nullopt,created_with_nd_shard_spec=0),alignment=Alignment([32, 32])))'
+    trace_id: 4294967295
+    timestamp_ns: 1793684402404877754
+- mesh_workload_set_program_binary_status:
+    mesh_workload_id: 0
+    mesh_id: 0
+    status: InFlight
+    timestamp_ns: 1793684403340369360
+- mesh_workload_set_program_binary_status:
+    mesh_workload_id: 0
+    mesh_id: 0
+    status: Committed
+    timestamp_ns: 1793684403340576830
+- runtime_entry:
+    mesh_workload_id: 0
+    runtime_id: 2
+    name: MatmulDeviceOperation
+    parameters: '[0]: TensorSpec(logical_shape=Shape([512, 2]),tensor_layout=TensorLayout(dtype=DataType::FLOAT32,page_config=PageConfig(config=TilePageConfig(tile=Tile(tile_shape={32, 32},face_shape={16, 16},num_faces=4))),memory_config=MemoryConfig(memory_layout=TensorMemoryLayout::INTERLEAVED,buffer_type=BufferType::DRAM,shard_spec=std::nullopt,nd_shard_spec=std::nullopt,created_with_nd_shard_spec=0),alignment=Alignment([32, 32]))), [1]: TensorSpec(logical_shape=Shape([2, 512]),tensor_layout=TensorLayout(dtype=DataType::FLOAT32,page_config=PageConfig(config=TilePageConfig(tile=Tile(tile_shape={32, 32},face_shape={16, 16},num_faces=4))),memory_config=MemoryConfig(memory_layout=TensorMemoryLayout::INTERLEAVED,buffer_type=BufferType::DRAM,shard_spec=std::nullopt,nd_shard_spec=std::nullopt,created_with_nd_shard_spec=0),alignment=Alignment([32, 32])))'
+    trace_id: 4294967295
+    timestamp_ns: 1793684403343006090
+- mesh_workload_set_program_binary_status:
+    mesh_workload_id: 0
+    mesh_id: 0
+    status: Committed
+    timestamp_ns: 1793684403343044770
+- runtime_entry:
+    mesh_workload_id: 0
+    runtime_id: 3
+    name: MatmulDeviceOperation
+    parameters: '[0]: TensorSpec(logical_shape=Shape([512, 2]),tensor_layout=TensorLayout(dtype=DataType::FLOAT32,page_config=PageConfig(config=TilePageConfig(tile=Tile(tile_shape={32, 32},face_shape={16, 16},num_faces=4))),memory_config=MemoryConfig(memory_layout=TensorMemoryLayout::INTERLEAVED,buffer_type=BufferType::DRAM,shard_spec=std::nullopt,nd_shard_spec=std::nullopt,created_with_nd_shard_spec=0),alignment=Alignment([32, 32]))), [1]: TensorSpec(logical_shape=Shape([2, 512]),tensor_layout=TensorLayout(dtype=DataType::FLOAT32,page_config=PageConfig(config=TilePageConfig(tile=Tile(tile_shape={32, 32},face_shape={16, 16},num_faces=4))),memory_config=MemoryConfig(memory_layout=TensorMemoryLayout::INTERLEAVED,buffer_type=BufferType::DRAM,shard_spec=std::nullopt,nd_shard_spec=std::nullopt,created_with_nd_shard_spec=0),alignment=Alignment([32, 32])))'
+    trace_id: 4294967295
+    timestamp_ns: 1793684403344411625
+- mesh_workload_set_program_binary_status:
+    mesh_workload_id: 0
+    mesh_id: 0
+    status: Committed
+    timestamp_ns: 1793684403344447865
+- mesh_workload_destroyed:
+    mesh_workload_id: 0
+    timestamp_ns: 1793684403499263780

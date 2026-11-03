@@ -1,0 +1,78 @@
+- kernel:
+    watcher_kernel_id: 3
+    name: cq_dispatch_subordinate
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_dispatch_subordinate/14463430560103911459/
+    source: tt_metal/impl/dispatch/kernels/cq_dispatch_subordinate.cpp
+    program_id: 0
+- kernel:
+    watcher_kernel_id: 4
+    name: cq_dispatch_subordinate_compute
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_dispatch_subordinate_compute/6356599351056271681/
+    source: tt_metal/impl/dispatch/kernels/cq_dispatch_subordinate_compute.cpp
+    program_id: 0
+- kernel:
+    watcher_kernel_id: 2
+    name: cq_dispatch
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_dispatch/15557465510833930444/
+    source: tt_metal/impl/dispatch/kernels/cq_dispatch.cpp
+    program_id: 0
+- kernel:
+    watcher_kernel_id: 1
+    name: cq_prefetch
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_prefetch/639486499262887994/
+    source: tt_metal/impl/dispatch/kernels/cq_prefetch.cpp
+    program_id: 0
+- kernel:
+    watcher_kernel_id: 5
+    name: cq_realtime_profiler
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_realtime_profiler/2432473890947930540/
+    source: tt_metal/impl/dispatch/kernels/cq_realtime_profiler.cpp
+    program_id: 1
+- kernel:
+    watcher_kernel_id: 6
+    name: cq_realtime_profiler_push
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_realtime_profiler_push/4249550120158995563/
+    source: tt_metal/impl/dispatch/kernels/cq_realtime_profiler_push.cpp
+    program_id: 1
+- kernel:
+    watcher_kernel_id: 12
+    name: reader_bmm_tile_layout_in0_receiver
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in0_receiver/7567626332681561456/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in0_receiver.cpp
+    program_id: 2
+- kernel:
+    watcher_kernel_id: 10
+    name: reader_bmm_tile_layout_in0_receiver
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in0_receiver/2489083804868476922/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in0_receiver.cpp
+    program_id: 2
+- kernel:
+    watcher_kernel_id: 9
+    name: reader_bmm_tile_layout_in1_receiver_writer_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in1_receiver_writer_padding/6247538212393636950/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in1_receiver_writer_padding.cpp
+    program_id: 2
+- kernel:
+    watcher_kernel_id: 11
+    name: reader_bmm_tile_layout_in1_receiver_writer_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in1_receiver_writer_padding/17956823544948467663/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in1_receiver_writer_padding.cpp
+    program_id: 2
+- kernel:
+    watcher_kernel_id: 7
+    name: reader_bmm_tile_layout_in0_sender_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in0_sender_padding/13355764978191313512/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in0_sender_padding.cpp
+    program_id: 2
+- kernel:
+    watcher_kernel_id: 13
+    name: bmm_large_block_zm_fused_bias_activation
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/bmm_large_block_zm_fused_bias_activation/18009621823043675235/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/compute/bmm_large_block_zm_fused_bias_activation.cpp
+    program_id: 2
+- kernel:
+    watcher_kernel_id: 8
+    name: reader_bmm_tile_layout_in1_sender_writer_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/105-canonical-ttnn-clean-default/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in1_sender_writer_padding/2242943030425982671/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in1_sender_writer_padding.cpp
+    program_id: 2

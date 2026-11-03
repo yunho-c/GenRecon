@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "variant": "default",
+  "scope": "Direct canonical-wheel TTNN kernel controls for the exact K2 arithmetic case.\n\nFresh process per variant. Native library paths and wheel RECORD hashes are\nverified before opening the device. Inspector records and an isolated kernel\ncache bind each result to generated descriptors, compiler arguments and ELFs.\nThis is a kernel capability diagnostic, not a sampler performance comparison.\n",
+  "source_commit": "bb82f8258d0f430cee0e27a79aa33257b207d609",
+  "phase": "waiting_for_device",
+  "native_control": {
+    "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/103-power-two-exponent-grid",
+    "outputs_sha256": "f491ca41bce9b241ee8ff04dc030fffb47fa2eb151f6faba7bf96a58e3b610f8",
+    "inputs_identical": true
+  },
+  "source_sha256": "d52b9bfc7ec0b8cb639907ef01a5b3180ff32e711cf1c1b42146066e8c6baef7",
+  "error": "ImportError('/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnn.so: undefined symbol: _ZN4ttnn9moreh_sumERKN2tt8tt_metal6TensorERKSt8optionalISt7variantIJlN4ttsl11SmallVectorIlLm8EEEEEEbRKS5_IS2_ERKS5_INS1_12MemoryConfigEERKS5_INS_19ComputeKernelConfigEE')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/canonical_ttnn_matmul_probe.py\", line 73, in main\n    import ttnn\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/ttnn/__init__.py\", line 32, in <module>\n    from ttnn._original import *\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/ttnn/_original/__init__.py\", line 17, in <module>\n    import ttnn._ttnn\nImportError: /home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnn.so: undefined symbol: _ZN4ttnn9moreh_sumERKN2tt8tt_metal6TensorERKSt8optionalISt7variantIJlN4ttsl11SmallVectorIlLm8EEEEEEbRKS5_IS2_ERKS5_INS1_12MemoryConfigEERKS5_INS_19ComputeKernelConfigEE\n"
+}

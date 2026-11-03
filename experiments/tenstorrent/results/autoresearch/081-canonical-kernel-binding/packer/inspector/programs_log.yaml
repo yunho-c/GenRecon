@@ -1,0 +1,149 @@
+- program_created:
+    id: 0
+    timestamp_ns: 1793684504957828808
+- program_compile_started:
+    id: 0
+    timestamp_ns: 1793684504958696831
+- program_kernel_compile_finished:
+    id: 0
+    timestamp_ns: 1793684505761271068
+    duration_ns: 802574237
+    watcher_kernel_id: 3
+    name: cq_dispatch_subordinate
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_dispatch_subordinate/14463430560103911459/
+    source: tt_metal/impl/dispatch/kernels/cq_dispatch_subordinate.cpp
+- program_kernel_compile_finished:
+    id: 0
+    timestamp_ns: 1793684505997275691
+    duration_ns: 1038578860
+    watcher_kernel_id: 4
+    name: cq_dispatch_subordinate_compute
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_dispatch_subordinate_compute/6356599351056271681/
+    source: tt_metal/impl/dispatch/kernels/cq_dispatch_subordinate_compute.cpp
+- program_kernel_compile_finished:
+    id: 0
+    timestamp_ns: 1793684507203088409
+    duration_ns: 2244391578
+    watcher_kernel_id: 2
+    name: cq_dispatch
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_dispatch/15557465510833930444/
+    source: tt_metal/impl/dispatch/kernels/cq_dispatch.cpp
+- program_kernel_compile_finished:
+    id: 0
+    timestamp_ns: 1793684508094755460
+    duration_ns: 3136058629
+    watcher_kernel_id: 1
+    name: cq_prefetch
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_prefetch/639486499262887994/
+    source: tt_metal/impl/dispatch/kernels/cq_prefetch.cpp
+- program_compile_finished:
+    id: 0
+    timestamp_ns: 1793684508094877000
+    duration_ns: 3136180169
+- program_created:
+    id: 1
+    timestamp_ns: 1793684508129871376
+- program_compile_started:
+    id: 1
+    timestamp_ns: 1793684508130128677
+- program_kernel_compile_finished:
+    id: 1
+    timestamp_ns: 1793684508709714510
+    duration_ns: 579585833
+    watcher_kernel_id: 5
+    name: cq_realtime_profiler
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_realtime_profiler/2432473890947930540/
+    source: tt_metal/impl/dispatch/kernels/cq_realtime_profiler.cpp
+- program_kernel_compile_finished:
+    id: 1
+    timestamp_ns: 1793684509213608001
+    duration_ns: 1083479324
+    watcher_kernel_id: 6
+    name: cq_realtime_profiler_push
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/cq_realtime_profiler_push/4249550120158995563/
+    source: tt_metal/impl/dispatch/kernels/cq_realtime_profiler_push.cpp
+- program_compile_finished:
+    id: 1
+    timestamp_ns: 1793684509213711271
+    duration_ns: 1083582594
+- program_created:
+    id: 2
+    timestamp_ns: 1793684509810510392
+- program_created:
+    id: 3
+    timestamp_ns: 1793684509811894627
+- program_destroyed:
+    id: 3
+    timestamp_ns: 1793684509811908577
+- program_compile_started:
+    id: 2
+    timestamp_ns: 1793684509812005087
+- program_kernel_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510448068640
+    duration_ns: 636063553
+    watcher_kernel_id: 10
+    name: reader_bmm_tile_layout_in0_receiver
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in0_receiver/2489083804868476922/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in0_receiver.cpp
+- program_kernel_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510474368991
+    duration_ns: 662363904
+    watcher_kernel_id: 12
+    name: reader_bmm_tile_layout_in0_receiver
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in0_receiver/7567626332681561456/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in0_receiver.cpp
+- program_kernel_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510613953282
+    duration_ns: 801948195
+    watcher_kernel_id: 11
+    name: reader_bmm_tile_layout_in1_receiver_writer_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in1_receiver_writer_padding/17956823544948467663/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in1_receiver_writer_padding.cpp
+- program_kernel_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510635739666
+    duration_ns: 823734579
+    watcher_kernel_id: 9
+    name: reader_bmm_tile_layout_in1_receiver_writer_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in1_receiver_writer_padding/6247538212393636950/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in1_receiver_writer_padding.cpp
+- program_kernel_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510668056591
+    duration_ns: 856051504
+    watcher_kernel_id: 7
+    name: reader_bmm_tile_layout_in0_sender_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in0_sender_padding/13355764978191313512/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in0_sender_padding.cpp
+- program_kernel_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510693134618
+    duration_ns: 881129531
+    watcher_kernel_id: 8
+    name: reader_bmm_tile_layout_in1_sender_writer_padding
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/reader_bmm_tile_layout_in1_sender_writer_padding/2242943030425982671/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/dataflow/reader_bmm_tile_layout_in1_sender_writer_padding.cpp
+- program_kernel_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510737674251
+    duration_ns: 925669164
+    watcher_kernel_id: 13
+    name: bmm_large_block_zm_fused_bias_activation
+    path: /home/user/tt-scratchpad/genrecon/autoresearch/107-canonical-packer/metal-cache/tt-metal-cache7388763415073669024/kernels/bmm_large_block_zm_fused_bias_activation/18009621823043675235/
+    source: ttnn/cpp/ttnn/operations/matmul/device/kernels/compute/bmm_large_block_zm_fused_bias_activation.cpp
+- program_compile_finished:
+    id: 2
+    timestamp_ns: 1793684510737752131
+    duration_ns: 925747044
+- program_destroyed:
+    id: 1
+    timestamp_ns: 1793684510886941609
+- program_destroyed:
+    id: 0
+    timestamp_ns: 1793684510887912063
+- program_destroyed:
+    id: 2
+    timestamp_ns: 1793684510914514576

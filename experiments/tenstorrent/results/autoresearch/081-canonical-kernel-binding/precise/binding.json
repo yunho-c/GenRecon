@@ -1,0 +1,39 @@
+{
+  "kernel": {
+    "watcher_kernel_id": 13,
+    "name": "bmm_large_block_zm_fused_bias_activation",
+    "path": "/home/user/tt-scratchpad/genrecon/autoresearch/108-canonical-precise/metal-cache/tt-metal-cache7388763415073669024/kernels/bmm_large_block_zm_fused_bias_activation/16464509019301086729/",
+    "source": "ttnn/cpp/ttnn/operations/matmul/device/kernels/compute/bmm_large_block_zm_fused_bias_activation.cpp",
+    "program_id": 2
+  },
+  "compile_time_args": [
+    1,
+    1,
+    2,
+    2,
+    1,
+    2,
+    2,
+    1,
+    1,
+    1,
+    2,
+    2,
+    4,
+    1,
+    4,
+    0,
+    0,
+    0
+  ],
+  "inner_blocks": 1,
+  "dst_sync": "DstSync::SyncHalf",
+  "approx": "false",
+  "effective_packer_l1_acc_define": false,
+  "bitwise_pjrt_control": true,
+  "elf_sha256": {
+    "trisc0": "b24968bafb1de8063c9f2522c505520a8d9c1d3c2b8acd7b17d25171e9cd5602",
+    "trisc1": "6c50a612c1c9d4b51845e88f144b89847db9f16f0faacdb1ec91f1bdb8e71592",
+    "trisc2": "c085e3504253f0df66c84a43fb8e2f35e43277f202f7e987e7a1a02040f74a7f"
+  }
+}
