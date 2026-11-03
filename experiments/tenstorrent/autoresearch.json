@@ -95,7 +95,8 @@
     "results/autoresearch/084-profile-sdk-configure/summary.json",
     "results/autoresearch/085-profile-sdk-build/summary.json",
     "results/autoresearch/086-runtime-trace-sampler/summary.json",
-    "results/autoresearch/087-profile-sdk-device-control/summary.json"
+    "results/autoresearch/087-profile-sdk-device-control/summary.json",
+    "results/autoresearch/088-matched-sdk-denoiser-control/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -179,7 +180,8 @@
     "An independent TT-Metal/TTNN checkout at canonical revisionf1f4ff75579 is configured for Release, Python3.12 bindings, distributed support and Tracy. Exact submodule revisions, toolchain, configure commands and a pinned Python dependency lock are retained. The generated rtoptions.cpp compile command contains-DTRACY_ENABLE, so configuration proves the intended native build definition beyond a cache label. No native libraries have been built or run yet; device profiling remains unverified. Existing Forge and9f9 profiling SDK checkouts are unchanged.",
     "Isolated canonical-revision Tracy SDK native build/install completed in450.48s. All18 native artifacts are hashed; actual compile flags contain TRACY_ENABLE. Build status remains built_unvalidated pending independent numerical and device-profiler controls.",
     "Complete native runtime trace capture/replay includes457 denoiser matrix operations and preserves every original12-step/21-call sampler state bitwise, without fallback/recompilation. Recorded16.795s coincides with host SDK compilation and is not speedup evidence. Stock CPU final0.299911 error remains.",
-    "Matching-revision isolated Tracy SDK runs unprofiled and profiled canonical K2 controls bitwise, with all native libraries confined to its workspace. Explicit TT_METAL_PROFILER_DIR yields3840 actual device timing rows. Device profiling capability is established; full-module calibration and marked denoiser captures remain."
+    "Matching-revision isolated Tracy SDK runs unprofiled and profiled canonical K2 controls bitwise, with all native libraries confined to its workspace. Explicit TT_METAL_PROFILER_DIR yields3840 actual device timing rows. Device profiling capability is established; full-module calibration and marked denoiser captures remain.",
+    "Full pretrained30-block shape512 generated denoiser on matching-revision SDK reproduces canonical generated execution bitwise and repeats exactly. Warm medians0.605576s canonical/0.601118s SDK are calibration observations under preloaded-activation boundary, not an optimization claim. Instrumented marked capture and current FP32/flat-RoPE recipe export follow."
   ],
   "next_actions": [
     "Validate source-built matching-revision profiling SDK against sealed canonical outputs and require actual device CSV rows, then calibrate complete sampler-module profiling boundaries.",
@@ -188,6 +190,17 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "run": 119,
+      "purpose": "Marked full denoiser profiling after bitwise canonical calibration",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/119-profile-sdk-generated-shape-capture"
+    },
+    {
+      "run": 120,
+      "purpose": "Export current FP32 flat-RoPE reciprocal-attention recipe for matching-revision profiling",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/120-shape-fp32-flat-codegen"
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }

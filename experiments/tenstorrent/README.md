@@ -1028,3 +1028,25 @@ remain unverified. Existing SDKs are preserved. Reproduce with:
 Omit `--configure-only` to compile/install. Logs, command PIDs, source/submodule
 identities, Python dependencies and build flags are checkpointed outside Git;
 a successful build is labeled `built_unvalidated` until device controls pass.
+
+The [completed build](results/autoresearch/085-profile-sdk-build/summary.json)
+and [device capability control](results/autoresearch/087-profile-sdk-device-control/summary.json)
+now establish a working matching-revision profiler: all three arithmetic repeats
+are bitwise canonical and 3,840 actual device timing records are retained.
+Set `TT_METAL_PROFILER_DIR` explicitly; the general logs path does not redirect
+the profiler's separate artifact root. The SDK remains separate from Forge.
+
+The [full denoiser calibration](results/autoresearch/088-matched-sdk-denoiser-control/summary.json)
+also reproduces canonical generated shape512 output bitwise, with exact repeats.
+Warm medians are 605.58ms canonical and 601.12ms SDK at the same preuploaded
+activation boundary. These are calibration observations, not an optimization
+claim or a full sampler quality result. Use `profile_sdk_codegen.py` with a
+sealed canonical `--native-control-result`; add `--profile` for marked warm
+captures, per-forward buffer flushing and a 10,000-program capacity. Library
+identities and the process-start SDK environment are recorded. Capture reports
+remain unvalidated until their device rows and measurement windows are checked.
+
+The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
+captures all 457 denoiser matrix operations and preserves every original sampler
+state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation
+and supports no speedup claim. The unchanged strict stock CPU gates still fail.

@@ -1,0 +1,31 @@
+{
+  "status": "completed_bitwise_matched_full_denoiser_sdk_control",
+  "case": "shape_flow_tensor",
+  "tokens": 512,
+  "recipe": "Original learned BF16 values, real-pair RoPE, original attention, full pretrained 30-block shape denoiser. Same sealed generated export and explicit uint32 index-cast repair.",
+  "canonical_warm_seconds": [
+    0.6055761320167221,
+    0.6067472560098395,
+    0.605062699993141
+  ],
+  "sdk_warm_seconds": [
+    0.6011036160052754,
+    0.6011182850343175,
+    0.6015713959932327
+  ],
+  "full_output_bitwise_canonical": true,
+  "all_within_runtime_repeats_exact": true,
+  "stock_cpu_check": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.06691406440448987,
+    "pcc": 0.9977801825908912,
+    "max_abs": 0.31577765941619873
+  },
+  "scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "limits": "One synthetic complete denoiser forward, not an entire sampler trajectory or scene-quality validation. Medians are calibration observations, not a speedup claim; instrumented timings require separate capture.",
+  "reproduce": "Create canonical control with native_environment wrapper and codegen_probe.py execute; run profile_sdk_codegen.py --sdk-workspace <f1-sdk> --export-dir <sealed019> --native-control-result <canonical-execute.json> --output-dir <new> --repair-embedding-indices --runs 3. Add --profile for a separate instrumented capture."
+}

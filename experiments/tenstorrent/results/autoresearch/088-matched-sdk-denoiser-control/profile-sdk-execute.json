@@ -1,0 +1,100 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/019-shape-real-rope-codegen-512",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "a6187ee1ed6e69bd8f9a760bd1669762aad874020b81755331adac7bc1b81fda",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "shape_flow_tensor",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0
+  },
+  "rope_mode": "real_pairs",
+  "export_sha256": "8fe19c192a7e3e2c3e82508cbd5a8f9e3f3c8155a1531794a72a68e71bb9c983",
+  "ttnn_path": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn/ttnn/__init__.py",
+  "native_library_sha256": {
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/_ttnncpp.so": "d65f8177140701f21e100ea59a3ec935fbac6d94c9114a6d6311e01544e9a437",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/libtt_metal.so": "7cdbf7fe954add65a1e37121c0d55934dc29a63dca4d9aa4499f579e083928c4",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn/ttnn/_ttnn.so": "f5a2a8b1594bc9127b6660802af1d76b1827baeefc3757c55e0a212ebb275453"
+  },
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "instrumented": false,
+  "flush_device_profiler": false,
+  "profiler_program_support_count": null,
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "activation_preparation_scope": "Generated loader reads files, converts dtype/layout and uploads activations; explicit device synchronization completes this before BEGIN/timer.",
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "activation_preparation_seconds": [
+    {
+      "label": "GENRECON_FIRST",
+      "seconds": 0.017030662042088807
+    },
+    {
+      "label": "GENRECON_WARMUP_0",
+      "seconds": 0.013784149952698499
+    },
+    {
+      "label": "GENRECON_WARMUP_1",
+      "seconds": 0.0044473460293374956
+    },
+    {
+      "label": "GENRECON_WARMUP_2",
+      "seconds": 0.003099691995885223
+    },
+    {
+      "label": "GENRECON_MEASURED_0",
+      "seconds": 0.002914810029324144
+    },
+    {
+      "label": "GENRECON_MEASURED_1",
+      "seconds": 0.0028387000202201307
+    },
+    {
+      "label": "GENRECON_MEASURED_2",
+      "seconds": 0.0043745870352722704
+    }
+  ],
+  "first_seconds": 82.24512615799904,
+  "native_control": {
+    "result_sha256": "abceec6012d4e8c665b12eee38b0a5598768d65bdc92180527da26297562898d",
+    "output_sha256": "39f0381f37b23a1861abc44ad484491694fe20f18437618844c9d2f9e611a522",
+    "bitwise_equal": true
+  },
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.06691406440448987,
+      "pcc": 0.9977801825908912,
+      "max_abs": 0.31577765941619873
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.06691406440448987,
+    "pcc": 0.9977801825908912,
+    "max_abs": 0.31577765941619873
+  },
+  "warm_seconds": [
+    0.6011036160052754,
+    0.6011182850343175,
+    0.6015713959932327
+  ],
+  "warm_median_seconds": 0.6011182850343175,
+  "output_sha256": "39f0381f37b23a1861abc44ad484491694fe20f18437618844c9d2f9e611a522"
+}

@@ -1,0 +1,94 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/019-shape-real-rope-codegen-512",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "a6187ee1ed6e69bd8f9a760bd1669762aad874020b81755331adac7bc1b81fda",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "shape_flow_tensor",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0
+  },
+  "rope_mode": "real_pairs",
+  "export_sha256": "8fe19c192a7e3e2c3e82508cbd5a8f9e3f3c8155a1531794a72a68e71bb9c983",
+  "ttnn_path": "/home/user/tt-forge-venv/lib/python3.12/site-packages/ttnn/__init__.py",
+  "native_library_sha256": {
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnn.so": "32a1eb33982dabf23018409458cd36ff2b9a1e5e8073e66bfe80ae915da702d4",
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnncpp.so": "6c9b0144218f7412a85ed99be8e05704b7da2b171cd02dadf611aa1697c9177e",
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/libtt_metal.so": "7b7e42b9b33f320a4761db8546780b40a005ea63212ff9bd5711b4c8efc9b564"
+  },
+  "instrumented": false,
+  "flush_device_profiler": false,
+  "profiler_program_support_count": null,
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "activation_preparation_scope": "Generated loader reads files, converts dtype/layout and uploads activations; explicit device synchronization completes this before BEGIN/timer.",
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "activation_preparation_seconds": [
+    {
+      "label": "GENRECON_FIRST",
+      "seconds": 0.012393714976496994
+    },
+    {
+      "label": "GENRECON_WARMUP_0",
+      "seconds": 0.020036633010022342
+    },
+    {
+      "label": "GENRECON_WARMUP_1",
+      "seconds": 0.0031914510182105005
+    },
+    {
+      "label": "GENRECON_WARMUP_2",
+      "seconds": 0.0030654710135422647
+    },
+    {
+      "label": "GENRECON_MEASURED_0",
+      "seconds": 0.002922559971921146
+    },
+    {
+      "label": "GENRECON_MEASURED_1",
+      "seconds": 0.0029764510109089315
+    },
+    {
+      "label": "GENRECON_MEASURED_2",
+      "seconds": 0.0027561900205910206
+    }
+  ],
+  "first_seconds": 81.52302639599657,
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.06691406440448987,
+      "pcc": 0.9977801825908912,
+      "max_abs": 0.31577765941619873
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.06691406440448987,
+    "pcc": 0.9977801825908912,
+    "max_abs": 0.31577765941619873
+  },
+  "warm_seconds": [
+    0.6055761320167221,
+    0.6067472560098395,
+    0.605062699993141
+  ],
+  "warm_median_seconds": 0.6055761320167221,
+  "output_sha256": "39f0381f37b23a1861abc44ad484491694fe20f18437618844c9d2f9e611a522"
+}

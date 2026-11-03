@@ -39,7 +39,11 @@ def main():
     p.add_argument('--active-voxels', type=int)
     p.add_argument('--optimization-level', type=int, choices=(0, 1, 2), default=0)
     p.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
-    p.add_argument('--rope-mode', choices=('stock', 'real_pairs'), default='stock')
+    p.add_argument('--rope-mode', choices=('stock', 'real_pairs', 'real_pairs_head_first',
+                   'real_pairs_flat_head_first', 'real_pairs_fp32_split'), default='stock')
+    p.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av',
+                   'bf16_qk_fp32_softmax', 'fp32_self_outer_qk'), default='stock')
+    p.add_argument('--device-precision', choices=('pipeline', 'float32'), default='pipeline')
     p.add_argument('--seed', type=int, default=0)
     p.add_argument('--threads', type=int, default=16)
     p.add_argument('--runs', type=int, default=3)
@@ -49,7 +53,14 @@ def main():
     p.add_argument('--repair-embedding-indices', action='store_true',
                    help='Explicitly restore the known omitted CPU-hoisted si32-to-ui32 cast for real-RoPE pair indices')
     p.add_argument('--result', type=Path, help='Execute report; must not exist')
+    p.add_argument('--native-control-result', type=Path,
+                   help='Require bitwise equality with a sealed execute report using the identical export')
     args = p.parse_args()
+    if args.command == 'export':
+        from experiments.tenstorrent.native_environment import reexec_clean_native_process
+        reexec_clean_native_process()
+    if args.native_control_result and args.command != 'execute':
+        p.error('native-control-result requires execute')
     if args.flush_device_profiler and args.command != 'execute':
         p.error('flush-device-profiler requires execute')
     if min(args.threads, args.runs) < 1:
@@ -105,12 +116,32 @@ def main():
                 expected = model(*inputs)
             torch.save({'inputs': inputs, 'expected': expected}, directory/'reference.pt')
             report['rope_mode'] = args.rope_mode
-            if args.rope_mode == 'real_pairs':
+            if args.rope_mode != 'stock':
                 from experiments.tenstorrent.inference_rope import prepare_real_rope
-                report['prepared_rope_blocks'] = prepare_real_rope(model)
+                report['prepared_rope_blocks'] = prepare_real_rope(model,
+                    head_first=args.rope_mode in ('real_pairs_head_first', 'real_pairs_flat_head_first', 'real_pairs_fp32_split'),
+                    flatten=args.rope_mode in ('real_pairs_flat_head_first', 'real_pairs_fp32_split'),
+                    fp32_split=args.rope_mode == 'real_pairs_fp32_split')
                 with torch.no_grad(), float32_reference(model):
                     candidate = model(*inputs)
                 report['prepared_cpu_relative_l2'] = (
+                    (candidate.double()-expected.double()).norm()/expected.double().norm().clamp_min(1e-30)).item()
+            report['attention_mode'] = args.attention_mode
+            if args.attention_mode != 'stock':
+                from experiments.tenstorrent.inference_attention import prepare_attention
+                report['prepared_attention_modules'] = prepare_attention(model, args.attention_mode)
+                with torch.no_grad(), float32_reference(model):
+                    candidate = model(*inputs)
+                report['attention_cpu_relative_l2'] = (
+                    (candidate.double()-expected.double()).norm()/expected.double().norm().clamp_min(1e-30)).item()
+            report['device_precision'] = args.device_precision
+            if args.device_precision == 'float32':
+                from experiments.tenstorrent.inference_precision import prepare_float32_device
+                report['device_precision_preparation'] = prepare_float32_device(model)
+                inputs = tuple(value.float() if value.is_floating_point() else value for value in inputs)
+                with torch.no_grad():
+                    candidate = model(*inputs)
+                report['device_precision_cpu_relative_l2'] = (
                     (candidate.double()-expected.double()).norm()/expected.double().norm().clamp_min(1e-30)).item()
             phase('waiting_for_device')
             lock = os.open('/tmp/genrecon-tt-pjrt.lock', os.O_CREAT | os.O_RDWR, 0o600)
@@ -134,9 +165,18 @@ def main():
                 raise ValueError('Export has not completed successfully')
             report.update(case=export['case'], seed=export['seed'],
                           compiler_options=export['compiler_options'],
-                          rope_mode=export.get('rope_mode', 'stock'))
+                          rope_mode=export.get('rope_mode', 'stock'),
+                          attention_mode=export.get('attention_mode', 'stock'),
+                          device_precision=export.get('device_precision', 'pipeline'))
             report['export_sha256'] = sha256(directory/'export.json')
             report['ttnn_path'] = ttnn.__file__
+            native_paths = sorted({Path(line.split()[-1]).resolve()
+                for line in Path('/proc/self/maps').read_text().splitlines()
+                if '/' in line and any(key in line for key in
+                    ('/_ttnn.so', '/_ttnncpp.so', 'libtt_metal.so'))})
+            if not native_paths:
+                raise ValueError('Cannot identify loaded TTNN/Metal libraries')
+            report['native_library_sha256'] = {str(path): sha256(path) for path in native_paths}
             metal_root = os.environ.get('TT_METAL_HOME')
             if metal_root:
                 report['metal_commit'] = subprocess.check_output(
@@ -216,6 +256,18 @@ def main():
 
             phase('first_forward')
             actual, report['first_seconds'] = infer('GENRECON_FIRST')
+            if args.native_control_result:
+                control_path = args.native_control_result.resolve()
+                control = json.loads(control_path.read_text())
+                if (control.get('status') != 'passed_smoke' or
+                        control.get('export_sha256') != report['export_sha256'] or
+                        control.get('compatibility_repairs', []) != report.get('compatibility_repairs', []) or
+                        sha256(control_path.with_suffix('.pt')) != control.get('output_sha256')):
+                    raise ValueError('Native control is incomplete, changed or uses a different export/repair')
+                native = torch.load(control_path.with_suffix('.pt'), weights_only=True, map_location='cpu')
+                torch.testing.assert_close(actual, native, rtol=0, atol=0)
+                report['native_control'] = {'result_sha256': sha256(control_path),
+                    'output_sha256': control['output_sha256'], 'bitwise_equal': True}
             report['vs_stock_cpu_fp32'] = enforce_check(report, 'first', actual, expected)
             phase('warmup')
             for index in range(3):
