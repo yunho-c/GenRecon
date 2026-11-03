@@ -714,6 +714,15 @@ versus HiFi4's 29.99%, with essentially unchanged sampler time (16.895s versus
 16.866s). It does not fix accuracy on this fixture. This is distinct from the
 earlier BF16-pipeline HiFi3 experiment; defaults and gates remain unchanged.
 
+`fp32_flow_diagnostic.py --first-block --output-dir <new>` observes the same
+FP32/HiFi4 shape recipe as the matched control. It retains all block outputs
+and first-block normalization, attention, MLP and residual boundaries. Stock
+and identically prepared CPU values are saved separately. The observer must
+match the ordinary native final output bitwise, repeat every state exactly,
+and report no fallback before those intermediates support attribution. MLP
+preactivations are deliberately omitted so linear/GELU fusion can survive.
+This numerical capture is separate from sampler timing and scene quality.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
