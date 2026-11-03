@@ -1,0 +1,198 @@
+{
+  "status": "completed_native_transposed_cache_scene_controls",
+  "CPU_two_scene_both_branch_changed_noise_bitwise_original": true,
+  "all_six_native_outputs_pass_original_smoke": true,
+  "all_native_repeats_bitwise": true,
+  "all_changed_positive_scene_cache_tensors_change": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "identical_negative_scene_cache_and_output_bitwise": true,
+  "changed_positive_scene_output_changes": true,
+  "old_scene_cache_replay_bitwise": true,
+  "no_fallback_or_value_change_recompile": true,
+  "learned_parameter_identities_preserved": true,
+  "native_functions": {
+    "prefill": {
+      "main_const_eval_1": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_2": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_3": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_4": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_6": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_7": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main": {
+        "linear_matmul_ops": 6,
+        "conditioning_products": 6
+      },
+      "cpu_hoisted_const_eval_ff152ca7": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_a86a8251": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      }
+    },
+    "body": {
+      "main_const_eval_0": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_1": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_3": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_4": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_5": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_6": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_7": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_8": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_9": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_10": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_11": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_12": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_13": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_15": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_16": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_17": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_18": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_19": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_20": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_21": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_22": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_23": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_24": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_25": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main_const_eval_26": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "main": {
+        "linear_matmul_ops": 31,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_7cf8f0b0": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_8a5d57e5": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_7697eb39": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_aa869fea": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_a09d0f43": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_3ef6c213": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_ec9efe91": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      },
+      "cpu_hoisted_const_eval_10224e39": {
+        "linear_matmul_ops": 0,
+        "conditioning_products": 0
+      }
+    }
+  },
+  "limits": "Tiny two-block fixture with nonzero LoRA, not pretrained speed or scene-reconstruction quality. Full pretrained CPU/native trajectory and paired timing are separate requirements."
+}

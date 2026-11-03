@@ -110,7 +110,8 @@
     "results/autoresearch/099-head-cache-pretrained-cpu/summary.json",
     "results/autoresearch/100-rejected-native-head-cache/summary.json",
     "results/autoresearch/101-head-cache-boundary-diagnostic/summary.json",
-    "results/autoresearch/102-transposed-key-boundary/summary.json"
+    "results/autoresearch/102-transposed-key-boundary/summary.json",
+    "results/autoresearch/103-transposed-cache-dynamic-scenes/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -209,7 +210,8 @@
     "Pretrained head-packed KV cache CPU trajectory is bitwise the ordinary prepared model at every original12-step/21-call state, with original learned parameter identities. Logical cache payload remains473702400bytes per branch across90 tensors. Native equivalence is separately rejected; CPU equality alone is insufficient.",
     "Pretrained native heads-cache candidate is rejected before ABBA: everyCPUstate is exact, but final native-vs-ordinary relative L2 is0.102053 and stock-CPU error0.306236. Observed13.5178s prefill+sampler is not accepted speedup evidence. Body moves context head packing into prefix, but a native arithmetic/boundary difference must be isolated first. Raw cache remains default.",
     "Shared-weight first-block diagnostic: native headed-prefill KV equals native pack-after-raw bitwise; fused pack+cross equals raw cross bitwise, but splitting pack/cross yields0.000607535 positive/0.000418120 negative relative error. Raw/fused key normalization is lowered in transposed BHDT with QK transpose_b=false; cached BHND uses transpose_b=true. Test transposed-key boundary before any speed claim.",
-    "Transposed-key cache boundary heads_t restores teacher-forced first-block native cross attention bitwise on both condition branches; all fused/split/prefill paths match original raw cross. QK retains transpose_b=false.71 focused CPU checks and exact XOR-evidence reconstruction pass. Full sampler/native performance still require validation."
+    "Transposed-key cache boundary heads_t restores teacher-forced first-block native cross attention bitwise on both condition branches; all fused/split/prefill paths match original raw cross. QK retains transpose_b=false.71 focused CPU checks and exact XOR-evidence reconstruction pass. Full sampler/native performance still require validation.",
+    "Native heads_t cache passes six two-scene/branch/noise controls, exact repeats and old-scene replay, without fallback or value-change compilation. Every changed positive cache tensor and output changes; unchanged negative cache/output remain bitwise. Native prefill has6 dynamic conditioning products, body31 total/zero conditioning products. NonzeroLoRA/learned identities retained; no pretrained speed or reconstruction claim."
   ],
   "next_actions": [
     "Isolate rejected heads-cache native difference using shared-weight raw KV prefill, normalized/head-packed prefill, pack-after-raw and fused/split first-block cross-attention controls. Preserve exact native/CPU gates and do not promote the faster unpaired candidate.",
@@ -231,12 +233,6 @@
       "purpose": "Complete transposed-key CPU/native equivalence and prefill-inclusive three-round ABBA if exact native state guard passes",
       "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/138-transposed-cache-pretrained-abba",
       "tool_session": 92462
-    },
-    {
-      "run": 139,
-      "purpose": "Two-scene native transposed cache generalization, selected-branch replay and changed-noise controls",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/139-transposed-cache-dynamic-scenes",
-      "tool_session": 37471
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
