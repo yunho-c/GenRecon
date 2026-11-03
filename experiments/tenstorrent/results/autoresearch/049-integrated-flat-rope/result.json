@@ -1,0 +1,392 @@
+{
+  "status": "completed_rope_layout_probe",
+  "scope": "Check actual native RoPE layouts before full-model experiments.\n\nSeeded synthetic BF16 values, original adjacent-pair rotation, BHSD output.\nResident inputs/phases; output D2H and synchronization included in timings.\nThis kernel diagnostic establishes neither full-flow speed nor scene quality.\n",
+  "seed": 57,
+  "source_commit": "15d05f8595fab79c506c3eee9efa3bb115fccc60",
+  "cases": {
+    "512": {
+      "input_digest": "7fd73a51ae30b5505e29a6e5f5a6b4d0c4904368e4afa7d31b2890bd7f102d25",
+      "phase_digest": "2efe760f2a813ae5ba14b28a0c0462df7dcb5459ce30ad2688098e5765186b23",
+      "modes": {
+        "token_first": {
+          "warm_seconds": [
+            0.005100052047055215,
+            0.004865362017881125,
+            0.0050285919569432735,
+            0.005951226979959756,
+            0.004595419974066317
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/512_token_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454022828870649,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "fallback_ops": [],
+          "aten_counters": {}
+        },
+        "contiguous_head_first": {
+          "warm_seconds": [
+            0.00456260098144412,
+            0.0046527410158887506,
+            0.004630510986316949,
+            0.004623949993401766,
+            0.005305654020048678
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/512_contiguous_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454022828870649,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000366,
+            "max_abs": 0.0
+          },
+          "tt_bitwise_token_first": true
+        },
+        "flat_head_first": {
+          "warm_seconds": [
+            0.00397336803143844,
+            0.003780746948905289,
+            0.004374858981464058,
+            0.005859897006303072,
+            0.0052674729959107935
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/512_flat_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999943,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454256457244512,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "tt_bitwise_token_first": false
+        },
+        "flat_token_first": {
+          "warm_seconds": [
+            0.0031909539829939604,
+            0.003148944000713527,
+            0.0033266840036958456,
+            0.00401437800610438,
+            0.004123458988033235
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/512_flat_token_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999943,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454256457244512,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "tt_bitwise_token_first": false
+        },
+        "integrated_head_first": {
+          "warm_seconds": [
+            0.0034044249914586544,
+            0.0031949039548635483,
+            0.003280484990682453,
+            0.0030063940212130547,
+            0.003163433982990682
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/512_integrated_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999943,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454256457244512,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "tt_bitwise_token_first": false,
+          "integrated_bitwise_prototype": true
+        }
+      }
+    },
+    "4096": {
+      "input_digest": "f2a0d8443013cf3b7345e9986a350226ca1721aa3676c63a3258e10200bda561",
+      "phase_digest": "537892cc908a845a1bed8e645f3a3ac887090d5cb8a59a88024944f5d80d4b95",
+      "modes": {
+        "token_first": {
+          "warm_seconds": [
+            0.027230150997638702,
+            0.0262500669923611,
+            0.02696079999441281,
+            0.026624069025274366,
+            0.026420307985972613
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/4096_token_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006473883474824675,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "fallback_ops": [],
+          "aten_counters": {}
+        },
+        "contiguous_head_first": {
+          "warm_seconds": [
+            0.022684120980557054,
+            0.023169022984802723,
+            0.023137192998547107,
+            0.023296933970414102,
+            0.022611192020121962
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/4096_contiguous_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006473883474824675,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000015028,
+            "max_abs": 0.0
+          },
+          "tt_bitwise_token_first": true
+        },
+        "flat_head_first": {
+          "warm_seconds": [
+            0.013123498007189482,
+            0.013195328996516764,
+            0.013151058985386044,
+            0.013803092006128281,
+            0.0125429259496741
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/4096_flat_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999051,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006474280725765716,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "tt_bitwise_token_first": false
+        },
+        "flat_token_first": {
+          "warm_seconds": [
+            0.015948271029628813,
+            0.01639158296165988,
+            0.01610518101369962,
+            0.016985344991553575,
+            0.01673408498754725
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/4096_flat_token_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999051,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006474280725765716,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "tt_bitwise_token_first": false
+        },
+        "integrated_head_first": {
+          "warm_seconds": [
+            0.011943004035856575,
+            0.012051223951857537,
+            0.012176704010926187,
+            0.012256554036866874,
+            0.012473835959099233
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/065-integrated-rope-probe/4096_integrated_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999051,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006474280725765716,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "tt_bitwise_token_first": false,
+          "integrated_bitwise_prototype": true
+        }
+      }
+    }
+  },
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "source_sha256": {
+    "experiments/tenstorrent/rope_layout_probe.py": "f12626dae5b91093bcf3305e5b00e0dc6a006ee8df3530a66b7ee4eda2f41bcf",
+    "experiments/tenstorrent/inference_rope.py": "b83f44d8507f003953c049e95594f8330d8d2ce751950698c34769a149f9d1f6"
+  },
+  "outputs_sha256": "4797b1e583f6e631e6bd7482098b2935a018cd63f60737785098b3fa27a8ddc2"
+}

@@ -28,22 +28,29 @@ class RoPELayoutMath(nn.Module):
     def __init__(self, phases, mode):
         super().__init__()
         self.mode = mode
-        self.rope = RealPairRoPE(phases, head_first=mode != 'token_first')
+        self.rope = RealPairRoPE(phases,
+            head_first=mode in ('contiguous_head_first', 'flat_head_first', 'integrated_head_first'),
+            flatten=mode == 'integrated_head_first')
 
     def forward(self, x):
         if self.mode == 'token_first':
             return self.rope(x).permute(0, 2, 1, 3)
-        x = x.permute(0, 2, 1, 3).contiguous()
-        if self.mode == 'contiguous_head_first':
+        if self.mode != 'flat_token_first':
+            x = x.permute(0, 2, 1, 3).contiguous()
+        if self.mode == 'integrated_head_first':
             return self.rope(x)
-        if self.mode != 'flat_head_first':
+        if self.mode == 'contiguous_head_first':
+            partner = torch.index_select(x, -1, self.rope.partner_ids).float()
+            return (x.float()*self.rope.cosine + partner*self.rope.signed_sine).to(x.dtype)
+        if self.mode not in ('flat_head_first', 'flat_token_first'):
             raise ValueError('Unknown RoPE layout')
         shape = x.shape
         flat = x.reshape(-1, shape[-1])
         cosine = self.rope.cosine.expand(shape).reshape(-1, shape[-1])
         sine = self.rope.signed_sine.expand(shape).reshape(-1, shape[-1])
         partner = torch.index_select(flat, -1, self.rope.partner_ids).float()
-        return (flat.float()*cosine + partner*sine).to(x.dtype).reshape(shape)
+        result = (flat.float()*cosine + partner*sine).to(x.dtype).reshape(shape)
+        return result.permute(0, 2, 1, 3) if self.mode == 'flat_token_first' else result
 
 
 def main():
@@ -97,7 +104,7 @@ def main():
             reference = RoPELayoutMath(phases, 'token_first')(values)
             report['cases'][str(tokens)] = {'input_digest': tensor_digest(values), 'phase_digest': tensor_digest(phases), 'modes': {}}
             device_input = values.to(device)
-            for mode in ('token_first', 'contiguous_head_first', 'flat_head_first'):
+            for mode in ('token_first', 'contiguous_head_first', 'flat_head_first', 'flat_token_first', 'integrated_head_first'):
                 label = str(tokens)+'_'+mode
                 phase(label)
                 module = RoPELayoutMath(phases, mode).eval()
@@ -126,6 +133,10 @@ def main():
                 if mode != 'token_first':
                     result['tt_vs_token_first'] = compare_tensors(actual, outputs[str(tokens)+'_token_first'])
                     result['tt_bitwise_token_first'] = torch.equal(actual, outputs[str(tokens)+'_token_first'])
+                if mode == 'integrated_head_first':
+                    result['integrated_bitwise_prototype'] = torch.equal(actual, outputs[str(tokens)+'_flat_head_first'])
+                    if not result['integrated_bitwise_prototype']:
+                        raise ValueError('Integrated helper differs from prototype')
                 report['cases'][str(tokens)]['modes'][mode] = result
                 (args.output_dir/(label+'-metrics.txt')).write_text(metrics.metrics_report())
                 if result['fallback_ops'] or result['aten_counters']:

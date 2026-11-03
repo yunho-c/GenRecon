@@ -1,0 +1,177 @@
+{
+  "status": "completed_native_integrated_kernel_screen",
+  "scope": "Check actual native RoPE layouts before full-model experiments.\n\nSeeded synthetic BF16 values, original adjacent-pair rotation, BHSD output.\nResident inputs/phases; output D2H and synchronization included in timings.\nThis kernel diagnostic establishes neither full-flow speed nor scene quality.\n",
+  "metrics": {
+    "512": {
+      "token_first": {
+        "median_seconds": 0.0050285919569432735,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005454022828870649,
+          "pcc": 0.9999998521789704,
+          "max_abs": 0.03125
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "contiguous_head_first": {
+        "median_seconds": 0.004630510986316949,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005454022828870649,
+          "pcc": 0.9999998521789704,
+          "max_abs": 0.03125
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.004374858981464058,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999943,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "flat_token_first": {
+        "median_seconds": 0.0033266840036958456,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999943,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "integrated_head_first": {
+        "median_seconds": 0.0031949039548635483,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999943,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": true
+      }
+    },
+    "4096": {
+      "token_first": {
+        "median_seconds": 0.026624069025274366,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006473883474824675,
+          "pcc": 0.999999792314548,
+          "max_abs": 0.015625
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "contiguous_head_first": {
+        "median_seconds": 0.023137192998547107,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006473883474824675,
+          "pcc": 0.999999792314548,
+          "max_abs": 0.015625
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.013151058985386044,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999051,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "flat_token_first": {
+        "median_seconds": 0.01639158296165988,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999051,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "integrated_head_first": {
+        "median_seconds": 0.012176704010926187,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999051,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": true
+      }
+    }
+  },
+  "native_ir": {
+    "512_token_first": "ttnn_1793668545586.mlir",
+    "512_contiguous_head_first": "ttnn_1793668546422.mlir",
+    "512_flat_head_first": "ttnn_1793668547126.mlir",
+    "512_flat_token_first": "ttnn_1793668547649.mlir",
+    "512_integrated_head_first": "No separate dump: native graph cache reused the flat_head_first compilation.",
+    "4096_token_first": "ttnn_1793668548668.mlir",
+    "4096_contiguous_head_first": "ttnn_1793668550462.mlir",
+    "4096_flat_head_first": "ttnn_1793668552410.mlir",
+    "4096_flat_token_first": "ttnn_1793668553435.mlir",
+    "4096_integrated_head_first": "No separate dump: native graph cache reused the flat_head_first compilation."
+  },
+  "independent_process_outputs_bitwise": {
+    "512_token_first": true,
+    "512_contiguous_head_first": true,
+    "512_flat_head_first": true,
+    "512_flat_token_first": true,
+    "4096_token_first": true,
+    "4096_contiguous_head_first": true,
+    "4096_flat_head_first": true,
+    "4096_flat_token_first": true
+  },
+  "finding": "Flattened head-first and token-first formulations both match CPU bitwise on the seeded BF16 fixtures. At4096, head-first prototype median13.15ms vs token-first16.39ms; integrated head-first12.18ms and bitwise equal to prototype. All eight preintegration native outputs match the independent integration process bitwise. Baseline microtiming varies between processes (about26.6\u201336.2ms at4096), so do not treat precise kernel ratios or small512-token differences as full-flow performance evidence.",
+  "decision": "Select flattened head-first for a full real-poster BF16-AV sampler trial. Preserve original CPU reference and schedules; verify final native layout and common-decoder quality. New run.py mode real_pairs_flat_head_first is opt-in. Defaults remain unchanged.",
+  "tests": "59 focused CPU checks pass, covering original LoRA/weights, both outer dtypes, complete blocks, both attention precision policies, fixed-layout rejection, analytic attention and bitwise adjacent-pair RoPE. All ten native kernel cases repeat exactly with no fallback; integrated helper matches prototype bitwise at both sizes.",
+  "retention": "Current and preintegration raw reports, independent native equality proof, actual IR dumps, metrics and representative values retained. Full synthetic outputs reproduce from seed57 and --tokens5124096; file hashes remain in raw reports.",
+  "reproduce": "rope_layout_probe.py --tokens 512 4096 --runs 5 --output-dir <new>"
+}

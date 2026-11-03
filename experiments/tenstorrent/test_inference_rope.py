@@ -26,7 +26,8 @@ def test_adjacent_complex_pair_equivalence(dtype, tokens, head_dim):
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
 @pytest.mark.parametrize('head_first', [False, True])
-def test_complete_block_with_nonzero_lora(dtype, head_first):
+@pytest.mark.parametrize('flatten', [False, True])
+def test_complete_block_with_nonzero_lora(dtype, head_first, flatten):
     torch.set_num_threads(4)
     torch.manual_seed(21)
     model = nn.Module()
@@ -43,7 +44,7 @@ def test_complete_block_with_nonzero_lora(dtype, head_first):
     x, mod, context = torch.randn(2, 17, 48).to(dtype), torch.randn(2, 288).to(dtype), torch.randn(2, 9, 24).to(dtype)
     with torch.no_grad():
         expected = model.block(x, mod, context, model.phases)
-        assert prepare_real_rope(model, head_first=head_first) == 1
+        assert prepare_real_rope(model, head_first=head_first, flatten=flatten) == 1
         actual = model.block(x, mod, context, model.phases)
     torch.testing.assert_close(actual.float(), expected.float(), rtol=2e-6, atol=2e-6)
 
@@ -56,12 +57,13 @@ def test_changed_layout_rejected():
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
 @pytest.mark.parametrize('tokens', [17, 129])
-def test_head_first_rope_bitwise_to_token_first(dtype, tokens):
+@pytest.mark.parametrize('flatten', [False, True])
+def test_head_first_rope_bitwise_to_token_first(dtype, tokens, flatten):
     torch.manual_seed(56)
     phases = RotaryPositionEmbedder(128, 3)(torch.randint(0, 64, (tokens, 3)))
     x = torch.randn(2, tokens, 12, 128).to(dtype)
     expected = RealPairRoPE(phases)(x)
-    actual = RealPairRoPE(phases, head_first=True)(x.permute(0, 2, 1, 3)).permute(0, 2, 1, 3)
+    actual = RealPairRoPE(phases, head_first=True, flatten=flatten)(x.permute(0, 2, 1, 3)).permute(0, 2, 1, 3)
     torch.testing.assert_close(actual, expected, rtol=0, atol=0)
 
 

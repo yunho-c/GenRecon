@@ -1,0 +1,10 @@
+{
+  "512_token_first": true,
+  "512_contiguous_head_first": true,
+  "512_flat_head_first": true,
+  "512_flat_token_first": true,
+  "4096_token_first": true,
+  "4096_contiguous_head_first": true,
+  "4096_flat_head_first": true,
+  "4096_flat_token_first": true
+}

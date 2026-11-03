@@ -645,6 +645,12 @@ retains a head-first cosine multiply with flattened arithmetic: at 4096 tokens,
 kernel plus output-transfer time falls 28.06ms to 12.60ms and matches CPU values
 bitwise on the seeded fixture. At 512 tokens it is slightly slower. Complete-flow
 speed and quality for the flattened prototype remain unproven.
+The [integration control](results/autoresearch/049-integrated-flat-rope/summary.json)
+confirms the helper matches its prototype bitwise on hardware. Use
+`--rope-mode real_pairs_flat_head_first` for complete-flow trials. This retains
+the same rotation and uses flattened head/token rows around its arithmetic.
+Independent kernel outputs repeat bitwise; microtiming varies across processes,
+so full sampler timing and common-decoder quality remain required.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
