@@ -209,6 +209,22 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Extend matching-revision marked profiles to optimized6181-token shape, occupancy and texture modules. Separate preuploaded-activation generated execution from transfer-inclusive PJRT sampler timing, and retain original full-trajectory quality gates."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "run": 133,
+      "purpose": "Fresh unchanged ordinary native shape512 baseline with prototype source identities",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/133-head-cache-ordinary-control",
+      "supervisor_pid": 809648,
+      "worker_pid": 809649,
+      "log": "/home/user/tt-scratchpad/genrecon/autoresearch/133-run.log"
+    },
+    {
+      "run": 134,
+      "purpose": "Head-packed KV prefill: complete pretrained CPU/native equality and three shared-weight ABBA rounds if every state matches ordinary native control",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/134-head-cache-pretrained-abba",
+      "worker_pid": 809647,
+      "log": "/home/user/tt-scratchpad/genrecon/autoresearch/134-run.log"
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
