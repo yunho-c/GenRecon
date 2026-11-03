@@ -89,18 +89,28 @@ def main():
              'https://download.pytorch.org/whl/cpu', 'torch==2.11.0+cpu'], 'install_cpu_torch')
         build_env = {**env, 'PATH': str(venv/'bin')+os.pathsep+env['PATH'], 'VIRTUAL_ENV': str(venv),
                      'PYTHON_ENV_DIR': str(venv), 'CMAKE_BUILD_PARALLEL_LEVEL': str(args.jobs)}
-        run([source/'build_metal.sh', '--configure-only', '--enable-ccache', '--build-type', 'Release',
-             '--build-dir', build, '--install-prefix', build, '--export-compile-commands'], 'configure', source, build_env)
-        # Pin generic Python as well as Python3; transitive CMake projects use both.
+        # Configure all interpreter/header settings in the initial pass. A second
+        # pass cannot fix stale Python metadata if the first pass already fails.
         python_paths = json.loads(subprocess.check_output([python, '-c',
             'import sysconfig,json; print(json.dumps({"include":sysconfig.get_path("include"),'
             '"library":sysconfig.get_config_var("LIBDIR")+"/libpython"+sysconfig.get_config_var("LDVERSION")+".so"}))'],
             env=build_env, text=True))
-        run(['cmake', '-S', source, '-B', build, '-DENABLE_TRACY=ON', '-U_Python_*', '-U_Python3_*',
+        build.mkdir(parents=True, exist_ok=True)
+        source_build = source/'build'
+        if not source_build.exists() and not source_build.is_symlink():
+            source_build.symlink_to(build, target_is_directory=True)
+        if source_build.resolve() != build:
+            raise ValueError('Existing source/build points outside this SDK workspace')
+        run(['cmake', '-S', source, '-B', build, '-G', 'Ninja',
+             '-DCMAKE_TOOLCHAIN_FILE='+str(source/'cmake/x86_64-linux-clang-20-libstdcpp-toolchain.cmake'),
+             '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_INSTALL_PREFIX='+str(build), '-DENABLE_CCACHE=TRUE',
+             '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON', '-DTT_UNITY_BUILDS=OFF', '-DTT_ENABLE_LIGHT_METAL_TRACE=ON',
+             '-DWITH_PYTHON_BINDINGS=ON', '-DENABLE_DISTRIBUTED=ON',
+             '-DENABLE_TRACY=ON', '-U_Python_*', '-U_Python3_*',
              '-DPython_EXECUTABLE='+str(python), '-DPython3_EXECUTABLE='+str(python),
              '-DPython_INCLUDE_DIR='+python_paths['include'], '-DPython3_INCLUDE_DIR='+python_paths['include'],
              '-DPython_LIBRARY='+python_paths['library'], '-DPython3_LIBRARY='+python_paths['library']],
-             'pin_profile_options', source, build_env)
+             'configure', source, build_env)
         cache = (build/'CMakeCache.txt').read_text()
         if 'ENABLE_TRACY:BOOL=ON' not in cache or 'WITH_PYTHON_BINDINGS:BOOL=ON' not in cache:
             raise ValueError('CMake did not retain profiling and Python binding options')
