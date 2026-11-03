@@ -227,6 +227,15 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Extend matching-revision marked profiles to optimized6181-token shape, occupancy and texture modules. Separate preuploaded-activation generated execution from transfer-inclusive PJRT sampler timing, and retain original full-trajectory quality gates."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "run": 140,
+      "purpose": "Fresh original texture512 stock CPU trajectory and native FP32 flat-RoPE reciprocal-attention control for heads_t cache comparison",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/140-transposed-texture-ordinary-control/tex_flow_tensor",
+      "tool_session": 98656,
+      "worker_pid": 831534,
+      "source_commit": "29507d0b54b2bd5307e8473c101a386ad1fcab6d"
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
