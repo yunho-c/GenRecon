@@ -1,0 +1,103 @@
+{
+  "status": "completed_single_crop_speed_accuracy_improvement",
+  "scope": "Decode matched sampler latents with the same FP32 CPU occupancy decoder.\n\nIsolates sampler differences from TT decoder differences on one scene crop.\nReports numerical failures alongside occupancy overlap; no mesh-quality claim\nor automatic quality promotion from an IoU value.\n",
+  "decoder_precision": "Same official decoder, FP32 CPU for every latent; fixed zero threshold and original max-pool 2",
+  "decoder_sha256": {
+    ".json": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5",
+    ".safetensors": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+  },
+  "source_artifacts_sha256": {
+    "cpu_fp32": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+    "real_rope_sdpa": "2e1cd790d3dbd9cc131be599421443032ed90965e83093fa8b8a4337dc423f36",
+    "fp32_reciprocal": "d2506f117fd9500586696e523a1ef19994a5a895fb45635ddf8d4bb2fe4c7949",
+    "bf16_av": "1df6516969be5d41ff6a0d1f39f5d497e4abeabf90236ea612962e922b41097c",
+    "flat_rope_bf16_av": "c7fa1216ae1501cb663d0f0d2188dd9f86c17d5742750324e855d6563ff5e51a",
+    "cpu_precision": "dc6e675837c17aa2795eda0437d932ebf06ba45ce906b27947e2e115f618771d"
+  },
+  "control_grids_bitwise_equal_previous": {
+    "cpu_fp32": true,
+    "real_rope_sdpa": true,
+    "fp32_reciprocal": true,
+    "bf16_av": true,
+    "cpu_precision": true
+  },
+  "overlap_vs_stock_fp32": {
+    "real_rope_sdpa": {
+      "actual_occupied": 4241,
+      "reference_occupied": 6464,
+      "intersection": 3632,
+      "union": 7073,
+      "iou": 0.5135020500494839,
+      "dice": 0.6785614198972443,
+      "false_positive": 609,
+      "false_negative": 2832
+    },
+    "fp32_reciprocal": {
+      "actual_occupied": 5690,
+      "reference_occupied": 6464,
+      "intersection": 4909,
+      "union": 7245,
+      "iou": 0.6775707384403037,
+      "dice": 0.8077999012670726,
+      "false_positive": 781,
+      "false_negative": 1555
+    },
+    "bf16_av": {
+      "actual_occupied": 5660,
+      "reference_occupied": 6464,
+      "intersection": 5047,
+      "union": 7077,
+      "iou": 0.7131552917903067,
+      "dice": 0.8325635103926097,
+      "false_positive": 613,
+      "false_negative": 1417
+    },
+    "flat_rope_bf16_av": {
+      "actual_occupied": 5821,
+      "reference_occupied": 6464,
+      "intersection": 5173,
+      "union": 7112,
+      "iou": 0.7273622047244095,
+      "dice": 0.8421652421652421,
+      "false_positive": 648,
+      "false_negative": 1291
+    },
+    "cpu_precision": {
+      "actual_occupied": 6510,
+      "reference_occupied": 6464,
+      "intersection": 6030,
+      "union": 6944,
+      "iou": 0.8683755760368663,
+      "dice": 0.9295514105133343,
+      "false_positive": 480,
+      "false_negative": 434
+    }
+  },
+  "flat_rope_vs_bf16_av_control": {
+    "actual_occupied": 5821,
+    "reference_occupied": 5660,
+    "intersection": 5554,
+    "union": 5927,
+    "iou": 0.9370676564872616,
+    "dice": 0.96751154080655,
+    "false_positive": 267,
+    "false_negative": 106
+  },
+  "flat_rope_vs_cpu_precision": {
+    "actual_occupied": 5821,
+    "reference_occupied": 6510,
+    "intersection": 5351,
+    "union": 6980,
+    "iou": 0.7666189111747851,
+    "dice": 0.8678939258778687,
+    "false_positive": 470,
+    "false_negative": 1159
+  },
+  "sampler_seconds": {
+    "bf16_av_control": 128.15515011397656,
+    "flat_rope_bf16_av": 104.50316542596556
+  },
+  "finding": "On the same poster crop and original FP32 decoder, flattened head-first RoPE raises occupancy IoU vs stock FP32 from0.7132 to0.7274 while reducing sampler time128.155s to104.503s. Occupied count5821 vs reference6464; false positives648 vs613 control, false negatives1291 vs1417 control. All five historical control grids remain bitwise unchanged.",
+  "decision": "Retain as opt-in measured improvement on this crop. Numerical latent gates still fail; occupancy alone does not establish mesh/material quality or cross-scene preservation. Establish FP32 device-tensor accuracy baseline and broaden scene/stage validation before default promotion.",
+  "reproduce": "compare_occupancy.py --reference <sealed poster CPU cache> --candidates real_rope_sdpa=<run031> fp32_reciprocal=<run057> bf16_av=<run058> flat_rope_bf16_av=<run066> cpu_precision=<CPU diagnostic> --threads 16 --output-dir <new>"
+}

@@ -662,6 +662,15 @@ error establish device behavior. FP32 tensor storage does not guarantee IEEE
 FP32 arithmetic inside every native kernel. This is an opt-in accuracy
 diagnostic with higher resident weight memory, and defaults remain unchanged.
 
+The [complete flattened-RoPE poster trial](results/autoresearch/050-poster-flat-rope-sampler/summary.json)
+reduces the original 22-forward sampler from 128.155s to 104.503s (18.46%).
+Native IR confirms all 60 cosine multiplies use the intended head-first layout;
+nominal result/phase payloads fall 64/64 MiB to 24/2 MiB. There is no fallback
+or trajectory recompilation. The [common-decoder comparison](results/autoresearch/051-poster-flat-rope-occupancy/summary.json)
+raises occupancy IoU vs stock FP32 from 0.713 to 0.727, with all five historical
+control grids unchanged bitwise. This is an opt-in improvement on one crop;
+strict latent gates still fail and mesh/material quality remains unverified.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
