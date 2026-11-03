@@ -117,7 +117,8 @@
     "results/autoresearch/106-texture-cache-sampler-extension/summary.json",
     "results/autoresearch/107-texture512-stock-cpu-reference/summary.json",
     "results/autoresearch/108-texture512-fresh-native-control/summary.json",
-    "results/autoresearch/109-texture-cache-cpu-and-identity-fix/summary.json"
+    "results/autoresearch/109-texture-cache-cpu-and-identity-fix/summary.json",
+    "results/autoresearch/110-texture512-matching-source-controls/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -223,7 +224,8 @@
     "Texture cache harness adds --stage tex with original12steps18calls and fixed32-channel shape concatenation, choosing matching texture checkpoint/CPU cache.30 focused CPU tests pass; cached/inline complete trajectories remain bitwise original for all three layouts and changed shape conditioning. Pretrained/native performance remains pending. Shape and production defaults unchanged.",
     "Sealed complete original pretrained texture512 stock CPU trajectory:58.2411s, original12steps18calls and fixed32-channel shape concat. Compressed artifact and strict model/reference/checkpoint/fixture manifest retained. Fresh native140 and cache141 gates remain pending; no texture speed claim.",
     "Fresh ordinary texture512 native control completes original12steps18calls with fixed32-channel shape concat, no fallback or sampler recompilation. Stock CPU final relativeL2=0.105170756/PCC=0.994446698 fails unchanged strict relativeL2<=0.1. Native main457 matrixops/30crossKVpacks.14.4673s overlapped candidateCPU preparation and is not paired speed evidence; cache141 still validating.",
-    "Pretrained heads_t texture cached CPU trajectory matches every ordinary prepared state bitwise and retains original learned identities. Candidate141 fails before device opening: native-control placeholder returned64 input channels instead of32 predicted texture channels. Fix uses fixture.noise features;32 focused checks include original shape/texture identity acceptance and changed texture shape-concat rejection. No native/performance conclusion from141; rerun fresh controls without relaxing shared-source checks."
+    "Pretrained heads_t texture cached CPU trajectory matches every ordinary prepared state bitwise and retains original learned identities. Candidate141 fails before device opening: native-control placeholder returned64 input channels instead of32 predicted texture channels. Fix uses fixture.noise features;32 focused checks include original shape/texture identity acceptance and changed texture shape-concat rejection. No native/performance conclusion from141; rerun fresh controls without relaxing shared-source checks.",
+    "Fresh same-source texture ordinary142 reproduces every byte of native140 trajectory, no fallback/recompile and unchanged failed stockCPU gates. Cache143 complete CPU trajectories match ordinary bitwise, and fixed native-control identity gate validates203 shared sources. Candidate native performance/equivalence still pending. Reuse duplicate committed tapes only after exact serialized-byte verification."
   ],
   "next_actions": [
     "Extend validated transposed-key heads_t conditioning cache to texture and matched real-image shape/texture fixtures using fresh same-source ordinary controls. Require CPU/native every-state equality, original schedules, no fallback/recompilation and paired prefill-inclusive timing; retain unchanged strict stock CPU quality gates.",
@@ -234,12 +236,6 @@
     "Extend matching-revision marked profiles to optimized6181-token shape, occupancy and texture modules. Separate preuploaded-activation generated execution from transfer-inclusive PJRT sampler timing, and retain original full-trajectory quality gates."
   ],
   "live_experiments": [
-    {
-      "run": 142,
-      "purpose": "Fresh same-source ordinary texture control after identity-placeholder fix; strict stock CPU cache reused",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/142-transposed-texture-ordinary-control/tex_flow_tensor",
-      "tool_session": 94083
-    },
     {
       "run": 143,
       "purpose": "Texture heads_t complete CPU/native equivalence and prefill-inclusive three-round ABBA against142",

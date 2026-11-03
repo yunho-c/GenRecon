@@ -1,0 +1,37 @@
+{
+  "status": "completed_matching_source_CPU_and_ordinary_native_controls",
+  "source_commit": "37c26834d785e54dd0dddd2886c6924ce3babec0",
+  "ordinary_native_all_serialized_bytes_identical140": true,
+  "native_tape": "../108-texture512-fresh-native-control/trajectory-tt.pt.gz",
+  "native_sha256": "7bedf11fde04f434f4bcf72ac49569586e49683c13699046949c771da79546ab",
+  "ordinary_runtime_IR_identical140": true,
+  "ordinary_runtime_IR": "../108-texture512-fresh-native-control/runtime-ttnn.mlir.gz",
+  "candidate_prepared_CPU_all_states_bitwise_ordinary": true,
+  "candidate_CPU_artifacts": {
+    "trajectory-ordinary-cpu.pt": {
+      "sha256": "15636a921cacb13bd8d394bb429e65cf802fca75b4ca4aaf999d88510a26b224",
+      "same_serialized_bytes_as109": true
+    },
+    "trajectory-cached-cpu.pt": {
+      "sha256": "5d43d24b1ea7d9047985c80848b982b136674e1b4125370633859fb293485ba0",
+      "same_serialized_bytes_as109": true
+    }
+  },
+  "candidate_native_control_shared_sources_verified": {
+    "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/142-transposed-texture-ordinary-control/tex_flow_tensor",
+    "artifact_sha256": "7bedf11fde04f434f4bcf72ac49569586e49683c13699046949c771da79546ab",
+    "shared_source_hashes_checked": 203,
+    "identity_verified": true
+  },
+  "stock_CPU_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.10517075593740585,
+    "pcc": 0.9944466976224953,
+    "max_abs": 2.1296298503875732
+  },
+  "limits": "Candidate native/body and ABBA checks remain pending. Native controls still fail strict stock CPU numerical gates; no texture speed or quality claim."
+}
