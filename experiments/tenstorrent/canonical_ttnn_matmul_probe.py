@@ -22,6 +22,14 @@ sys.path.insert(0, str(ROOT))
 
 
 def main():
+    # The loader and Python initialize their search paths at process startup.
+    # Merely deleting these variables after startup can still mix native SDKs.
+    isolated_keys = ('PYTHONPATH', 'LD_LIBRARY_PATH', 'TT_METAL_HOME', 'TT_METAL_RUNTIME_ROOT', 'TT_PJRT_PLUGIN_DIR')
+    if any(key in os.environ for key in isolated_keys):
+        clean = dict(os.environ)
+        for key in isolated_keys:
+            clean.pop(key, None)
+        os.execve(sys.executable, [sys.executable, *sys.argv], clean)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--variant', choices=('default', 'full_sync', 'packer', 'precise', 'hifi3', 'hifi2', 'fp16_dest'), default='default')
@@ -29,14 +37,13 @@ def main():
     args = parser.parse_args()
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=False)
-    for key in ('PYTHONPATH', 'LD_LIBRARY_PATH', 'TT_METAL_HOME', 'TT_METAL_RUNTIME_ROOT', 'TT_PJRT_PLUGIN_DIR'):
-        os.environ.pop(key, None)
     os.environ.update(TT_METAL_LOGS_PATH=str(args.output_dir/'metal-logs'),
         TT_METAL_CACHE=str(args.output_dir/'metal-cache'), TT_METAL_INSPECTOR='1',
         TT_METAL_INSPECTOR_LOG_RUNTIME_ENTRIES='1', TT_METAL_INSPECTOR_CAPTURE_TENSOR_SPECS='1',
         TT_METAL_LOG_KERNELS_COMPILE_COMMANDS='1', ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
     report = {'status': 'running', 'variant': args.variant, 'scope': __doc__,
-              'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
+              'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+              'clean_native_process_start': True}
 
     def phase(name):
         report['phase'] = name
