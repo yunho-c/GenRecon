@@ -571,6 +571,15 @@ QK error is below 0.06% and scaling is exact. HiFi3 does not fix it. Full state
 hashes and representative rows are retained without treating local errors as
 additive whole-model effects.
 
+`softmax_diagnostic.py` compares native softmax, renormalization and stable
+exponential formulations on identical observed score tensors. The
+[unfused reciprocal formulation](results/autoresearch/036-softmax-formulations/summary.json)
+reduces self/cross error from 3.99%/2.36% to 0.0631%/0.0255% without fallback.
+Direct exp/div is fused back to native softmax; exp times reciprocal avoids the
+compiler's DivOp fusion pattern. Native IR is dumped during ordinary execution,
+with dry run explicitly disabled. An `exp2` attempt was rejected for CPU fallback.
+These local improvements still require complete-flow and sampled-quality tests.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

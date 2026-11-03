@@ -1,0 +1,208 @@
+{
+  "status": "failed",
+  "scope": "Compare stable FP32 softmax formulations on identical observed TT scores.\n\nNative PJRT execution with explicit non-dry-run options. IR is dumped by the\nnative compiler; codegen is never invoked. Operator timings include output D2H\nfrom resident inputs and are not whole-attention/pipeline speed measurements.\n",
+  "source_commit": "1fc7da3771cfe43ea57f40f1667e0b06749da9df",
+  "phase": "self_explicit_exp2",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "script_sha256": "003a3882066ba65b5391bb940fd21c72ed928faab47529559e8077d6f10a4b8d",
+  "source_states_sha256": "29c93b2c37a0aa560c421db15c04b891dcf392e4fe6d7a6d4c5f3d1d22981fba",
+  "input_digests": {
+    "self": "af36903ac49cb296e3de28d3c7852c64c7088fefd63ff8376a983f47aa4ab709",
+    "cross": "9102255d80e74eeeec50f5698f232c11cae5a7397155a38fee208d09dfbab1ab"
+  },
+  "cases": {
+    "self": {
+      "builtin": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/048-softmax-formulations/self_builtin-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000155,
+          "max_abs": 0.0
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "max_row_sum_error": 0.03853362798690796,
+        "warm_seconds": [
+          0.01885001902701333,
+          0.008554484054911882,
+          0.007955891021993011
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "renormalized": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/048-softmax-formulations/self_renormalized-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 2.017555806017263e-07,
+          "pcc": 0.9999999999999784,
+          "max_abs": 8.344650268554688e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.035366413194190975,
+          "pcc": 0.9993651752590574,
+          "max_abs": 0.04733958840370178
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03536641459632058,
+          "pcc": 0.9993651751331927,
+          "max_abs": 0.04733958840370178
+        },
+        "max_row_sum_error": 0.0013805627822875977,
+        "warm_seconds": [
+          0.0128072319785133,
+          0.0123920280020684,
+          0.010351075034122914
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_exp": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/048-softmax-formulations/self_explicit_exp-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7636627683175443e-07,
+          "pcc": 0.9999999999999809,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988151616275828,
+          "pcc": 0.9993019060171121,
+          "max_abs": 0.04695815593004227
+        },
+        "max_row_sum_error": 0.03853362798690796,
+        "warm_seconds": [
+          0.011977955000475049,
+          0.013089133019093424,
+          0.012017216009553522
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_exp2": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/048-softmax-formulations/self_explicit_exp2-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7800691007760178e-07,
+          "pcc": 1.0000000000000149,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306365744504212,
+          "pcc": 0.9999999364503499,
+          "max_abs": 0.0015375018119812012
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306622611357765,
+          "pcc": 0.9999999364521065,
+          "max_abs": 0.0015371441841125488
+        },
+        "max_row_sum_error": 0.0015780925750732422,
+        "warm_seconds": [
+          0.026572257047519088,
+          0.02473825600463897,
+          0.025410789996385574
+        ],
+        "fallback_ops": [
+          "aten::exp2"
+        ],
+        "aten_counters": {
+          "aten::exp2": 6
+        }
+      }
+    }
+  },
+  "error": "ValueError('Unexpected CPU fallback')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/softmax_diagnostic.py\", line 128, in main\n    raise ValueError('Unexpected CPU fallback')\nValueError: Unexpected CPU fallback\n"
+}

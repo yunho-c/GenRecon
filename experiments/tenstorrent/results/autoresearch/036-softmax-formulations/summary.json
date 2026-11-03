@@ -1,0 +1,142 @@
+{
+  "status": "completed_native_softmax_comparison",
+  "scope": "Compare stable FP32 softmax formulations on identical observed TT scores.\n\nNative PJRT execution with explicit non-dry-run options. IR is dumped by the\nnative compiler; codegen is never invoked. Operator timings include output D2H\nfrom resident inputs and are not whole-attention/pipeline speed measurements.\n",
+  "errors_vs_cpu": {
+    "self": {
+      "builtin": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.03988152684176953,
+        "pcc": 0.9993019059757182,
+        "max_abs": 0.04695815593004227
+      },
+      "renormalized": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.035366413194190975,
+        "pcc": 0.9993651752590574,
+        "max_abs": 0.04733958840370178
+      },
+      "explicit_exp": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.03988152684176953,
+        "pcc": 0.9993019059757182,
+        "max_abs": 0.04695815593004227
+      },
+      "explicit_reciprocal": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0006306452961685455,
+        "pcc": 0.9999999364510256,
+        "max_abs": 0.0015375018119812012
+      },
+      "refined_reciprocal": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0006306442894720532,
+        "pcc": 0.9999999364507036,
+        "max_abs": 0.0015375018119812012
+      }
+    },
+    "cross": {
+      "builtin": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.02363108913282472,
+        "pcc": 0.9997283974892753,
+        "max_abs": 0.008890494704246521
+      },
+      "renormalized": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.020824616151725463,
+        "pcc": 0.9997590607407971,
+        "max_abs": 0.004736721515655518
+      },
+      "explicit_exp": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.02363108913282472,
+        "pcc": 0.9997283974892753,
+        "max_abs": 0.008890494704246521
+      },
+      "explicit_reciprocal": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00025539590577487844,
+        "pcc": 0.9999999980114435,
+        "max_abs": 5.742162466049194e-05
+      },
+      "refined_reciprocal": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0002553906734168382,
+        "pcc": 0.9999999980114185,
+        "max_abs": 5.742162466049194e-05
+      }
+    }
+  },
+  "max_row_sum_errors": {
+    "self": {
+      "builtin": 0.03853362798690796,
+      "renormalized": 0.0013805627822875977,
+      "explicit_exp": 0.03853362798690796,
+      "explicit_reciprocal": 0.0015780925750732422,
+      "refined_reciprocal": 0.0015780925750732422
+    },
+    "cross": {
+      "builtin": 0.03868520259857178,
+      "renormalized": 0.0003886222839355469,
+      "explicit_exp": 0.03868520259857178,
+      "explicit_reciprocal": 0.00047075748443603516,
+      "refined_reciprocal": 0.00047075748443603516
+    }
+  },
+  "finding": "Unfused stable exp times reciprocal of exp sum reduces self/cross softmax error from 3.99%/2.36% to 0.0631%/0.0255%, about 63x/93x. All ten accepted cases repeat exactly with no fallback. Renormalizing native softmax is insufficient. Direct exp/div is fused back to native softmax; explicit reciprocal multiplication avoids the DivOp fusion pattern.",
+  "rejected": "exp2 used aten::exp2 CPU fallback and is not a Tensix candidate. Initial ten-case grid hit Dynamo specialization limit; fresh compile cache per independent operator case completes fullgraph capture without changing sampler recompile gates.",
+  "source_audit": {
+    "tt_metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+    "tt_mlir_commit": "6b2d83bbee7bc60e8521b814368d32785df6cd73",
+    "observations": [
+      "Matching Metal ComputeKernelConfig defaults math_approx_mode=true. Runtime sets it only when present; original softmax IR does not specify it.",
+      "Matching softmax program factory maps math_approx_mode to EXP_APPROX. This suggests approximate exponential math contributes, but configuration-toggle causality has not been tested.",
+      "TTIR SoftmaxFusionPattern matches DivOp(exp,reduce_sum(exp)); native IR confirms direct division fuses and reciprocal multiplication does not."
+    ],
+    "primary_source": "https://github.com/tenstorrent/tt-metal/blob/f1f4ff75579ebd7a69c7da52d45368f273026d85/ttnn/cpp/ttnn/operations/core/compute_kernel/compute_kernel_config.hpp"
+  },
+  "limit": "Identical observed FP32 score tensors from synthetic learned attention. Not a full-flow or reconstruction-quality result. Newton reciprocal refinement adds no material improvement. Native IR dumped directly from ordinary non-dry-run PJRT; no codegen backend mutation.",
+  "next": "Evaluate FP32 attention with the unfused reciprocal softmax in complete pretrained flows, including strict stock references, original trajectories, timing and decoded quality.",
+  "tests": "10 CPU checks cover stable formulations on aligned/unaligned widths and large offsets. All accepted hardware cases are finite, bitwise repeatable and fallback-free.",
+  "reproduce": "python experiments/tenstorrent/softmax_diagnostic.py --stage-directory /path/to/accepted-stage-run --output-dir /path/to/new"
+}

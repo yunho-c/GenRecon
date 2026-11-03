@@ -1,0 +1,386 @@
+{
+  "status": "failed",
+  "scope": "Compare stable FP32 softmax formulations on identical observed TT scores.\n\nNative PJRT execution with explicit non-dry-run options. IR is dumped by the\nnative compiler; codegen is never invoked. Operator timings include output D2H\nfrom resident inputs and are not whole-attention/pipeline speed measurements.\n",
+  "source_commit": "1fc7da3771cfe43ea57f40f1667e0b06749da9df",
+  "phase": "cross_explicit_reciprocal",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "script_sha256": "eb7fbd56abf3b950e76f172c958a547199cebe1dd18e17f6bfea5614daff853c",
+  "source_states_sha256": "29c93b2c37a0aa560c421db15c04b891dcf392e4fe6d7a6d4c5f3d1d22981fba",
+  "input_digests": {
+    "self": "af36903ac49cb296e3de28d3c7852c64c7088fefd63ff8376a983f47aa4ab709",
+    "cross": "9102255d80e74eeeec50f5698f232c11cae5a7397155a38fee208d09dfbab1ab"
+  },
+  "cases": {
+    "self": {
+      "builtin": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/self_builtin-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000155,
+          "max_abs": 0.0
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "max_row_sum_error": 0.03853362798690796,
+        "warm_seconds": [
+          0.02040199004113674,
+          0.009328635002020746,
+          0.008248528989497572
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "renormalized": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/self_renormalized-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 2.017555806017263e-07,
+          "pcc": 0.9999999999999784,
+          "max_abs": 8.344650268554688e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.035366413194190975,
+          "pcc": 0.9993651752590574,
+          "max_abs": 0.04733958840370178
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03536641459632058,
+          "pcc": 0.9993651751331927,
+          "max_abs": 0.04733958840370178
+        },
+        "max_row_sum_error": 0.0013805627822875977,
+        "warm_seconds": [
+          0.02256308397045359,
+          0.0070813019992783666,
+          0.010314460028894246
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_exp": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/self_explicit_exp-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7636627683175443e-07,
+          "pcc": 0.9999999999999809,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988151616275828,
+          "pcc": 0.9993019060171121,
+          "max_abs": 0.04695815593004227
+        },
+        "max_row_sum_error": 0.03853362798690796,
+        "warm_seconds": [
+          0.007357582973781973,
+          0.007205572968814522,
+          0.007718396023847163
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/self_explicit_reciprocal-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7627682154381418e-07,
+          "pcc": 0.9999999999999974,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306452961685455,
+          "pcc": 0.9999999364510256,
+          "max_abs": 0.0015375018119812012
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306646771473769,
+          "pcc": 0.9999999364522922,
+          "max_abs": 0.0015371441841125488
+        },
+        "max_row_sum_error": 0.0015780925750732422,
+        "warm_seconds": [
+          0.009849937981925905,
+          0.008955402998253703,
+          0.00902930402662605
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "refined_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/self_refined_reciprocal-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7627682154381418e-07,
+          "pcc": 0.9999999999999974,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306442894720532,
+          "pcc": 0.9999999364507036,
+          "max_abs": 0.0015375018119812012
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306636703935156,
+          "pcc": 0.9999999364519702,
+          "max_abs": 0.0015371441841125488
+        },
+        "max_row_sum_error": 0.0015780925750732422,
+        "warm_seconds": [
+          0.009551307011861354,
+          0.010529821971431375,
+          0.009723127004690468
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      }
+    },
+    "cross": {
+      "builtin": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/cross_builtin-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999959,
+          "max_abs": 0.0
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02363108913282472,
+          "pcc": 0.9997283974892753,
+          "max_abs": 0.008890494704246521
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02363108913282472,
+          "pcc": 0.9997283974892753,
+          "max_abs": 0.008890494704246521
+        },
+        "max_row_sum_error": 0.03868520259857178,
+        "warm_seconds": [
+          0.018494889023713768,
+          0.019202094001229852,
+          0.01898580096894875
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "renormalized": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/cross_renormalized-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.575728459534764e-08,
+          "pcc": 0.9999999999999927,
+          "max_abs": 4.470348358154297e-08
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.020824616151725463,
+          "pcc": 0.9997590607407971,
+          "max_abs": 0.004736721515655518
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.020824618090180463,
+          "pcc": 0.9997590607463044,
+          "max_abs": 0.004736721515655518
+        },
+        "max_row_sum_error": 0.0003886222839355469,
+        "warm_seconds": [
+          0.017307672009337693,
+          0.01991045702015981,
+          0.019409453961998224
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_exp": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/049-softmax-reciprocal/cross_explicit_exp-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.895214677168334e-08,
+          "pcc": 0.9999999999999917,
+          "max_abs": 3.725290298461914e-08
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02363108913282472,
+          "pcc": 0.9997283974892753,
+          "max_abs": 0.008890494704246521
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.023631091015402256,
+          "pcc": 0.9997283974587213,
+          "max_abs": 0.008890479803085327
+        },
+        "max_row_sum_error": 0.03868520259857178,
+        "warm_seconds": [
+          0.03737307997653261,
+          0.017410902015399188,
+          0.04921395902056247
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      }
+    }
+  },
+  "error": "FailOnRecompileLimitHit('Hard failure due to fullgraph=True')",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/convert_frame.py\", line 1773, in _compile\n    raise_unimplemented_cache_limit_exceeded()\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/convert_frame.py\", line 1757, in raise_unimplemented_cache_limit_exceeded\n    unimplemented(\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/exc.py\", line 634, in unimplemented\n    raise Unsupported(msg, gb_type, skip_frame)\ntorch._dynamo.exc.Unsupported: Dynamo recompile limit exceeded\n  Explanation: Dynamo attempted to recompile the code object too many times, exceeding the recompile_limit cache size limit (currently set to 8). Excessive recompilations can degrade performance due to the compilation overhead of each recompilation.\n  Hint: To monitor recompilations, enable TORCH_LOGS=recompiles. If recompilations are expected, consider increasing torch._dynamo.config.recompile_limit to an appropriate value.\n  Hint: See https://docs.pytorch.org/docs/main/user_guide/torch_compiler/compile/programming_model.recompilation.html for tips on dealing with recompilations.\n\n  Developer debug context: Limit type: recompile_limit\n\n For more details about this graph break, please visit: https://meta-pytorch.github.io/compile-graph-break-site/gb/gb0039.html\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/softmax_diagnostic.py\", line 117, in main\n    actual = compiled(device_input).cpu()\n             ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py\", line 472, in __call__\n    return super().__call__(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1779, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py\", line 1024, in compile_wrapper\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1779, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\n    return forward_call(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/convert_frame.py\", line 2316, in __call__\n    result = self._torchdynamo_orig_backend(\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/convert_frame.py\", line 729, in __call__\n    result = _compile(\n             ^^^^^^^^^\n  File \"/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/convert_frame.py\", line 1780, in _compile\n    raise FailOnRecompileLimitHit(\ntorch._dynamo.exc.FailOnRecompileLimitHit: Hard failure due to fullgraph=True\n"
+}

@@ -1,0 +1,475 @@
+{
+  "status": "completed_softmax_diagnostic",
+  "scope": "Compare stable FP32 softmax formulations on identical observed TT scores.\n\nNative PJRT execution with explicit non-dry-run options. IR is dumped by the\nnative compiler; codegen is never invoked. Operator timings include output D2H\nfrom resident inputs and are not whole-attention/pipeline speed measurements.\n",
+  "source_commit": "1fc7da3771cfe43ea57f40f1667e0b06749da9df",
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "script_sha256": "87ced6120934ed448df6353f807b51973677d8aa5504e9b66a9026846002f7c2",
+  "source_states_sha256": "29c93b2c37a0aa560c421db15c04b891dcf392e4fe6d7a6d4c5f3d1d22981fba",
+  "input_digests": {
+    "self": "af36903ac49cb296e3de28d3c7852c64c7088fefd63ff8376a983f47aa4ab709",
+    "cross": "9102255d80e74eeeec50f5698f232c11cae5a7397155a38fee208d09dfbab1ab"
+  },
+  "cases": {
+    "self": {
+      "builtin": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/self_builtin-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000155,
+          "max_abs": 0.0
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "max_row_sum_error": 0.03853362798690796,
+        "warm_seconds": [
+          0.02301378600532189,
+          0.022338342969305813,
+          0.009493921999819577
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "renormalized": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/self_renormalized-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 2.017555806017263e-07,
+          "pcc": 0.9999999999999784,
+          "max_abs": 8.344650268554688e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.035366413194190975,
+          "pcc": 0.9993651752590574,
+          "max_abs": 0.04733958840370178
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03536641459632058,
+          "pcc": 0.9993651751331927,
+          "max_abs": 0.04733958840370178
+        },
+        "max_row_sum_error": 0.0013805627822875977,
+        "warm_seconds": [
+          0.016554100962821394,
+          0.00841933605261147,
+          0.007790322997607291
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_exp": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/self_explicit_exp-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7636627683175443e-07,
+          "pcc": 0.9999999999999809,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988151616275828,
+          "pcc": 0.9993019060171121,
+          "max_abs": 0.04695815593004227
+        },
+        "max_row_sum_error": 0.03853362798690796,
+        "warm_seconds": [
+          0.010174194991122931,
+          0.009359702002257109,
+          0.009451212012208998
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/self_explicit_reciprocal-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7627682154381418e-07,
+          "pcc": 0.9999999999999974,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306452961685455,
+          "pcc": 0.9999999364510256,
+          "max_abs": 0.0015375018119812012
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306646771473769,
+          "pcc": 0.9999999364522922,
+          "max_abs": 0.0015371441841125488
+        },
+        "max_row_sum_error": 0.0015780925750732422,
+        "warm_seconds": [
+          0.011945505044423044,
+          0.008826879027765244,
+          0.008351846016012132
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "refined_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/self_refined_reciprocal-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.7627682154381418e-07,
+          "pcc": 0.9999999999999974,
+          "max_abs": 6.556510925292969e-07
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306442894720532,
+          "pcc": 0.9999999364507036,
+          "max_abs": 0.0015375018119812012
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006306636703935156,
+          "pcc": 0.9999999364519702,
+          "max_abs": 0.0015371441841125488
+        },
+        "max_row_sum_error": 0.0015780925750732422,
+        "warm_seconds": [
+          0.01252317801117897,
+          0.010676979029085487,
+          0.019487817015033215
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      }
+    },
+    "cross": {
+      "builtin": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/cross_builtin-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999959,
+          "max_abs": 0.0
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02363108913282472,
+          "pcc": 0.9997283974892753,
+          "max_abs": 0.008890494704246521
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02363108913282472,
+          "pcc": 0.9997283974892753,
+          "max_abs": 0.008890494704246521
+        },
+        "max_row_sum_error": 0.03868520259857178,
+        "warm_seconds": [
+          0.017261784989386797,
+          0.018862073018681258,
+          0.039524987048935145
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "renormalized": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/cross_renormalized-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.575728459534764e-08,
+          "pcc": 0.9999999999999927,
+          "max_abs": 4.470348358154297e-08
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.020824616151725463,
+          "pcc": 0.9997590607407971,
+          "max_abs": 0.004736721515655518
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.020824618090180463,
+          "pcc": 0.9997590607463044,
+          "max_abs": 0.004736721515655518
+        },
+        "max_row_sum_error": 0.0003886222839355469,
+        "warm_seconds": [
+          0.018346099997870624,
+          0.02222687198081985,
+          0.018786973028909415
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_exp": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/cross_explicit_exp-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.895214677168334e-08,
+          "pcc": 0.9999999999999917,
+          "max_abs": 3.725290298461914e-08
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02363108913282472,
+          "pcc": 0.9997283974892753,
+          "max_abs": 0.008890494704246521
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.023631091015402256,
+          "pcc": 0.9997283974587213,
+          "max_abs": 0.008890479803085327
+        },
+        "max_row_sum_error": 0.03868520259857178,
+        "warm_seconds": [
+          0.021808438992593437,
+          0.016310448991134763,
+          0.016096527979243547
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "explicit_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/cross_explicit_reciprocal-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.756535686556803e-08,
+          "pcc": 0.9999999999999891,
+          "max_abs": 3.725290298461914e-08
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00025539590577487844,
+          "pcc": 0.9999999980114435,
+          "max_abs": 5.742162466049194e-05
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0002553947362923071,
+          "pcc": 0.9999999980114961,
+          "max_abs": 5.742162466049194e-05
+        },
+        "max_row_sum_error": 0.00047075748443603516,
+        "warm_seconds": [
+          0.04089175502303988,
+          0.021253215963952243,
+          0.033214792027138174
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "refined_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/050-softmax-controls/cross_refined_reciprocal-native-ir"
+        },
+        "cpu_vs_builtin": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.756535686556803e-08,
+          "pcc": 0.9999999999999891,
+          "max_abs": 3.725290298461914e-08
+        },
+        "tt_vs_builtin_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0002553906734168382,
+          "pcc": 0.9999999980114185,
+          "max_abs": 5.742162466049194e-05
+        },
+        "tt_vs_same_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0002553895037351051,
+          "pcc": 0.9999999980114712,
+          "max_abs": 5.742162466049194e-05
+        },
+        "max_row_sum_error": 0.00047075748443603516,
+        "warm_seconds": [
+          0.022862865997012705,
+          0.02127058699261397,
+          0.022424633032642305
+        ],
+        "fallback_ops": [],
+        "aten_counters": {}
+      }
+    }
+  },
+  "outputs_sha256": "c6278d7c1bcb341f7fdaa6cc60235ac6f17041f98ff836d33b0a9f2304c3abea"
+}
