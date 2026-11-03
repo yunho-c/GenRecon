@@ -580,6 +580,15 @@ compiler's DivOp fusion pattern. Native IR is dumped during ordinary execution,
 with dry run explicitly disabled. An `exp2` attempt was rejected for CPU fallback.
 These local improvements still require complete-flow and sampled-quality tests.
 
+`run.py --attention-mode fp32_reciprocal --rope-mode real_pairs
+--sampler-trajectory --native-ir` tests that formulation in complete dense or
+fixed-sequence flows. Q/K/V and attention products use FP32; the original
+projections, trained LoRA, normalization, RoPE, output dtype and sampler stay
+intact. The stock CPU references are captured before preparation. A 30-block
+cross-attention flow must report **60 prepared attention modules**. Preparation
+rejects unknown wrappers instead of silently skipping them; all helper imports
+use the same package path. This is an opt-in experiment, with defaults unchanged.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

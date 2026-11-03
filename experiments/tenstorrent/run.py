@@ -28,7 +28,7 @@ def write_result(path, result):
 
 def worker(args):
     # Match the working DINO experiment; the wheel supplies its own Metal runtime.
-    for name in ("TT_METAL_HOME", "LD_LIBRARY_PATH", "PYTHONPATH"):
+    for name in ("TT_METAL_HOME", "TT_METAL_RUNTIME_ROOT", "LD_LIBRARY_PATH", "PYTHONPATH"):
         os.environ.pop(name, None)
     os.environ["PJRT_DEVICE"] = "TT"
     if args.runtime_trace:
@@ -44,6 +44,7 @@ def worker(args):
         "seed": args.seed, "fullgraph": True,
         "lora_mode": args.lora_mode,
         "rope_mode": args.rope_mode,
+        "attention_mode": args.attention_mode,
         "requested_active_voxels": args.active_voxels,
         "profile_markers": args.profile_markers,
         "synthetic_trajectory": args.synthetic_trajectory and args.flow_inputs is None,
@@ -52,6 +53,7 @@ def worker(args):
             **({"optimization_level": args.optimization_level} if args.optimization_level is not None else {}),
             **({"enable_trace": "true"} if args.runtime_trace else {}),
             **({"math_fidelity": args.math_fidelity} if args.math_fidelity is not None else {}),
+            **({'export_path': str(args.output_dir / 'native-ir'), 'dry_run': 'false'} if args.native_ir else {}),
         },
         "trace_region_size": args.trace_region_size if args.runtime_trace else None,
         "compile_options_note": "Explicit options submitted to XLA; omitted settings retain SDK/environment defaults.",
@@ -130,7 +132,7 @@ def worker(args):
                     ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
                     for ref, out in zip(reference, candidate, strict=True)]
         if args.rope_mode != "stock":
-            from inference_rope import prepare_real_rope
+            from experiments.tenstorrent.inference_rope import prepare_real_rope
             start = time.perf_counter()
             result["prepared_rope_blocks"] = prepare_real_rope(model)
             result["rope_prepare_seconds"] = time.perf_counter() - start
@@ -141,6 +143,16 @@ def worker(args):
                 result["prepared_cpu_relative_l2"] = [
                     ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
                     for ref, out in zip(reference, candidate, strict=True)]
+        if args.attention_mode != 'stock':
+            from experiments.tenstorrent.inference_attention import prepare_attention
+            result['prepared_attention_modules'] = prepare_attention(model, args.attention_mode)
+            context = float32_reference(model) if args.reference_precision == 'float32' else nullcontext(model)
+            with torch.no_grad(), context:
+                prepared = outputs(model(*reference_inputs))
+            result['attention_cpu_relative_l2'] = [
+                ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
+                for ref, out in zip(reference, prepared, strict=True)]
+            result['attention_note'] = 'Original weights and outer dtype retained; FP32 SDPA with stable unfused exp/reciprocal. Error includes preparation and device arithmetic.'
         result["phase"] = "waiting_for_device"
         write_result(path, result)
         # Permit CPU references/downloads to overlap, but serialize our hardware
@@ -261,6 +273,8 @@ def main():
     parser.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
     parser.add_argument("--rope-mode", choices=("stock", "real_pairs"), default="stock")
+    parser.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal'), default='stock')
+    parser.add_argument('--native-ir', action='store_true', help='Dump actual native compiler IR with dry run disabled')
     parser.add_argument('--synthetic-trajectory', '--sampler-trajectory', action='store_true',
                         help='Compare the complete original 12-step schedule against stock FP32 CPU (complete tensor flows only)')
     parser.add_argument('--flow-inputs', type=Path,
@@ -309,6 +323,9 @@ def main():
                    "--reference-precision", args.reference_precision]
         command += ["--lora-mode", args.lora_mode]
         command += ["--rope-mode", args.rope_mode]
+        command += ['--attention-mode', args.attention_mode]
+        if args.native_ir:
+            command += ['--native-ir']
         if args.synthetic_trajectory:
             command += ['--synthetic-trajectory']
         if args.flow_inputs is not None:

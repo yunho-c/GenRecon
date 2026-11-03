@@ -38,7 +38,13 @@
     "results/autoresearch/027-cpu-reference-cache/summary.json",
     "results/autoresearch/028-stock-poster-occupancy/summary.json",
     "results/autoresearch/029-paired-poster-occupancy/summary.json",
-    "results/autoresearch/030-poster-occupancy-quality/summary.json"
+    "results/autoresearch/030-poster-occupancy-quality/summary.json",
+    "results/autoresearch/031-real-poster-precision/summary.json",
+    "results/autoresearch/032-rejected-export-interleaving/summary.json",
+    "results/autoresearch/033-isolated-attention-precision/summary.json",
+    "results/autoresearch/034-attention-postscale/summary.json",
+    "results/autoresearch/035-attention-stage-errors/summary.json",
+    "results/autoresearch/036-softmax-formulations/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -62,11 +68,16 @@
     "Completed real-poster occupancy sampler: stock 364.935s vs real-pair 88.121s, 4.141x over the same 12 steps and 22 forwards. Both fail FP32 trajectory gates at about 74.8% relative L2; candidate-vs-stock TT is 29.4%. No fallback or trajectory recompilation. No quality-preserving promotion.",
     "Common FP32 CPU occupancy decoder isolates sampler effects: 6464 occupied reference voxels, 4163 stock TT, 4241 candidate. Stock/candidate IoU vs FP32 is 0.509/0.514; TT variants IoU is 0.913. One-crop topology changes prevent preserved-quality claims; this is not mesh/CUDA equivalence.",
     "Both independently computed real-image stock FP32 CPU references are bitwise equal. Sealed cache retains original model/reference source and exact fixture identity; physical checkpoint bytes are rescanned on reuse. Full validation 2.52s vs original 743s CPU trajectory. Initial 70ms tensor/manifest-only validation excluded checkpoint rescan.",
-    "Validation passed: preceding 89-test CPU regression suite plus 2 subtests; 10 cache and 4 sampler checks; 3 occupancy-metric checks; 9 precision/input checks. Hardware numerical diagnostics retain failed quality gates explicitly."
+    "Validation passed: preceding 89-test CPU regression suite plus 2 subtests; 10 cache and 4 sampler checks; 3 occupancy-metric checks; 9 precision/input checks. Hardware numerical diagnostics retain failed quality gates explicitly.",
+    "Real-poster CPU pipeline precision calibration completed: latent relative L2 0.415 vs FP32 but common-decoder occupancy IoU 0.868. Both TT variants still differ about 0.71 from this diagnostic, with occupancy IoU about 0.54. Intended BF16 boundaries alone do not explain the device gap.",
+    "Reject codegen/inference interleaving: codegen_py changes process-global backend options and mutates exported modules. Controlled isolated attention outputs match a separate no-export process bitwise; actual native IR can instead be dumped using export_path and dry_run=false.",
+    "On identical learned first-block Q/K/V, FP32 postscale attention reduces self-attention error from 0.102 to 0.0272; cross-attention remains about 0.0182. Stage capture matches ordinary final output bitwise. Local QK error is below 0.0006, scale is exact, and native softmax error is 0.0399 self / 0.0236 cross on identical TT scores.",
+    "Stable exp times reciprocal(sum(exp)) avoids the compiler DivOp softmax fusion and reduces local softmax error to 0.000631 self / 0.000255 cross, with exact repeats and no fallback. Direct exp/div fuses back to native softmax. Approximate-exp defaults in exact SDK sources are a hypothesis, not a toggle-tested causal finding. exp2 was rejected for CPU fallback.",
+    "An initial full-flow attention run prepared only 30 cross-attention modules because top-level and package imports created different RoPE wrapper classes. Retain it as a partial-attention control, not the complete candidate. Canonical package imports and fail-closed unknown-wrapper checks prevent silent partial preparation."
   ],
   "next_actions": [
-    "Finish live CPU pipeline-precision calibration at scratchpad autoresearch/039-ss-precision-poster. Check actual process as well as report; saved running status alone is insufficient. Compare all 12 states with sealed FP32 cache and both real-image TT payloads under strict fixture identity, then decode the CPU diagnostic through the same occupancy decoder. It is not a CUDA oracle and does not relax gates.",
-    "Isolate first-block normalization, attention, MLP and output normalization/projection using identical inputs. Preserve captured-final equivalence checks. Test whether explicit FP32 attention score/softmax intermediates improve agreement without altering weights or outer BF16 boundaries; this is an untested precision hypothesis, not an established error cause.",
+    "Finish shape512 complete FP32 reciprocal attention trajectory using canonical imports: require 60 prepared self/cross modules, no fallback/recompilation, all original 12 steps and stock FP32 references. Retain run051 as a 30-module cross-only control. Inspect actual native IR for replacement coverage and dtypes.",
+    "If complete shape attention improves full-trajectory accuracy, evaluate the same candidate on the real-poster ss_flow fixture using the sealed original CPU cache and common occupancy decoder. Local softmax gains alone do not establish sampler or scene quality.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
@@ -74,11 +85,11 @@
   ],
   "live_experiments": [
     {
-      "name": "039-ss-precision-poster",
-      "purpose": "CPU-only BF16-boundary/FP32-product calibration on the same real-image inputs",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/039-ss-precision-poster",
-      "status_at_last_check": "running emulated_pipeline_forward_and_trajectory",
-      "note": "Verify actual live process before treating as active or retrying."
+      "name": "051-shape-reciprocal-trajectory",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/051-shape-reciprocal-trajectory",
+      "purpose": "Partial-attention control: 30 cross modules prepared; self modules stayed stock SDPA with real RoPE",
+      "status_at_last_check": "running compile_and_first_inference",
+      "note": "Check actual process. Canonical-import complete candidate must prepare 60 modules."
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
