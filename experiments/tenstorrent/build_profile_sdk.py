@@ -6,7 +6,6 @@ environment and any source cache checkout are never modified. A successful
 build is still unvalidated until native numeric/profiler controls are run.
 """
 import argparse
-import importlib.metadata
 import json
 import os
 from pathlib import Path
@@ -114,6 +113,11 @@ def main():
         cache = (build/'CMakeCache.txt').read_text()
         if 'ENABLE_TRACY:BOOL=ON' not in cache or 'WITH_PYTHON_BINDINGS:BOOL=ON' not in cache:
             raise ValueError('CMake did not retain profiling and Python binding options')
+        compile_commands = json.loads((build/'compile_commands.json').read_text())
+        profiler_commands = [entry for entry in compile_commands if entry['file'].endswith('/llrt/rtoptions.cpp')]
+        if len(profiler_commands) != 1 or '-DTRACY_ENABLE' not in profiler_commands[0]['command'].split():
+            raise ValueError('Native runtime options source lacks the actual Tracy compile definition')
+        report['profiler_compile_proof'] = profiler_commands[0]
         report['cmake_options'] = [line for line in cache.splitlines() if line and not line.startswith(('#', '//')) and
             any(key in line.split('=')[0] for key in ('TRACY', 'PYTHON', 'Python', 'CMAKE_CXX_COMPILER:', 'CMAKE_BUILD_TYPE:', 'DISTRIBUTED', 'UNITY', 'LIGHT_METAL'))]
         report['toolchain'] = {tool: subprocess.check_output([tool, '--version'], env=build_env, text=True).splitlines()[0]
@@ -125,8 +129,10 @@ def main():
             return
         run(['cmake', '--build', build, '--target', 'install', '--parallel', str(args.jobs)], 'build', source, build_env)
         from experiments.tenstorrent.experiment_identity import sha256
-        report['native_artifact_sha256'] = {str(path.relative_to(build)): sha256(path)
-            for path in sorted((build/'lib').glob('*.so*')) if path.is_file()}
+        artifacts = sorted({path for directory in ('lib', 'lib64') for path in (build/directory).glob('*.so*') if path.is_file()})
+        if not any(path.name == '_ttnn.so' for path in artifacts) or not any(path.name == 'libtt_metal.so' for path in artifacts):
+            raise ValueError('Successful install did not produce required TTNN/Metal shared libraries')
+        report['native_artifact_sha256'] = {str(path.relative_to(build)): sha256(path) for path in artifacts}
         report['status'] = 'built_unvalidated'
         phase('complete')
     except Exception as exc:
