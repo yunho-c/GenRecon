@@ -936,3 +936,13 @@ beyond initial operand representability, without locating every internal roundin
 point. The pinned source audit retains the intermediate-copy precision hypothesis
 and its lack of measured kernel/program binding. Reproduce with
 `matmul_reduction_probe.py --output-dir <new>`.
+
+The [single-graph K2 active-term control](results/autoresearch/076-k2-isolated-products/summary.json)
+keeps the same FP32/HiFi4 matrix operation for all eight value-only cases. Each
+isolated product is exact, and their CPU sum equals the CPU full result bitwise.
+The native two-active-term result differs 0.00013974; reversing term order leaves
+it unchanged. Positive-only products also differ (0.00011894), while integer
+inputs are exact. No changed-value case recompiles or falls back. This identifies
+additional loss while the matrix path combines terms, without locating an
+internal rounding point or assigning a complete-model error share. Reproduce
+with `matmul_reduction_probe.py --mode active_terms --output-dir <new>`.

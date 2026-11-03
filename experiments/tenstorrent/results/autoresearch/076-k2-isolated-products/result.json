@@ -1,0 +1,622 @@
+{
+  "status": "completed_native_active_term_control",
+  "scope": "Measure FP32 matrix-reduction error with exactly BF16-representable inputs.\n\nSeed62 matches the earlier matrix probe. All native storage remains FP32;\nReduction mode varies dot length using prefixes of the same original data.\nActive-terms mode retains one K2 matrix graph and changes only input values,\nisolating the two products and reversing their order without recompilation.\nThis is a synthetic mechanism diagnostic, not learned-model attribution.\n",
+  "seed": 62,
+  "mode": "active_terms",
+  "cases": {
+    "full_k2": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "5d674b204f14d8299d1c8449d6949f130577daa6728de1240f918fac95515990",
+        "3f7515af7b82cb1f9678f575432db34565fb02b8c09fa3148465925ca838e97d"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001397395241334344,
+        "pcc": 0.9999999902864759,
+        "max_abs": 0.00201416015625
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001397395241334344,
+        "pcc": 0.9999999902864759,
+        "max_abs": 0.00201416015625
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.03386043000500649,
+        0.04012933699414134,
+        0.04800222901394591
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {},
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {
+        "CompileTime": 1
+      }
+    },
+    "first_only": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "5d674b204f14d8299d1c8449d6949f130577daa6728de1240f918fac95515990",
+        "bf53c7215b25894b6a051915aacdca3a05268f73e2459427b2d7244936a30eb9"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": true,
+      "native_bitwise_float64_rounded": true,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.022726743947714567,
+        0.02513161301612854,
+        0.007433090009726584
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "second_only": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "5d674b204f14d8299d1c8449d6949f130577daa6728de1240f918fac95515990",
+        "317013611ec464bca437c5d4a978816aa6bf6a11906438c74692d913407d5bc9"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": true,
+      "native_bitwise_float64_rounded": true,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.037137734005227685,
+        0.035256084986031055,
+        0.01964808104094118
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "first_only_zero_a": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "8e99e8fcbb935d2bc37b1f5e5e5a63735b8518c9a18c32d926040c66af845ef1",
+        "3f7515af7b82cb1f9678f575432db34565fb02b8c09fa3148465925ca838e97d"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": true,
+      "native_bitwise_float64_rounded": true,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.026626761013176292,
+        0.03639237995957956,
+        0.03403144999174401
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "second_only_zero_a": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "b0b6ccf470dd08d016ceaae912276fd64bfa5cd0ddd2fb3a9bf87e0b6ce9736f",
+        "3f7515af7b82cb1f9678f575432db34565fb02b8c09fa3148465925ca838e97d"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": true,
+      "native_bitwise_float64_rounded": true,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.023854819010011852,
+        0.051915904972702265,
+        0.040656927973032
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "reversed_k2": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "a411b6d507dcb472ee28693ec6951357fb24ace5987ced88c3ccd3b956903d9a",
+        "3f42b91822192e229cc6f4f760c0f978846c13a65b1177b90161953f24c59e27"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001397395241334344,
+        "pcc": 0.9999999902864759,
+        "max_abs": 0.00201416015625
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001397395241334344,
+        "pcc": 0.9999999902864759,
+        "max_abs": 0.00201416015625
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999988,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.03821814799448475,
+        0.019358160032425076,
+        0.027591455029323697
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "positive_products": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "a6f81c7e988379b3d363b3adc34600e52f9c9d489a66defb5989daebc48b12aa",
+        "80f9ec6cb7cfb7f691eb0b2bb2414e028ee55046db245d8027b1ed63bb923957"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001189361535616958,
+        "pcc": 0.9999999849222488,
+        "max_abs": 0.00201416015625
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001189361535616958,
+        "pcc": 0.9999999849222488,
+        "max_abs": 0.00201416015625
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999974,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.015985365957021713,
+        0.018169756047427654,
+        0.023930818017106503
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "integer_values": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "346a9cc8f72995f9dc3494552f82e72cadc40608d126f266c56170ee8dec07b1",
+        "b179b719158f8b6bf76aaf0556f5ab671174fe67069a490439d4e549d9e18839"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.000000000000588,
+        "max_abs": 0.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.000000000000588,
+        "max_abs": 0.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.000000000000588,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": true,
+      "native_bitwise_float64_rounded": true,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.031979932973627,
+        0.01590684603434056,
+        0.02861510799266398
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    }
+  },
+  "source_commit": "6edcb14156c72a7b5cf2269bb272fbfe17e5493a",
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "source_sha256": {
+    "experiments/tenstorrent/matmul_reduction_probe.py": "7527afdf46017f92f187def2461827a07fd353b22aa06c6a9c2d051b6a29a37a",
+    "experiments/tenstorrent/fp32_matmul_probe.py": "0b65e3dd16349d0efbeec7e0650ac4f832aefa1a57ae7b7d8e665adc7a8382be"
+  },
+  "controls": {
+    "native_full_vs_cpu_sum_of_isolated_native_products": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0001397395241334344,
+      "pcc": 0.9999999902864759,
+      "max_abs": 0.00201416015625
+    },
+    "isolated_native_sum_vs_cpu_full": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 0.9999999999999988,
+      "max_abs": 0.0
+    },
+    "full_vs_reversed_native": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.000000000000001,
+      "max_abs": 0.0
+    },
+    "first_zero_operand_bitwise": true,
+    "second_zero_operand_bitwise": true
+  },
+  "outputs_sha256": "55afff5dc972b5785ef6125808888e224153acff7eb022d4c229c7d7c09fead7"
+}
