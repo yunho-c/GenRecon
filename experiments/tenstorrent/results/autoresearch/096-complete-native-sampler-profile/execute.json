@@ -1,0 +1,1184 @@
+{
+  "status": "completed_native_matched_sampler",
+  "scope": "Original shape Euler/CFG sampler through a sealed generated TTNN graph.\n\nChanging inputs are freshly uploaded on every call. Learned weights and the\ncompiler const-eval cache remain resident. Require a sealed canonical forward\nand every state of the canonical native trajectory to match bitwise. Original\nstock CPU trajectory gates are reported unchanged, including inherited failures.\n",
+  "script_sha256": "7fbc8137dd274615adadab675842a788d8f1768e940222b3599facd428aa730e",
+  "source_commit": "97ade4e67278040d528b7a9b8092ad7cc18106fc",
+  "instrumented": true,
+  "phase": "complete",
+  "export_sha256": "c8db775b351d94410ce94dfc5ca463fc6beb87b78ff7a65c35905f5cd232e926",
+  "torch": "2.11.0+cpu",
+  "sampler_native_control": {
+    "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/110-clean-process-shape-control/shape_flow_tensor",
+    "result_sha256": "8481078ccf5ef9f824f8bee7ac7b0dd07e4c4cef54dc1836e35bce9500193d99",
+    "source_hashes_checked": 114,
+    "checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+    "artifact_sha256": {
+      "trajectory-reference.pt": "df43fe45e2ce7d44ecdc16b9ef82e7f90a03a1bf9a17651fb991e4f37ebcf9fc",
+      "trajectory-tt.pt": "9ab5ef422a9ecf823b32ef7ad2bda8eb28b5c92a8374c161c9bdb99bae81b40d"
+    }
+  },
+  "native_library_sha256": {
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/_ttnncpp.so": "d65f8177140701f21e100ea59a3ec935fbac6d94c9114a6d6311e01544e9a437",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/libtt_metal.so": "7cdbf7fe954add65a1e37121c0d55934dc29a63dca4d9aa4499f579e083928c4",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn/ttnn/_ttnn.so": "f5a2a8b1594bc9127b6660802af1d76b1827baeefc3757c55e0a212ebb275453"
+  },
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    },
+    {
+      "kind": "restore_native_timestep_frequency_constant",
+      "source": "experiments/tenstorrent/results/autoresearch/083-clean-start-sampler-control/runtime-ttnn.mlir.gz",
+      "native_ir_uncompressed_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1",
+      "changed_indices": [
+        12,
+        106
+      ],
+      "differences": [
+        {
+          "index": 12,
+          "native": 0.4216964840888977,
+          "eager_cpu": 0.4216965138912201,
+          "ulp_difference": -1
+        },
+        {
+          "index": 106,
+          "native": 0.00048696750309318304,
+          "eager_cpu": 0.0004869675321970135,
+          "ulp_difference": -1
+        }
+      ]
+    }
+  ],
+  "activation_input_mapping": [
+    null,
+    1,
+    2,
+    3,
+    0
+  ],
+  "native_control": {
+    "result_sha256": "d5c87abc9eb159d0c913230ace75d9f0a1062cacd7ecb4cf01461c4aaba3ba42",
+    "bitwise_equal": true
+  },
+  "trials": [
+    {
+      "sampler": {
+        "seconds": 174.8078832150204,
+        "forwards": [
+          {
+            "seconds": 7.6962930710287765,
+            "t": [
+              1000.0
+            ]
+          },
+          {
+            "seconds": 6.723986319033429,
+            "t": [
+              1000.0
+            ]
+          },
+          {
+            "seconds": 6.832262583018746,
+            "t": [
+              970.5882568359375
+            ]
+          },
+          {
+            "seconds": 6.767624078958761,
+            "t": [
+              970.5882568359375
+            ]
+          },
+          {
+            "seconds": 6.963841398013756,
+            "t": [
+              937.5
+            ]
+          },
+          {
+            "seconds": 6.45811251795385,
+            "t": [
+              937.5
+            ]
+          },
+          {
+            "seconds": 6.773128275992349,
+            "t": [
+              900.0
+            ]
+          },
+          {
+            "seconds": 6.892252804012969,
+            "t": [
+              900.0
+            ]
+          },
+          {
+            "seconds": 6.955509408027865,
+            "t": [
+              857.1428833007812
+            ]
+          },
+          {
+            "seconds": 6.748083403974306,
+            "t": [
+              857.1428833007812
+            ]
+          },
+          {
+            "seconds": 6.738723788992502,
+            "t": [
+              807.6923217773438
+            ]
+          },
+          {
+            "seconds": 8.30563117802376,
+            "t": [
+              807.6923217773438
+            ]
+          },
+          {
+            "seconds": 9.43397112400271,
+            "t": [
+              750.0
+            ]
+          },
+          {
+            "seconds": 7.741245623037685,
+            "t": [
+              750.0
+            ]
+          },
+          {
+            "seconds": 10.477911750029307,
+            "t": [
+              681.8181762695312
+            ]
+          },
+          {
+            "seconds": 6.879524327989202,
+            "t": [
+              681.8181762695312
+            ]
+          },
+          {
+            "seconds": 7.079163851973135,
+            "t": [
+              600.0
+            ]
+          },
+          {
+            "seconds": 6.888096670969389,
+            "t": [
+              600.0
+            ]
+          },
+          {
+            "seconds": 7.05082531797234,
+            "t": [
+              500.0
+            ]
+          },
+          {
+            "seconds": 6.784674687020015,
+            "t": [
+              375.0
+            ]
+          },
+          {
+            "seconds": 6.715298677037936,
+            "t": [
+              214.2857208251953
+            ]
+          }
+        ],
+        "steps": [
+          {
+            "step": 1,
+            "t": 1.0,
+            "t_prev": 0.9705882352941178,
+            "seconds": 16.414006375998724,
+            "forwards": 2
+          },
+          {
+            "step": 2,
+            "t": 0.9705882352941178,
+            "t_prev": 0.9374999999999999,
+            "seconds": 15.597560746013187,
+            "forwards": 2
+          },
+          {
+            "step": 3,
+            "t": 0.9374999999999999,
+            "t_prev": 0.9,
+            "seconds": 15.378382075985428,
+            "forwards": 2
+          },
+          {
+            "step": 4,
+            "t": 0.9,
+            "t_prev": 0.8571428571428571,
+            "seconds": 15.697557231993414,
+            "forwards": 2
+          },
+          {
+            "step": 5,
+            "t": 0.8571428571428571,
+            "t_prev": 0.8076923076923076,
+            "seconds": 15.759751805046108,
+            "forwards": 2
+          },
+          {
+            "step": 6,
+            "t": 0.8076923076923076,
+            "t_prev": 0.75,
+            "seconds": 17.444310315011535,
+            "forwards": 2
+          },
+          {
+            "step": 7,
+            "t": 0.75,
+            "t_prev": 0.6818181818181819,
+            "seconds": 19.45391215599375,
+            "forwards": 2
+          },
+          {
+            "step": 8,
+            "t": 0.6818181818181819,
+            "t_prev": 0.6,
+            "seconds": 19.470231549988966,
+            "forwards": 2
+          },
+          {
+            "step": 9,
+            "t": 0.6,
+            "t_prev": 0.5,
+            "seconds": 16.02222901704954,
+            "forwards": 2
+          },
+          {
+            "step": 10,
+            "t": 0.5,
+            "t_prev": 0.3750000000000001,
+            "seconds": 8.074005593021866,
+            "forwards": 1
+          },
+          {
+            "step": 11,
+            "t": 0.3750000000000001,
+            "t_prev": 0.21428571428571436,
+            "seconds": 7.78290242399089,
+            "forwards": 1
+          },
+          {
+            "step": 12,
+            "t": 0.21428571428571436,
+            "t_prev": 0.0,
+            "seconds": 7.712440574017819,
+            "forwards": 1
+          }
+        ],
+        "parameters": {
+          "steps": 12,
+          "guidance_strength": 7.5,
+          "guidance_rescale": 0.5,
+          "guidance_interval": [
+            0.6,
+            1.0
+          ],
+          "rescale_t": 3.0
+        },
+        "sampler_config_sha256": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0",
+        "scope": "One complete original 12-step trajectory, fixed noise and synthetic conditioning; no reconstruction-quality assessment"
+      },
+      "calls": [
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_00",
+          "t": [
+            1000.0
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0012115630088374019,
+          "model_seconds": 0.7759661529562436,
+          "profiler_flush_seconds": 6.919012654980179,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 2641765,
+            "end": 3521377
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_01",
+          "t": [
+            1000.0
+          ],
+          "positive": false,
+          "preparation_seconds": 0.0012793639907613397,
+          "model_seconds": 0.7755437450250611,
+          "profiler_flush_seconds": 5.94704667996848,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 3521377,
+            "end": 4400893
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_02",
+          "t": [
+            970.5882568359375
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0011874440242536366,
+          "model_seconds": 0.776919762021862,
+          "profiler_flush_seconds": 6.0540487370453775,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 4400893,
+            "end": 5280540
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_03",
+          "t": [
+            970.5882568359375
+          ],
+          "positive": false,
+          "preparation_seconds": 0.0012595740263350308,
+          "model_seconds": 0.7756529109901749,
+          "profiler_flush_seconds": 5.990602693986148,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 5280540,
+            "end": 6160157
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_04",
+          "t": [
+            937.5
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0017624860047362745,
+          "model_seconds": 0.7765302769839764,
+          "profiler_flush_seconds": 6.185438755026553,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 6160157,
+            "end": 7039674
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_05",
+          "t": [
+            937.5
+          ],
+          "positive": false,
+          "preparation_seconds": 0.0016890360275283456,
+          "model_seconds": 0.7752634459757246,
+          "profiler_flush_seconds": 5.681056645989884,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 7039674,
+            "end": 7919268
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_06",
+          "t": [
+            900.0
+          ],
+          "positive": true,
+          "preparation_seconds": 0.010151291033253074,
+          "model_seconds": 0.776416722976137,
+          "profiler_flush_seconds": 5.986447880975902,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 7919268,
+            "end": 8798914
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_07",
+          "t": [
+            900.0
+          ],
+          "positive": false,
+          "preparation_seconds": 0.00255647802259773,
+          "model_seconds": 0.7754419830162078,
+          "profiler_flush_seconds": 6.1141589430044405,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 8798914,
+            "end": 9678531
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_08",
+          "t": [
+            857.1428833007812
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0014216650160960853,
+          "model_seconds": 0.77641632797895,
+          "profiler_flush_seconds": 6.177562034979928,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 9678531,
+            "end": 10558190
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_09",
+          "t": [
+            857.1428833007812
+          ],
+          "positive": false,
+          "preparation_seconds": 0.0032191790523938835,
+          "model_seconds": 0.7764817730057985,
+          "profiler_flush_seconds": 5.968263430986553,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 10558190,
+            "end": 11437679
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_10",
+          "t": [
+            807.6923217773438
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0012116240104660392,
+          "model_seconds": 0.776027632993646,
+          "profiler_flush_seconds": 5.961388322000857,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 11437679,
+            "end": 12317226
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_11",
+          "t": [
+            807.6923217773438
+          ],
+          "positive": false,
+          "preparation_seconds": 0.006181959004607052,
+          "model_seconds": 0.7761441770126112,
+          "profiler_flush_seconds": 7.523177391034551,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 12317226,
+            "end": 13196753
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_12",
+          "t": [
+            750.0
+          ],
+          "positive": true,
+          "preparation_seconds": 0.001306664024014026,
+          "model_seconds": 0.7780918259522878,
+          "profiler_flush_seconds": 8.654432334005833,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 13196753,
+            "end": 14076326
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_13",
+          "t": [
+            750.0
+          ],
+          "positive": false,
+          "preparation_seconds": 0.007248912996146828,
+          "model_seconds": 0.7767598750069737,
+          "profiler_flush_seconds": 6.957045563030988,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 14076326,
+            "end": 14955925
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_14",
+          "t": [
+            681.8181762695312
+          ],
+          "positive": true,
+          "preparation_seconds": 0.002267576986923814,
+          "model_seconds": 0.910286360012833,
+          "profiler_flush_seconds": 9.565202922967728,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 14955925,
+            "end": 15838510
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_15",
+          "t": [
+            681.8181762695312
+          ],
+          "positive": false,
+          "preparation_seconds": 0.006900661974214017,
+          "model_seconds": 0.7754209280246869,
+          "profiler_flush_seconds": 6.09709021798335,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 15838510,
+            "end": 16718137
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_16",
+          "t": [
+            600.0
+          ],
+          "positive": true,
+          "preparation_seconds": 0.001238894008565694,
+          "model_seconds": 0.77717885596212,
+          "profiler_flush_seconds": 6.3006420219899155,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 16718137,
+            "end": 17597821
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_17",
+          "t": [
+            600.0
+          ],
+          "positive": false,
+          "preparation_seconds": 0.001894276007078588,
+          "model_seconds": 0.7817629729979672,
+          "profiler_flush_seconds": 6.104320710990578,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 17597821,
+            "end": 18477410
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_18",
+          "t": [
+            500.0
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0012454139650799334,
+          "model_seconds": 0.7790580569999292,
+          "profiler_flush_seconds": 6.270384457020555,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 18477410,
+            "end": 19357037
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_19",
+          "t": [
+            375.0
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0011998339905403554,
+          "model_seconds": 0.776047169987578,
+          "profiler_flush_seconds": 6.007313301961403,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 19357037,
+            "end": 20236626
+          }
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_20",
+          "t": [
+            214.2857208251953
+          ],
+          "positive": true,
+          "preparation_seconds": 0.0011923440033569932,
+          "model_seconds": 0.7759795520105399,
+          "profiler_flush_seconds": 5.9380168709903955,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 20236626,
+            "end": 21119790
+          }
+        }
+      ],
+      "all_states_bitwise_native": true,
+      "vs_stock_cpu": {
+        "fixture_identity_verified": true,
+        "identity_note": "Condition/config hashes match",
+        "final": {
+          "shape_match": true,
+          "finite": true,
+          "passed": false,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.29991133282335974,
+          "pcc": 0.9545747629508539,
+          "max_abs": 4.071747064590454
+        },
+        "pred_x_t": [
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0028944270340278103,
+            "pcc": 0.999995821062988,
+            "max_abs": 0.01641368865966797
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.007112396107289125,
+            "pcc": 0.999974772612964,
+            "max_abs": 0.03863987326622009
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.010948094223165096,
+            "pcc": 0.9999401090374042,
+            "max_abs": 0.09856683015823364
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.016714529048300193,
+            "pcc": 0.9998608726014617,
+            "max_abs": 0.11645592749118805
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.027654718520926,
+            "pcc": 0.9996172313286705,
+            "max_abs": 0.26331016421318054
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.04329967546383943,
+            "pcc": 0.9990615619810246,
+            "max_abs": 0.4235581010580063
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.06696519614098022,
+            "pcc": 0.9977557748032556,
+            "max_abs": 0.44241705536842346
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.11414068907232165,
+            "pcc": 0.9934616381540715,
+            "max_abs": 0.7123139426112175
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.20667440602285797,
+            "pcc": 0.9784890108527412,
+            "max_abs": 1.6008352637290955
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.2327262849789,
+            "pcc": 0.9726884778765409,
+            "max_abs": 2.137697994709015
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.2665608873707861,
+            "pcc": 0.9641304820812578,
+            "max_abs": 2.9968557357788086
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.29991133282335974,
+            "pcc": 0.9545747629508539,
+            "max_abs": 4.071747064590454
+          }
+        ],
+        "pred_x_0": [
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.05361354040690247,
+            "pcc": 0.9986946742322598,
+            "max_abs": 0.558065265417099
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.09935919538130833,
+            "pcc": 0.9953239700714551,
+            "max_abs": 1.151641845703125
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.12121359601620517,
+            "pcc": 0.99260355214485,
+            "max_abs": 1.7815258502960205
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.14067065825247638,
+            "pcc": 0.9901823390743376,
+            "max_abs": 2.238207697868347
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.2156248516243693,
+            "pcc": 0.9766084631488657,
+            "max_abs": 4.293039917945862
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.23714398452871846,
+            "pcc": 0.9718498879610554,
+            "max_abs": 2.512750506401062
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.29578507032939083,
+            "pcc": 0.9556282574812621,
+            "max_abs": 4.596509099006653
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.40402205508568373,
+            "pcc": 0.9177383818990279,
+            "max_abs": 4.744113206863403
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.5351520174432804,
+            "pcc": 0.8565271349740894,
+            "max_abs": 8.732509136199951
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.29945358799830046,
+            "pcc": 0.9546669582412849,
+            "max_abs": 3.7482917308807373
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.30444122780579624,
+            "pcc": 0.9531749535523335,
+            "max_abs": 4.142411470413208
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": false,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.29991273612689756,
+            "pcc": 0.9545743375242929,
+            "max_abs": 4.071756362915039
+          }
+        ],
+        "all_states_pass_smoke": false
+      },
+      "vs_native": {
+        "fixture_identity_verified": true,
+        "identity_note": "Condition/config hashes match",
+        "final": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999992,
+          "max_abs": 0.0
+        },
+        "pred_x_t": [
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000002,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000004,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999999,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999999,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999993,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999997,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000009,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.999999999999999,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000002,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999992,
+            "max_abs": 0.0
+          }
+        ],
+        "pred_x_0": [
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000002,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999991,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999992,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000016,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999987,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000004,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999998,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000004,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000002,
+            "max_abs": 0.0
+          },
+          {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000016,
+            "max_abs": 0.0
+          }
+        ],
+        "all_states_pass_smoke": true
+      },
+      "artifact_sha256": "736ac14b48783649855adbf086a10489b0b0274bdc5d3051b5e6afb93a2e424d"
+    }
+  ],
+  "timing_scope": "Fresh five-activation H2D/layout preparation and synchronization timed separately. Marked model calls include generated denoiser and output D2H. Original CPU Euler/CFG and all12steps/21calls retained. Instrumented sampler wall includes per-call profiler flushing; marked model/transfer windows exclude flushing. Resident original weights and const-eval cache; compilation and warmups excluded from sampler trials.",
+  "warmup_calls": [
+    {
+      "label": "GENRECON_FIRST",
+      "t": [
+        600.0
+      ],
+      "positive": true,
+      "preparation_seconds": 0.024198344035539776,
+      "model_seconds": 46.23566135996953,
+      "profiler_flush_seconds": 15.523699579003733,
+      "cpp_profile_range": {
+        "file": "profiler/.logs/cpp_device_perf_report.csv",
+        "begin": 0,
+        "end": 884101
+      }
+    },
+    {
+      "label": "GENRECON_WARMUP_0",
+      "t": [
+        600.0
+      ],
+      "positive": true,
+      "preparation_seconds": 0.007373292988631874,
+      "model_seconds": 0.9364058109931648,
+      "profiler_flush_seconds": 6.689545593981165,
+      "cpp_profile_range": {
+        "file": "profiler/.logs/cpp_device_perf_report.csv",
+        "begin": 884101,
+        "end": 1763554
+      }
+    },
+    {
+      "label": "GENRECON_WARMUP_1",
+      "t": [
+        600.0
+      ],
+      "positive": false,
+      "preparation_seconds": 0.004939325037412345,
+      "model_seconds": 0.776346749975346,
+      "profiler_flush_seconds": 6.185531914990861,
+      "cpp_profile_range": {
+        "file": "profiler/.logs/cpp_device_perf_report.csv",
+        "begin": 1763554,
+        "end": 2641765
+      }
+    }
+  ]
+}

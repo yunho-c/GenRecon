@@ -1098,6 +1098,38 @@ runs, total sampler wall includes per-call profiler flushing; individual
 model/transfer windows exclude that flushing. The one unprofiled 16.23s result
 is execution-boundary calibration, not a speedup distribution or quality claim.
 
+The [first full sampler host capture](results/autoresearch/095-rejected-truncated-host-capture/summary.json)
+is rejected: the worker/native C++ profiler completed all calls, but the optional
+Tracy host stream stopped during call4. A successful capture-tool exit did not
+establish complete windows. The full-window parser rejects that partial data.
+
+The [complete native device sampler profile](results/autoresearch/096-complete-native-sampler-profile/summary.json)
+instead records exact C++ CSV byte ranges after each synchronized profiler read.
+Every original native state matches bitwise. All 21 calls contain 4,219 complete
+device records and 457 matrix products: 88,599 sampler operations and 9,597
+matrix products in total. All 101,256 first/warm/sampler rows are accounted for
+without gaps, overlap or unassigned trailing data. Sampler kernel durations sum
+to 15.971s: matrix 4.266s (26.71%), reshape 4.232s (26.50%), binary 3.253s
+(20.37%). These are kernel-sum shares. Python model timers sum to 16.443s and
+fresh uploads/preparation to 57.6ms. Instrumented wall includes 136.4s profiler
+flushing plus other host work and is not ordinary sampler latency.
+
+Use `--profile --device-profile-only` with the result094 sampler command, then
+`cpp_sampler_profile_report.py --cpp-csv <native.csv> --sampler-result <execute.json>
+--output <new.json>`. The launcher enables device profiling, operator names,
+native C++ post-processing and mid-run dumping. Restore compressed CSV bytes
+without rewriting them: recorded byte ranges are part of the evidence. This
+mode reports actual operator names/durations and Python host timers; input
+shapes and per-core timelines are outside its scope. Thirty focused checks cover
+both this path and rejection of incomplete optional host traces.
+
+The native IR binds the largest reshape groups to cross-KV head packing,
+self-QKV head packing and head-to-sequence layouts. Existing conditioning
+prefill caches flat raw KV, so it still repeats the cross-KV head packing and
+key normalization in each denoiser call. Moving those fixed-condition operations
+into prefill is the next execution-optimization hypothesis, subject to CPU/native
+trajectory controls and complete prefill-inclusive performance comparisons.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

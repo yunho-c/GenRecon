@@ -243,12 +243,20 @@ def main():
             signpost(label+'_END')
             ttnn.deallocate(outputs[0])
             flush = 0.0
+            cpp_range = None
             if args.flush_device_profiler:
-                start = time.perf_counter(); ttnn.ReadDeviceProfiler(device)
+                start = time.perf_counter()
+                cpp_path = Path(os.environ['TT_METAL_PROFILER_DIR'])/'.logs/cpp_device_perf_report.csv'
+                begin = cpp_path.stat().st_size if cpp_path.exists() else 0
+                ttnn.ReadDeviceProfiler(device)
+                end = cpp_path.stat().st_size
+                if end <= begin:
+                    raise ValueError('Profiler read did not append actual native C++ timing rows')
+                cpp_range = {'file': str(cpp_path.relative_to(result.parent)), 'begin': begin, 'end': end}
                 flush = time.perf_counter()-start
             calls.append({'label': label, 't': t.tolist(), 'positive': cond is fixture.positive,
                           'preparation_seconds': preparation, 'model_seconds': seconds,
-                          'profiler_flush_seconds': flush})
+                          'profiler_flush_seconds': flush, 'cpp_profile_range': cpp_range})
             return actual
 
         phase('first_forward_and_warmup')

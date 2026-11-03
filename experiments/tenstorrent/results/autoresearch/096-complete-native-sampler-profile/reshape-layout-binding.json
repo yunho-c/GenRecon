@@ -1,0 +1,18 @@
+{
+  "native_ir_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1",
+  "groups": {
+    "cross_kv_head_packing": {
+      "native_ir_operations": 30,
+      "first_operation": "%520 = \"ttnn.reshape\"(%519) <{shape = [1 : i32, 1029 : i32, 2 : i32, 12 : i32, 128 : i32]}> : (tensor<1029x3072xf32, #ttnn_layout87>) -> tensor<1x1029x2x12x128xf32, #ttnn_layout88> loc(#loc1160)"
+    },
+    "self_qkv_head_packing": {
+      "native_ir_operations": 30,
+      "first_operation": "%398 = \"ttnn.reshape\"(%397) <{shape = [1 : i32, 512 : i32, 3 : i32, 12 : i32, 128 : i32]}> : (tensor<512x4608xf32, #ttnn_layout72>) -> tensor<1x512x3x12x128xf32, #ttnn_layout73> loc(#loc1059)"
+    },
+    "attention_heads_to_sequence": {
+      "native_ir_operations": 60,
+      "first_operation": "%458 = \"ttnn.reshape\"(%457) <{shape = [512 : i32, 1536 : i32]}> : (tensor<1x512x12x128xf32, #ttnn_layout75>) -> tensor<512x1536xf32, #ttnn_layout69> loc(#loc1104)"
+    }
+  },
+  "cache_observation": "Current ConditioningPrefill returns projected conditioning and flat raw KV. Head packing and key normalization therefore remain in the cached denoiser body. Moving those fixed-condition operations into prefill is an untested optimization hypothesis."
+}

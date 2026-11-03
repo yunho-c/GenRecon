@@ -1,0 +1,5 @@
+{
+  "pid": 803804,
+  "signal": "SIGINT",
+  "reason": "Missing TTNN_OP_PROFILER=1; source and completed130 show it is required to populate native operation names. Stop this diagnostic configuration before a full sampler run."
+}

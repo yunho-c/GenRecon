@@ -1,0 +1,544 @@
+{
+  "scope": "Per-call native C++ device timings using recorded profiler-read byte ranges.\n\nThis report does not depend on Tracy host collection. Operator names/durations\ncome from actual device measurements; input shapes and per-core timelines are\nnot present in this C++ report. Host times come from the worker's Python timers.\n",
+  "all_states_bitwise_native": true,
+  "original_stock_cpu_gates_pass": false,
+  "device_operations": 88599,
+  "matrix_operations": 9597,
+  "kernel_sum_ns": 15971155499.0,
+  "host_model_seconds_sum": 16.44339050789131,
+  "upload_preparation_seconds_sum": 0.05762624117778614,
+  "profiler_flush_seconds_sum": 136.4026525709196,
+  "trials": [
+    {
+      "instrumented_sampler_wall_seconds": 174.8078832150204,
+      "model_adapter_seconds_sum": 152.9061608570628,
+      "outside_model_adapter_seconds": 21.901722357957624,
+      "calls": [
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_00",
+          "t": [
+            1000.0
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760279722.0,
+          "global_call_id_min": 12961792,
+          "global_call_id_max": 17281024,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 2641765,
+            "end": 3521377
+          },
+          "host_model_seconds": 0.7759661529562436,
+          "upload_preparation_seconds": 0.0012115630088374019,
+          "profiler_flush_seconds": 6.919012654980179
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_01",
+          "t": [
+            1000.0
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760600062.0,
+          "global_call_id_min": 17282048,
+          "global_call_id_max": 21601280,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 3521377,
+            "end": 4400893
+          },
+          "host_model_seconds": 0.7755437450250611,
+          "upload_preparation_seconds": 0.0012793639907613397,
+          "profiler_flush_seconds": 5.94704667996848
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_02",
+          "t": [
+            970.5882568359375
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 761167895.0,
+          "global_call_id_min": 21602304,
+          "global_call_id_max": 25921536,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 4400893,
+            "end": 5280540
+          },
+          "host_model_seconds": 0.776919762021862,
+          "upload_preparation_seconds": 0.0011874440242536366,
+          "profiler_flush_seconds": 6.0540487370453775
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_03",
+          "t": [
+            970.5882568359375
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760638201.0,
+          "global_call_id_min": 25922560,
+          "global_call_id_max": 30241792,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 5280540,
+            "end": 6160157
+          },
+          "host_model_seconds": 0.7756529109901749,
+          "upload_preparation_seconds": 0.0012595740263350308,
+          "profiler_flush_seconds": 5.990602693986148
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_04",
+          "t": [
+            937.5
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760542010.0,
+          "global_call_id_min": 30242816,
+          "global_call_id_max": 34562048,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 6160157,
+            "end": 7039674
+          },
+          "host_model_seconds": 0.7765302769839764,
+          "upload_preparation_seconds": 0.0017624860047362745,
+          "profiler_flush_seconds": 6.185438755026553
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_05",
+          "t": [
+            937.5
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760373677.0,
+          "global_call_id_min": 34563072,
+          "global_call_id_max": 38882304,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 7039674,
+            "end": 7919268
+          },
+          "host_model_seconds": 0.7752634459757246,
+          "upload_preparation_seconds": 0.0016890360275283456,
+          "profiler_flush_seconds": 5.681056645989884
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_06",
+          "t": [
+            900.0
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 759919435.0,
+          "global_call_id_min": 38883328,
+          "global_call_id_max": 43202560,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 7919268,
+            "end": 8798914
+          },
+          "host_model_seconds": 0.776416722976137,
+          "upload_preparation_seconds": 0.010151291033253074,
+          "profiler_flush_seconds": 5.986447880975902
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_07",
+          "t": [
+            900.0
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760446504.0,
+          "global_call_id_min": 43203584,
+          "global_call_id_max": 47522816,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 8798914,
+            "end": 9678531
+          },
+          "host_model_seconds": 0.7754419830162078,
+          "upload_preparation_seconds": 0.00255647802259773,
+          "profiler_flush_seconds": 6.1141589430044405
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_08",
+          "t": [
+            857.1428833007812
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760290260.0,
+          "global_call_id_min": 47523840,
+          "global_call_id_max": 51843072,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 9678531,
+            "end": 10558190
+          },
+          "host_model_seconds": 0.77641632797895,
+          "upload_preparation_seconds": 0.0014216650160960853,
+          "profiler_flush_seconds": 6.177562034979928
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_09",
+          "t": [
+            857.1428833007812
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760793935.0,
+          "global_call_id_min": 51844096,
+          "global_call_id_max": 56163328,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 10558190,
+            "end": 11437679
+          },
+          "host_model_seconds": 0.7764817730057985,
+          "upload_preparation_seconds": 0.0032191790523938835,
+          "profiler_flush_seconds": 5.968263430986553
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_10",
+          "t": [
+            807.6923217773438
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760622060.0,
+          "global_call_id_min": 56164352,
+          "global_call_id_max": 60483584,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 11437679,
+            "end": 12317226
+          },
+          "host_model_seconds": 0.776027632993646,
+          "upload_preparation_seconds": 0.0012116240104660392,
+          "profiler_flush_seconds": 5.961388322000857
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_11",
+          "t": [
+            807.6923217773438
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760745338.0,
+          "global_call_id_min": 60484608,
+          "global_call_id_max": 64803840,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 12317226,
+            "end": 13196753
+          },
+          "host_model_seconds": 0.7761441770126112,
+          "upload_preparation_seconds": 0.006181959004607052,
+          "profiler_flush_seconds": 7.523177391034551
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_12",
+          "t": [
+            750.0
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760098305.0,
+          "global_call_id_min": 64804864,
+          "global_call_id_max": 69124096,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 13196753,
+            "end": 14076326
+          },
+          "host_model_seconds": 0.7780918259522878,
+          "upload_preparation_seconds": 0.001306664024014026,
+          "profiler_flush_seconds": 8.654432334005833
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_13",
+          "t": [
+            750.0
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 759579792.0,
+          "global_call_id_min": 69125120,
+          "global_call_id_max": 73444352,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 14076326,
+            "end": 14955925
+          },
+          "host_model_seconds": 0.7767598750069737,
+          "upload_preparation_seconds": 0.007248912996146828,
+          "profiler_flush_seconds": 6.957045563030988
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_14",
+          "t": [
+            681.8181762695312
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 762203208.0,
+          "global_call_id_min": 73445376,
+          "global_call_id_max": 77764608,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 14955925,
+            "end": 15838510
+          },
+          "host_model_seconds": 0.910286360012833,
+          "upload_preparation_seconds": 0.002267576986923814,
+          "profiler_flush_seconds": 9.565202922967728
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_15",
+          "t": [
+            681.8181762695312
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760232097.0,
+          "global_call_id_min": 77765632,
+          "global_call_id_max": 82084864,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 15838510,
+            "end": 16718137
+          },
+          "host_model_seconds": 0.7754209280246869,
+          "upload_preparation_seconds": 0.006900661974214017,
+          "profiler_flush_seconds": 6.09709021798335
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_16",
+          "t": [
+            600.0
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 761163760.0,
+          "global_call_id_min": 82085888,
+          "global_call_id_max": 86405120,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 16718137,
+            "end": 17597821
+          },
+          "host_model_seconds": 0.77717885596212,
+          "upload_preparation_seconds": 0.001238894008565694,
+          "profiler_flush_seconds": 6.3006420219899155
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_17",
+          "t": [
+            600.0
+          ],
+          "positive": false,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760998498.0,
+          "global_call_id_min": 86406144,
+          "global_call_id_max": 90725376,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 17597821,
+            "end": 18477410
+          },
+          "host_model_seconds": 0.7817629729979672,
+          "upload_preparation_seconds": 0.001894276007078588,
+          "profiler_flush_seconds": 6.104320710990578
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_18",
+          "t": [
+            500.0
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760523651.0,
+          "global_call_id_min": 90726400,
+          "global_call_id_max": 95045632,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 18477410,
+            "end": 19357037
+          },
+          "host_model_seconds": 0.7790580569999292,
+          "upload_preparation_seconds": 0.0012454139650799334,
+          "profiler_flush_seconds": 6.270384457020555
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_19",
+          "t": [
+            375.0
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 760029824.0,
+          "global_call_id_min": 95046656,
+          "global_call_id_max": 99365888,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 19357037,
+            "end": 20236626
+          },
+          "host_model_seconds": 0.776047169987578,
+          "upload_preparation_seconds": 0.0011998339905403554,
+          "profiler_flush_seconds": 6.007313301961403
+        },
+        {
+          "label": "GENRECON_SAMPLER_0_CALL_20",
+          "t": [
+            214.2857208251953
+          ],
+          "positive": true,
+          "device_operations": 4219,
+          "matrix_operations": 457,
+          "kernel_sum_ns": 759907265.0,
+          "global_call_id_min": 99366912,
+          "global_call_id_max": 103686144,
+          "cpp_profile_range": {
+            "file": "profiler/.logs/cpp_device_perf_report.csv",
+            "begin": 20236626,
+            "end": 21119790
+          },
+          "host_model_seconds": 0.7759795520105399,
+          "upload_preparation_seconds": 0.0011923440033569932,
+          "profiler_flush_seconds": 5.9380168709903955
+        }
+      ]
+    }
+  ],
+  "by_operation": [
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 9597,
+      "kernel_sum_ns": 4265837983.0,
+      "share_of_kernel_sum": 0.2670963903186026
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 3150,
+      "kernel_sum_ns": 4232485649.0,
+      "share_of_kernel_sum": 0.2650081047213527
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 30891,
+      "kernel_sum_ns": 3253012121.0,
+      "share_of_kernel_sum": 0.20368044886944345
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 12054,
+      "kernel_sum_ns": 1341769738.0,
+      "share_of_kernel_sum": 0.08401206400401098
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 8190,
+      "kernel_sum_ns": 778194555.0,
+      "share_of_kernel_sum": 0.04872500020732533
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 8190,
+      "kernel_sum_ns": 699494363.0,
+      "share_of_kernel_sum": 0.0437973547401625
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 5040,
+      "kernel_sum_ns": 497982789.0,
+      "share_of_kernel_sum": 0.03118013527769986
+    },
+    {
+      "operation": "FillPadDeviceOperation",
+      "calls": 3150,
+      "kernel_sum_ns": 276602826.0,
+      "share_of_kernel_sum": 0.01731889881213159
+    },
+    {
+      "operation": "PermuteDeviceOperation",
+      "calls": 1260,
+      "kernel_sum_ns": 153309193.0,
+      "share_of_kernel_sum": 0.009599129694128839
+    },
+    {
+      "operation": "TypecastDeviceOperation",
+      "calls": 2520,
+      "kernel_sum_ns": 132594097.0,
+      "share_of_kernel_sum": 0.00830209792950185
+    },
+    {
+      "operation": "LayerNormDeviceOperation",
+      "calls": 1911,
+      "kernel_sum_ns": 131215493.0,
+      "share_of_kernel_sum": 0.00821577956636987
+    },
+    {
+      "operation": "EmbeddingsDeviceOperation",
+      "calls": 1260,
+      "kernel_sum_ns": 127453764.0,
+      "share_of_kernel_sum": 0.00798024688996236
+    },
+    {
+      "operation": "UntilizeDeviceOperation",
+      "calls": 1260,
+      "kernel_sum_ns": 75948285.0,
+      "share_of_kernel_sum": 0.004755340651761568
+    },
+    {
+      "operation": "TilizeWithValPaddingDeviceOperation",
+      "calls": 63,
+      "kernel_sum_ns": 3825630.0,
+      "share_of_kernel_sum": 0.00023953370188146584
+    },
+    {
+      "operation": "TilizeDeviceOperation",
+      "calls": 42,
+      "kernel_sum_ns": 1362644.0,
+      "share_of_kernel_sum": 8.531906160987031e-05
+    },
+    {
+      "operation": "ConcatDeviceOperation",
+      "calls": 21,
+      "kernel_sum_ns": 66369.0,
+      "share_of_kernel_sum": 4.155554055193787e-06
+    }
+  ],
+  "total_native_rows_including_first_and_warmup": 101256,
+  "all_native_byte_ranges_contiguous_and_complete": true,
+  "interpretation": "Kernel sums are actual operation durations, not critical-path wall attribution. First/warm calls excluded from sampler aggregates. Host model timers exclude upload preparation and profiler flushing; instrumented sampler wall includes flushing and is not ordinary latency. This report does not infer input shapes or depend on optional Tracy host visualization.",
+  "cpp_csv_sha256": "716322572184f8f4f490168ca93238f978308cb57a228bbbe006c57d4c4d7415",
+  "sampler_result_sha256": "5fb7e3cdb9fe3e02c16efc16c5ea16788de68082e1103b6335d6b13a09d41868",
+  "source_sha256": "d2bf4be3c85ea4c7a8d55e4c6508b9cd492745cd2c7832233a11546ebf285845"
+}

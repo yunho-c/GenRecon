@@ -25,6 +25,8 @@ def main():
     parser.add_argument('--profile', action='store_true')
     parser.add_argument('--compact-profile', action='store_true',
         help='Keep native per-operation C++ device timings; omit per-core marker CSV/Tracy copies')
+    parser.add_argument('--device-profile-only', action='store_true',
+        help='Sampler: capture native per-call C++ device timings and Python host timers without Tracy host collection')
     parser.add_argument('--repair-embedding-indices', action='store_true')
     parser.add_argument('--repair-native-time-frequencies', action='store_true')
     parser.add_argument('--runs', type=int, default=3)
@@ -35,6 +37,8 @@ def main():
         parser.error('compact-profile requires profile')
     if args.repair_native_time_frequencies and not args.sampler_native_control_dir:
         parser.error('repair-native-time-frequencies requires sampler-native-control-dir')
+    if args.device_profile_only and (not args.profile or not args.sampler_native_control_dir):
+        parser.error('device-profile-only requires profile and sampler-native-control-dir')
     from experiments.tenstorrent.native_environment import clean_native_environment
     from experiments.tenstorrent.experiment_identity import sha256
     sdk, output = args.sdk_workspace.resolve(), args.output_dir.resolve()
@@ -60,7 +64,12 @@ def main():
         TT_METAL_LOGS_PATH=str(output/'metal-logs'), TT_METAL_PROFILER_DIR=str(output/'profiler'),
         PATH=str(venv/'bin')+os.pathsep+environment.get('PATH', ''))
     command = [str(venv/'bin/python')]
-    if args.profile:
+    if args.device_profile_only:
+        environment.update(TT_METAL_DEVICE_PROFILER='1', TT_METAL_PROFILER_CPP_POST_PROCESS='1',
+            TT_METAL_PROFILER_MID_RUN_DUMP='1', TTNN_OP_PROFILER='1',
+            TT_METAL_PROFILER_DISABLE_DUMP_TO_FILES='1', TT_METAL_PROFILER_DISABLE_PUSH_TO_TRACY='1',
+            TT_METAL_PROFILER_PROGRAM_SUPPORT_COUNT='10000')
+    elif args.profile:
         # Explicit signposts and native TTNN zones suffice. Profiling every
         # Python function bloats import/JIT traces and host post-processing.
         command += ['-m', 'tracy', '-r', '-p', '--op-support-count', '10000',
@@ -84,13 +93,18 @@ def main():
     if args.repair_native_time_frequencies:
         command += ['--repair-native-time-frequencies']
     if args.profile:
-        command += ['--profile-markers', '--flush-device-profiler']
+        command += ['--flush-device-profiler']
+        if not args.device_profile_only:
+            command += ['--profile-markers']
     report = {'status': 'running', 'command': command, 'metal_commit': commit,
         'sdk_build_result_sha256': sha256(sdk/'build-result.json'), 'launcher_sha256': sha256(Path(__file__)),
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'environment': {k: environment[k] for k in ('LD_LIBRARY_PATH', 'PYTHONPATH', 'TT_METAL_HOME',
             'TT_METAL_RUNTIME_ROOT', 'VIRTUAL_ENV', 'TT_METAL_LOGS_PATH', 'TT_METAL_PROFILER_DIR')},
-        'profile': args.profile, 'compact_profile': args.compact_profile}
+        'profile': args.profile, 'compact_profile': args.compact_profile or args.device_profile_only,
+        'device_profile_only': args.device_profile_only,
+        'profiler_environment': {k: v for k, v in environment.items()
+            if k.startswith('TT_METAL_PROFILER') or k in ('TT_METAL_DEVICE_PROFILER', 'TTNN_OP_PROFILER')}}
 
     def save():
         temporary = output/'launch.tmp'
@@ -110,7 +124,7 @@ def main():
         if (result.get('status') == expected_status and result.get('native_control', {}).get('bitwise_equal')
                 and paths and all(path.is_relative_to(sdk) for path in paths)):
             report['status'] = 'completed_calibrated_execute' if not args.profile else 'completed_capture_unvalidated'
-            if args.compact_profile:
+            if args.compact_profile or args.device_profile_only:
                 perf = output/'profiler/.logs/cpp_device_perf_report.csv'
                 if not perf.is_file() or len(perf.read_text().splitlines()) < 2:
                     report['status'] = 'failed'

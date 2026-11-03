@@ -1,0 +1,39 @@
+{
+  "status": "running",
+  "scope": "Original shape Euler/CFG sampler through a sealed generated TTNN graph.\n\nChanging inputs are freshly uploaded on every call. Learned weights and the\ncompiler const-eval cache remain resident. Require a sealed canonical forward\nand every state of the canonical native trajectory to match bitwise. Original\nstock CPU trajectory gates are reported unchanged, including inherited failures.\n",
+  "script_sha256": "7fbc8137dd274615adadab675842a788d8f1768e940222b3599facd428aa730e",
+  "source_commit": "97ade4e67278040d528b7a9b8092ad7cc18106fc",
+  "instrumented": true,
+  "phase": "first_forward_and_warmup",
+  "export_sha256": "c8db775b351d94410ce94dfc5ca463fc6beb87b78ff7a65c35905f5cd232e926",
+  "torch": "2.11.0+cpu",
+  "sampler_native_control": {
+    "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/110-clean-process-shape-control/shape_flow_tensor",
+    "result_sha256": "8481078ccf5ef9f824f8bee7ac7b0dd07e4c4cef54dc1836e35bce9500193d99",
+    "source_hashes_checked": 114,
+    "checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+    "artifact_sha256": {
+      "trajectory-reference.pt": "df43fe45e2ce7d44ecdc16b9ef82e7f90a03a1bf9a17651fb991e4f37ebcf9fc",
+      "trajectory-tt.pt": "9ab5ef422a9ecf823b32ef7ad2bda8eb28b5c92a8374c161c9bdb99bae81b40d"
+    }
+  },
+  "native_library_sha256": {
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/_ttnncpp.so": "d65f8177140701f21e100ea59a3ec935fbac6d94c9114a6d6311e01544e9a437",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/libtt_metal.so": "7cdbf7fe954add65a1e37121c0d55934dc29a63dca4d9aa4499f579e083928c4",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn/ttnn/_ttnn.so": "f5a2a8b1594bc9127b6660802af1d76b1827baeefc3757c55e0a212ebb275453"
+  },
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "activation_input_mapping": [
+    null,
+    1,
+    2,
+    3,
+    0
+  ]
+}

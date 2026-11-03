@@ -1,0 +1,61 @@
+{
+  "status": "complete_original_schedule_native_device_profile",
+  "all_original_states_bitwise_native": true,
+  "steps": 12,
+  "calls": 21,
+  "positive_calls": 12,
+  "negative_calls": 9,
+  "device_operations": 88599,
+  "matrix_operations": 9597,
+  "total_device_rows_including_first_and_warm": 101256,
+  "all_actual_byte_ranges_contiguous_and_complete": true,
+  "sampler_kernel_sum_seconds": 15.971155499,
+  "host_model_seconds_sum": 16.44339050789131,
+  "upload_preparation_seconds_sum": 0.05762624117778614,
+  "instrumented_profiler_flush_seconds_sum": 136.4026525709196,
+  "instrumented_wall_seconds": 174.8078832150204,
+  "outside_model_adapter_instrumented_seconds": 21.901722357957624,
+  "kernel_seconds_by_operation": {
+    "MatmulDeviceOperation": 4.265837983,
+    "ReshapeViewDeviceOperation": 4.232485649,
+    "BinaryNgDeviceOperation": 3.253012121,
+    "UnaryDeviceOperation": 1.341769738,
+    "TransposeDeviceOperation": 0.778194555,
+    "SliceDeviceOperation": 0.699494363,
+    "ReduceDeviceOperation": 0.497982789,
+    "FillPadDeviceOperation": 0.276602826,
+    "PermuteDeviceOperation": 0.153309193,
+    "TypecastDeviceOperation": 0.132594097,
+    "LayerNormDeviceOperation": 0.131215493,
+    "EmbeddingsDeviceOperation": 0.127453764,
+    "UntilizeDeviceOperation": 0.075948285,
+    "TilizeWithValPaddingDeviceOperation": 0.00382563,
+    "TilizeDeviceOperation": 0.001362644,
+    "ConcatDeviceOperation": 6.6369e-05
+  },
+  "original_stock_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "scope": "Actual native C++ per-operation device durations and operation names for every original-schedule sampler call. Exact byte ranges recorded after synchronized profiler reads; no dependence on truncated Tracy host visualization. Python timers cover model calls and fresh uploads separately. No input-shape or per-core timeline inference from this C++ table.",
+  "required_profiler_flags": [
+    "TT_METAL_DEVICE_PROFILER=1",
+    "TTNN_OP_PROFILER=1",
+    "TT_METAL_PROFILER_CPP_POST_PROCESS=1",
+    "TT_METAL_PROFILER_MID_RUN_DUMP=1"
+  ],
+  "rejected_setup_attempts": {
+    "130": "Without MID_RUN_DUMP the C++ CSV is written at device close, not after each read; first byte-range guard rejected missing file. Operator names also need TTNN_OP_PROFILER.",
+    "131": "Interrupted own diagnostic worker once missing operator-name profiling was established, then reran in fresh132 with both settings audited from /proc."
+  },
+  "limits": "Single synthetic512 fixture on n150. Instrumented wall includes136.4s buffer flushing and other host work; it is not ordinary sampler latency and must not be used as a speedup baseline. Kernel shares are operation-duration shares, not critical-path wall percentages. Original stock CPU trajectory gates still fail; defaults unchanged.",
+  "tests": "30 focused checks pass, including missing/blank/nonfinite device rows, duplicate/overlapping ranges, unaccounted trailing rows, missing host windows and failed native equality.",
+  "reproduce": "Add --profile --device-profile-only to the result094 launcher command. Run cpp_sampler_profile_report.py with the resulting native CSV and execute.json. Restore compressed CSV bytes without rewriting them to preserve recorded offsets.",
+  "next": "Extend fixed-conditioning prefill to cache normalized/head-packed cross-attention K/V, with CPU and native trajectory controls and fresh used prefill cost included. Current raw-KV cache retains repeated context head packing; exact native reshape paths are bound in reshape-layout-binding.json."
+}

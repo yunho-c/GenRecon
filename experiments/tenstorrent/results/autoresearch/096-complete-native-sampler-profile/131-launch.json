@@ -1,0 +1,47 @@
+{
+  "status": "failed",
+  "command": [
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/venv/bin/python",
+    "/home/user/GitHub/GenRecon/experiments/tenstorrent/codegen_sampler.py",
+    "--directory",
+    "/home/user/tt-scratchpad/genrecon/autoresearch/120-shape-fp32-flat-codegen",
+    "--result",
+    "/home/user/tt-scratchpad/genrecon/autoresearch/131-original-sampler-native-device-profile/execute.json",
+    "--native-control-result",
+    "/home/user/tt-scratchpad/genrecon/autoresearch/122-canonical-fp32-flat-control/execute.json",
+    "--runs",
+    "1",
+    "--sampler-native-control-dir",
+    "/home/user/tt-scratchpad/genrecon/autoresearch/110-clean-process-shape-control/shape_flow_tensor",
+    "--repair-embedding-indices",
+    "--repair-native-time-frequencies",
+    "--flush-device-profiler"
+  ],
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "sdk_build_result_sha256": "d5bf720c01b0d304136d62b4fc046f60fa443316cfcf6c6dba5bc49222d7f44b",
+  "launcher_sha256": "1754cc3f281fe5e8fbe5aaa2c0a933352ee679245157b405fb6330e4675f332a",
+  "source_commit": "97ade4e67278040d528b7a9b8092ad7cc18106fc",
+  "environment": {
+    "LD_LIBRARY_PATH": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib:/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib64",
+    "PYTHONPATH": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn:/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source:/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/tools",
+    "TT_METAL_HOME": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source",
+    "TT_METAL_RUNTIME_ROOT": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source",
+    "VIRTUAL_ENV": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/venv",
+    "TT_METAL_LOGS_PATH": "/home/user/tt-scratchpad/genrecon/autoresearch/131-original-sampler-native-device-profile/metal-logs",
+    "TT_METAL_PROFILER_DIR": "/home/user/tt-scratchpad/genrecon/autoresearch/131-original-sampler-native-device-profile/profiler"
+  },
+  "profile": true,
+  "compact_profile": true,
+  "device_profile_only": true,
+  "profiler_environment": {
+    "TT_METAL_PROFILER_DIR": "/home/user/tt-scratchpad/genrecon/autoresearch/131-original-sampler-native-device-profile/profiler",
+    "TT_METAL_DEVICE_PROFILER": "1",
+    "TT_METAL_PROFILER_CPP_POST_PROCESS": "1",
+    "TT_METAL_PROFILER_MID_RUN_DUMP": "1",
+    "TT_METAL_PROFILER_DISABLE_DUMP_TO_FILES": "1",
+    "TT_METAL_PROFILER_DISABLE_PUSH_TO_TRACY": "1",
+    "TT_METAL_PROFILER_PROGRAM_SUPPORT_COUNT": "10000"
+  },
+  "pid": 803804,
+  "returncode": -2
+}
