@@ -1,0 +1,22 @@
+{
+  "status": "completed_standalone_canonical_profiler_capability_control",
+  "finding": "Standalone canonical TTNN device-profiler request is rejected before device opening with the same Tracy-enabled-build requirement as PJRT. Process-start environment isolation and all three native library wheel-RECORD hashes are verified. Bundled profiler APIs and a Tracy shared-library dependency do not establish that the native Metal build enables device profiling. Inspector operation/program/kernel logging remains the supported canonical path tested here.",
+  "source_commit": "2bebe405c5212e486001d5932d13b3490ed6a6f5",
+  "native_device_program_executed": false,
+  "native_library_audit": {
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnn.so": {
+      "sha256": "32a1eb33982dabf23018409458cd36ff2b9a1e5e8073e66bfe80ae915da702d4",
+      "matches_wheel_record": true
+    },
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnncpp.so": {
+      "sha256": "6c9b0144218f7412a85ed99be8e05704b7da2b171cd02dadf611aa1697c9177e",
+      "matches_wheel_record": true
+    },
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/libtt_metal.so": {
+      "sha256": "7b7e42b9b33f320a4761db8546780b40a005ea63212ff9bd5711b4c8efc9b564",
+      "matches_wheel_record": true
+    }
+  },
+  "decision": "Do not retry profiler env flags on this wheel. Build an isolated profiling-enabled SDK at the canonical Metal revision, preserving compiler/source/build identities and actual numeric/trajectory controls before claiming matched-version kernel profiles. Existing alternate-SDK profiles remain explicitly labeled.",
+  "reproduce": "canonical_ttnn_matmul_probe.py --variant default --profile-device --native-control-dir <sealed103> --output-dir <new> (source2bebe40)"
+}
