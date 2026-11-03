@@ -1211,6 +1211,14 @@ Thirty focused checks include complete cached and inline CPU trajectories for
 all cache layouts and changed shape conditioning. This extension alone supplies
 no pretrained texture speed or quality result. Shape remains the default stage.
 
+The [sealed texture512 stock CPU reference](results/autoresearch/107-texture512-stock-cpu-reference/summary.json)
+retains all original texture states, noise, coordinates, condition identities and
+fixed shape concatenation. Restore its `manifest.json` and decompress
+`reference.pt.gz` as `reference.pt` into a fresh external cache directory.
+Strict physical checkpoint, reference-source, SDK and semantic fixture checks
+apply on reuse. The stored 58.24s CPU duration is reference provenance, not a
+native speed comparison.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

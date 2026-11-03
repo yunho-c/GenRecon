@@ -114,7 +114,8 @@
     "results/autoresearch/103-transposed-cache-dynamic-scenes/summary.json",
     "results/autoresearch/104-transposed-cache-pretrained-controls/summary.json",
     "results/autoresearch/105-transposed-cache-abba-sampler/summary.json",
-    "results/autoresearch/106-texture-cache-sampler-extension/summary.json"
+    "results/autoresearch/106-texture-cache-sampler-extension/summary.json",
+    "results/autoresearch/107-texture512-stock-cpu-reference/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -217,7 +218,8 @@
     "Native heads_t cache passes six two-scene/branch/noise controls, exact repeats and old-scene replay, without fallback or value-change compilation. Every changed positive cache tensor and output changes; unchanged negative cache/output remain bitwise. Native prefill has6 dynamic conditioning products, body31 total/zero conditioning products. NonzeroLoRA/learned identities retained; no pretrained speed or reconstruction claim.",
     "Transposed-key pretrained CPU trajectory preserves every ordinary prepared state bitwise, with original learned identities and logical cache payload. Fresh ordinary native137 matches every original110 state. Candidate native/paired validation is a separate pending gate; stock CPU native error remains0.299911.",
     "Transposed-key cache heads_t passes all pretrained CPU/native state guards and twelve paired ABBA trajectories. Prefill-inclusive median falls16.869609s to13.628906s (19.2103% lower), with fresh positive/negative caches each cached trial, no fallback or measured recompilation, original12steps21calls and shared learned objects/LoRA. Prefix32/body425 matrixops and30/0 fixed cross-KV packs confirm work moved out of denoiser.92 focused tests and independent compressed-evidence audit pass. One n150 synthetic512-token shape fixture only; unchanged stock CPU final error0.299911/PCC0.954575 still fails, raw cache default and production defaults unchanged.",
-    "Texture cache harness adds --stage tex with original12steps18calls and fixed32-channel shape concatenation, choosing matching texture checkpoint/CPU cache.30 focused CPU tests pass; cached/inline complete trajectories remain bitwise original for all three layouts and changed shape conditioning. Pretrained/native performance remains pending. Shape and production defaults unchanged."
+    "Texture cache harness adds --stage tex with original12steps18calls and fixed32-channel shape concatenation, choosing matching texture checkpoint/CPU cache.30 focused CPU tests pass; cached/inline complete trajectories remain bitwise original for all three layouts and changed shape conditioning. Pretrained/native performance remains pending. Shape and production defaults unchanged.",
+    "Sealed complete original pretrained texture512 stock CPU trajectory:58.2411s, original12steps18calls and fixed32-channel shape concat. Compressed artifact and strict model/reference/checkpoint/fixture manifest retained. Fresh native140 and cache141 gates remain pending; no texture speed claim."
   ],
   "next_actions": [
     "Extend validated transposed-key heads_t conditioning cache to texture and matched real-image shape/texture fixtures using fresh same-source ordinary controls. Require CPU/native every-state equality, original schedules, no fallback/recompilation and paired prefill-inclusive timing; retain unchanged strict stock CPU quality gates.",
@@ -235,6 +237,12 @@
       "tool_session": 98656,
       "worker_pid": 831534,
       "source_commit": "29507d0b54b2bd5307e8473c101a386ad1fcab6d"
+    },
+    {
+      "run": 141,
+      "purpose": "Texture heads_t CPU/native equivalence then prefill-inclusive three-round ABBA against fresh140",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/141-transposed-texture-cache-abba",
+      "tool_session": 9579
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."

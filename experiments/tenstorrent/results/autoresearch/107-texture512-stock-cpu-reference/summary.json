@@ -1,0 +1,10 @@
+{
+  "status": "completed_original_texture512_stock_CPU_reference",
+  "scope": "Strictly loaded original pretrained texture512 stock FP32 CPU reference, original12steps18calls andfixed32-channel shape concat, seeded synthetic conditions/noise. Native control140 still compiling; cached candidate141 CPU checks starting.",
+  "cpu_trajectory_seconds": 58.24106941296486,
+  "checkpoint_sha256": "28f99217a4fbcd04f36a5f576905975ae8b874ad63548d6ab8afdb96cf03ed47",
+  "reference_sha256": "449719febb0a05b5597d7e5e52191b5b147e4814426b7c8e07714ba390dc995f",
+  "manifest_sha256": "958e25eb44a90586c5f53428a1f8681b8597659407e3f9a1048f5e90bcd604ac",
+  "restore": "Copy manifest.json and decompress reference.pt.gz as reference.pt in a fresh directory. Reuse validates physical checkpoint hash, original reference/model sources, versions, fixture conditions/noise/coordinates/shape concat and original sampler config.",
+  "limits": "No native equality, speed or reconstruction-quality claim from this CPU reference artifact."
+}
