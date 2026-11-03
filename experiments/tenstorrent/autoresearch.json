@@ -122,11 +122,19 @@
     "The compensated prepared FP32 CPU model has complete-sampler final relative L2 0.000064297 versus stock; all-state gates pass: True. Native candidate differs 0.295794 from the identically prepared CPU trajectory. Physical checkpoint bytes and all shared model/helper hashes are verified. This is a CPU control, not a CUDA oracle."
   ],
   "next_actions": [
-    "Use complete matched sampler and CPU controls to choose the next native primitive investigation. Retain stock gates and report both layout and lookup compensation effects; avoid promoting local kernel accuracy alone.",
+    "Complete native run078 with FP32 model tensors and HiFi3 versus matched HiFi4 run077. Verify actual native compute configurations, source/reference/fixture identity and complete original21-forward trajectory; do not infer full accuracy from the runtime warning or old BF16 trial.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "name": "matched flat FP32 HiFi3 sampler",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/078-shape-flat-fp32-hifi3",
+      "status": "launched",
+      "source_commit": "e524d50",
+      "note": "Only requested math fidelity changes versus completed run077. Native runtime warns HiFi4 can be less accurate with FP32 accumulation on Wormhole; run077 IR explicitly uses HiFi4+FP32 accumulation. Prior result012 tested a different BF16-pipeline recipe. Original schedule, learned weights, sealed reference and strict gates retained."
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
