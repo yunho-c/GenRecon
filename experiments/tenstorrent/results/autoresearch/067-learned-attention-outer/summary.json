@@ -1,0 +1,318 @@
+{
+  "status": "completed_guarded_self_attention_trial_cross_rejected",
+  "scope": "Guard isolated learned attention against accepted full-model FP32 boundaries.\n\nOnly accepted ordinary/observer comparisons support component attribution.\nQKV-only alternatives consume identical observed native Q/K/V values. Timings\nare isolated resident-input calls with output transfer, not whole-flow latency.\n",
+  "self": {
+    "cpu_observer_bitwise_ordinary": true,
+    "cpu_teacher_boundaries_bitwise": true,
+    "input_digest": "23ee1647a2c714240ee5f32bf89105cc619e388ff5f67cd103781f279ca5c9ec",
+    "context_digest": "973197881499e150ca50b84508319943ef7edb5e069a1019b388934c427d0f73",
+    "full_model_boundary_vs_cpu": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.01571305772630971,
+      "pcc": 0.9999184234255803,
+      "max_abs": 10.972678184509277
+    },
+    "isolated_vs_full_model": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0000000000000118,
+      "max_abs": 0.0
+    },
+    "isolated_bitwise_full_model": true,
+    "observer_vs_ordinary": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0000000000000118,
+      "max_abs": 0.0
+    },
+    "observer_bitwise_ordinary": true,
+    "all_states_repeat_bitwise": true,
+    "executed_fallback_ops": [],
+    "aten_counters": {},
+    "attribution_accepted": true,
+    "local_errors": {
+      "q_raw": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.004912799379449213,
+        "pcc": 0.9999994009307872,
+        "max_abs": 2.365386962890625
+      },
+      "k_raw": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0049294377467434735,
+        "pcc": 0.9999994960009498,
+        "max_abs": 2.126556396484375
+      },
+      "v_raw": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.005027688737269299,
+        "pcc": 0.9999981953732859,
+        "max_abs": 0.4229888916015625
+      },
+      "q_norm": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00034540448430217736,
+        "pcc": 0.9999999925109188,
+        "max_abs": 0.0561065673828125
+      },
+      "q_head": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00013981627000559331,
+        "pcc": 0.9999999902036261,
+        "max_abs": 0.0147857666015625
+      },
+      "k_norm": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0002484823677664528,
+        "pcc": 0.9999999934837636,
+        "max_abs": 0.05548095703125
+      },
+      "k_head": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00011045746626068522,
+        "pcc": 0.9999999938964657,
+        "max_abs": 0.02234649658203125
+      },
+      "v_head": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.000000000000013,
+        "max_abs": 0.0
+      },
+      "scores": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0014323284045638608,
+        "pcc": 0.9999999574550938,
+        "max_abs": 4.222412109375
+      },
+      "probabilities": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.000634622422749854,
+        "pcc": 0.9999999350839026,
+        "max_abs": 0.0015808343887329102
+      },
+      "attended": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0023880368223587346,
+        "pcc": 0.9999994898196004,
+        "max_abs": 0.4994489550590515
+      },
+      "output": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.002070302682226324,
+        "pcc": 0.9999997338655161,
+        "max_abs": 0.42669677734375
+      }
+    },
+    "qkv_cases": {
+      "native": {
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.001,
+          "min_pcc": 0.999999,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999961,
+          "max_abs": 0.0
+        },
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.014721903438733745,
+          "pcc": 0.9998945295372809,
+          "max_abs": 4.692440986633301
+        },
+        "native_vs_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.014721903438733745,
+          "pcc": 0.9998945295372809,
+          "max_abs": 4.692440986633301
+        },
+        "warm_seconds": [
+          0.007135465042665601,
+          0.005430740013252944,
+          0.00560640002368018
+        ],
+        "native_vs_captured_attended": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999901,
+          "max_abs": 0.0
+        },
+        "native_bitwise_captured_attended": true,
+        "executed_fallback_ops": [],
+        "aten_counters": {}
+      },
+      "outer_sum": {
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.001,
+          "min_pcc": 0.999999,
+          "relative_l2": 5.8774568683965875e-06,
+          "pcc": 0.9999999999827223,
+          "max_abs": 0.001712799072265625
+        },
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00193264065212787,
+          "pcc": 0.9999994702100662,
+          "max_abs": 0.3385162353515625
+        },
+        "native_vs_cpu_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0019326468607277257,
+          "pcc": 0.9999994701646674,
+          "max_abs": 0.33852386474609375
+        },
+        "warm_seconds": [
+          0.09886038699187338,
+          0.09741254203254357,
+          0.09711758000776172
+        ],
+        "native_vs_captured_attended": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.014554686709761575,
+          "pcc": 0.9998945614090837,
+          "max_abs": 4.6764678955078125
+        },
+        "native_bitwise_captured_attended": false,
+        "executed_fallback_ops": [],
+        "aten_counters": {}
+      }
+    },
+    "qkv_source_attribution_accepted": true
+  },
+  "cross": {
+    "cpu_observer_bitwise_ordinary": true,
+    "cpu_teacher_boundaries_bitwise": true,
+    "input_digest": "8ec3064aecb60a8d4d23696cffa29a6d0065e76e8758efb34f9133fdc7e067d1",
+    "context_digest": "973197881499e150ca50b84508319943ef7edb5e069a1019b388934c427d0f73",
+    "full_model_boundary_vs_cpu": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.011096137062300776,
+      "pcc": 0.9999991469290713,
+      "max_abs": 0.24840927124023438
+    },
+    "isolated_vs_full_model": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0014854360572644847,
+      "pcc": 0.9999997357183795,
+      "max_abs": 0.1264304518699646
+    },
+    "isolated_bitwise_full_model": false,
+    "observer_vs_ordinary": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0005768270932878187,
+      "pcc": 0.9999998390097986,
+      "max_abs": 0.12457364797592163
+    },
+    "observer_bitwise_ordinary": false,
+    "all_states_repeat_bitwise": true,
+    "executed_fallback_ops": [],
+    "aten_counters": {},
+    "attribution_accepted": false
+  },
+  "finding": "Self attention passes all three bitwise guards: isolated vs full-model, observer vs isolated, and native QKV-only vs captured attended output. On identical actual TT Q/K/V, balanced outer QK lowers core relative error0.0147219 to0.00193264 (7.62x), while median time rises5.606ms to97.413ms (17.37x). Cross attention fails isolated/full-model and observer/ordinary equality, so it supports no suboperation attribution or QKV alternative claim.",
+  "decision": "Test a self-attention-only precise-QK option in the complete original shape sampler and an identical prepared CPU trajectory. Keep cross attention and all learned weights/schedules unchanged. This is an accuracy/cost diagnostic; local gains are not full-model or sampler quality evidence.",
+  "tests": "15 focused observer/outer-sum CPU checks pass. Accepted self capture repeats all12 outputs exactly, preserves original LoRA and reconstructs CPU boundaries bitwise. QKV candidates repeat exactly without fallback; cross rejection is retained explicitly.",
+  "retention": "Raw report, actual runtime IRs, metrics, selected self QKV/stage/alternative outputs retained. Full cross tensors remain outside Git; no rejected cross attribution used.",
+  "reproduce": "learned_attention_diagnostic.py --capture-directory <accepted-full-capture079> --output-dir <new>; original checkpoint and semantic input hashes are verified."
+}

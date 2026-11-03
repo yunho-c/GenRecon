@@ -74,7 +74,8 @@
     "results/autoresearch/063-rejected-fidelity-cache-sweep/summary.json",
     "results/autoresearch/064-fresh-matrix-cancellation-controls/summary.json",
     "results/autoresearch/065-arbitrary-fp32-single-term/summary.json",
-    "results/autoresearch/066-balanced-outer-product/summary.json"
+    "results/autoresearch/066-balanced-outer-product/summary.json",
+    "results/autoresearch/067-learned-attention-outer/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -135,22 +136,15 @@
     "Reject the same-process requested HiFi4/HiFi3 sweep: all16 outputs reuse the first four compiled native graph shapes, only HiFi4 runtime IR exists, and every requested-HiFi3 output equals its HiFi4 counterpart bitwise. Fresh-process controls below determine which numerical results actually differ. The harness now rejects multiple fidelities before creating output; fresh-process native compute configurations are required.",
     "Fresh-process HiFi4/HiFi3 tests verify actual FP32 operand/accumulation configurations and bitwise input device roundtrips. The FP32 cancellation has exact CPU result1 but native result0 under both fidelities. BF16-representable cancellation gives2^-14 exactly under HiFi4 but zero under HiFi3. Random matmul outputs retain bits beyond ten fraction bits, ruling out a simple final-output-only quantization model. K1 rewrites to broadcast multiply and is exact on BF16-representable values; it is not evidence of exact matrix-unit arithmetic. General matrix errors differ across K32/K128 and fidelity; this does not locate every internal loss or quantify sampler contribution.",
     "For seeded arbitrary FP32 values, the K1 product lowered to broadcast multiply matches CPU bitwise across512x512 outputs, with exact input roundtrips and repeats and no fallback. All eight previous HiFi4 controls repeat bitwise in this independent process. This confirms a precise multiplication primitive for these inputs; it does not establish multi-term dot-product accuracy, speed or full-model quality.",
-    "Balanced outer-product FP32 accumulation matches its CPU formula bitwise in all nine native cases, with no BF16 or matrix operations in emitted runtime IR. Random K128 FP32 product error versus ordinary CPU matmul falls0.00171543 to2.18e-7; the previous exact-result1 cancellation now returns1. All input readbacks/repeats are exact, without fallback. Extra pointwise/slice operations cost substantially more; this is a precision diagnostic, not a fast attention replacement."
+    "Balanced outer-product FP32 accumulation matches its CPU formula bitwise in all nine native cases, with no BF16 or matrix operations in emitted runtime IR. Random K128 FP32 product error versus ordinary CPU matmul falls0.00171543 to2.18e-7; the previous exact-result1 cancellation now returns1. All input readbacks/repeats are exact, without fallback. Extra pointwise/slice operations cost substantially more; this is a precision diagnostic, not a fast attention replacement.",
+    "Self attention passes all three bitwise guards: isolated vs full-model, observer vs isolated, and native QKV-only vs captured attended output. On identical actual TT Q/K/V, balanced outer QK lowers core relative error0.0147219 to0.00193264 (7.62x), while median time rises5.606ms to97.413ms (17.37x). Cross attention fails isolated/full-model and observer/ordinary equality, so it supports no suboperation attribution or QKV alternative claim."
   ],
   "next_actions": [
-    "Use the accurate balanced outer-product dot on accepted first-block learned Q/K. Generic native results now match CPU formula bitwise and fix cancellation, with extra measured kernel cost. Require isolated learned attention and its observer to match accepted full-model attention before attribution, then evaluate complete original samplers if the local gain warrants the cost.",
+    "Run a self-attention-only outer-QK diagnostic in the complete original FP32 shape sampler. Local self attention passes all source guards and core error improves7.62x at17.37x core cost. Cross isolation/observation fails and is excluded. Require identical prepared CPU control, original sealed stock reference/gates, all21 model calls, actual native IR, no fallback and complete timings before interpreting full-sampler quality or cost.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [
-    {
-      "name": "Guarded learned self/cross attention and precise QK control",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/087-learned-attention-outer-control",
-      "source_commit": "2774de0",
-      "status": "running",
-      "note": "Use exact accepted full-flow079 attention inputs. Require ordinary isolated attention equal full source, observer equal ordinary, exact repeats and no fallback. QKV outer-sum accuracy/cost is measured separately; generic dot precision alone does not establish sampler quality."
-    }
-  ],
+  "live_experiments": [],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
