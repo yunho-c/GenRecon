@@ -1,0 +1,51 @@
+{
+  "status": "completed_canonical_and_matching_revision_generated_texture_forward_calibration",
+  "recipe": {
+    "case": "tex_flow_tensor",
+    "rope_mode": "real_pairs_flat_head_first",
+    "attention_mode": "fp32_reciprocal",
+    "device_precision": "float32",
+    "compiler_options": {
+      "optimization_level": 0,
+      "math_fidelity": "hifi4"
+    },
+    "tokens": 512
+  },
+  "prepared_CPU_vs_stock_forward_relativeL2": 2.1093026965759162e-06,
+  "canonical_vs_stock_CPU": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.04779185871022093,
+    "pcc": 0.998890164776979,
+    "max_abs": 0.45763611793518066
+  },
+  "SDK_bitwise_canonical": true,
+  "native_main_matrix_ops": 457,
+  "canonical_warm_seconds": [
+    0.7753779309568927,
+    0.7750406480045058,
+    0.7751481889863499
+  ],
+  "sdk_warm_seconds": [
+    0.7715862399782054,
+    0.7714796300278977,
+    0.7703183850389905
+  ],
+  "canonical_median_seconds": 0.7751481889863499,
+  "sdk_median_seconds": 0.7714796300278977,
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "matching_metal_revision": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "SDK_native_libraries_confined_to_isolated_workspace": true,
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "export_sha256": "748fa5ef5ca492d023807b9ebdc737910aafd1637103467b9a08346bcd275f8a",
+  "limits": "Canonical and SDK execute the same generated full denoiser and pass exact repeat/SDK equality guards. This is alternate-boundary forward calibration, not a speedup or complete18call native PJRT sampler equivalence/quality result. Full sampler requires exact native frequency constants and every original state; original strict stockCPU trajectory gate remains failed. Large generated weight/tensor files stay outside Git and are reproducible from original checkpoint and export options."
+}

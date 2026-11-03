@@ -1,0 +1,38 @@
+{
+  "status": "completed_calibrated_execute",
+  "command": [
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/venv/bin/python",
+    "/home/user/GitHub/GenRecon/experiments/tenstorrent/codegen_probe.py",
+    "execute",
+    "--directory",
+    "/home/user/tt-scratchpad/genrecon/autoresearch/144-texture-fp32-flat-codegen",
+    "--result",
+    "/home/user/tt-scratchpad/genrecon/autoresearch/146-texture-profile-sdk-calibration/execute.json",
+    "--native-control-result",
+    "/home/user/tt-scratchpad/genrecon/autoresearch/145-texture-canonical-execute/execute.json",
+    "--runs",
+    "3",
+    "--repair-embedding-indices"
+  ],
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "sdk_build_result_sha256": "d5bf720c01b0d304136d62b4fc046f60fa443316cfcf6c6dba5bc49222d7f44b",
+  "launcher_sha256": "a644fbe592bf319d75250116d374cd0937eb3b9ec299b8b305522c45bd8aa270",
+  "source_commit": "0e72f10938f3f72011495a0447c0327a6024c3e9",
+  "environment": {
+    "LD_LIBRARY_PATH": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib:/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib64",
+    "PYTHONPATH": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn:/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source:/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/tools",
+    "TT_METAL_HOME": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source",
+    "TT_METAL_RUNTIME_ROOT": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source",
+    "VIRTUAL_ENV": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/venv",
+    "TT_METAL_LOGS_PATH": "/home/user/tt-scratchpad/genrecon/autoresearch/146-texture-profile-sdk-calibration/metal-logs",
+    "TT_METAL_PROFILER_DIR": "/home/user/tt-scratchpad/genrecon/autoresearch/146-texture-profile-sdk-calibration/profiler"
+  },
+  "profile": false,
+  "compact_profile": false,
+  "device_profile_only": false,
+  "profiler_environment": {
+    "TT_METAL_PROFILER_DIR": "/home/user/tt-scratchpad/genrecon/autoresearch/146-texture-profile-sdk-calibration/profiler"
+  },
+  "pid": 844547,
+  "returncode": 0
+}

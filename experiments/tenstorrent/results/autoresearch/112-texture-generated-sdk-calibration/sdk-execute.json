@@ -1,0 +1,103 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/144-texture-fp32-flat-codegen",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "b80eb22befd3b5527a4777f809b2d41f1c12965e059a8a7513d68dbc6aa75fb6",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "tex_flow_tensor",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0,
+    "math_fidelity": "hifi4"
+  },
+  "rope_mode": "real_pairs_flat_head_first",
+  "attention_mode": "fp32_reciprocal",
+  "device_precision": "float32",
+  "export_sha256": "748fa5ef5ca492d023807b9ebdc737910aafd1637103467b9a08346bcd275f8a",
+  "ttnn_path": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn/ttnn/__init__.py",
+  "native_library_sha256": {
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/_ttnncpp.so": "d65f8177140701f21e100ea59a3ec935fbac6d94c9114a6d6311e01544e9a437",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/libtt_metal.so": "7cdbf7fe954add65a1e37121c0d55934dc29a63dca4d9aa4499f579e083928c4",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn/ttnn/_ttnn.so": "f5a2a8b1594bc9127b6660802af1d76b1827baeefc3757c55e0a212ebb275453"
+  },
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "instrumented": false,
+  "flush_device_profiler": false,
+  "profiler_program_support_count": null,
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "activation_preparation_scope": "Generated loader reads files, converts dtype/layout and uploads activations; explicit device synchronization completes this before BEGIN/timer.",
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "activation_preparation_seconds": [
+    {
+      "label": "GENRECON_FIRST",
+      "seconds": 0.017538192973006517
+    },
+    {
+      "label": "GENRECON_WARMUP_0",
+      "seconds": 0.002797280962113291
+    },
+    {
+      "label": "GENRECON_WARMUP_1",
+      "seconds": 0.0030416710069403052
+    },
+    {
+      "label": "GENRECON_WARMUP_2",
+      "seconds": 0.0029951210017316043
+    },
+    {
+      "label": "GENRECON_MEASURED_0",
+      "seconds": 0.0028697699890471995
+    },
+    {
+      "label": "GENRECON_MEASURED_1",
+      "seconds": 0.0029840600327588618
+    },
+    {
+      "label": "GENRECON_MEASURED_2",
+      "seconds": 0.002763609983958304
+    }
+  ],
+  "first_seconds": 7.433928384969477,
+  "native_control": {
+    "result_sha256": "6b4a6fb974aec0e061f1c91f74a9462bd8c71fcc7eada42b6a1ce1cb7aa889df",
+    "output_sha256": "82e0075babc0efec230052e658f9be11ac2897be7ec7d979f47ecc457e873c0b",
+    "bitwise_equal": true
+  },
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.04779185871022093,
+      "pcc": 0.998890164776979,
+      "max_abs": 0.45763611793518066
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.04779185871022093,
+    "pcc": 0.998890164776979,
+    "max_abs": 0.45763611793518066
+  },
+  "warm_seconds": [
+    0.7715862399782054,
+    0.7714796300278977,
+    0.7703183850389905
+  ],
+  "warm_median_seconds": 0.7714796300278977,
+  "output_sha256": "82e0075babc0efec230052e658f9be11ac2897be7ec7d979f47ecc457e873c0b"
+}
