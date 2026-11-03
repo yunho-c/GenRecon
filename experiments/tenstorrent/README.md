@@ -722,6 +722,13 @@ match the ordinary native final output bitwise, repeat every state exactly,
 and report no fallback before those intermediates support attribution. MLP
 preactivations are deliberately omitted so linear/GELU fusion can survive.
 This numerical capture is separate from sampler timing and scene quality.
+After an accepted detailed capture, `fp32_first_block_analysis.py
+--capture-directory <capture> --output-dir <new>` reconstructs its prepared CPU
+states bitwise, then compares each native boundary with CPU math on the same
+observed inputs. It verifies checkpoint bytes, model/helper sources, input
+digests and tensor artifacts. Combined attention, MLP and output-head errors
+are reported separately from propagated differences; they are not additive
+contributions to the final prediction error.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning

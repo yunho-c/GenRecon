@@ -9,6 +9,8 @@ from genrecon.modules.attention import RotaryPositionEmbedder
 from genrecon.modules.transformer import ModulatedTransformerCrossBlock
 from genrecon.modules.lora import apply_lora_to_attention
 from experiments.tenstorrent.flow_observation import ShapeFlowObservation
+from experiments.tenstorrent.flow_observation import FIRST_BLOCK_NAMES, observe_block
+from experiments.tenstorrent.fp32_first_block_analysis import first_block_references
 from experiments.tenstorrent.inference_rope import prepare_real_rope
 from experiments.tenstorrent.inference_attention import prepare_attention
 
@@ -73,3 +75,42 @@ def test_unsupported_modulation_is_rejected():
     flow.blocks[0].share_mod = False
     with pytest.raises(ValueError,match='shared-modulation'):
         ShapeFlowObservation(flow,first_block=True)
+
+
+def test_teacher_forcing_separates_upstream_error_from_local_arithmetic():
+    torch.set_num_threads(4)
+    torch.manual_seed(60)
+    flow = TinyFlow().eval()
+    prepare_real_rope(flow,head_first=True,flatten=True)
+    prepare_attention(flow,'fp32_reciprocal')
+    observation = ShapeFlowObservation(flow,first_block=True).eval()
+    inputs = (torch.randn(17,8),torch.tensor([.6]),torch.randn(1,9,24),torch.randn(17,24))
+    with torch.no_grad():
+        states = dict(zip(observation.names,observation(*inputs),strict=True))
+        for name,value in first_block_references(flow,inputs,states).items():
+            torch.testing.assert_close(value,states[name],rtol=0,atol=0)
+        original_norm = states['first_norm1'].clone()
+        output,values = observe_block(flow.blocks[0],states['first_input']+torch.randn_like(states['first_input'])*.1,
+                                     states['modulation'],inputs[2],flow.phases)
+        states.update(zip(FIRST_BLOCK_NAMES[2:],values,strict=True))
+        states['block_00'] = output
+        references = first_block_references(flow,inputs,states)
+        assert not torch.equal(original_norm,states['first_norm1'])
+        assert not torch.equal(references['first_input'],states['first_input'])
+        for name in ['first_norm1','first_self_output','first_cross_output','first_mlp_output','block_00']:
+            torch.testing.assert_close(references[name],states[name],rtol=0,atol=0)
+
+
+def test_teacher_forcing_assigns_mlp_error_before_residual_amplification():
+    torch.manual_seed(61)
+    flow = TinyFlow().eval()
+    observation = ShapeFlowObservation(flow,first_block=True).eval()
+    inputs = (torch.randn(17,8),torch.tensor([.6]),torch.randn(1,9,24),torch.randn(17,24))
+    with torch.no_grad():
+        states = dict(zip(observation.names,observation(*inputs),strict=True))
+        states['first_mlp_output'] = states['first_mlp_output']+.1
+        gate = (flow.blocks[0].modulation+states['modulation']).chunk(6,dim=1)[5]
+        states['block_00'] = states['first_after_cross']+states['first_mlp_output']*gate.unsqueeze(1)
+        references = first_block_references(flow,inputs,states)
+        assert not torch.equal(references['first_mlp_output'],states['first_mlp_output'])
+        torch.testing.assert_close(references['block_00'],states['block_00'],rtol=0,atol=0)

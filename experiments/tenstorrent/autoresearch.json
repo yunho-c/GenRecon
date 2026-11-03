@@ -124,11 +124,19 @@
     "On the identical FP32-tensor, flattened-RoPE shape512 sampler, HiFi3 final relative L2 is 0.301752 versus HiFi4 0.299911; runtime 16.895s versus 16.866s. Actual runtime IR confirms all457 learned linear/matmul operations use requested HiFi3/HiFi4 with FP32 accumulation and FP32 operands. Original12steps/21forwards, stock reference, physical checkpoint and model/helper sources match; no fallback or recompilation. The runtime warning motivated a test, not an assumed accuracy improvement."
   ],
   "next_actions": [
-    "Investigate FP32 normalization, nonlinearities and learned projections on identical actual TT activations. Require captured final output to match ordinary execution bitwise before attribution. Complete matched lookup and fidelity controls retain about30% final error while prepared CPU error is about0.0064%; neither local lookup compensation nor HiFi3 resolves the sampler gap.",
+    "Complete native observer079 and reject attribution if observation changes final execution. If accepted, run fp32_first_block_analysis.py to compare normalization, modulation, attention, MLP and residual boundaries on identical captured TT inputs. New CPU tests inject upstream and MLP errors to verify that teacher forcing separates propagation from local arithmetic.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "name": "FP32 first-block and full-flow native observation",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/079-fp32-first-block-capture",
+      "status": "ordinary_compiled_forward",
+      "source_commit": "a54f6bd",
+      "note": "Same FP32/HiFi4 flattened-RoPE reciprocal-attention recipe as run077. CPU stock/prepared capture equals ordinary CPU forward bitwise. Hardware attribution requires captured final equal ordinary native final bitwise, exact state repeats and no fallback. Process425108 confirmed live; next run guarded CPU teacher-forcing analysis if accepted."
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
