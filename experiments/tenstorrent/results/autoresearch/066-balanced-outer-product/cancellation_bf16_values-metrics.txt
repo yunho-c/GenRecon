@@ -1,0 +1,84 @@
+Metric: DeviceLockWait
+  TotalSamples: 9
+  Accumulator: 019.310us
+  ValueRate: 033.782us / second
+  Rate: 15.7451 / second
+  Percentiles: 1%=000.340us; 5%=000.340us; 10%=000.340us; 20%=000.400us; 50%=000.610us; 80%=006.020us; 90%=008.730us; 95%=008.730us; 99%=008.730us
+Metric: LazyTracing
+  TotalSamples: 1553
+  Accumulator: 269ms651.145us
+  ValueRate: 774ms879.965us / second
+  Rate: 3009.41 / second
+  Percentiles: 1%=005.430us; 5%=005.600us; 10%=005.710us; 20%=005.880us; 50%=006.540us; 80%=008.780us; 90%=009.580us; 95%=010.471us; 99%=015.070us
+Metric: RunCachedGraphInputData
+  TotalSamples: 4
+  Accumulator: 012.010us
+  ValueRate: 061.294us / second
+  Rate: 20.4143 / second
+  Percentiles: 1%=001.900us; 5%=001.900us; 10%=001.900us; 20%=001.900us; 50%=003.190us; 80%=004.570us; 90%=004.570us; 95%=004.570us; 99%=004.570us
+Metric: RunCachedGraphOutputData
+  TotalSamples: 4
+  Accumulator: 051.000us
+  ValueRate: 260.272us / second
+  Rate: 20.4135 / second
+  Percentiles: 1%=006.940us; 5%=006.940us; 10%=006.940us; 20%=006.940us; 50%=012.690us; 80%=018.970us; 90%=018.970us; 95%=018.970us; 99%=018.970us
+Metric: TensorsGraphSize
+  TotalSamples: 1
+  Accumulator: 646.00
+  Percentiles: 1%=646.00; 5%=646.00; 10%=646.00; 20%=646.00; 50%=646.00; 80%=646.00; 90%=646.00; 95%=646.00; 99%=646.00
+Metric: UnwrapXlaData
+  TotalSamples: 8
+  Accumulator: 005.460us
+  ValueRate: 021.144us / second
+  Rate: 30.9797 / second
+  Percentiles: 1%=000.240us; 5%=000.240us; 10%=000.240us; 20%=000.320us; 50%=000.540us; 80%=000.950us; 90%=001.680us; 95%=001.680us; 99%=001.680us
+Metric: WrapXlaData
+  TotalSamples: 4
+  Accumulator: 000.450us
+  ValueRate: 002.310us / second
+  Rate: 20.5303 / second
+  Percentiles: 1%=000.070us; 5%=000.070us; 10%=000.070us; 20%=000.070us; 50%=000.150us; 80%=000.150us; 90%=000.150us; 95%=000.150us; 99%=000.150us
+Counter: CachedCompile
+  Value: 1
+Counter: CreateXlaTensor
+  Value: 1042
+Counter: DestroyLtcTensor
+  Value: 1044
+Counter: DestroyXlaTensor
+  Value: 1044
+Counter: DynamoExtractCompiledGraph
+  Value: 1
+Counter: xla::_to_copy
+  Value: 4
+Counter: xla::add
+  Value: 254
+Counter: xla::clone
+  Value: 2
+Counter: xla::mul
+  Value: 256
+Counter: xla::slice_copy
+  Value: 512
+Counter: xla::view_symint
+  Value: 8
+Metric: ExecuteTime
+  TotalSamples: 4
+  Accumulator: 251ms946.387us
+  ValueRate: 01s288ms142.645us / second
+  Rate: 20.5326 / second
+  Percentiles: 1%=062ms272.305us; 5%=062ms272.305us; 10%=062ms272.305us; 20%=062ms272.305us; 50%=063ms866.127us; 80%=063ms404.810us; 90%=063ms404.810us; 95%=063ms404.810us; 99%=063ms404.810us
+Metric: InboundData
+  TotalSamples: 4
+  Accumulator: 1.00MB
+  ValueRate: 5.13MB / second
+  Rate: 20.536 / second
+  Percentiles: 1%=256.00KB; 5%=256.00KB; 10%=256.00KB; 20%=256.00KB; 50%=256.00KB; 80%=256.00KB; 90%=256.00KB; 95%=256.00KB; 99%=256.00KB
+Metric: TransferFromDeviceTime
+  TotalSamples: 4
+  Accumulator: 004ms143.336us
+  ValueRate: 021ms271.951us / second
+  Rate: 20.5361 / second
+  Percentiles: 1%=780.744us; 5%=780.744us; 10%=780.744us; 20%=780.744us; 50%=001ms049.674us; 80%=001ms317.215us; 90%=001ms317.215us; 95%=001ms317.215us; 99%=001ms317.215us
+Counter: CreateDataHandles
+  Value: 4
+Counter: MarkStep
+  Value: 1

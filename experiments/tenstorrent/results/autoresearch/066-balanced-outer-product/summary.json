@@ -1,0 +1,265 @@
+{
+  "status": "completed_native_precise_dot_diagnostic",
+  "finding": "Balanced outer-product FP32 accumulation matches its CPU formula bitwise in all nine native cases, with no BF16 or matrix operations in emitted runtime IR. Random K128 FP32 product error versus ordinary CPU matmul falls0.00171543 to2.18e-7; the previous exact-result1 cancellation now returns1. All input readbacks/repeats are exact, without fallback. Extra pointwise/slice operations cost substantially more; this is a precision diagnostic, not a fast attention replacement.",
+  "metrics": {
+    "identity_fp32": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000009,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000009,
+        "max_abs": 0.0
+      },
+      "candidate_median_seconds": 0.06395799299934879,
+      "baseline_median_seconds": 0.001539006014354527,
+      "time_ratio": 41.557987689978816
+    },
+    "identity_bf16_values_fp32_storage": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000346,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000346,
+        "max_abs": 0.0
+      },
+      "candidate_median_seconds": 0.06393662304617465,
+      "baseline_median_seconds": 0.0016262769931927323,
+      "time_ratio": 39.31471902621784
+    },
+    "product_fp32": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 2.1786485878557932e-07,
+        "pcc": 0.999999999999976,
+        "max_abs": 3.0517578125e-05
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 2.1786485878557932e-07,
+        "pcc": 0.999999999999976,
+        "max_abs": 3.0517578125e-05
+      },
+      "candidate_median_seconds": 0.0641529030399397,
+      "baseline_median_seconds": 0.0038906459813006222,
+      "time_ratio": 16.489010654856273
+    },
+    "product_bf16_values_fp32_storage": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 8.212962434181201e-08,
+        "pcc": 0.9999999999999986,
+        "max_abs": 1.1444091796875e-05
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 8.212962434181201e-08,
+        "pcc": 0.9999999999999986,
+        "max_abs": 1.1444091796875e-05
+      },
+      "candidate_median_seconds": 0.0647250059992075,
+      "baseline_median_seconds": 0.0018999369931407273,
+      "time_ratio": 34.06692234157333
+    },
+    "product_bf16_values_k32": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 3.2384246140366515e-08,
+        "pcc": 0.9999999999999971,
+        "max_abs": 3.814697265625e-06
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 3.2384246140366515e-08,
+        "pcc": 0.9999999999999971,
+        "max_abs": 3.814697265625e-06
+      },
+      "candidate_median_seconds": 0.0243161860271357,
+      "baseline_median_seconds": 0.0026926309801638126,
+      "time_ratio": 9.030641854108195
+    },
+    "product_bf16_values_k1": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000095,
+        "max_abs": 0.0
+      },
+      "candidate_median_seconds": 0.0028091909480281174,
+      "baseline_median_seconds": 0.0021596079459413886,
+      "time_ratio": 1.3007874662192775
+    },
+    "product_fp32_k1": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000002,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000002,
+        "max_abs": 0.0
+      },
+      "candidate_median_seconds": 0.0021992779802531004,
+      "baseline_median_seconds": 0.001872866996563971,
+      "time_ratio": 1.1742841239062756
+    },
+    "cancellation_fp32": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": null,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 0.0,
+        "pcc": null,
+        "max_abs": 0.0
+      },
+      "candidate_median_seconds": 0.06412669195560738,
+      "baseline_median_seconds": 0.0010567450080998242,
+      "time_ratio": 60.68322202999205
+    },
+    "cancellation_bf16_values": {
+      "candidate_vs_cpu_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": null,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_formula": true,
+      "cpu_formula_vs_matmul": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 2e-06,
+        "min_pcc": 0.999999999,
+        "relative_l2": 0.0,
+        "pcc": null,
+        "max_abs": 0.0
+      },
+      "candidate_median_seconds": 0.06403756199870259,
+      "baseline_median_seconds": 0.0010984149994328618,
+      "time_ratio": 58.299970440832226
+    }
+  },
+  "native_ir": {
+    "identity_fp32": {
+      "matmul_ops": 0,
+      "multiply_ops": 128,
+      "add_ops": 127
+    },
+    "product_fp32": {
+      "matmul_ops": 0,
+      "multiply_ops": 128,
+      "add_ops": 127
+    },
+    "product_bf16_values_k32": {
+      "matmul_ops": 0,
+      "multiply_ops": 32,
+      "add_ops": 31
+    },
+    "product_bf16_values_k1": {
+      "matmul_ops": 0,
+      "multiply_ops": 1,
+      "add_ops": 0
+    }
+  },
+  "tests": "18 focused CPU checks pass. Nine native cases match the balanced CPU formula bitwise, including arbitrary FP32 values, BF16-representable values and both cancellation controls.",
+  "decision": "Validate isolated learned attention and QK math using accepted full-model first-block inputs. Measure cost and require ordinary/captured equivalence; no full-sampler promotion from this kernel evidence.",
+  "reproduce": "fp32_matmul_probe.py --math-fidelities hifi4 --product-mode outer_sum --output-dir <new> (seed62). Baseline uses --product-mode native in a separate process."
+}
