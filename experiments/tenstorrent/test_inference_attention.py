@@ -9,14 +9,15 @@ from torch import nn
 from genrecon.modules.attention import MultiHeadAttention, RotaryPositionEmbedder
 from genrecon.modules.lora import apply_lora_to_attention
 from genrecon.modules.utils import convert_module_to
-from experiments.tenstorrent.inference_attention import prepare_attention
+from experiments.tenstorrent.inference_attention import ATTENTION_MODES, prepare_attention, reciprocal_attention
 from experiments.tenstorrent.inference_rope import RealPairRoPE, RealRoPESelfAttention
 from experiments.tenstorrent.precision_reference import PipelinePrecisionMode
 
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
 @pytest.mark.parametrize('kind,real_rope', [('self', False), ('self', True), ('cross', False)])
-def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_rope):
+@pytest.mark.parametrize('mode', ['fp32_reciprocal', 'fp32_scores_bf16_av'])
+def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_rope, mode):
     torch.set_num_threads(4)
     torch.manual_seed(53)
     attention = MultiHeadAttention(48, 4, ctx_channels=24, type=kind,
@@ -37,7 +38,14 @@ def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_ro
     context = torch.randn(2, 9, 24).to(dtype) if kind == 'cross' else None
     with torch.no_grad(), PipelinePrecisionMode():
         expected = model.self_attn(x, context=context, phases=phases)
-        assert prepare_attention(model, 'fp32_reciprocal') == 1
+        if mode == 'fp32_scores_bf16_av' and dtype == torch.bfloat16:
+            # This candidate intentionally rounds probabilities before AV.
+            # Check wrapper reconstruction against original learned QKV/LoRA
+            # and projection; stock SDPA is no longer the same arithmetic.
+            from experiments.tenstorrent.attention_diagnostic import extract_qkv
+            qkv = extract_qkv(attention, x, context=context, phases=phases)
+            expected = attention.to_out(reciprocal_attention(*qkv, mode).reshape_as(x))
+        assert prepare_attention(model, mode) == 1
         actual = model.self_attn(x, context=context, phases=phases)
     assert actual.dtype == dtype
     assert identities == {id(p) for p in model.parameters()}
@@ -87,3 +95,39 @@ def test_combined_block_prepares_both_attention_paths_and_rejects_unknown_wrappe
     with pytest.raises(ValueError, match='Unsupported attention module'):
         prepare_attention(other, 'fp32_reciprocal')
     assert other.cross_attn is original_cross
+
+
+@pytest.mark.parametrize('mode', ATTENTION_MODES)
+@pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
+def test_matrix_precision_boundaries_and_uniform_attention(mode, dtype):
+    from torch.utils._python_dispatch import TorchDispatchMode
+
+    class ObserveProducts(TorchDispatchMode):
+        def __init__(self):
+            super().__init__()
+            self.dtypes = []
+
+        def __torch_dispatch__(self, func, types, args=(), kwargs=None):
+            if func._schema.name == 'aten::bmm':
+                self.dtypes.append(args[0].dtype)
+            return func(*args, **(kwargs or {}))
+
+    q, k = torch.zeros(1, 17, 4, 12, dtype=dtype), torch.zeros(1, 32, 4, 12, dtype=dtype)
+    v = torch.arange(32, dtype=dtype)[None, :, None, None].expand(1, 32, 4, 12)
+    observer = ObserveProducts()
+    with torch.no_grad(), PipelinePrecisionMode(), observer:
+        actual = reciprocal_attention(q, k, v, mode)
+    expected = torch.full_like(q, 15.5)
+    torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+    first = dtype if mode == 'bf16_qk_fp32_softmax' else torch.float32
+    second = torch.float32 if mode == 'fp32_reciprocal' else dtype
+    assert observer.dtypes == [first, second]
+
+
+def test_fp32_preparation_modes_share_the_original_formula():
+    from experiments.tenstorrent.attention_precision import PrecisionAttention
+    torch.manual_seed(55)
+    values = (torch.randn(2, 17, 4, 12), torch.randn(2, 9, 4, 12), torch.randn(2, 9, 4, 12))
+    expected = PrecisionAttention('legacy')(*values)
+    for mode in ATTENTION_MODES:
+        torch.testing.assert_close(reciprocal_attention(*values, mode), expected, rtol=0, atol=0)

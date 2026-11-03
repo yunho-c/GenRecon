@@ -1,0 +1,426 @@
+{
+  "status": "completed_attention_precision_diagnostic",
+  "scope": "Measure attention precision boundaries on sealed pretrained Q/K/V.\n\nResident inputs, output D2H and synchronization included. Native IR dumps are\nordinary execution with dry_run=false; no codegen or full-flow quality claim.\n",
+  "source_commit": "6bff5a43c743576882fdb49e8c845e325da82664",
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "source_sha256": {
+    "experiments/tenstorrent/attention_precision.py": "e7be490e4996d8b6aee053ac4dc9dbe41c8acde24adcac787de0c08b40976888",
+    "experiments/tenstorrent/inference_attention.py": "9a33e927994b4ebbec8ed0f2dc1b9438b38d9bd25c9ab41d889abce61a60a81d"
+  },
+  "fixture_sha256": "3466743a1595d1dc0f2fbe2486fa376d618fe3e7944ed78ca96044d785c3362f",
+  "fixture_digests": {
+    "self": [
+      "ed32fbe58986457833248019d3449de6bba0ad1c13c8701a4eb40e9b9989555a",
+      "fad73dbde548dd00a5c661241c0046c9f14d1941eed100040bfb22141679f52e",
+      "6113947dc5851a6ee6a58abc960ece1e05ba3a12382fdd47e3eb1e3c07638fd6"
+    ],
+    "cross": [
+      "e62f54e5e0a7bfdfd4dc72735b98348c5ed93e5d5e539f642ef4144b01a03fef",
+      "2b6930d92112cc11ffa1c5bfddd0745122d07776d6e236c4511791f0b4de660c",
+      "e8916812fb458e4a088da16058b1f4df477c9fbad6f53663f1bdee23be5acf85"
+    ]
+  },
+  "fixture_model": {
+    "weights": "pretrained",
+    "checkpoint": {
+      "url": "https://kaldir.vc.cit.tum.de/genrecon/shape_slat.pt",
+      "bytes": 5410532174,
+      "etag": "\"1427e2b4e-6503179da85ac\"",
+      "sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb"
+    },
+    "checkpoint_state": "root",
+    "strict_loading": true,
+    "config": "configs/gen/slat_flow_img2shape/genrecon_512.json",
+    "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+    "input_kind": "seeded synthetic",
+    "blocks": 30,
+    "active_voxels": 512,
+    "cpu_original_equivalence": "torch.testing.assert_close passed for all 30 sparse blocks and IO",
+    "cpu_original_equivalence_precision": "float32",
+    "adaptation": "single chunk active tokens as a dense sequence; all native sparse weights including LoRA preserved",
+    "host_work": "fixed coordinates and RoPE phases; precomputed image conditions"
+  },
+  "cases": {
+    "self": {
+      "legacy": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/self_legacy-native-ir"
+        },
+        "warm_seconds": [
+          0.005028913030400872,
+          0.0049991130363196135,
+          0.0057034160126931965,
+          0.005006532999686897,
+          0.0054489559843204916
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.012904256829818373,
+          "pcc": 0.9999172844799623,
+          "max_abs": 2.84375
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.01290408089436009,
+          "pcc": 0.9999172856819933,
+          "max_abs": 2.84375
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 8.82212589023039e-05,
+          "pcc": 0.9999999961088121,
+          "max_abs": 0.25
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "fp32_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/self_fp32_reciprocal-native-ir"
+        },
+        "warm_seconds": [
+          0.005636196001432836,
+          0.005397075030487031,
+          0.004801361006684601,
+          0.005216074001509696,
+          0.0048528219922445714
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.012904256829818373,
+          "pcc": 0.9999172844799623,
+          "max_abs": 2.84375
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.01290408089436009,
+          "pcc": 0.9999172856819933,
+          "max_abs": 2.84375
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 8.82212589023039e-05,
+          "pcc": 0.9999999961088121,
+          "max_abs": 0.25
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "fp32_scores_bf16_av": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/self_fp32_scores_bf16_av-native-ir"
+        },
+        "warm_seconds": [
+          0.004783461976330727,
+          0.004559910041280091,
+          0.004507421050220728,
+          0.0046309109893627465,
+          0.004520251008216292
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.012933224646544868,
+          "pcc": 0.9999166955463189,
+          "max_abs": 2.78125
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.01296713903609267,
+          "pcc": 0.9999162484406572,
+          "max_abs": 2.71875
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.002382540989252013,
+          "pcc": 0.9999971616700384,
+          "max_abs": 0.5
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "bf16_qk_fp32_softmax": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/self_bf16_qk_fp32_softmax-native-ir"
+        },
+        "warm_seconds": [
+          0.004211228981148452,
+          0.0042075689998455346,
+          0.0041042889934033155,
+          0.004899783001746982,
+          0.00487408199114725
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.09985677095640841,
+          "pcc": 0.995031505610978,
+          "max_abs": 16.34375
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": false,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.10337085154827826,
+          "pcc": 0.9946523314511188,
+          "max_abs": 22.90625
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": false,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.1013757383886006,
+          "pcc": 0.994887076804617,
+          "max_abs": 16.34375
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "refactored_baseline_bitwise": true
+    },
+    "cross": {
+      "legacy": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/cross_legacy-native-ir"
+        },
+        "warm_seconds": [
+          0.0062496179598383605,
+          0.0062548089772462845,
+          0.00643097999272868,
+          0.006407649023458362,
+          0.006273989041801542
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006441770185534048,
+          "pcc": 0.9999960636983297,
+          "max_abs": 0.015625
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006441708507491263,
+          "pcc": 0.9999960639641087,
+          "max_abs": 0.015625
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 3.429173916183579e-05,
+          "pcc": 0.9999999994104574,
+          "max_abs": 0.00390625
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "fp32_reciprocal": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/cross_fp32_reciprocal-native-ir"
+        },
+        "warm_seconds": [
+          0.006506879988592118,
+          0.006128788983915001,
+          0.006276048952713609,
+          0.006518320005852729,
+          0.0063120590057224035
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006441770185534048,
+          "pcc": 0.9999960636983297,
+          "max_abs": 0.015625
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006441708507491263,
+          "pcc": 0.9999960639641087,
+          "max_abs": 0.015625
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 3.429173916183579e-05,
+          "pcc": 0.9999999994104574,
+          "max_abs": 0.00390625
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "fp32_scores_bf16_av": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/cross_fp32_scores_bf16_av-native-ir"
+        },
+        "warm_seconds": [
+          0.005759676976595074,
+          0.005686775024514645,
+          0.006103676976636052,
+          0.006232129002455622,
+          0.006131778005510569
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006184940548361885,
+          "pcc": 0.999995793134067,
+          "max_abs": 0.015625
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006201847659146584,
+          "pcc": 0.9999956942667478,
+          "max_abs": 0.015625
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0015999746728825597,
+          "pcc": 0.9999987166342694,
+          "max_abs": 0.0078125
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "bf16_qk_fp32_softmax": {
+        "requested_compile_options": {
+          "optimization_level": 0,
+          "dry_run": "false",
+          "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/056-attention-precision-boundaries/cross_bf16_qk_fp32_softmax-native-ir"
+        },
+        "warm_seconds": [
+          0.006005126982927322,
+          0.005708435957785696,
+          0.005801666004117578,
+          0.005968896963167936,
+          0.005711986974347383
+        ],
+        "tt_vs_cpu_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0075434303931950055,
+          "pcc": 0.9999862193442183,
+          "max_abs": 0.015625
+        },
+        "tt_vs_same_precision_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006971882295096663,
+          "pcc": 0.9999902650652317,
+          "max_abs": 0.03125
+        },
+        "cpu_precision_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.004912248997337826,
+          "pcc": 0.99998790277573,
+          "max_abs": 0.015625
+        },
+        "fallback_ops": [],
+        "aten_counters": {}
+      },
+      "refactored_baseline_bitwise": true
+    }
+  },
+  "outputs_sha256": "a72cd2d8e2cf7a792477e3efebf2dce971056ead688d58a21dae5234f9e14870"
+}

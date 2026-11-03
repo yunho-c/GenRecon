@@ -152,7 +152,7 @@ def worker(args):
             result['attention_cpu_relative_l2'] = [
                 ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
                 for ref, out in zip(reference, prepared, strict=True)]
-            result['attention_note'] = 'Original weights and outer dtype retained; FP32 SDPA with stable unfused exp/reciprocal. Error includes preparation and device arithmetic.'
+            result['attention_note'] = 'Original weights and outer dtype retained; stable FP32 unfused exp/reciprocal, with QK/AV precision selected by attention_mode. Error includes preparation and device arithmetic.'
         result["phase"] = "waiting_for_device"
         write_result(path, result)
         # Permit CPU references/downloads to overlap, but serialize our hardware
@@ -273,7 +273,7 @@ def main():
     parser.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
     parser.add_argument("--rope-mode", choices=("stock", "real_pairs"), default="stock")
-    parser.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal'), default='stock')
+    parser.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax'), default='stock')
     parser.add_argument('--native-ir', action='store_true', help='Dump actual native compiler IR with dry run disabled')
     parser.add_argument('--synthetic-trajectory', '--sampler-trajectory', action='store_true',
                         help='Compare the complete original 12-step schedule against stock FP32 CPU (complete tensor flows only)')

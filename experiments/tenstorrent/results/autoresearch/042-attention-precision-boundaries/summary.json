@@ -1,0 +1,110 @@
+{
+  "status": "completed_isolated_precision_screen",
+  "scope": "Measure attention precision boundaries on sealed pretrained Q/K/V.\n\nResident inputs, output D2H and synchronization included. Native IR dumps are\nordinary execution with dry_run=false; no codegen or full-flow quality claim.\n",
+  "metrics": {
+    "self": {
+      "legacy": {
+        "tt_relative_l2": 0.012904256829818373,
+        "cpu_same_precision_relative_l2": 8.82212589023039e-05,
+        "median_seconds": 0.005028913030400872
+      },
+      "fp32_reciprocal": {
+        "tt_relative_l2": 0.012904256829818373,
+        "cpu_same_precision_relative_l2": 8.82212589023039e-05,
+        "median_seconds": 0.005216074001509696
+      },
+      "fp32_scores_bf16_av": {
+        "tt_relative_l2": 0.012933224646544868,
+        "cpu_same_precision_relative_l2": 0.002382540989252013,
+        "median_seconds": 0.004559910041280091
+      },
+      "bf16_qk_fp32_softmax": {
+        "tt_relative_l2": 0.09985677095640841,
+        "cpu_same_precision_relative_l2": 0.1013757383886006,
+        "median_seconds": 0.004211228981148452
+      }
+    },
+    "cross": {
+      "legacy": {
+        "tt_relative_l2": 0.006441770185534048,
+        "cpu_same_precision_relative_l2": 3.429173916183579e-05,
+        "median_seconds": 0.006273989041801542
+      },
+      "fp32_reciprocal": {
+        "tt_relative_l2": 0.006441770185534048,
+        "cpu_same_precision_relative_l2": 3.429173916183579e-05,
+        "median_seconds": 0.0063120590057224035
+      },
+      "fp32_scores_bf16_av": {
+        "tt_relative_l2": 0.006184940548361885,
+        "cpu_same_precision_relative_l2": 0.0015999746728825597,
+        "median_seconds": 0.006103676976636052
+      },
+      "bf16_qk_fp32_softmax": {
+        "tt_relative_l2": 0.0075434303931950055,
+        "cpu_same_precision_relative_l2": 0.004912248997337826,
+        "median_seconds": 0.005801666004117578
+      }
+    }
+  },
+  "native_ir": {
+    "self_legacy": {
+      "softmax_ops": 0,
+      "arithmetic": [
+        "%8 = \"ttnn.matmul\"(%4, %7) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x128xf32, #ttnn_layout4>, tensor<1x12x128x512xf32, #ttnn_layout5>) -> tensor<1x12x512x512xf32, #ttnn_layout6> loc(#loc6)",
+        "%12 = \"ttnn.exp\"(%11) : (tensor<1x12x512x512xf32, #ttnn_layout6>) -> tensor<1x12x512x512xf32, #ttnn_layout6> loc(#loc10)",
+        "%19 = \"ttnn.matmul\"(%15, %18) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x512xf32, #ttnn_layout6>, tensor<1x12x512x128xf32, #ttnn_layout4>) -> tensor<1x12x512x128xf32, #ttnn_layout4> loc(#loc15)"
+      ]
+    },
+    "self_fp32_scores_bf16_av": {
+      "softmax_ops": 0,
+      "arithmetic": [
+        "%8 = \"ttnn.matmul\"(%4, %7) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x128xf32, #ttnn_layout4>, tensor<1x12x128x512xf32, #ttnn_layout5>) -> tensor<1x12x512x512xf32, #ttnn_layout6> loc(#loc6)",
+        "%12 = \"ttnn.exp\"(%11) : (tensor<1x12x512x512xf32, #ttnn_layout6>) -> tensor<1x12x512x512xf32, #ttnn_layout6> loc(#loc10)",
+        "%19 = \"ttnn.matmul\"(%16, %18) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x512xbf16, #ttnn_layout8>, tensor<1x12x512x128xbf16, #ttnn_layout9>) -> tensor<1x12x512x128xbf16, #ttnn_layout9> loc(#loc16)"
+      ]
+    },
+    "self_bf16_qk_fp32_softmax": {
+      "softmax_ops": 0,
+      "arithmetic": [
+        "%6 = \"ttnn.matmul\"(%3, %5) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x128xbf16, #ttnn_layout3>, tensor<1x12x128x512xbf16, #ttnn_layout4>) -> tensor<1x12x512x512xbf16, #ttnn_layout5> loc(#loc6)",
+        "%11 = \"ttnn.exp\"(%10) : (tensor<1x12x512x512xf32, #ttnn_layout6>) -> tensor<1x12x512x512xf32, #ttnn_layout6> loc(#loc11)",
+        "%18 = \"ttnn.matmul\"(%15, %17) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x512xbf16, #ttnn_layout5>, tensor<1x12x512x128xbf16, #ttnn_layout3>) -> tensor<1x12x512x128xbf16, #ttnn_layout3> loc(#loc17)"
+      ]
+    },
+    "cross_legacy": {
+      "softmax_ops": 0,
+      "arithmetic": [
+        "%8 = \"ttnn.matmul\"(%4, %7) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x128xf32, #ttnn_layout5>, tensor<1x12x128x1029xf32, #ttnn_layout8>) -> tensor<1x12x512x1029xf32, #ttnn_layout9> loc(#loc6)",
+        "%12 = \"ttnn.exp\"(%11) : (tensor<1x12x512x1029xf32, #ttnn_layout9>) -> tensor<1x12x512x1029xf32, #ttnn_layout9> loc(#loc10)",
+        "%19 = \"ttnn.matmul\"(%15, %18) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x1029xf32, #ttnn_layout9>, tensor<1x12x1029x128xf32, #ttnn_layout11>) -> tensor<1x12x512x128xf32, #ttnn_layout5> loc(#loc15)"
+      ]
+    },
+    "cross_fp32_scores_bf16_av": {
+      "softmax_ops": 0,
+      "arithmetic": [
+        "%8 = \"ttnn.matmul\"(%4, %7) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x128xf32, #ttnn_layout5>, tensor<1x12x128x1029xf32, #ttnn_layout8>) -> tensor<1x12x512x1029xf32, #ttnn_layout9> loc(#loc6)",
+        "%12 = \"ttnn.exp\"(%11) : (tensor<1x12x512x1029xf32, #ttnn_layout9>) -> tensor<1x12x512x1029xf32, #ttnn_layout9> loc(#loc10)",
+        "%19 = \"ttnn.matmul\"(%16, %18) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x1029xbf16, #ttnn_layout11>, tensor<1x12x1029x128xbf16, #ttnn_layout12>) -> tensor<1x12x512x128xbf16, #ttnn_layout13> loc(#loc16)"
+      ]
+    },
+    "cross_bf16_qk_fp32_softmax": {
+      "softmax_ops": 0,
+      "arithmetic": [
+        "%6 = \"ttnn.matmul\"(%3, %5) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x128xbf16, #ttnn_layout4>, tensor<1x12x128x1029xbf16, #ttnn_layout6>) -> tensor<1x12x512x1029xbf16, #ttnn_layout7> loc(#loc6)",
+        "%11 = \"ttnn.exp\"(%10) : (tensor<1x12x512x1029xf32, #ttnn_layout8>) -> tensor<1x12x512x1029xf32, #ttnn_layout8> loc(#loc11)",
+        "%18 = \"ttnn.matmul\"(%15, %17) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<1x12x512x1029xbf16, #ttnn_layout7>, tensor<1x12x1029x128xbf16, #ttnn_layout10>) -> tensor<1x12x512x128xbf16, #ttnn_layout4> loc(#loc17)"
+      ]
+    }
+  },
+  "legacy_baseline_bitwise": {
+    "self": true,
+    "cross": true
+  },
+  "native_ir_cache_note": "Legacy and extracted FP32 baseline graphs match and native compile cache reuses the legacy binary; only legacy path emits IR. All new precision variants emit their own IR. No claim of an independent baseline recompile.",
+  "finding": "BF16 AV preserves isolated accuracy: self error 0.01290 to 0.01293, cross 0.00644 to 0.00618. Isolated measured times fall about 13% self and 3% cross vs the extracted FP32 baseline, but these millisecond operator timings do not predict full-flow speed. BF16 QK raises self error to 0.0999; its CPU quantization diagnostic already incurs 0.1014, so keep QK FP32 for the next full-flow candidate.",
+  "decision": "Run the BF16 AV candidate on the complete real-poster sampler and compare topology. Refresh the FP32 baseline after arithmetic extraction to verify full-model output stability. No default or acceptance-gate change.",
+  "tests": "30 focused CPU checks pass: intended matrix dtypes, analytic uniform attention, exact FP32 legacy arithmetic, original learned QKV/LoRA/projection reconstruction, preserved parameter identities/values and outer dtype. Hardware all eight cases repeat bitwise, no fallback, and both extracted baselines equal legacy expressions bitwise.",
+  "retention": "All nonduplicate output tensors retained; legacy outputs equal extracted FP32 outputs. Original sealed QKV fixtures in result033. Raw report records original output-file hash outside Git.",
+  "reproduce": "attention_precision.py --fixture-directory <restored accepted QKV fixture directory> --threads 16 --runs 5 --output-dir <new>"
+}

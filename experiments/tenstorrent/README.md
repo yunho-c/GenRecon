@@ -602,6 +602,15 @@ improves IoU vs FP32 from 0.514 to 0.678 (CPU precision diagnostic: 0.868).
 This is an opt-in accuracy/latency tradeoff on one crop. Numerical gates still
 fail, and mesh/material quality has not been established.
 
+`attention_precision.py --fixture-directory <sealed QKV run> --output-dir <new>`
+tests narrower precision boundaries on identical learned tensors, with native
+IR and an exact legacy-expression control. `fp32_scores_bf16_av` retains FP32
+scores/softmax and rounds probabilities for a BF16 attention–value product.
+`bf16_qk_fp32_softmax` also rounds the QK product to BF16 before FP32 scaling
+and softmax. BF16 denotes the original torso dtype; FP32 CPU preparation checks
+retain FP32. Both modes are opt-in through `run.py --attention-mode` and require
+full sampler/quality checks. They do not change weights or sampler schedules.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
