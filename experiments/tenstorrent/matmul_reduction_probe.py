@@ -1,6 +1,7 @@
 """Measure FP32 matrix-reduction error with exactly BF16-representable inputs.
 
-Seed62 matches the earlier matrix probe. All native storage remains FP32;
+Seed62 matches the earlier matrix probe. Native storage defaults to FP32;
+--matmul-mode tests BF16 sources with either ordinary BF16 or explicit FP32 output.
 Reduction mode varies dot length using prefixes of the same original data.
 Active-terms mode retains one K2 matrix graph and changes only input values,
 isolating the two products and reversing their order without recompilation.
@@ -26,13 +27,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--mode', choices=('reduction', 'active_terms'), default='reduction')
+    parser.add_argument('--matmul-mode', choices=('fp32', 'bf16', 'bf16_fp32'), default='fp32')
+    parser.add_argument('--lengths', type=int, nargs='+', choices=(1, 2, 4, 8, 16, 32, 64, 128),
+                        default=[1, 2, 4, 8, 16, 32, 64, 128])
     args = parser.parse_args()
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=False)
     for key in ('LD_LIBRARY_PATH', 'PYTHONPATH', 'TT_METAL_HOME', 'TT_METAL_RUNTIME_ROOT'):
         os.environ.pop(key, None)
     os.environ.update(PJRT_DEVICE='TT', ATTN_BACKEND='sdpa', SPARSE_ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
-    report = {'status': 'running', 'scope': __doc__, 'seed': 62, 'mode': args.mode, 'cases': {},
+    report = {'status': 'running', 'scope': __doc__, 'seed': 62, 'mode': args.mode,
+              'matmul_mode': args.matmul_mode, 'cases': {},
               'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
 
     def phase(value):
@@ -50,6 +55,9 @@ def main():
         from experiments.tenstorrent.experiment_identity import sha256
         from experiments.tenstorrent.trajectory import tensor_digest
         from experiments.tenstorrent.validation import compare_tensors
+        class Float32OutputProduct(torch.nn.Module):
+            def forward(self, a, b):
+                return torch.mm(a, b, out_dtype=torch.float32)
         report['versions'] = {name: importlib.metadata.version(name) for name in ('torch', 'torch-xla', 'tt-forge', 'pjrt-plugin-tt')}
         report['source_sha256'] = {str(path.relative_to(ROOT)): sha256(path) for path in
             (Path(__file__), Path(__file__).with_name('fp32_matmul_probe.py'))}
@@ -59,7 +67,7 @@ def main():
         right = torch.randn(128, 512).bfloat16().float()
         if args.mode == 'reduction':
             cases = {str(length): (left[:, :length].contiguous(), right[:length].contiguous())
-                     for length in (1, 2, 4, 8, 16, 32, 64, 128)}
+                     for length in args.lengths}
         else:
             a, b = left[:, :2].contiguous(), right[:2].contiguous()
             a0, a1, b0, b1 = a.clone(), a.clone(), b.clone(), b.clone()
@@ -87,9 +95,11 @@ def main():
                 directory = args.output_dir/(label+'-native-ir')
                 torch_xla.set_custom_compile_options({'optimization_level': 0, 'math_fidelity': 'hifi4',
                                                       'dry_run': 'false', 'export_path': str(directory)})
-                compiled = torch.compile(MatrixProduct().eval(), backend='tt', fullgraph=True)
-            resident = a.to(device), b.to(device)
-            if not all(torch.equal(value.cpu(), original) for value, original in zip(resident, (a, b), strict=True)):
+                module = Float32OutputProduct() if args.matmul_mode == 'bf16_fp32' else MatrixProduct()
+                compiled = torch.compile(module.eval(), backend='tt', fullgraph=True)
+            dtype = torch.float32 if args.matmul_mode == 'fp32' else torch.bfloat16
+            resident = a.to(dtype).to(device), b.to(dtype).to(device)
+            if not all(torch.equal(value.cpu().float(), original) for value, original in zip(resident, (a, b), strict=True)):
                 raise ValueError('Input roundtrip altered exact BF16-representable values')
             metrics.clear_all()
             before = dict(torch._dynamo.utils.counters['stats'])
@@ -108,6 +118,7 @@ def main():
                    'cpu_fp32_vs_float64_rounded': compare_tensors(expected, exact),
                    'native_bitwise_cpu_fp32': torch.equal(value, expected), 'native_bitwise_float64_rounded': torch.equal(value, exact),
                    'output_dtype': str(value.dtype), 'warm_seconds': latencies,
+                   'native_input_dtypes': [str(item.dtype) for item in resident],
                    'input_roundtrip_bitwise': True, 'native_repeats_bitwise': True,
                    'matrix_ops': matrix_ops, 'runtime_ir_sha256': sha256(path),
                    'executed_fallback_ops': list(metrics.executed_fallback_ops()),
@@ -121,8 +132,14 @@ def main():
                 raise ValueError('Changing only active terms recompiled the matrix graph')
             if row['executed_fallback_ops'] or row['aten_counters']:
                 raise ValueError('Reduction diagnostic used fallback')
-            if any('math_fidelity = hifi4, fp32_dest_acc_en = true' not in op or 'xbf16' in op for op in matrix_ops):
-                raise ValueError('Native matrix arithmetic does not retain the requested FP32/HiFi4 configuration')
+            if any('math_fidelity = hifi4' not in op for op in matrix_ops):
+                raise ValueError('Native matrix arithmetic does not retain requested HiFi4')
+            if args.matmul_mode == 'fp32' and any('fp32_dest_acc_en = true' not in op or 'xbf16' in op for op in matrix_ops):
+                raise ValueError('Native matrix arithmetic does not retain requested FP32 storage/accumulation')
+            if args.matmul_mode == 'bf16_fp32' and (value.dtype != torch.float32 or any(
+                    'fp32_dest_acc_en = true' not in op or op.count('xbf16') < 2 or
+                    not re.search(r'-> tensor<[^>]*xf32', op) for op in matrix_ops)):
+                raise ValueError('Explicit BF16-source/FP32-output policy was not retained in native IR')
             outputs[name] = value
             (args.output_dir/(label+'-metrics.txt')).write_text(metrics.metrics_report())
         if args.mode == 'active_terms':
