@@ -561,6 +561,16 @@ reduces self-attention error to 2.72%, while cross-attention stays near 1.8%.
 Its baseline outputs and independent no-export control match bitwise. This
 remains an isolated diagnostic; no full-flow defaults or quality gates change.
 
+`attention_stages.py --fixture-directory /path/to/attention-run --output-dir
+/path/to/new` captures QK, scaled scores, probabilities and AV. CPU local
+comparisons consume the actual TT intermediate inputs; attribution requires
+bitwise equality to ordinary TT attention and exact repeatability. The
+[stage diagnostic](results/autoresearch/035-attention-stage-errors/summary.json)
+finds softmax error of 3.99%/2.36% on identical self/cross score tensors, while
+QK error is below 0.06% and scaling is exact. HiFi3 does not fix it. Full state
+hashes and representative rows are retained without treating local errors as
+additive whole-model effects.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

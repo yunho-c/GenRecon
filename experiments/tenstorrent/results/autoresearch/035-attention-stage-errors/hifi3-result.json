@@ -1,0 +1,342 @@
+{
+  "status": "completed_stage_diagnostic",
+  "scope": "Observe FP32 attention stages and compare each on identical input values.\n\nCapturing intermediates is accepted only if final TT output matches ordinary\nFP32 postscale attention bitwise. Teacher-forced CPU suboperations consume TT\nintermediates to separate local arithmetic error from propagation. No latency,\nCUDA equivalence or full-flow quality claim.\n",
+  "requested_compile_options": {
+    "optimization_level": 0,
+    "math_fidelity": "hifi3"
+  },
+  "source_commit": "9b8a9c6c31acadbe07abec9f36f34753455b1fd6",
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "source_sha256": {
+    "experiments/tenstorrent/attention_stages.py": "ce77a43d0496edec08bb21dd037df2cb3687843eda669e82747cdc6a627e8ab9",
+    "experiments/tenstorrent/attention_diagnostic.py": "6238f26504a043a1e32e35dc1cc23c3ce6e6a7b54a2af7b6be71bcfaa235e820",
+    "genrecon/modules/attention/full_attn.py": "b99745a2eb25c3b9fb1bfa3b1fcfc7a24599e50271a2611842f201bf7a7d7286"
+  },
+  "fixture_sha256": "3466743a1595d1dc0f2fbe2486fa376d618fe3e7944ed78ca96044d785c3362f",
+  "fixture_report_sha256": "50ce8cf2743769468168b324b1bfea9804fe7ba7d1c44715648eae5a94e98356",
+  "cases": {
+    "self": {
+      "captured_final_exact_to_ordinary": true,
+      "all_repeated_states_exact": true,
+      "vs_cpu": {
+        "final": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.027610495385518984,
+          "pcc": 0.9997322344509143,
+          "max_abs": 3.65625
+        },
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0004101511691626634,
+          "pcc": 0.9999999881278006,
+          "max_abs": 15.92578125
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00041015118141565245,
+          "pcc": 0.9999999881277566,
+          "max_abs": 1.4075927734375
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.04879537997394334,
+          "pcc": 0.9988927239604196,
+          "max_abs": 0.062244366854429245
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.027490523512672737,
+          "pcc": 0.9997350467226618,
+          "max_abs": 3.682976722717285
+        }
+      },
+      "local_same_input_error": {
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0004101511691626634,
+          "pcc": 0.9999999881278006,
+          "max_abs": 15.92578125
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999662,
+          "max_abs": 0.0
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03987848356802297,
+          "pcc": 0.9993029056466257,
+          "max_abs": 0.04609542340040207
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0017936184365651637,
+          "pcc": 0.9999995947563193,
+          "max_abs": 0.3867950439453125
+        }
+      },
+      "mantissa_statistics": {
+        "qk_product": {
+          "tt": {
+            "nonzero_finite": 3145728,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.0018078485736623406,
+            "low_16_bits_zero_fraction": 0.00024477639817632735
+          },
+          "cpu": {
+            "nonzero_finite": 3145728,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00019391377281863242,
+            "low_16_bits_zero_fraction": 2.3523965865024365e-05
+          }
+        },
+        "scaled_scores": {
+          "tt": {
+            "nonzero_finite": 3145728,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00013001759361941367,
+            "low_16_bits_zero_fraction": 1.2079874977644067e-05
+          },
+          "cpu": {
+            "nonzero_finite": 3145728,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00013287861656863242,
+            "low_16_bits_zero_fraction": 1.5894571333774365e-05
+          }
+        },
+        "probabilities": {
+          "tt": {
+            "nonzero_finite": 3145728,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.06473668664693832,
+            "low_16_bits_zero_fraction": 0.008222579956054688
+          },
+          "cpu": {
+            "nonzero_finite": 3145728,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00012270610022824258,
+            "low_16_bits_zero_fraction": 1.430511474609375e-05
+          }
+        },
+        "av_product": {
+          "tt": {
+            "nonzero_finite": 786432,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.0009943643817678094,
+            "low_16_bits_zero_fraction": 0.000133514404296875
+          },
+          "cpu": {
+            "nonzero_finite": 786432,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00023651123046875,
+            "low_16_bits_zero_fraction": 3.178914266754873e-05
+          }
+        }
+      },
+      "fallback_ops": [],
+      "aten_counters": {}
+    },
+    "cross": {
+      "captured_final_exact_to_ordinary": true,
+      "all_repeated_states_exact": true,
+      "vs_cpu": {
+        "final": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.018423951519421767,
+          "pcc": 0.9999342371934004,
+          "max_abs": 0.078125
+        },
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006133079602241086,
+          "pcc": 0.9999999586262229,
+          "max_abs": 0.119232177734375
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006133079623347753,
+          "pcc": 0.9999999586261928,
+          "max_abs": 0.010538578033447266
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02399829607045056,
+          "pcc": 0.9997245882603195,
+          "max_abs": 0.009045004844665527
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.018275623777235444,
+          "pcc": 0.9999371910243154,
+          "max_abs": 0.07418811321258545
+        }
+      },
+      "local_same_input_error": {
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006133079602241086,
+          "pcc": 0.9999999586262229,
+          "max_abs": 0.119232177734375
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999679,
+          "max_abs": 0.0
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.023672904225686804,
+          "pcc": 0.9997284402490431,
+          "max_abs": 0.008825555443763733
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006111868426043877,
+          "pcc": 0.9999986766232738,
+          "max_abs": 0.013714075088500977
+        }
+      },
+      "mantissa_statistics": {
+        "qk_product": {
+          "tt": {
+            "nonzero_finite": 6322176,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.0007948213024064898,
+            "low_16_bits_zero_fraction": 0.0001243242877535522
+          },
+          "cpu": {
+            "nonzero_finite": 6322176,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00017747054516803473,
+            "low_16_bits_zero_fraction": 2.404235419817269e-05
+          }
+        },
+        "scaled_scores": {
+          "tt": {
+            "nonzero_finite": 6322176,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00013254930672701448,
+            "low_16_bits_zero_fraction": 1.6608206351520494e-05
+          },
+          "cpu": {
+            "nonzero_finite": 6322176,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.0001168901362689212,
+            "low_16_bits_zero_fraction": 1.2970217539987061e-05
+          }
+        },
+        "probabilities": {
+          "tt": {
+            "nonzero_finite": 6322176,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.06907685101032257,
+            "low_16_bits_zero_fraction": 0.00887985434383154
+          },
+          "cpu": {
+            "nonzero_finite": 6322176,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00012210985005367547,
+            "low_16_bits_zero_fraction": 1.7240899978787638e-05
+          }
+        },
+        "av_product": {
+          "tt": {
+            "nonzero_finite": 786432,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.000759124755859375,
+            "low_16_bits_zero_fraction": 0.00012334187340456992
+          },
+          "cpu": {
+            "nonzero_finite": 786432,
+            "finite": true,
+            "low_13_bits_zero_fraction": 0.00020345051598269492,
+            "low_16_bits_zero_fraction": 2.1616617232211865e-05
+          }
+        }
+      },
+      "fallback_ops": [],
+      "aten_counters": {}
+    }
+  },
+  "states_sha256": "48e2a7bb425b16ff8e67c3400eb43f7076057cb83cafd0e6d62c74be1419b204"
+}

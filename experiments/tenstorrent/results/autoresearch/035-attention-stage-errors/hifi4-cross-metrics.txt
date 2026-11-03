@@ -1,0 +1,108 @@
+Metric: DeviceLockWait
+  TotalSamples: 13
+  Accumulator: 032.500us
+  ValueRate: 019.414us / second
+  Rate: 7.76571 / second
+  Percentiles: 1%=000.290us; 5%=000.290us; 10%=000.290us; 20%=000.330us; 50%=001.270us; 80%=003.280us; 90%=009.120us; 95%=009.660us; 99%=009.660us
+Metric: InputOutputAliasCount
+  TotalSamples: 2
+  Accumulator: 0.00
+  ValueRate: 0.00 / second
+  Rate: 4.22447 / second
+  Percentiles: 1%=0.00; 5%=0.00; 10%=0.00; 20%=0.00; 50%=0.00; 80%=0.00; 90%=0.00; 95%=0.00; 99%=0.00
+Metric: LazyTracing
+  TotalSamples: 173
+  Accumulator: 01s465ms864.833us
+  ValueRate: 767ms425.369us / second
+  Rate: 90.6327 / second
+  Percentiles: 1%=002.550us; 5%=003.140us; 10%=003.390us; 20%=005.510us; 50%=009.170us; 80%=025.490us; 90%=065.690us; 95%=006ms731.993us; 99%=115ms991.604us
+Metric: RunCachedGraphInputData
+  TotalSamples: 3
+  Accumulator: 015.100us
+  ValueRate: 009.424us / second
+  Rate: 1.87237 / second
+  Percentiles: 1%=003.970us; 5%=003.970us; 10%=003.970us; 20%=003.970us; 50%=005.380us; 80%=005.750us; 90%=005.750us; 95%=005.750us; 99%=005.750us
+Metric: RunCachedGraphOutputData
+  TotalSamples: 3
+  Accumulator: 090.560us
+  ValueRate: 056.520us / second
+  Rate: 1.87235 / second
+  Percentiles: 1%=022.080us; 5%=022.080us; 10%=022.080us; 20%=022.080us; 50%=030.750us; 80%=037.730us; 90%=037.730us; 95%=037.730us; 99%=037.730us
+Metric: TensorsGraphSize
+  TotalSamples: 2
+  Accumulator: 48.00
+  ValueRate: 102.08 / second
+  Rate: 4.2532 / second
+  Percentiles: 1%=24.00; 5%=24.00; 10%=24.00; 20%=24.00; 50%=24.00; 80%=24.00; 90%=24.00; 95%=24.00; 99%=24.00
+Metric: UnwrapXlaData
+  TotalSamples: 14
+  Accumulator: 015.171us
+  ValueRate: 008.293us / second
+  Rate: 7.65298 / second
+  Percentiles: 1%=000.110us; 5%=000.110us; 10%=000.200us; 20%=000.250us; 50%=000.460us; 80%=002.610us; 90%=003.641us; 95%=004.940us; 99%=004.940us
+Metric: WrapXlaData
+  TotalSamples: 3
+  Accumulator: 000.560us
+  ValueRate: 000.375us / second
+  Rate: 2.00905 / second
+  Percentiles: 1%=000.170us; 5%=000.170us; 10%=000.170us; 20%=000.170us; 50%=000.190us; 80%=000.200us; 90%=000.200us; 95%=000.200us; 99%=000.200us
+Counter: CreateXlaTensor
+  Value: 58
+Counter: DestroyLtcTensor
+  Value: 61
+Counter: DestroyXlaTensor
+  Value: 61
+Counter: DynamoExtractCompiledGraph
+  Value: 2
+Counter: UncachedCompile
+  Value: 2
+Counter: xla::_copy_from
+  Value: 8
+Counter: xla::_softmax
+  Value: 2
+Counter: xla::_to_copy
+  Value: 18
+Counter: xla::clone
+  Value: 3
+Counter: xla::einsum
+  Value: 4
+Counter: xla::empty_symint
+  Value: 8
+Counter: xla::expand_copy_symint
+  Value: 8
+Counter: xla::mul
+  Value: 2
+Counter: xla::permute_copy
+  Value: 10
+Metric: CompileTime
+  TotalSamples: 2
+  Accumulator: 108ms387.044us
+  ValueRate: 231ms513.151us / second
+  Rate: 4.25352 / second
+  Percentiles: 1%=053ms569.792us; 5%=053ms569.792us; 10%=053ms569.792us; 20%=053ms569.792us; 50%=056ms817.252us; 80%=056ms817.252us; 90%=056ms817.252us; 95%=056ms817.252us; 99%=056ms817.252us
+Metric: ExecuteTime
+  TotalSamples: 3
+  Accumulator: 114ms385.659us
+  ValueRate: 077ms603.163us / second
+  Rate: 2.00908 / second
+  Percentiles: 1%=002ms602.615us; 5%=002ms602.615us; 10%=002ms602.615us; 20%=002ms602.615us; 50%=002ms906.607us; 80%=111ms876.437us; 90%=111ms876.437us; 95%=111ms876.437us; 99%=111ms876.437us
+Metric: InboundData
+  TotalSamples: 11
+  Accumulator: 155.20MB
+  ValueRate: 90.15MB / second
+  Rate: 6.38957 / second
+  Percentiles: 1%=1.50MB; 5%=1.50MB; 10%=1.50MB; 20%=1.50MB; 50%=24.12MB; 80%=24.12MB; 90%=24.12MB; 95%=24.12MB; 99%=24.12MB
+Metric: TransferFromDeviceTime
+  TotalSamples: 11
+  Accumulator: 01s168ms241.339us
+  ValueRate: 679ms596.197us / second
+  Rate: 6.38957 / second
+  Percentiles: 1%=003ms972.517us; 5%=003ms972.517us; 10%=003ms215.209us; 20%=003ms395.651us; 50%=031ms045.795us; 80%=050ms975.288us; 90%=051ms220.699us; 95%=930ms068.460us; 99%=930ms068.460us
+Counter: CreateCompileHandles
+  Value: 1
+Counter: CreateDataHandles
+  Value: 10
+Counter: MarkStep
+  Value: 1
+Counter: StableHloCompile
+  Value: 1

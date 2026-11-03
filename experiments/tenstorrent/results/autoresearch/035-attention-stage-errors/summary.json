@@ -1,0 +1,185 @@
+{
+  "status": "observationally_equivalent_stage_diagnostics",
+  "scope": "Observe FP32 attention stages and compare each on identical input values.\n\nCapturing intermediates is accepted only if final TT output matches ordinary\nFP32 postscale attention bitwise. Teacher-forced CPU suboperations consume TT\nintermediates to separate local arithmetic error from propagation. No latency,\nCUDA equivalence or full-flow quality claim.\n",
+  "local_errors": {
+    "hifi4": {
+      "self": {
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0003715157693186966,
+          "pcc": 0.9999999889919543,
+          "max_abs": 13.94921875
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999947,
+          "max_abs": 0.0
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03988152684176953,
+          "pcc": 0.9993019059757182,
+          "max_abs": 0.04695815593004227
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0017287692585613618,
+          "pcc": 0.9999996075031192,
+          "max_abs": 0.32564544677734375
+        }
+      },
+      "cross": {
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005652575395512834,
+          "pcc": 0.999999958997613,
+          "max_abs": 0.10979461669921875
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000207,
+          "max_abs": 0.0
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.02363108913282472,
+          "pcc": 0.9997283974892753,
+          "max_abs": 0.008890494704246521
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006037561314592356,
+          "pcc": 0.9999986873727529,
+          "max_abs": 0.013696908950805664
+        }
+      }
+    },
+    "hifi3": {
+      "self": {
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0004101511691626634,
+          "pcc": 0.9999999881278006,
+          "max_abs": 15.92578125
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999662,
+          "max_abs": 0.0
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.03987848356802297,
+          "pcc": 0.9993029056466257,
+          "max_abs": 0.04609542340040207
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0017936184365651637,
+          "pcc": 0.9999995947563193,
+          "max_abs": 0.3867950439453125
+        }
+      },
+      "cross": {
+        "qk_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006133079602241086,
+          "pcc": 0.9999999586262229,
+          "max_abs": 0.119232177734375
+        },
+        "scaled_scores": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999679,
+          "max_abs": 0.0
+        },
+        "probabilities": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.023672904225686804,
+          "pcc": 0.9997284402490431,
+          "max_abs": 0.008825555443763733
+        },
+        "av_product": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.006111868426043877,
+          "pcc": 0.9999986766232738,
+          "max_abs": 0.013714075088500977
+        }
+      }
+    }
+  },
+  "all_captured_finals_bitwise_to_ordinary": true,
+  "all_repeated_states_bitwise": true,
+  "finding": "On identical input values, HiFi4 QK product error is 0.037% self / 0.057% cross, scalar scaling is exact, but softmax probability error is 3.99% self / 2.36% cross. AV error on identical probabilities is 0.17% / 0.60%. HiFi3 does not improve softmax error or final attention. These are local errors, not additive whole-model components.",
+  "decision": "Prioritize controlled softmax/exp/reduction accuracy experiments. Do not apply blanket precision/fidelity changes or promote full-flow candidates.",
+  "retained": "Full per-stage metrics, bit statistics and raw-state hashes plus worst softmax rows. Large complete state tensors remain outside Git; original QKV fixtures are retained in result 033 and reproduce the measurements.",
+  "tests": "10 CPU checks for attention extraction, precision/restored dtype, staged math and bit-statistic masking pass. Hardware output equivalence/repeatability and no-fallback checks pass for both fidelities.",
+  "reproduce": "python experiments/tenstorrent/attention_stages.py --fixture-directory /path/to/validated-attention-fixtures --math-fidelity hifi4 --output-dir /path/to/new; repeat with hifi3 in a separate process."
+}
