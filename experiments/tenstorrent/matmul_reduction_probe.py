@@ -5,6 +5,8 @@ Seed62 matches the earlier matrix probe. Native storage defaults to FP32;
 Reduction mode varies dot length using prefixes of the same original data.
 Active-terms mode retains one K2 matrix graph and changes only input values,
 isolating the two products and reversing their order without recompilation.
+Mantissa-split mode separates each BF16-representable operand into a six-fraction-
+bit high part and an exact residual on CPU, then measures each native product.
 This is a synthetic mechanism diagnostic, not learned-model attribution.
 """
 import argparse
@@ -26,7 +28,7 @@ sys.path.insert(0, str(ROOT))
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
-    parser.add_argument('--mode', choices=('reduction', 'active_terms'), default='reduction')
+    parser.add_argument('--mode', choices=('reduction', 'active_terms', 'mantissa_split'), default='reduction')
     parser.add_argument('--matmul-mode', choices=('fp32', 'bf16', 'bf16_fp32'), default='fp32')
     parser.add_argument('--lengths', type=int, nargs='+', choices=(1, 2, 4, 8, 16, 32, 64, 128),
                         default=[1, 2, 4, 8, 16, 32, 64, 128])
@@ -68,7 +70,7 @@ def main():
         if args.mode == 'reduction':
             cases = {str(length): (left[:, :length].contiguous(), right[:length].contiguous())
                      for length in args.lengths}
-        else:
+        elif args.mode == 'active_terms':
             a, b = left[:, :2].contiguous(), right[:2].contiguous()
             a0, a1, b0, b1 = a.clone(), a.clone(), b.clone(), b.clone()
             a0[:, 1] = 0; a1[:, 0] = 0; b0[1] = 0; b1[0] = 0
@@ -77,12 +79,25 @@ def main():
                      'reversed_k2': (a.flip(-1).contiguous(), b.flip(0).contiguous()),
                      'positive_products': (a.abs(), b.abs()),
                      'integer_values': ((a*16).round(), (b*16).round())}
+        else:
+            cases = {}
+            for length in args.lengths:
+                a, b = left[:, :length].contiguous(), right[:length].contiguous()
+                ah = (a.view(torch.int32) & -131072).view(torch.float32)
+                bh = (b.view(torch.int32) & -131072).view(torch.float32)
+                al, bl = a-ah, b-bh
+                torch.testing.assert_close(ah+al, a, rtol=0, atol=0)
+                torch.testing.assert_close(bh+bl, b, rtol=0, atol=0)
+                prefix = 'k'+str(length)
+                cases.update({prefix+'_full': (a, b), prefix+'_left_hi': (ah, b),
+                              prefix+'_left_lo': (al, b), prefix+'_right_hi': (a, bh), prefix+'_right_lo': (a, bl)})
         phase('waiting_for_device')
         lock = os.open('/tmp/genrecon-tt-pjrt.lock', os.O_CREAT | os.O_RDWR, 0o600)
         fcntl.flock(lock, fcntl.LOCK_EX)
         device = torch_xla.device()
         outputs = {}
         compiled = None
+        compiled_shapes = None
         for name, (a, b) in cases.items():
             label = 'k'+name if args.mode == 'reduction' else name
             phase(label)
@@ -90,13 +105,15 @@ def main():
             torch.testing.assert_close(b, b.bfloat16().float(), rtol=0, atol=0)
             expected = a@b
             exact = (a.double()@b.double()).float()
-            if compiled is None or args.mode == 'reduction':
+            shapes = (tuple(a.shape), tuple(b.shape))
+            if compiled is None or args.mode == 'reduction' or shapes != compiled_shapes:
                 torch.compiler.reset()
                 directory = args.output_dir/(label+'-native-ir')
                 torch_xla.set_custom_compile_options({'optimization_level': 0, 'math_fidelity': 'hifi4',
                                                       'dry_run': 'false', 'export_path': str(directory)})
                 module = Float32OutputProduct() if args.matmul_mode == 'bf16_fp32' else MatrixProduct()
                 compiled = torch.compile(module.eval(), backend='tt', fullgraph=True)
+                compiled_shapes = shapes
             dtype = torch.float32 if args.matmul_mode == 'fp32' else torch.bfloat16
             resident = a.to(dtype).to(device), b.to(dtype).to(device)
             if not all(torch.equal(value.cpu().float(), original) for value, original in zip(resident, (a, b), strict=True)):
@@ -127,7 +144,9 @@ def main():
             row['dynamo_after'] = dict(torch._dynamo.utils.counters['stats'])
             row['xla_compile_samples'] = {key: metrics.metric_data(key)[0] for key in metrics.metric_names() if 'Compile' in key and 'Cached' not in key}
             report['cases'][name] = row
-            if args.mode == 'active_terms' and name != 'full_k2' and (
+            value_only_case = (args.mode == 'active_terms' and name != 'full_k2') or (
+                args.mode == 'mantissa_split' and not name.endswith('_full'))
+            if value_only_case and (
                     row['dynamo_before'] != row['dynamo_after'] or any(row['xla_compile_samples'].values())):
                 raise ValueError('Changing only active terms recompiled the matrix graph')
             if row['executed_fallback_ops'] or row['aten_counters']:
@@ -150,9 +169,28 @@ def main():
                 'full_vs_reversed_native': compare_tensors(outputs['full_k2'], outputs['reversed_k2']),
                 'first_zero_operand_bitwise': torch.equal(outputs['first_only'], outputs['first_only_zero_a']),
                 'second_zero_operand_bitwise': torch.equal(outputs['second_only'], outputs['second_only_zero_a'])}
+        if args.mode == 'mantissa_split':
+            report['controls'] = {}
+            for length in args.lengths:
+                prefix = 'k'+str(length)
+                a, b = cases[prefix+'_full']
+                expected = a@b
+                report['controls'][str(length)] = {}
+                for side in ('left', 'right'):
+                    summed = outputs[prefix+'_'+side+'_hi']+outputs[prefix+'_'+side+'_lo']
+                    high, low = cases[prefix+'_'+side+'_hi'], cases[prefix+'_'+side+'_lo']
+                    cpu_formula = high[0]@high[1]+low[0]@low[1]
+                    outputs[prefix+'_'+side+'_summed_on_cpu'] = summed
+                    report['controls'][str(length)][side] = {
+                        'native_partial_products_summed_on_cpu_vs_cpu_full': compare_tensors(summed, expected),
+                        'cpu_partial_formula_vs_cpu_full': compare_tensors(cpu_formula, expected),
+                        'native_partial_sum_vs_cpu_partial_formula': compare_tensors(summed, cpu_formula),
+                        'native_partial_products_summed_on_cpu_bitwise_full': torch.equal(summed, expected)}
         torch.save(outputs, args.output_dir/'outputs.pt')
         report['outputs_sha256'] = sha256(args.output_dir/'outputs.pt')
-        report['status'] = 'completed_native_reduction_diagnostic' if args.mode == 'reduction' else 'completed_native_active_term_control'
+        report['status'] = {'reduction': 'completed_native_reduction_diagnostic',
+                            'active_terms': 'completed_native_active_term_control',
+                            'mantissa_split': 'completed_native_mantissa_split_control'}[args.mode]
         phase('complete')
     except Exception as exc:
         report.update(status='failed', error=repr(exc), traceback=traceback.format_exc())
