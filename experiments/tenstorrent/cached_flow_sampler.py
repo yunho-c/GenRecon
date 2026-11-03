@@ -42,7 +42,11 @@ def main():
     parser.add_argument('--cpu-threads', type=int, default=16)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--cpu-only', action='store_true')
+    parser.add_argument('--paired-rounds', type=int, default=0, help='ABBA complete sampler rounds sharing weights')
+    parser.add_argument('--native-control-dir', type=Path, help='Sealed ordinary native run required for paired trials')
     args = parser.parse_args()
+    if args.paired_rounds < 0 or (args.paired_rounds and (args.cpu_only or args.native_control_dir is None)):
+        parser.error('Paired rounds require native execution and --native-control-dir')
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=False)
     for key in ('LD_LIBRARY_PATH', 'PYTHONPATH', 'TT_METAL_HOME', 'TT_METAL_RUNTIME_ROOT'):
@@ -109,6 +113,9 @@ def main():
         report['cache_bytes_per_branch'] = sum(value.numel()*value.element_size() for value in cpu_cache[id(branches[0])])
         torch.save(cached, args.output_dir/'trajectory-cached-cpu.pt')
         del cpu_cache
+        if args.paired_rounds:
+            from experiments.tenstorrent.conditioning_cache_comparison import validate_native_control
+            expected_native, report['paired_native_control'] = validate_native_control(args.native_control_dir, report, fixture)
         if args.cpu_only:
             report['status'] = 'completed_exact_cpu_control'
             phase('complete')
@@ -132,11 +139,13 @@ def main():
         torch_xla.sync(wait=True)
 
         def compile_module(module, name):
-            torch.compiler.reset()
             torch_xla.set_custom_compile_options({'optimization_level': 0, 'math_fidelity': 'hifi4', 'dry_run': 'false',
                                                   'export_path': str(args.output_dir/(name+'-native-ir'))})
             return torch.compile(module, backend='tt', fullgraph=True)
 
+        # Preserve all warmed Dynamo graphs when alternating modules. Resetting
+        # between modules would invalidate the earlier compiled callable.
+        torch.compiler.reset()
         metrics.clear_all()
         phase('compile_prefill_and_warm_both_branches')
         compiled_prefill = compile_module(prefill, 'prefill')
@@ -180,6 +189,17 @@ def main():
         report['trajectory_vs_stock_cpu_fp32'] = compare_trajectories(actual, stock)
         report['trajectory_vs_identical_cpu'] = compare_trajectories(actual, cached)
         torch.save(actual, args.output_dir/'trajectory-tt.pt')
+        if args.paired_rounds:
+            from experiments.tenstorrent.conditioning_cache_comparison import paired_trials
+
+            def save_paired(value):
+                report['paired'] = value
+                (args.output_dir/'result.json').write_text(json.dumps(report, indent=2, allow_nan=False)+'\n')
+
+            report['paired'] = paired_trials(rounds=args.paired_rounds, fixture=fixture, prefill=prefill, body=body,
+                compiled_prefill=compiled_prefill, compiled_body=compiled_body, resident=resident, device=device,
+                inputs=inputs, compile_module=compile_module, expected=expected_native, first_cached=actual,
+                assert_bitwise=assert_bitwise_trajectory, phase=phase, save=save_paired, output_dir=args.output_dir)
         report['xla_executed_fallback_ops'] = list(metrics.executed_fallback_ops())
         report['xla_aten_counters'] = {name: metrics.counter_value(name) for name in metrics.counter_names() if name.startswith('aten::')}
         (args.output_dir/'xla_metrics.txt').write_text(metrics.metrics_report())

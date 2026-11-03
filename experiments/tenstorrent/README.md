@@ -893,3 +893,12 @@ and all 30 self/cross QK products intact. Both guidance caches occupy 903.52MiB.
 No fallback or sampler recompilation occurs. The inherited 29.99% final error
 against stock CPU still fails the unchanged gates. This opt-in synthetic512
 result requires repeated timing and real-scene validation before promotion.
+
+Add `--paired-rounds 3 --native-control-dir <accepted-ordinary-run>` for six
+complete cached and six uncached trajectories in ABBA order in one process.
+The uncached graph inlines the original prefill into every denoiser call and
+shares the original learned objects. Both paths must match every state of the
+sealed accepted ordinary native trajectory bitwise. Each measured cached
+trial computes and uses a fresh positive/negative cache pair; its setup cost
+is included. Dynamo and XLA compilation counters must remain fixed in every
+measured window. Warmups, comparisons and artifact writes occur outside timing.
