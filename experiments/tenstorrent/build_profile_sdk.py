@@ -6,6 +6,7 @@ environment and any source cache checkout are never modified. A successful
 build is still unvalidated until native numeric/profiler controls are run.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -43,6 +44,7 @@ def main():
     if state.exists() and json.loads(state.read_text())['recipe'] != recipe:
         raise ValueError('Existing SDK build recipe differs; use a new workspace')
     report = {'status': 'running', 'recipe': recipe, 'jobs': args.jobs, 'commands': [],
+              'builder_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
     env = clean_native_environment()
 
