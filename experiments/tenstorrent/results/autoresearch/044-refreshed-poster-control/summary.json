@@ -1,0 +1,51 @@
+{
+  "status": "completed_bitwise_full_sampler_control",
+  "scope": "Matched real-poster full sampler after extraction of shared reciprocal-attention arithmetic. All original weights/LoRA, 4096 tokens, conditioning, 12 steps and 22 forwards retained.",
+  "legacy_reference": "result040 / scratchpad run054",
+  "native_ir_counts": {
+    "softmax": 0,
+    "exp": 60,
+    "matmul": 270
+  },
+  "prepared_attention_modules": 60,
+  "sampler_seconds": 129.7250297869905,
+  "warm_ms": 5886.077859031502,
+  "bitwise_control": {
+    "fixture_identity_equal": true,
+    "noise_equal": true,
+    "samples_bitwise": true,
+    "pred_x_t": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "pred_x_0": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  "fallback_ops": [],
+  "trajectory_recompiled": false,
+  "finding": "Every refreshed TT sampler state and final sample matches the legacy FP32 reciprocal run bitwise. Sampler time 129.725s matches prior129.726s closely. Extracting shared arithmetic did not alter this full-model execution. Strict reference gates still fail at final relative L2 0.6074; this control is not a promotion.",
+  "retention": "Native IR, raw measurements and every-state bitwise proof retained. Identical trajectory tensor contents already retained in result040, so duplicate tensors are omitted.",
+  "reproduce": "Same result040 command with current helper, fp32_reciprocal mode and sealed poster CPU cache; compare all states to result040 payload."
+}
