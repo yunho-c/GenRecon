@@ -925,3 +925,14 @@ compilation or fallback occurs in measured windows. The compiler emits the same
 32-product prefill and 425-product cached-body IR as result073. The unchanged
 29.99% stock-CPU final error remains a failed quality gate. The gain is scoped
 to this synthetic512 scene and one chip; further scene/quality validation remains.
+
+The [BF16-representable reduction sweep](results/autoresearch/075-bf16-representable-reduction/summary.json)
+keeps FP32 storage and exact input roundtrips while varying dot length. K2
+already differs 0.00013974 from CPU; K32 and K128 differ 0.00031307 and 0.00074521.
+CPU K2 agrees exactly with the rounded float64 oracle. K1 is exact but lowers
+to broadcast multiply; K2 and larger use real FP32/HiFi4 matrix operations.
+K1/32/128 reproduce historical native outputs bitwise. This demonstrates loss
+beyond initial operand representability, without locating every internal rounding
+point. The pinned source audit retains the intermediate-copy precision hypothesis
+and its lack of measured kernel/program binding. Reproduce with
+`matmul_reduction_probe.py --output-dir <new>`.

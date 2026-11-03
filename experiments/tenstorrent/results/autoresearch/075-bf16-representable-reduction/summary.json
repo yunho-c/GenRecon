@@ -1,0 +1,81 @@
+{
+  "status": "completed_native_reduction_diagnostic",
+  "scope": "Measure FP32 matrix-reduction error with exactly BF16-representable inputs.\n\nSeed62 matches the earlier matrix probe. All native storage remains FP32;\nonly the reduction length changes, using prefixes of the same original data.\nThis is a synthetic mechanism diagnostic, not learned-model attribution.\n",
+  "finding": "Exact BF16-representable FP32-stored input sweep records native matrix reduction error acrossK1,2,4,8,16,32,64,128, with exact input roundtrips/repeats and no fallback. K1/32/128 are bitwise previous fresh HiFi4 outputs. K1=0, K2=0.00013973952, K4=0.00022777611, K8=0.0003097191, K16=0.00031117151, K32=0.00031307106, K64=0.00040936116, K128=0.00074520998. This isolates additional loss beyond initial operand representability without identifying every internal rounding point.",
+  "cases": {
+    "1": {
+      "relative_l2_vs_cpu_fp32": 0.0,
+      "relative_l2_vs_float64_rounded": 0.0,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 0.0,
+      "native_bitwise_cpu_fp32": true,
+      "native_matrix_ops": 0
+    },
+    "2": {
+      "relative_l2_vs_cpu_fp32": 0.0001397395241334344,
+      "relative_l2_vs_float64_rounded": 0.0001397395241334344,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 0.0,
+      "native_bitwise_cpu_fp32": false,
+      "native_matrix_ops": 1
+    },
+    "4": {
+      "relative_l2_vs_cpu_fp32": 0.00022777610588001025,
+      "relative_l2_vs_float64_rounded": 0.0002277761323209322,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 4.9272976970866995e-09,
+      "native_bitwise_cpu_fp32": false,
+      "native_matrix_ops": 1
+    },
+    "8": {
+      "relative_l2_vs_cpu_fp32": 0.0003097191042585225,
+      "relative_l2_vs_float64_rounded": 0.0003097191151604488,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 9.500414742726551e-09,
+      "native_bitwise_cpu_fp32": false,
+      "native_matrix_ops": 1
+    },
+    "16": {
+      "relative_l2_vs_cpu_fp32": 0.00031117151174770623,
+      "relative_l2_vs_float64_rounded": 0.0003111715341206339,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 1.8967859103483692e-08,
+      "native_bitwise_cpu_fp32": false,
+      "native_matrix_ops": 1
+    },
+    "32": {
+      "relative_l2_vs_cpu_fp32": 0.0003130710591545885,
+      "relative_l2_vs_float64_rounded": 0.0003130710019527457,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 3.396751979430881e-08,
+      "native_bitwise_cpu_fp32": false,
+      "native_matrix_ops": 1
+    },
+    "64": {
+      "relative_l2_vs_cpu_fp32": 0.0004093611644591385,
+      "relative_l2_vs_float64_rounded": 0.00040936116618931173,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 5.430928250014905e-08,
+      "native_bitwise_cpu_fp32": false,
+      "native_matrix_ops": 1
+    },
+    "128": {
+      "relative_l2_vs_cpu_fp32": 0.0007452099783918314,
+      "relative_l2_vs_float64_rounded": 0.0007452100812352984,
+      "cpu_fp32_relative_l2_vs_float64_rounded": 7.663359107363156e-08,
+      "native_bitwise_cpu_fp32": false,
+      "native_matrix_ops": 1
+    }
+  },
+  "historical_controls": {
+    "1": {
+      "input_digests_identical": true,
+      "native_bitwise_previous_hifi4": true
+    },
+    "32": {
+      "input_digests_identical": true,
+      "native_bitwise_previous_hifi4": true
+    },
+    "128": {
+      "input_digests_identical": true,
+      "native_bitwise_previous_hifi4": true
+    }
+  },
+  "source_audit": "pinned-source-audit.json",
+  "timing_limit": "Warm synchronized output-transfer-inclusive samples retained as diagnostic metadata, not an optimization speed claim. Different K can select different native lowering/kernel strategies.",
+  "decision": "Use measured short-K accuracy to select the next decomposition experiment. Do not assume BF16-representable FP32 inputs or fp32_dest_acc_en guarantee an accurate long reduction. Keep kernel reload hypothesis distinct from demonstrated behavior.",
+  "reproduce": "matmul_reduction_probe.py --output-dir <new> (source fa9292b, canonical Forge1.4.0 HiFi4)"
+}

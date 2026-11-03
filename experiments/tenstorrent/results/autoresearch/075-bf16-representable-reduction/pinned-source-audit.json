@@ -1,0 +1,25 @@
+{
+  "pinned_metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "matches_forge_runtime_revision": "See003-profiling-infrastructure native-build source provenance",
+  "files": {
+    "tech_reports/op_kernel_dev/accuracy_tips/accuracy_tips.md": {
+      "sha256": "76b621537ed2ae3951f2ad5c9e48cfdb05d0e70de47bdd10b03c9eabf7dc4f8c",
+      "url": "https://github.com/tenstorrent/tt-metal/blob/f1f4ff75579ebd7a69c7da52d45368f273026d85/tech_reports/op_kernel_dev/accuracy_tips/accuracy_tips.md"
+    },
+    "ttnn/cpp/ttnn/operations/matmul/device/kernels/compute/bmm.cpp": {
+      "sha256": "f6a052644538be45f4d09af76318e80242d4a6cfd4a3dc2f0e24cf04935c1efd",
+      "url": "https://github.com/tenstorrent/tt-metal/blob/f1f4ff75579ebd7a69c7da52d45368f273026d85/ttnn/cpp/ttnn/operations/matmul/device/kernels/compute/bmm.cpp"
+    },
+    "ttnn/cpp/ttnn/operations/matmul/device/kernels/compute/bmm_large_block_zm.cpp": {
+      "sha256": "ffe430171ea874e88d812ca2fa501b65c5a82fff299ec36e5af48310df36b473",
+      "url": "https://github.com/tenstorrent/tt-metal/blob/f1f4ff75579ebd7a69c7da52d45368f273026d85/ttnn/cpp/ttnn/operations/matmul/device/kernels/compute/bmm_large_block_zm.cpp"
+    },
+    "tt_metal/hw/inc/api/compute/tile_move_copy.h": {
+      "sha256": "bf41c7c433dddb18aa3279a1976dfea8a89d0cfa1c60877a1903a8368fb342aa",
+      "url": "https://github.com/tenstorrent/tt-metal/blob/f1f4ff75579ebd7a69c7da52d45368f273026d85/tt_metal/hw/inc/api/compute/tile_move_copy.h"
+    }
+  },
+  "finding": "Pinned official accuracy notes describe precision loss when spilled FP32 intermediates are copied through source registers rather than directly into destination registers. The pinned large-block matrix kernel contains a copy_tile reload path. A git grep across pinned matmul sources finds no explicit UnpackToDestFp32/unpack_to_dest_mode configuration.",
+  "limit": "Source mechanism hypothesis only. Actual selected native kernel/program parameters are not bound to these measurements; no SDK patch or causal fix is established. Errors at short reduction lengths may require a different or additional mechanism.",
+  "explicit_matmul_unpacked_dest_matches": []
+}
