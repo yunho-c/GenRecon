@@ -44,7 +44,8 @@
     "results/autoresearch/033-isolated-attention-precision/summary.json",
     "results/autoresearch/034-attention-postscale/summary.json",
     "results/autoresearch/035-attention-stage-errors/summary.json",
-    "results/autoresearch/036-softmax-formulations/summary.json"
+    "results/autoresearch/036-softmax-formulations/summary.json",
+    "results/autoresearch/037-cross-only-reciprocal-control/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -73,7 +74,8 @@
     "Reject codegen/inference interleaving: codegen_py changes process-global backend options and mutates exported modules. Controlled isolated attention outputs match a separate no-export process bitwise; actual native IR can instead be dumped using export_path and dry_run=false.",
     "On identical learned first-block Q/K/V, FP32 postscale attention reduces self-attention error from 0.102 to 0.0272; cross-attention remains about 0.0182. Stage capture matches ordinary final output bitwise. Local QK error is below 0.0006, scale is exact, and native softmax error is 0.0399 self / 0.0236 cross on identical TT scores.",
     "Stable exp times reciprocal(sum(exp)) avoids the compiler DivOp softmax fusion and reduces local softmax error to 0.000631 self / 0.000255 cross, with exact repeats and no fallback. Direct exp/div fuses back to native softmax. Approximate-exp defaults in exact SDK sources are a hypothesis, not a toggle-tested causal finding. exp2 was rejected for CPU fallback.",
-    "An initial full-flow attention run prepared only 30 cross-attention modules because top-level and package imports created different RoPE wrapper classes. Retain it as a partial-attention control, not the complete candidate. Canonical package imports and fail-closed unknown-wrapper checks prevent silent partial preparation."
+    "An initial full-flow attention run prepared only 30 cross-attention modules because top-level and package imports created different RoPE wrapper classes. Retain it as a partial-attention control, not the complete candidate. Canonical package imports and fail-closed unknown-wrapper checks prevent silent partial preparation.",
+    "Cross-only 30-module reciprocal control completed: 14.35s trajectory, final relative L2 0.435 vs original FP32 and 0.416 vs matched CPU precision diagnostic, no fallback or recompile. It does not improve trajectory agreement. Native IR retains 30 BF16 softmax and replaces only 30 cross softmax. Complete 60-module experiment remains separate."
   ],
   "next_actions": [
     "Finish shape512 complete FP32 reciprocal attention trajectory using canonical imports: require 60 prepared self/cross modules, no fallback/recompilation, all original 12 steps and stock FP32 references. Retain run051 as a 30-module cross-only control. Inspect actual native IR for replacement coverage and dtypes.",
@@ -85,11 +87,11 @@
   ],
   "live_experiments": [
     {
-      "name": "051-shape-reciprocal-trajectory",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/051-shape-reciprocal-trajectory",
-      "purpose": "Partial-attention control: 30 cross modules prepared; self modules stayed stock SDPA with real RoPE",
-      "status_at_last_check": "running compile_and_first_inference",
-      "note": "Check actual process. Canonical-import complete candidate must prepare 60 modules."
+      "name": "052-shape-full-reciprocal",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/052-shape-full-reciprocal",
+      "purpose": "Complete 60-module self/cross reciprocal attention with real-pair RoPE; original references and schedule",
+      "status_at_last_check": "running CPU build/reference",
+      "note": "Verify actual process and prepared count before interpreting."
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."

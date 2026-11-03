@@ -1,0 +1,38 @@
+{
+  "status": "completed_partial_attention_control_not_complete_candidate",
+  "prepared_modules": 30,
+  "scope": "30 cross-attention modules use FP32 postscale exp/reciprocal; self attention retains stock SDPA with real-pair RoPE. Same original weights, 512 synthetic active tokens and 12-step/21-forward schedule.",
+  "reason": "Top-level run import of inference_rope and package import in inference_attention created different wrapper class identities. Preparation silently skipped the 30 real-RoPE self modules. Canonical imports and explicit unknown-wrapper rejection fixed in commit 2ed599f.",
+  "native_ir_counts": {
+    "softmax": 30,
+    "exp": 30,
+    "divide": 150,
+    "matmul": 270
+  },
+  "warm_ms": 682.8672690317035,
+  "trajectory_seconds": 14.345986677973997,
+  "vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.4348946929864437,
+    "pcc": 0.9036374387412488,
+    "max_abs": 4.502198696136475
+  },
+  "vs_cpu_precision_diagnostic_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.4158083862531727,
+    "pcc": 0.9121575039129663,
+    "max_abs": 3.6158576011657715
+  },
+  "finding": "Cross-only reciprocal attention does not improve the full trajectory: relative L2 0.435 vs stock FP32. Historical real-RoPE SDPA trajectory was 0.383; its artifacts lack modern fixture hashes, so that historical contrast is diagnostic only. Complete candidate remains separate.",
+  "fallback_ops": [],
+  "trajectory_recompiled": false,
+  "decision": "No promotion. Retain full raw results, native IR and trajectory payloads as a partial-attention control. Await complete 60-module candidate."
+}
