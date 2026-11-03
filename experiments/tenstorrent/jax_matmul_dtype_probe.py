@@ -21,6 +21,8 @@ sys.path.insert(0, str(ROOT))
 
 
 def main():
+    from experiments.tenstorrent.native_environment import reexec_clean_native_process
+    reexec_clean_native_process()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--source-dtype', choices=('float32', 'bfloat16'), default='bfloat16')
@@ -49,6 +51,7 @@ def main():
         report['versions'] = {name: importlib.metadata.version(name) for name in
             ('torch', 'torch-xla', 'tt-forge', 'pjrt-plugin-tt', 'jax', 'jaxlib')}
         report['script_sha256'] = sha256(Path(__file__))
+        report['native_environment_sha256'] = sha256(Path(__file__).with_name('native_environment.py'))
         torch.set_num_threads(4)
         torch.manual_seed(62)
         left = torch.randn(512, 128).bfloat16().float()

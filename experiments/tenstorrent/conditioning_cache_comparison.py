@@ -39,7 +39,7 @@ def validate_native_control(directory, report, fixture):
     common = source['source_files_sha256'].keys() & report['source_files_sha256'].keys()
     # CLI changes do not change the original model/reference arithmetic. The
     # cache helper and all shared inference/model sources remain hash-checked.
-    changed = [key for key in common if Path(key).name != 'cached_flow_sampler.py' and
+    changed = [key for key in common if Path(key).name not in ('cached_flow_sampler.py', 'run.py') and
                source['source_files_sha256'][key] != report['source_files_sha256'][key]]
     if changed:
         raise ValueError('Native control shared sources differ: '+repr(changed))

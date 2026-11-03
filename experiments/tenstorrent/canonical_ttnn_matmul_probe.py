@@ -22,14 +22,8 @@ sys.path.insert(0, str(ROOT))
 
 
 def main():
-    # The loader and Python initialize their search paths at process startup.
-    # Merely deleting these variables after startup can still mix native SDKs.
-    isolated_keys = ('PYTHONPATH', 'LD_LIBRARY_PATH', 'TT_METAL_HOME', 'TT_METAL_RUNTIME_ROOT', 'TT_PJRT_PLUGIN_DIR')
-    if any(key in os.environ for key in isolated_keys):
-        clean = dict(os.environ)
-        for key in isolated_keys:
-            clean.pop(key, None)
-        os.execve(sys.executable, [sys.executable, *sys.argv], clean)
+    from experiments.tenstorrent.native_environment import reexec_clean_native_process
+    reexec_clean_native_process()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--variant', choices=('default', 'full_sync', 'packer', 'precise', 'hifi3', 'hifi2', 'fp16_dest'), default='default')
@@ -78,6 +72,7 @@ def main():
         report['native_control'] = {'directory': str(args.native_control_dir.resolve()),
             'outputs_sha256': sha256(path), 'inputs_identical': True}
         report['source_sha256'] = sha256(Path(__file__))
+        report['native_environment_sha256'] = sha256(Path(__file__).with_name('native_environment.py'))
         phase('waiting_for_device')
         lock = os.open('/tmp/genrecon-tt-pjrt.lock', os.O_CREAT | os.O_RDWR, 0o600)
         fcntl.flock(lock, fcntl.LOCK_EX)

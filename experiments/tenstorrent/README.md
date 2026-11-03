@@ -989,3 +989,13 @@ packer flag is also inactive for one block; no enabled-packer claim follows.
 Raw Inspector records, compiler commands, descriptors and ELF hashes are retained.
 Standalone TTNN and PJRT remain distinct execution/build boundaries even when
 they ship in the same package and use the same source revision.
+
+Native process isolation now happens before Python/native-library imports.
+`native_environment.py <script.py or -m module> [arguments...]` starts any older
+probe with the inherited SDK/Python/library search paths removed, preserving
+unrelated settings. The main harness sanitizes child environments too; active
+sampler/matrix probes re-execute themselves when necessary. This addresses the
+observed direct-TTNN ABI failure from clearing loader variables after startup.
+For paired controls, CLI launcher files are excluded from arithmetic-source
+identity checks; original model/reference/inference/cache helper hashes and
+all checkpoint/fixture/SDK identity checks remain enforced.

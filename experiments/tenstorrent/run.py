@@ -27,6 +27,8 @@ def write_result(path, result):
 
 
 def worker(args):
+    from experiments.tenstorrent.native_environment import SDK_ENV_KEYS
+    entry_sdk_keys = [name for name in SDK_ENV_KEYS if name in os.environ]
     # Match the working DINO experiment; the wheel supplies its own Metal runtime.
     for name in ("TT_METAL_HOME", "TT_METAL_RUNTIME_ROOT", "LD_LIBRARY_PATH", "PYTHONPATH"):
         os.environ.pop(name, None)
@@ -39,6 +41,7 @@ def worker(args):
     sys.path.insert(0, str(ROOT))
     result = {
         "case": args.worker, "status": "running", "phase": "imports",
+        "worker_entry_sdk_environment_keys": entry_sdk_keys,
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "versions": {name: importlib.metadata.version(name) for name in ("torch", "torch-xla", "tt-forge", "pjrt-plugin-tt")},
         "seed": args.seed, "fullgraph": True,
@@ -279,6 +282,9 @@ def worker(args):
 
 
 def main():
+    sys.path.insert(0, str(ROOT))
+    from experiments.tenstorrent.native_environment import reexec_clean_native_process, clean_native_environment
+    reexec_clean_native_process()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cases", nargs="+", default=["projection", "dense_aggregator", "sparse_aggregator", "ss_decoder", "dit_block"])
     parser.add_argument("--checkpoint-dir", type=Path, default=Path.home() / "models/genrecon")
@@ -369,7 +375,8 @@ def main():
         print(f"Running {case}; log: {dest / 'run.log'}", flush=True)
         with (dest / "run.log").open("w") as log:
             try:
-                process = subprocess.run(command, cwd=dest, stdout=log, stderr=subprocess.STDOUT, timeout=args.timeout)
+                process = subprocess.run(command, cwd=dest, stdout=log, stderr=subprocess.STDOUT,
+                                         timeout=args.timeout, env=clean_native_environment())
                 code = process.returncode
             except subprocess.TimeoutExpired:
                 code = 124

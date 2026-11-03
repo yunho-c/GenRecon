@@ -27,6 +27,8 @@ sys.path.insert(0, str(ROOT))
 
 
 def main():
+    from experiments.tenstorrent.native_environment import reexec_clean_native_process
+    reexec_clean_native_process()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--mode', choices=('reduction', 'active_terms', 'mantissa_split', 'power_two'), default='reduction')
@@ -63,7 +65,7 @@ def main():
                 return torch.mm(a, b, out_dtype=torch.float32)
         report['versions'] = {name: importlib.metadata.version(name) for name in ('torch', 'torch-xla', 'tt-forge', 'pjrt-plugin-tt')}
         report['source_sha256'] = {str(path.relative_to(ROOT)): sha256(path) for path in
-            (Path(__file__), Path(__file__).with_name('fp32_matmul_probe.py'))}
+            (Path(__file__), Path(__file__).with_name('fp32_matmul_probe.py'), Path(__file__).with_name('native_environment.py'))}
         torch.set_num_threads(4)
         torch.manual_seed(62)
         left = torch.randn(512, 128).bfloat16().float()
