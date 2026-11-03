@@ -1,0 +1,91 @@
+{
+  "status": "completed_native_exact_paired_performance_result_stock_cpu_quality_failed",
+  "hardware": "one n150 Wormhole B0 PCIe3 chip",
+  "scope": "Pretrained shape512, seeded synthetic noise and conditioning, original 12-step/21-call Euler/CFG sampler; prepared FP32 flat-head real RoPE and reciprocal attention. Pipeline-loaded BF16-quantized torso values promoted to FP32; original learned parameter objects and LoRA preserved.",
+  "source_commit": "ce76bbe27f4f079411592a0e028e328972b4fc8a",
+  "change": "Cache projected conditioning, normalized keys in BHDT layout and values in BHND layout per block. Move static cross-KV normalization/head packing and conditioning projections into a fresh native prefill per branch.",
+  "paired_design": "ABBA rounds in one process, shared original weights. Each cached trial computes and uses a fresh positive/negative native prefill pair; both paths retain all original12steps/21calls. Explicit synchronization, no compilation/warmup/artifact I/O in measured windows.",
+  "paired_summary": {
+    "ordinary": {
+      "seconds": [
+        16.900436236988753,
+        16.839660158962943,
+        16.86971865198575,
+        16.93049903702922,
+        16.864348340954166,
+        16.869498693034984
+      ],
+      "median_seconds": 16.869608672510367,
+      "min_seconds": 16.839660158962943,
+      "max_seconds": 16.93049903702922
+    },
+    "cached": {
+      "seconds": [
+        13.656836633977946,
+        13.581180674023926,
+        13.641014644992538,
+        13.638622096041217,
+        13.61919002403738,
+        13.615804859960917
+      ],
+      "median_seconds": 13.628906060039299,
+      "min_seconds": 13.581180674023926,
+      "max_seconds": 13.656836633977946
+    },
+    "cached_reduction_percent": 19.21030105311162
+  },
+  "paired_prefill_pair_seconds": [
+    0.35041813395218924,
+    0.3510237809969112,
+    0.3506434829905629,
+    0.3508271500468254,
+    0.3507470350014046,
+    0.35070442099822685
+  ],
+  "paired_prefill_pair_median_seconds": 0.3507257279998157,
+  "fresh_ordinary_native_anchor": "../104-transposed-cache-pretrained-controls/ordinary-result.json",
+  "CPU_prepared_all_states_bitwise_ordinary": true,
+  "initial_cached_and_inline_all_states_bitwise_fresh_ordinary_native": true,
+  "all_12_trials_all_states_bitwise_native": true,
+  "all_12_trials_compile_states_unchanged": true,
+  "fallback_ops": [],
+  "aten_counters": {},
+  "original_learned_parameter_identities_preserved": true,
+  "cache_logical_bytes_per_branch": 473702400,
+  "cache_tensors_per_branch": 90,
+  "native_main_op_counts": {
+    "prefill": {
+      "matrix": 32,
+      "cross_kv_head_pack": 30
+    },
+    "body": {
+      "matrix": 425,
+      "cross_kv_head_pack": 0
+    },
+    "inline_control": {
+      "matrix": 457,
+      "cross_kv_head_pack": 30
+    }
+  },
+  "stock_cpu_final_quality": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "focused_tests": "92 passed; see focused-tests.txt",
+  "verification": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/results/autoresearch/105-transposed-cache-abba-sampler/verify.py",
+  "evidence_retention": "Initial native and inline-control complete tapes are retained; CPU tapes and original native anchor are retained in104. Each paired trial is checked at every state before its row is appended; per-trial tapes are not independently retained. Complete timings, compile counters, original schedules, exact comparison verdicts, runtime IR and final XLA metrics are retained.",
+  "limits": [
+    "All timed trials in one process on one chip. No cross-device or real-scene reconstruction claim.",
+    "Includes fresh positive/negative native prefill and complete transfer-inclusive PJRT denoiser sampler calls. Excludes initial raw-condition upload, compilation, warmup and artifact I/O; not full-pipeline latency.",
+    "Ordinary paired control recomputes original conditioning inside every denoiser using the same learned objects and matches fresh original native137 at every state.",
+    "Existing stock CPU error0.299911 and PCC0.954575 still fail strict unchanged numerical gates. This is not a production/default or quality promotion; raw cache remains default.",
+    "Logical cache payload is not measured physical allocation or peak memory. Moving work does not establish identical peak memory.",
+    "Head-untransposed cache100 remains rejected. Diagnostics101/102 show layout-dependent key-normalization values; no single internal instruction is proven responsible."
+  ]
+}

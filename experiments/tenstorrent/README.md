@@ -1143,8 +1143,64 @@ finds identical native cached K/V from both prefix constructions. Fused packing
 and attention match raw-cache attention bitwise, while splitting the two graphs
 changes the result. Native IR shows transposed key normalization and QK
 `transpose_b=false` in the fused path, versus `transpose_b=true` with cached
-untransposed keys. A transposed-key cache is the next counterfactual; no specific
-faulty instruction or quality-preserving speedup is established by this result.
+untransposed keys. This identifies a layout counterfactual; it does not establish
+a specific faulty internal instruction.
+
+The [transposed-key boundary control](results/autoresearch/102-transposed-key-boundary/summary.json)
+restores first-block native attention bitwise on both branches by caching keys
+as BHDT and retaining the original QK lowering. Normalized key values also
+depend on layout, so the evidence does not attribute the difference solely to
+the matrix transpose flag. The [dynamic-scene control](results/autoresearch/103-transposed-cache-dynamic-scenes/summary.json)
+passes scene, branch, noise, repeat and old-scene replay checks without fallback
+or value-change recompilation. Original learned objects and nonzero LoRA remain.
+
+The [complete transposed-key sampler comparison](results/autoresearch/105-transposed-cache-abba-sampler/summary.json)
+measures **19.21% lower median time**, from **16.870s to 13.629s**, across three
+ABBA rounds (six complete trajectories per path). Every cached trial includes
+a fresh positive/negative native prefill pair, with median pair cost 350.7ms.
+All 12 trials preserve every state of the fresh ordinary native control bitwise,
+retain the original 12 steps and 21 denoiser calls, and show no fallback or
+measured recompilation. The paired ordinary graph recomputes original
+conditioning each call using the same learned objects; it also matches the
+fresh original model at every state. Runtime IR moves all 30 cross-KV head
+packs and 32 conditioning matrix products into prefill, leaving zero such packs
+and 425 matrix products per body call. Ninety-two focused tests pass.
+
+This is one n150 and a synthetic 512-token pretrained shape fixture using the
+experimental FP32/flat-head RoPE/reciprocal-attention recipe. Timing excludes
+initial condition upload, compilation, warmup and artifact writes; it includes
+the complete PJRT sampler and fresh native prefill. Logical cache payload is
+473,702,400 bytes per branch, not a physical allocation or peak-memory result.
+The existing stock CPU final relative L2 of 0.299911 still fails the unchanged
+strict quality gates. Raw KV remains the default cache layout; production
+defaults and reconstruction-quality status are unchanged.
+
+Reproduce with a fresh ordinary control from the same source snapshot. Historical
+controls are accepted only when all shared source and fixture identities match:
+
+```bash
+/home/user/tt-forge-venv/bin/python experiments/tenstorrent/run.py \
+  --cases shape_flow_tensor --output-dir /tmp/genrecon-heads-t-control \
+  --runs 1 --cpu-threads 16 --reference-precision float32 \
+  --rope-mode real_pairs_flat_head_first --attention-mode fp32_reciprocal \
+  --device-precision float32 --math-fidelity hifi4 --optimization-level 0 \
+  --native-ir --sampler-trajectory --timeout 1800 \
+  --cpu-trajectory-cache /home/user/tt-scratchpad/genrecon/shape512-cpu-reference-cache-v1
+
+/home/user/tt-forge-venv/bin/python experiments/tenstorrent/cached_flow_sampler.py \
+  --cache-layout heads_t --paired-rounds 3 \
+  --output-dir /tmp/genrecon-heads-t-paired \
+  --cpu-trajectory-cache /home/user/tt-scratchpad/genrecon/shape512-cpu-reference-cache-v1 \
+  --native-control-dir /tmp/genrecon-heads-t-control/shape_flow_tensor
+```
+
+Both runs report `numerical_mismatch` when only the unchanged stock CPU gate
+fails; check terminal phase, complete trials and strict native equality rather
+than treating that status as a performance acceptance. The sealed original CPU
+cache can be restored from result038. For an audit without hardware, run
+`results/autoresearch/105-transposed-cache-abba-sampler/verify.py` with the
+recorded Forge Python. It checks compressed seals, CPU/native complete tapes,
+trial schedules/counters/timing arithmetic and actual native operation counts.
 
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler

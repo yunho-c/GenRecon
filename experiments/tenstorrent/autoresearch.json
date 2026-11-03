@@ -112,7 +112,8 @@
     "results/autoresearch/101-head-cache-boundary-diagnostic/summary.json",
     "results/autoresearch/102-transposed-key-boundary/summary.json",
     "results/autoresearch/103-transposed-cache-dynamic-scenes/summary.json",
-    "results/autoresearch/104-transposed-cache-pretrained-controls/summary.json"
+    "results/autoresearch/104-transposed-cache-pretrained-controls/summary.json",
+    "results/autoresearch/105-transposed-cache-abba-sampler/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -213,23 +214,17 @@
     "Shared-weight first-block diagnostic: native headed-prefill KV equals native pack-after-raw bitwise; fused pack+cross equals raw cross bitwise, but splitting pack/cross yields0.000607535 positive/0.000418120 negative relative error. Raw/fused key normalization is lowered in transposed BHDT with QK transpose_b=false; cached BHND uses transpose_b=true. Test transposed-key boundary before any speed claim.",
     "Transposed-key cache boundary heads_t restores teacher-forced first-block native cross attention bitwise on both condition branches; all fused/split/prefill paths match original raw cross. QK retains transpose_b=false.71 focused CPU checks and exact XOR-evidence reconstruction pass. Full sampler/native performance still require validation.",
     "Native heads_t cache passes six two-scene/branch/noise controls, exact repeats and old-scene replay, without fallback or value-change compilation. Every changed positive cache tensor and output changes; unchanged negative cache/output remain bitwise. Native prefill has6 dynamic conditioning products, body31 total/zero conditioning products. NonzeroLoRA/learned identities retained; no pretrained speed or reconstruction claim.",
-    "Transposed-key pretrained CPU trajectory preserves every ordinary prepared state bitwise, with original learned identities and logical cache payload. Fresh ordinary native137 matches every original110 state. Candidate native/paired validation is a separate pending gate; stock CPU native error remains0.299911."
+    "Transposed-key pretrained CPU trajectory preserves every ordinary prepared state bitwise, with original learned identities and logical cache payload. Fresh ordinary native137 matches every original110 state. Candidate native/paired validation is a separate pending gate; stock CPU native error remains0.299911.",
+    "Transposed-key cache heads_t passes all pretrained CPU/native state guards and twelve paired ABBA trajectories. Prefill-inclusive median falls16.869609s to13.628906s (19.2103% lower), with fresh positive/negative caches each cached trial, no fallback or measured recompilation, original12steps21calls and shared learned objects/LoRA. Prefix32/body425 matrixops and30/0 fixed cross-KV packs confirm work moved out of denoiser.92 focused tests and independent compressed-evidence audit pass. One n150 synthetic512-token shape fixture only; unchanged stock CPU final error0.299911/PCC0.954575 still fails, raw cache default and production defaults unchanged."
   ],
   "next_actions": [
-    "Isolate rejected heads-cache native difference using shared-weight raw KV prefill, normalized/head-packed prefill, pack-after-raw and fused/split first-block cross-attention controls. Preserve exact native/CPU gates and do not promote the faster unpaired candidate.",
+    "Extend validated transposed-key heads_t conditioning cache to texture and matched real-image shape/texture fixtures using fresh same-source ordinary controls. Require CPU/native every-state equality, original schedules, no fallback/recompilation and paired prefill-inclusive timing; retain unchanged strict stock CPU quality gates.",
     "Investigate the exact current-recipe reshape paths behind the three input groups totaling180.85ms. Bind operation IDs to native IR and test a layout-aware QKV/attention rewrite with learned LoRA retained; require CPU and native trajectory controls before any promotion.",
-    "Use the measured native conditioning-prefill cache as an opt-in execution boundary; pursue strict full-trajectory numerical gates, isolate native prefill errors against identical CPU caches, and validate real-scene inputs before promotion. Retain original12steps/21calls and include both branch prefill costs in comparisons.",
+    "Use measured heads_t conditioning-prefill cache as an opt-in execution boundary. Investigate strict full-trajectory numerical accuracy and real-scene geometry/material quality before promotion. Preserve native layout-dependent key normalization; untransposed heads cache remains rejected.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Extend matching-revision marked profiles to optimized6181-token shape, occupancy and texture modules. Separate preuploaded-activation generated execution from transfer-inclusive PJRT sampler timing, and retain original full-trajectory quality gates."
   ],
-  "live_experiments": [
-    {
-      "run": 138,
-      "purpose": "Complete transposed-key CPU/native equivalence and prefill-inclusive three-round ABBA if exact native state guard passes",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/138-transposed-cache-pretrained-abba",
-      "tool_session": 92462
-    }
-  ],
+  "live_experiments": [],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
