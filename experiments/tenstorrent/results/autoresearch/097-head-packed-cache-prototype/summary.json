@@ -1,0 +1,14 @@
+{
+  "status": "completed_small_cpu_equivalence_prototype",
+  "cache_layout": "heads (opt-in); raw remains default",
+  "change": "Prefill computes original cross-KV projection, original key RMS normalization when enabled, and head-first K/V packing once per condition. Body retains original query normalization, reciprocal attention, output projection, LoRA and learned objects.",
+  "checks": "70 focused CPU checks passed. Both raw/head modes preserve original outputs bitwise across two scenes, noise/guidance branches and changed time; parameter identities/values retained. Invalid cache dtype/shape and incomplete preparation plans reject before mutation.",
+  "source_sha256": {
+    "conditioning_cache.py": "83ddd97dc4fe155fba16b5736bbae293cf3fa25c1048dccac7ff5baa7f8751e5",
+    "cached_flow_sampler.py": "6f7897784522e7df2e23f9c2ad2c486c3e48e290ff8032be09daa09581cd17c7",
+    "test_conditioning_cache.py": "6760909d24e7e16fcfc606fb286b705d6b9e9129da81fdb1dab9450d1283c661",
+    "test_conditioning_cache_comparison.py": "ff30a17e93f118253f19cf0a67fa6a3de69bcb7c869c82874139f9ddba21c02b"
+  },
+  "limits": "Tiny CPU fixtures only. No pretrained full-trajectory, native equivalence or speed claim yet. Original quality gates and production defaults unchanged.",
+  "next": "Fresh ordinary native baseline with these source identities; complete pretrained CPU/native candidate and prefill-inclusive shared-weight ABBA comparison."
+}

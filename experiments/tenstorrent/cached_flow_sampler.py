@@ -44,6 +44,7 @@ def main():
     parser.add_argument('--cpu-threads', type=int, default=16)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--cpu-only', action='store_true')
+    parser.add_argument('--cache-layout', choices=('raw','heads'), default='raw')
     parser.add_argument('--paired-rounds', type=int, default=0, help='ABBA complete sampler rounds sharing weights')
     parser.add_argument('--native-control-dir', type=Path, help='Sealed ordinary native run required for paired trials')
     args = parser.parse_args()
@@ -55,6 +56,7 @@ def main():
         os.environ.pop(key, None)
     os.environ.update(PJRT_DEVICE='TT', ATTN_BACKEND='sdpa', SPARSE_ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
     report = {'status': 'running', 'scope': __doc__, 'case': 'shape_flow_tensor', 'seed': args.seed,
+              'cache_layout': args.cache_layout,
               'reference_precision': 'float32', 'cpu_threads': args.cpu_threads,
               'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
 
@@ -100,7 +102,7 @@ def main():
         torch.save(ordinary, args.output_dir/'trajectory-ordinary-cpu.pt')
         report['ordinary_cpu_vs_stock'] = compare_trajectories(ordinary, stock)
         identities = {id(value) for value in model.parameters()}
-        prefill, body = prepare_conditioning_cache(model)
+        prefill, body = prepare_conditioning_cache(model, args.cache_layout)
         if identities != {id(value) for value in body.parameters()}:
             raise ValueError('Original learned parameter identities changed')
         report['parameter_identities_preserved'] = True
@@ -113,11 +115,9 @@ def main():
         report['cached_cpu_all_states_bitwise_ordinary'] = True
         report['cached_cpu_vs_stock'] = compare_trajectories(cached, stock)
         report['cache_bytes_per_branch'] = sum(value.numel()*value.element_size() for value in cpu_cache[id(branches[0])])
+        report['cache_shapes_per_branch'] = [list(value.shape) for value in cpu_cache[id(branches[0])]]
         torch.save(cached, args.output_dir/'trajectory-cached-cpu.pt')
         del cpu_cache
-        if args.paired_rounds:
-            from experiments.tenstorrent.conditioning_cache_comparison import validate_native_control
-            expected_native, report['paired_native_control'] = validate_native_control(args.native_control_dir, report, fixture)
         if args.cpu_only:
             report['status'] = 'completed_exact_cpu_control'
             phase('complete')
@@ -131,6 +131,13 @@ def main():
         # Descriptor retained through native atexit, serializing device teardown too.
         device_lock = os.open('/tmp/genrecon-tt-pjrt.lock', os.O_CREAT | os.O_RDWR, 0o600)
         fcntl.flock(device_lock, fcntl.LOCK_EX)
+        if args.paired_rounds:
+            # An ordinary control may be compiling while candidate CPU checks
+            # run. Its lifetime device lock is released only after final seals
+            # and native teardown; validate it before any candidate device work.
+            from experiments.tenstorrent.conditioning_cache_comparison import validate_native_control
+            phase('validate_completed_ordinary_native_control')
+            expected_native, report['paired_native_control'] = validate_native_control(args.native_control_dir, report, fixture)
         device = torch_xla.device()
         assert runtime.device_type() == 'TT'
         report['device_type'] = runtime.device_type()
