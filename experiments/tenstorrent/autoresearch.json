@@ -102,13 +102,32 @@
     "Flattened head-first and token-first formulations both match CPU bitwise on the seeded BF16 fixtures. At4096, head-first prototype median13.15ms vs token-first16.39ms; integrated head-first12.18ms and bitwise equal to prototype. All eight preintegration native outputs match the independent integration process bitwise. Baseline microtiming varies between processes (about26.6\u201336.2ms at4096), so do not treat precise kernel ratios or small512-token differences as full-flow performance evidence."
   ],
   "next_actions": [
-    "Run complete real-poster ss_flow with real_pairs_flat_head_first and fp32_scores_bf16_av against sealed CPU reference, then common FP32 decoder. The integrated kernel matches the prototype and CPU bitwise on seeded cases, but full-model layout and speed/quality are unproven.",
+    "Finish confirmed live run066 and queued decoder067. Inspect actual final native IR for head-first cosine layout and60 FP32 QK/60 BF16 AV products, no fallback/recompilation, all original22 forwards and12 steps. Compare complete states and occupancy to run058 and sealed stock CPU reference. Retain any numerical failures; commit/push completed results.",
     "After the layout experiment, establish an all-FP32 device-torso accuracy baseline using the same already-BF16-quantized learned weights and original CPU reference. The CPU BF16-boundary diagnostic itself fails strict FP32 trajectory gates, so quantify how much removable rounding vs remaining native arithmetic contributes before more selective precision tuning. Start with shape512 to validate memory/runtime and complete schedule.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "name": "066-poster-flat-rope",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/066-poster-flat-rope",
+      "pid_at_last_check": 343128,
+      "tool_session_id": 21140,
+      "status_at_last_check": "running cpu_reference",
+      "purpose": "Complete real-poster BF16-AV sampler using integrated flattened head-first RoPE, original CPU reference and schedules.",
+      "note": "Actual worker confirmed; inspect process arguments and result before treating as live or terminal. Do not restart from observation timeout."
+    },
+    {
+      "name": "067-flat-rope-occupancy",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/067-flat-rope-occupancy",
+      "pid_at_last_check": 343139,
+      "tool_session_id": 41277,
+      "status_at_last_check": "live controller waiting for run066 terminal result",
+      "log": "/home/user/tt-scratchpad/genrecon/autoresearch/067-run.log",
+      "purpose": "Common FP32 CPU decoder on stock references, prior SDPA/FP32/BF16-AV candidates, new flattened RoPE and CPU precision diagnostic."
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
