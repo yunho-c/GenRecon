@@ -1,0 +1,233 @@
+{
+  "status": "completed_native_integrated_kernel_screen",
+  "scope": "Check actual native RoPE layouts before full-model experiments.\n\nSeeded synthetic real values, original adjacent-pair rotation, BHSD output.\nResident inputs/phases; output D2H and synchronization included in timings.\nThis kernel diagnostic establishes neither full-flow speed nor scene quality.\n",
+  "metrics": {
+    "512": {
+      "token_first": {
+        "median_seconds": 0.008521791023667902,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006059924127758753,
+          "pcc": 0.9999998174220336,
+          "max_abs": 0.011322498321533203
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999988,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.005184319044928998,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005883615748712494,
+          "pcc": 0.9999998269166357,
+          "max_abs": 0.009818553924560547
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999988,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "scaled_split_head_first": {
+        "median_seconds": 0.008532091975212097,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.0620163775482034e-08,
+          "pcc": 1.000000000000001,
+          "max_abs": 4.76837158203125e-07
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.0620163775482034e-08,
+          "pcc": 1.000000000000001,
+          "max_abs": 4.76837158203125e-07
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "integrated_split_head_first": {
+        "median_seconds": 0.008667310990858823,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.0620163775482034e-08,
+          "pcc": 1.000000000000001,
+          "max_abs": 4.76837158203125e-07
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.0620163775482034e-08,
+          "pcc": 1.000000000000001,
+          "max_abs": 4.76837158203125e-07
+        },
+        "integrated_bitwise_prototype": true
+      }
+    },
+    "4096": {
+      "token_first": {
+        "median_seconds": 0.03536290902411565,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006986028597692623,
+          "pcc": 0.9999997579296367,
+          "max_abs": 0.01648688316345215
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.000000000000009,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.016958072024863213,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006751509121767224,
+          "pcc": 0.9999997720864041,
+          "max_abs": 0.015005350112915039
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.000000000000009,
+          "max_abs": 0.0
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "scaled_split_head_first": {
+        "median_seconds": 0.023715326969977468,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.206290671736472e-08,
+          "pcc": 1.0,
+          "max_abs": 4.76837158203125e-07
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.206290671736472e-08,
+          "pcc": 1.0,
+          "max_abs": 4.76837158203125e-07
+        },
+        "integrated_bitwise_prototype": null
+      },
+      "integrated_split_head_first": {
+        "median_seconds": 0.02391358802560717,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.206290671736472e-08,
+          "pcc": 1.0,
+          "max_abs": 4.76837158203125e-07
+        },
+        "cpu_formula_vs_reference": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.206290671736472e-08,
+          "pcc": 1.0,
+          "max_abs": 4.76837158203125e-07
+        },
+        "integrated_bitwise_prototype": true
+      }
+    }
+  },
+  "native_ir": {
+    "4096_token_first-native-ir": [
+      "4096_token_first-native-ir-ttnn_1793673719774.mlir.gz",
+      "4096_token_first-native-ir-shlo_frontend_1793673719747.mlir.gz"
+    ],
+    "4096_scaled_split_head_first-native-ir": [
+      "4096_scaled_split_head_first-native-ir-shlo_frontend_1793673723389.mlir.gz",
+      "4096_scaled_split_head_first-native-ir-ttnn_1793673723428.mlir.gz"
+    ],
+    "512_scaled_split_head_first-native-ir": [
+      "512_scaled_split_head_first-native-ir-ttnn_1793673718489.mlir.gz",
+      "512_scaled_split_head_first-native-ir-shlo_frontend_1793673718450.mlir.gz"
+    ],
+    "512_token_first-native-ir": [
+      "512_token_first-native-ir-ttnn_1793673716967.mlir.gz",
+      "512_token_first-native-ir-shlo_frontend_1793673716933.mlir.gz"
+    ],
+    "512_flat_head_first-native-ir": [
+      "512_flat_head_first-native-ir-ttnn_1793673717834.mlir.gz",
+      "512_flat_head_first-native-ir-shlo_frontend_1793673717806.mlir.gz"
+    ],
+    "4096_flat_head_first-native-ir": [
+      "4096_flat_head_first-native-ir-ttnn_1793673721948.mlir.gz",
+      "4096_flat_head_first-native-ir-shlo_frontend_1793673721921.mlir.gz"
+    ]
+  },
+  "finding": "Three BF16 payloads with a BF16 multiply-by-three between down/up casts preserve nonzero residuals in native IR. Integrated native outputs match the compensated CPU formula and an independent prototype process bitwise at512/4096. Relative L2 vs original FP32 rotation falls to1.06e-8/1.21e-8, with max error4.77e-7. The method costs extra kernel time and is validated only for normal activation ranges, not arbitrary FP32 extremes. Complete sampler effects remain unmeasured.",
+  "tests": "78 focused CPU checks pass. All eight native cases repeat exactly without fallback or aten counters. Full integrated outputs match the compensated CPU formula, same-process prototype and independent prototype process bitwise at both sizes.",
+  "decision": "Keep opt-in real_pairs_fp32_split; run the full original shape sampler against stock and prepared CPU controls. Defaults and strict gates unchanged.",
+  "retention": "Raw current/prototype reports, actual native and frontend IR, metrics, full-tensor equality proof, representative values/digests and seeded reproduction retained. No separate integrated native dump when graph cache reuses prototype.",
+  "reproduce": "rope_layout_probe.py --input-dtype float32 --tokens 512 4096 --modes token_first flat_head_first scaled_split_head_first integrated_split_head_first --output-dir <new>"
+}

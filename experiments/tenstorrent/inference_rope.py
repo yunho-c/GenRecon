@@ -8,15 +8,35 @@ import torch
 from torch import nn
 
 
+def compensated_gather(x, indices):
+    """Near-FP32 lookup via three supported BF16 payloads.
+
+    Intended for normal GenRecon activation ranges. BF16 multiplication keeps
+    narrowing observable: the pinned compiler removes direct down/up casts.
+    The small CPU approximation and native error require independent checks.
+    """
+    residual = x
+    pieces = []
+    for index in range(3):
+        digit = residual.bfloat16() * 3
+        pieces.append(torch.index_select(digit, -1, indices).float() * (1/3))
+        if index < 2:
+            residual = residual - digit.float() * (1/3)
+    return (pieces[0] + pieces[1]) + pieces[2]
+
+
 class RealPairRoPE(nn.Module):
-    def __init__(self, phases, head_first=False, flatten=False):
+    def __init__(self, phases, head_first=False, flatten=False, fp32_split=False):
         super().__init__()
+        if fp32_split and not (head_first and flatten):
+            raise ValueError('FP32 split lookup requires flattened head-first layout')
         if phases.device.type != 'cpu' or not phases.is_complex() or phases.ndim != 2:
             raise ValueError('Expected fixed CPU complex phases [tokens, head_dim/2]')
         tokens, pairs = phases.shape
         self.tokens, self.head_dim = tokens, pairs*2
         self.head_first = head_first
         self.flatten = flatten
+        self.fp32_split = fp32_split
         ids = torch.arange(self.head_dim)
         signs = torch.where(ids % 2 == 0, -1., 1.)
         self.register_buffer('partner_ids', ids ^ 1)
@@ -36,7 +56,8 @@ class RealPairRoPE(nn.Module):
             flat = x.reshape(-1, shape[-1])
             cosine = self.cosine.expand(shape).reshape(-1, shape[-1])
             sine = self.signed_sine.expand(shape).reshape(-1, shape[-1])
-            partner = torch.index_select(flat, -1, self.partner_ids).float()
+            partner = (compensated_gather(flat, self.partner_ids) if self.fp32_split and x.dtype == torch.float32
+                       else torch.index_select(flat, -1, self.partner_ids).float())
             return (flat.float()*cosine + partner*sine).to(x.dtype).reshape(shape)
         # Gather before promotion: BF16 input pairs stay exactly representable.
         partner = torch.index_select(x, -1, self.partner_ids).float()
@@ -91,11 +112,13 @@ class FixedSparseRealRoPE(nn.Module):
         return q_embed, k.replace(self.rope(k.feats.unsqueeze(0))[0])
 
 
-def prepare_real_rope(model, head_first=False, flatten=False):
+def prepare_real_rope(model, head_first=False, flatten=False, fp32_split=False):
     from genrecon.modules.attention import MultiHeadAttention
     from genrecon.modules.sparse.attention import SparseMultiHeadAttention
     if model.training:
         raise ValueError('Real RoPE preparation requires model.eval()')
+    if fp32_split and not (head_first and flatten):
+        raise ValueError('FP32 split lookup requires flattened head-first layout')
     if head_first:
         from genrecon.modules.attention import config
         if config.BACKEND != 'sdpa':
@@ -130,7 +153,7 @@ def prepare_real_rope(model, head_first=False, flatten=False):
             if attn._type != 'self' or attn.attn_mode != 'full':
                 raise ValueError('Only full fixed-layout self-attention is supported')
             if shared_rope is None:
-                shared_rope = RealPairRoPE(phases, head_first=head_first, flatten=flatten)
+                shared_rope = RealPairRoPE(phases, head_first=head_first, flatten=flatten, fp32_split=fp32_split)
             if attn.head_dim != shared_rope.head_dim:
                 raise ValueError('Attention head dimension disagrees with prepared phases')
             if fixed_sparse:

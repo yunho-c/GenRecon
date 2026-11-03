@@ -1,0 +1,36 @@
+{
+  "512": {
+    "input_digest": "d32c71da411b76aab2320c30763304dde0cd50fc96f066ad74aac54b851addbf",
+    "phase_digest": "2efe760f2a813ae5ba14b28a0c0462df7dcb5459ce30ad2688098e5765186b23",
+    "native_bitwise_cpu_compensated_formula": true,
+    "native_bitwise_independent_prototype_process": true,
+    "integrated_bitwise_same_process_prototype": true,
+    "native_vs_original_cpu": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 1.0620163775482034e-08,
+      "pcc": 1.000000000000001,
+      "max_abs": 4.76837158203125e-07
+    }
+  },
+  "4096": {
+    "input_digest": "fd2f770b7aea394e9f9db0c5a5d491b64f286f583d79e27682ef83ab00fac13f",
+    "phase_digest": "537892cc908a845a1bed8e645f3a3ac887090d5cb8a59a88024944f5d80d4b95",
+    "native_bitwise_cpu_compensated_formula": true,
+    "native_bitwise_independent_prototype_process": true,
+    "integrated_bitwise_same_process_prototype": true,
+    "native_vs_original_cpu": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 1.206290671736472e-08,
+      "pcc": 1.0,
+      "max_abs": 4.76837158203125e-07
+    }
+  }
+}

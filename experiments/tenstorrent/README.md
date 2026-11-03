@@ -644,7 +644,7 @@ flattened arithmetic before whole-model trials. The
 retains a head-first cosine multiply with flattened arithmetic: at 4096 tokens,
 kernel plus output-transfer time falls 28.06ms to 12.60ms and matches CPU values
 bitwise on the seeded fixture. At 512 tokens it is slightly slower. Complete-flow
-speed and quality for the flattened prototype remain unproven.
+results follow below; these kernel timings alone did not establish them.
 The [integration control](results/autoresearch/049-integrated-flat-rope/summary.json)
 confirms the helper matches its prototype bitwise on hardware. Use
 `--rope-mode real_pairs_flat_head_first` for complete-flow trials. This retains
@@ -684,6 +684,18 @@ hashes, checkpoint bytes and full fixture identity are verified.
 --attention-mode fp32_reciprocal` reproduces that complete prepared CPU control.
 Its default remains the original BF16-boundary diagnostic. Model preparation
 and CPU reference controls retain all original sampler settings.
+
+The [FP32 lookup counterfactual](results/autoresearch/054-fp32-rope-lookup-loss/summary.json)
+shows that native flattened RoPE exactly matches CPU math with only its gathered
+partner rounded to BF16. A [simple residual split](results/autoresearch/055-rejected-cast-roundtrip-split/summary.json)
+fails because native cast folding eliminates the rounding residual. The
+[compensated lookup](results/autoresearch/056-compensated-fp32-lookup/summary.json)
+uses three BF16 payloads with a BF16 multiply between casts. At 512 and 4096
+tokens, integrated native outputs match this compensated CPU formula and an
+independent prototype process bitwise; error against the original rotation is
+about 1e-8 relative L2. This adds kernel cost and has only been checked on normal
+activation ranges. Use `--rope-mode real_pairs_fp32_split` for opt-in full-flow
+validation; sampler quality and speed require separate measurements.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning

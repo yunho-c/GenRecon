@@ -1,0 +1,197 @@
+{
+  "status": "completed_native_counterfactual",
+  "scope": "Check actual native RoPE layouts before full-model experiments.\n\nSeeded synthetic real values, original adjacent-pair rotation, BHSD output.\nResident inputs/phases; output D2H and synchronization included in timings.\nThis kernel diagnostic establishes neither full-flow speed nor scene quality.\n",
+  "metrics": {
+    "512": {
+      "token_first": {
+        "median_seconds": 0.005977544002234936,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006059924127758753,
+          "pcc": 0.9999998174220336,
+          "max_abs": 0.011322498321533203
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "contiguous_head_first": {
+        "median_seconds": 0.00573560205521062,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006560631085199053,
+          "pcc": 0.9999997886909266,
+          "max_abs": 0.012309074401855469
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.005096689972560853,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005883615748712494,
+          "pcc": 0.9999998269166357,
+          "max_abs": 0.009818553924560547
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "flat_token_first": {
+        "median_seconds": 0.004328376962803304,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005883615748712494,
+          "pcc": 0.9999998269166357,
+          "max_abs": 0.009818553924560547
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "integrated_head_first": {
+        "median_seconds": 0.004432247020304203,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005883615748712494,
+          "pcc": 0.9999998269166357,
+          "max_abs": 0.009818553924560547
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": true
+      }
+    },
+    "4096": {
+      "token_first": {
+        "median_seconds": 0.03562997101107612,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006986028597692623,
+          "pcc": 0.9999997579296367,
+          "max_abs": 0.01648688316345215
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "contiguous_head_first": {
+        "median_seconds": 0.04960507701616734,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007578903203386379,
+          "pcc": 0.9999997200703383,
+          "max_abs": 0.019765853881835938
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.04272435902385041,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006751509121767224,
+          "pcc": 0.9999997720864041,
+          "max_abs": 0.015005350112915039
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "flat_token_first": {
+        "median_seconds": 0.039833108021412045,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006751509121767224,
+          "pcc": 0.9999997720864041,
+          "max_abs": 0.015005350112915039
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "integrated_head_first": {
+        "median_seconds": 0.017917001037858427,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006751509121767224,
+          "pcc": 0.9999997720864041,
+          "max_abs": 0.015005350112915039
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": true
+      }
+    }
+  },
+  "native_ir": {
+    "4096_token_first-native-ir": [
+      "4096_token_first-native-ir-ttnn_1793671431191.mlir.gz",
+      "4096_token_first-native-ir-shlo_frontend_1793671431163.mlir.gz"
+    ],
+    "512_flat_token_first-native-ir": [
+      "512_flat_token_first-native-ir-shlo_frontend_1793671429359.mlir.gz",
+      "512_flat_token_first-native-ir-ttnn_1793671429388.mlir.gz"
+    ],
+    "4096_contiguous_head_first-native-ir": [
+      "4096_contiguous_head_first-native-ir-ttnn_1793671433778.mlir.gz",
+      "4096_contiguous_head_first-native-ir-shlo_frontend_1793671433751.mlir.gz"
+    ],
+    "512_token_first-native-ir": [
+      "512_token_first-native-ir-ttnn_1793671426674.mlir.gz",
+      "512_token_first-native-ir-shlo_frontend_1793671426641.mlir.gz"
+    ],
+    "512_contiguous_head_first-native-ir": [
+      "512_contiguous_head_first-native-ir-shlo_frontend_1793671427408.mlir.gz",
+      "512_contiguous_head_first-native-ir-ttnn_1793671427436.mlir.gz"
+    ],
+    "512_flat_head_first-native-ir": [
+      "512_flat_head_first-native-ir-ttnn_1793671428871.mlir.gz",
+      "512_flat_head_first-native-ir-shlo_frontend_1793671428844.mlir.gz"
+    ],
+    "4096_flat_head_first-native-ir": [
+      "4096_flat_head_first-native-ir-ttnn_1793671436723.mlir.gz",
+      "4096_flat_head_first-native-ir-shlo_frontend_1793671436697.mlir.gz"
+    ],
+    "4096_flat_token_first-native-ir": [
+      "4096_flat_token_first-native-ir-shlo_frontend_1793671437935.mlir.gz",
+      "4096_flat_token_first-native-ir-ttnn_1793671437963.mlir.gz"
+    ]
+  },
+  "finding": "Native flattened FP32 RoPE output equals a CPU counterfactual rounding only the gathered partner to BF16 bitwise at both 512 and 4096 tokens. Native IR explicitly casts the lookup table to BF16 and the result back to FP32. Relative L2 is about0.000588/0.000675. This proves a local lookup loss on these seeded inputs, not its contribution to complete sampler error.",
+  "decision": "Test compensated FP32 gather while retaining stock numerical gates and full-sampler checks.",
+  "reproduce": "rope_layout_probe.py --input-dtype float32 --tokens 512 4096 --output-dir <new>; regenerate seed57 values and compare flat output with CPU rotation using BF16-rounded partner only."
+}

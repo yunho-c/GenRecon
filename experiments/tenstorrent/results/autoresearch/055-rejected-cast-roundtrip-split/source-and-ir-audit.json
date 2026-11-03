@@ -1,0 +1,17 @@
+{
+  "tt_mlir_commit": "6b2d83bbee7bc60e8521b814368d32785df6cd73",
+  "source": "lib/Dialect/TTNN/IR/TTNNOps.cpp",
+  "source_url": "https://github.com/tenstorrent/tt-mlir/blob/6b2d83bbee7bc60e8521b814368d32785df6cd73/lib/Dialect/TTNN/IR/TTNNOps.cpp#L48",
+  "source_sha256": "8591145e2efddece7a55f91a511b2deaa48f2d9fbdf4abd7d4517169315114a4",
+  "analysis": "foldConsecutiveDataCastOps merges consecutive casts when the earlier cast has one use, without a lossy-direction check. Typecast identity folding can then remove FP32-to-BF16-to-FP32 rounding. Source is consistent with the observed zero residual; it does not attribute every full-model error to this fold.",
+  "observed_ir": {
+    "512": [
+      "%11 = \"ttnn.subtract\"(%4, %4) : (tensor<6144x128xf32, #ttnn_layout11>, tensor<6144x128xf32, #ttnn_layout11>) -> tensor<6144x128xf32, #ttnn_layout11> loc(#loc11)",
+      "%18 = \"ttnn.subtract\"(%12, %12) : (tensor<128x6144xf32, #ttnn_layout4>, tensor<128x6144xf32, #ttnn_layout4>) -> tensor<128x6144xf32, #ttnn_layout4> loc(#loc16)"
+    ],
+    "4096": [
+      "%11 = \"ttnn.subtract\"(%4, %4) : (tensor<49152x128xf32, #ttnn_layout11>, tensor<49152x128xf32, #ttnn_layout11>) -> tensor<49152x128xf32, #ttnn_layout11> loc(#loc11)",
+      "%18 = \"ttnn.subtract\"(%12, %12) : (tensor<128x49152xf32, #ttnn_layout4>, tensor<128x49152xf32, #ttnn_layout4>) -> tensor<128x49152xf32, #ttnn_layout4> loc(#loc16)"
+    ]
+  }
+}

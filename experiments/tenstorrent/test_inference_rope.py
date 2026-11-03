@@ -25,9 +25,10 @@ def test_adjacent_complex_pair_equivalence(dtype, tokens, head_dim):
 
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
-@pytest.mark.parametrize('head_first', [False, True])
-@pytest.mark.parametrize('flatten', [False, True])
-def test_complete_block_with_nonzero_lora(dtype, head_first, flatten):
+@pytest.mark.parametrize('head_first,flatten,fp32_split', [
+    (False, False, False), (False, True, False), (True, False, False),
+    (True, True, False), (True, True, True)])
+def test_complete_block_with_nonzero_lora(dtype, head_first, flatten, fp32_split):
     torch.set_num_threads(4)
     torch.manual_seed(21)
     model = nn.Module()
@@ -44,7 +45,7 @@ def test_complete_block_with_nonzero_lora(dtype, head_first, flatten):
     x, mod, context = torch.randn(2, 17, 48).to(dtype), torch.randn(2, 288).to(dtype), torch.randn(2, 9, 24).to(dtype)
     with torch.no_grad():
         expected = model.block(x, mod, context, model.phases)
-        assert prepare_real_rope(model, head_first=head_first, flatten=flatten) == 1
+        assert prepare_real_rope(model, head_first=head_first, flatten=flatten, fp32_split=fp32_split) == 1
         actual = model.block(x, mod, context, model.phases)
     torch.testing.assert_close(actual.float(), expected.float(), rtol=2e-6, atol=2e-6)
 
@@ -53,6 +54,31 @@ def test_changed_layout_rejected():
     rope = RealPairRoPE(torch.ones(17, 8, dtype=torch.complex64))
     with pytest.raises(ValueError, match='layout'):
         rope(torch.randn(1, 18, 4, 16))
+
+
+@pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
+@pytest.mark.parametrize('tokens', [17, 129])
+def test_compensated_lookup_preserves_rotation(dtype, tokens):
+    torch.manual_seed(57)
+    phases = RotaryPositionEmbedder(128, 3)(torch.randint(0, 64, (tokens, 3)))
+    x = torch.randn(2, tokens, 12, 128).to(dtype)
+    expected = RealPairRoPE(phases)(x)
+    actual = RealPairRoPE(phases, head_first=True, flatten=True, fp32_split=True)(
+        x.permute(0, 2, 1, 3)).permute(0, 2, 1, 3)
+    tolerance = 1e-6 if dtype == torch.float32 else 0
+    torch.testing.assert_close(actual, expected, rtol=tolerance, atol=tolerance)
+
+
+@pytest.mark.parametrize('head_first,flatten', [(False, False), (False, True), (True, False)])
+def test_compensated_lookup_requires_flat_head_first_before_mutation(head_first, flatten):
+    model = nn.Module()
+    model.eval()
+    with pytest.raises(ValueError, match='flattened head-first'):
+        prepare_real_rope(model, head_first=head_first, flatten=flatten, fp32_split=True)
+    assert not list(model.modules())[1:]
+    with pytest.raises(ValueError, match='flattened head-first'):
+        RealPairRoPE(torch.ones(17, 8, dtype=torch.complex64),
+                     head_first=head_first, flatten=flatten, fp32_split=True)
 
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])

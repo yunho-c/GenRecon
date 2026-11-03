@@ -1,0 +1,128 @@
+{
+  "status": "rejected_native_roundtrip_fold",
+  "metrics": {
+    "512": {
+      "token_first": {
+        "median_seconds": 0.005574246984906495,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006059924127758753,
+          "pcc": 0.9999998174220336,
+          "max_abs": 0.011322498321533203
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.005328836035914719,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005883615748712494,
+          "pcc": 0.9999998269166357,
+          "max_abs": 0.009818553924560547
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "split_head_first": {
+        "median_seconds": 0.008205774996895343,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005883615748712494,
+          "pcc": 0.9999998269166357,
+          "max_abs": 0.009818553924560547
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      }
+    },
+    "4096": {
+      "token_first": {
+        "median_seconds": 0.03477718395879492,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006986028597692623,
+          "pcc": 0.9999997579296367,
+          "max_abs": 0.01648688316345215
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "flat_head_first": {
+        "median_seconds": 0.017402613011654466,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006751509121767224,
+          "pcc": 0.9999997720864041,
+          "max_abs": 0.015005350112915039
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      },
+      "split_head_first": {
+        "median_seconds": 0.021249814017210156,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006751509121767224,
+          "pcc": 0.9999997720864041,
+          "max_abs": 0.015005350112915039
+        },
+        "cpu_formula_vs_reference": null,
+        "integrated_bitwise_prototype": null
+      }
+    }
+  },
+  "native_ir": {
+    "4096_token_first-native-ir": [
+      "4096_token_first-native-ir-shlo_frontend_1793672522362.mlir.gz",
+      "4096_token_first-native-ir-ttnn_1793672522389.mlir.gz"
+    ],
+    "4096_split_head_first-native-ir": [
+      "4096_split_head_first-native-ir-shlo_frontend_1793672525434.mlir.gz",
+      "4096_split_head_first-native-ir-ttnn_1793672525467.mlir.gz"
+    ],
+    "512_token_first-native-ir": [
+      "512_token_first-native-ir-shlo_frontend_1793672520214.mlir.gz",
+      "512_token_first-native-ir-ttnn_1793672520249.mlir.gz"
+    ],
+    "512_flat_head_first-native-ir": [
+      "512_flat_head_first-native-ir-shlo_frontend_1793672521049.mlir.gz",
+      "512_flat_head_first-native-ir-ttnn_1793672521077.mlir.gz"
+    ],
+    "512_split_head_first-native-ir": [
+      "512_split_head_first-native-ir-shlo_frontend_1793672521671.mlir.gz",
+      "512_split_head_first-native-ir-ttnn_1793672521704.mlir.gz"
+    ],
+    "4096_flat_head_first-native-ir": [
+      "4096_flat_head_first-native-ir-ttnn_1793672524288.mlir.gz",
+      "4096_flat_head_first-native-ir-shlo_frontend_1793672524261.mlir.gz"
+    ]
+  },
+  "finding": "Simple three-payload FP32-to-BF16 residual splitting fails on hardware: final native IR subtracts each value from itself, eliminating the rounding residual, although frontend StableHLO preserves the down/up casts and CPU math is exact. Native output retains the old lookup error. Reject this implementation; a BF16 multiply between casts is tested separately.",
+  "source_audit": "source-and-ir-audit.json",
+  "reproduce": "rope_layout_probe.py --input-dtype float32 --tokens 512 4096 --modes token_first flat_head_first split_head_first --output-dir <new>"
+}

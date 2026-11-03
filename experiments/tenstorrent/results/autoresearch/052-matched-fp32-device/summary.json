@@ -46,7 +46,7 @@
     "embedding_ops_with_bf16_table": 60
   },
   "no_fallback_or_recompile": true,
-  "finding": "FP32 model tensors reduce final relative error from0.3921 to0.2936 while increasing sampler time from about14.97s to18.89s. Parameter payload grows2.723GB to5.377GB and fits this device. All457 native-IR linear/matmul operations use FP32 operands, but60 RoPE embeddings still use BF16 tables introduced by lowering. Promoting model tensors alone does not preserve FP32 through every primitive and does not resolve trajectory drift.",
+  "finding": "FP32 model tensors reduce final relative error from0.3921 to0.2936 while increasing sampler time from about15.01s to18.89s. Parameter payload grows2.723GB to5.377GB and fits this device. All457 native-IR linear/matmul operations use FP32 operands, but60 RoPE embeddings still use BF16 tables introduced by lowering. Promoting model tensors alone does not preserve FP32 through every primitive and does not resolve trajectory drift.",
   "controls": "Same model/reference/checkpoint/version/input signature; original conditions/noise/config match. Refreshed pipeline control matches every historical run052 sampler state bitwise. Prepared full CPU control in result053 stays close to stock, separating helper algebra from the observed native gap.",
   "decision": "No promotion or weakened gates. Investigate the observed FP32-to-BF16 gather lowering and test controlled workarounds before larger FP32 scene trials. Keep dtype, operator and full-trajectory evidence separate.",
   "retention": "New candidate trajectory retained; control tensor values already present in result038 with exact equality proof. Original stock CPU reference/cache in result038. Both actual native IRs and raw reports retained.",

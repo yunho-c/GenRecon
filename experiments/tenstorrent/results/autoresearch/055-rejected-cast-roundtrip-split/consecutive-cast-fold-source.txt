@@ -1,0 +1,32 @@
+template <typename T>
+static ::mlir::LogicalResult
+foldConsecutiveDataCastOps(T op, ::mlir::PatternRewriter &rewriter) {
+  // Fold two consecutive data type cast ops into a single one
+  T previousDataCastOp = op.getInput().template getDefiningOp<T>();
+
+  // If there is no previous data cast op, return failure.
+  if (!previousDataCastOp) {
+    return ::mlir::failure();
+  }
+
+  // Check if the previous cast op has only one use. We can only fold if the
+  // previous op has single use.
+  if (!previousDataCastOp->hasOneUse()) {
+    return ::mlir::failure();
+  }
+
+  // Replace the previous op with the merged data type cast op.
+  Value foldedTypecastOp = rewriter.replaceOpWithNewOp<T>(
+      previousDataCastOp, op.getType(), previousDataCastOp.getInput());
+
+  // Replace all uses of the current op with the merged TypecastOp.
+  rewriter.replaceAllUsesWith(op, foldedTypecastOp);
+
+  // Erase the current op.
+  rewriter.eraseOp(op);
+
+  return ::mlir::success();
+}
+
+//===----------------------------------------------------------------------===//
+// RandOp

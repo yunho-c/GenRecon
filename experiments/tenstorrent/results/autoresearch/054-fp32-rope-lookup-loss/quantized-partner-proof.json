@@ -1,0 +1,30 @@
+{
+  "512": {
+    "native_vs_bf16_partner_formula": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0000000000000118,
+      "max_abs": 0.0
+    },
+    "bitwise_equal_to_bf16_partner_formula": true,
+    "first_zero_phase_token_matches_input_bitwise": true
+  },
+  "4096": {
+    "native_vs_bf16_partner_formula": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.000000000000005,
+      "max_abs": 0.0
+    },
+    "bitwise_equal_to_bf16_partner_formula": true,
+    "first_zero_phase_token_matches_input_bitwise": true
+  }
+}

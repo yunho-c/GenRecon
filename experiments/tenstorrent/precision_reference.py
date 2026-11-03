@@ -57,7 +57,7 @@ def main():
     p.add_argument('--checkpoints', type=Path, default=Path.home()/'models/genrecon')
     p.add_argument('--flow-inputs', type=Path, help='Prepared real-image inputs; currently supports --stage ss')
     p.add_argument('--precision', choices=('pipeline', 'float32'), default='pipeline')
-    p.add_argument('--rope-mode', choices=('stock', 'real_pairs', 'real_pairs_head_first', 'real_pairs_flat_head_first'), default='stock')
+    p.add_argument('--rope-mode', choices=('stock', 'real_pairs', 'real_pairs_head_first', 'real_pairs_flat_head_first', 'real_pairs_fp32_split'), default='stock')
     p.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax'), default='stock')
     p.add_argument('--output-dir', type=Path, required=True)
     args = p.parse_args()
@@ -102,8 +102,9 @@ def main():
         if args.rope_mode != 'stock':
             from experiments.tenstorrent.inference_rope import prepare_real_rope
             report['prepared_rope_blocks'] = prepare_real_rope(model,
-                head_first=args.rope_mode in ('real_pairs_head_first', 'real_pairs_flat_head_first'),
-                flatten=args.rope_mode=='real_pairs_flat_head_first')
+                head_first=args.rope_mode in ('real_pairs_head_first', 'real_pairs_flat_head_first', 'real_pairs_fp32_split'),
+                flatten=args.rope_mode in ('real_pairs_flat_head_first', 'real_pairs_fp32_split'),
+                fp32_split=args.rope_mode=='real_pairs_fp32_split')
         if args.attention_mode != 'stock':
             from experiments.tenstorrent.inference_attention import prepare_attention
             report['prepared_attention_modules'] = prepare_attention(model,args.attention_mode)

@@ -15,7 +15,7 @@ from experiments.tenstorrent.precision_reference import PipelinePrecisionMode
 
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
-@pytest.mark.parametrize('kind,real_rope', [('self', False), ('self', True), ('self', 'head_first'), ('self', 'flat_head_first'), ('cross', False)])
+@pytest.mark.parametrize('kind,real_rope', [('self', False), ('self', True), ('self', 'head_first'), ('self', 'flat_head_first'), ('self', 'split_fp32'), ('cross', False)])
 @pytest.mark.parametrize('mode', ['fp32_reciprocal', 'fp32_scores_bf16_av'])
 def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_rope, mode):
     torch.set_num_threads(4)
@@ -29,8 +29,9 @@ def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_ro
     attention.apply(lambda module: convert_module_to(module, dtype))
     phases = RotaryPositionEmbedder(12, 3)(torch.randint(0, 32, (17, 3)))
     original = RealRoPESelfAttention(attention, RealPairRoPE(phases,
-        head_first=real_rope in ('head_first', 'flat_head_first'),
-        flatten=real_rope == 'flat_head_first')) if real_rope else attention
+        head_first=real_rope in ('head_first', 'flat_head_first', 'split_fp32'),
+        flatten=real_rope in ('flat_head_first', 'split_fp32'),
+        fp32_split=real_rope == 'split_fp32')) if real_rope else attention
     model = nn.Module()
     model.self_attn = original
     model.eval()

@@ -1,0 +1,20 @@
+{
+  "512": {
+    "embedding_ops": 3,
+    "self_subtract_ops": 0,
+    "bf16_multiply_lines": [
+      "%9 = \"ttnn.multiply\"(%8, %0) : (tensor<6144x128xbf16, #ttnn_layout14>, tensor<1x1xbf16, #ttnn_layout>) -> tensor<6144x128xbf16, #ttnn_layout14> loc(#loc9)",
+      "%20 = \"ttnn.multiply\"(%19, %0) : (tensor<128x6144xbf16, #ttnn_layout15>, tensor<1x1xbf16, #ttnn_layout>) -> tensor<128x6144xbf16, #ttnn_layout15> loc(#loc18)",
+      "%30 = \"ttnn.multiply\"(%29, %0) : (tensor<128x6144xbf16, #ttnn_layout15>, tensor<1x1xbf16, #ttnn_layout>) -> tensor<128x6144xbf16, #ttnn_layout15> loc(#loc27)"
+    ]
+  },
+  "4096": {
+    "embedding_ops": 3,
+    "self_subtract_ops": 0,
+    "bf16_multiply_lines": [
+      "%9 = \"ttnn.multiply\"(%8, %0) : (tensor<49152x128xbf16, #ttnn_layout14>, tensor<1x1xbf16, #ttnn_layout>) -> tensor<49152x128xbf16, #ttnn_layout14> loc(#loc9)",
+      "%20 = \"ttnn.multiply\"(%19, %0) : (tensor<128x49152xbf16, #ttnn_layout15>, tensor<1x1xbf16, #ttnn_layout>) -> tensor<128x49152xbf16, #ttnn_layout15> loc(#loc18)",
+      "%30 = \"ttnn.multiply\"(%29, %0) : (tensor<128x49152xbf16, #ttnn_layout15>, tensor<1x1xbf16, #ttnn_layout>) -> tensor<128x49152xbf16, #ttnn_layout15> loc(#loc27)"
+    ]
+  }
+}
