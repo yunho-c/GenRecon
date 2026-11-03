@@ -1,0 +1,1079 @@
+{
+  "case": "shape_flow_tensor",
+  "status": "numerical_mismatch",
+  "phase": "complete",
+  "worker_entry_sdk_environment_keys": [],
+  "source_commit": "70bb0ffb62b9e91d16d8b43148dc56b7020938ed",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "seed": 0,
+  "fullgraph": true,
+  "lora_mode": "stock",
+  "rope_mode": "real_pairs_flat_head_first",
+  "attention_mode": "fp32_reciprocal",
+  "device_precision": "float32",
+  "requested_active_voxels": null,
+  "profile_markers": false,
+  "synthetic_trajectory": true,
+  "sampler_trajectory": true,
+  "requested_compile_options": {
+    "optimization_level": 0,
+    "enable_trace": "true",
+    "math_fidelity": "hifi4",
+    "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/111-shape-runtime-trace-control/shape_flow_tensor/native-ir",
+    "dry_run": "false"
+  },
+  "trace_region_size": 67108864,
+  "compile_options_note": "Explicit options submitted to XLA; omitted settings retain SDK/environment defaults.",
+  "source_files_sha256": {
+    "genrecon/__init__.py": "68ae213f800bfb526540c94a9d117e90ea7d4b0071187c494cf74b4d0d168509",
+    "genrecon/backends/__init__.py": "8b6864658cb8f445bc04e0af82ab13803e3509117cb1a7358775534ed72aae52",
+    "genrecon/backends/tenstorrent/__init__.py": "1e299786b91f8491a4e0b21f2c8b4074aa9a60c63928d30d6450b131f0ae6465",
+    "genrecon/backends/tenstorrent/precision.py": "fd73cf6890ad9fdf4399253ed3d8c3694407823befb6d3466bd5bede9303dd75",
+    "genrecon/backends/tenstorrent/sparse_decoder.py": "acd89654fb7fa194db0b18540f953178b787fb9960077ff37092925cf2ebc725",
+    "genrecon/datasets/__init__.py": "89fbaaeaf41969a134dec59b4417e60d820ca52a7c1bc749161156f39bb7d4cb",
+    "genrecon/datasets/components.py": "5292a5cb5a2c23ee9683e0fe3b005269e0d9e97f6b612a7c114909bfb27624ce",
+    "genrecon/datasets/flexi_dual_grid.py": "51259a0c36364e7810fc649c2090a4fc53deef4685f4c1e8c6af89363c37528f",
+    "genrecon/datasets/sparse_structure_latent.py": "e973255475de3f1115ab36444647923f661b42a812f018aeccc446b3ef5f8f67",
+    "genrecon/datasets/sparse_voxel_pbr.py": "68892fc9de51713ac320959bd4c04beae35563b8c30b9584af8d0c81c54f8a83",
+    "genrecon/datasets/structured_latent.py": "ba5387a45512c9c72a5663156950f34dd943d30ead14b63723d950bc9d213fc0",
+    "genrecon/datasets/structured_latent_shape.py": "dcd5d5bd5ffacf38394e8a4d725dc98f74a91cc7f397cecc9e9467f34b4f1393",
+    "genrecon/datasets/structured_latent_svpbr.py": "501213f83405131a3ae0113c3448fcb5d9c6db81a9a34139e20c57c84d8f7d5a",
+    "genrecon/models/__init__.py": "75c2ede73ff96106a82748487c7e05b17625b3c0ea9f6a20c4e5fa5a7498f312",
+    "genrecon/models/sc_vaes/fdg_vae.py": "1520630926b610d9ee11c842029ec846b3f3c73c969fab244aacddeb85509cdf",
+    "genrecon/models/sc_vaes/sparse_unet_vae.py": "22d7f4f48ab9d58012d20aa0aad849d1ee97c0f06e961756987cde7cc5946f8c",
+    "genrecon/models/sparse_elastic_mixin.py": "936567d5481dd1f6a9e4689961749f95450bd98a8a871dc9913d9437e5f4c2b2",
+    "genrecon/models/sparse_structure_flow.py": "17bbc3996e6358a0e24c552b70a424e52449a81b34a91430a4c8f4266105ab93",
+    "genrecon/models/sparse_structure_vae.py": "6014cc57e146c415d5ec7c95957d8a6385a62f9cf6ae66ca8bfc97fb081bf00e",
+    "genrecon/models/structured_latent_flow.py": "4d5a87f4e32a9326196e72b6bff10639bf4dd231dfd1ccec81c782e086b139a5",
+    "genrecon/modules/attention/__init__.py": "4c5f3198d57cd203e4bd4e4e7de435b658669f72cc4d38ab8adf051104d713cc",
+    "genrecon/modules/attention/config.py": "1c98a66883033db7015a2555f8079dcb0e0f1f167816e241f8a2ebaf4edb01a2",
+    "genrecon/modules/attention/full_attn.py": "b99745a2eb25c3b9fb1bfa3b1fcfc7a24599e50271a2611842f201bf7a7d7286",
+    "genrecon/modules/attention/modules.py": "7e75fef284477b333ba9ea3f9fe2cd69d6ec14fdcc5f068b47a7489bd087de40",
+    "genrecon/modules/attention/rope.py": "187fb33103b31b53c9ec2bbd5ecb6791e4eef1e2c20e94c9e434a80cdd2e6ba0",
+    "genrecon/modules/cond_3D/__init__.py": "bbab015b36efaf237c330d8d6b6de3ea4e5a3390e5671250a1ad72d3422e80a7",
+    "genrecon/modules/cond_3D/aggregation_net.py": "1b244a3e994da775421ef9ff032757fbb7e6785f5a045a2ef38c585c90d9ef7e",
+    "genrecon/modules/cond_3D/projection.py": "2e31cf19cf18f0a2cf81a44ec3c5d164042d5eabeca6fe0c281a0b940d7f2519",
+    "genrecon/modules/cond_3D/sparse_aggregation_net.py": "36dc8b6fc68a19541dcf3a0e1bcca2121a1c17bfcced6a221178a3a4f966f554",
+    "genrecon/modules/cond_3D/sparse_projection.py": "8f286044635a3ac9d418ecb8ad1d35e30be010d5d79dce780f9cb6ec656d6117",
+    "genrecon/modules/image_feature_extractor.py": "55e3d7294711cf6ab8275f315f709e3f9f6c2f45876a160e088e2d954a5e34d4",
+    "genrecon/modules/lora.py": "3e6c7e8d9d9b53efa30f7954432d351571c930f507cb8c677b60c656c5dc240b",
+    "genrecon/modules/norm.py": "98a295a764627dc4824cf5f4beae55fa674da047b5d8b490bf4461967592bc61",
+    "genrecon/modules/sparse/__init__.py": "4bd74f36e19e5a5f839eec9f8fc475ce17ed969b8241cbd1400e6054a8ee7ef0",
+    "genrecon/modules/sparse/attention/__init__.py": "f2678691b0cf003fab66489e362e44d7174d64b2b7283a966877711c73e60ee8",
+    "genrecon/modules/sparse/attention/full_attn.py": "858bcf29e08bbb95c2444654b23bfe6824652f49495249a2bbc5b24ccb255055",
+    "genrecon/modules/sparse/attention/modules.py": "de818b069a330e8cf4590b2cfc141eb53937307a31313046db214379228275a3",
+    "genrecon/modules/sparse/attention/rope.py": "0f85a78ac26fe2172552081e2f5e8ae88e5f647a15dae56c873bd0f424fce03c",
+    "genrecon/modules/sparse/attention/windowed_attn.py": "ea7ba1f463b0a287cd855a867c44d0c55720d859bbfe9ebe0a1d9ba72352d77c",
+    "genrecon/modules/sparse/basic.py": "fcdda1f56bfad353f665f98133df3e0394244a57cd4611b8c764cab4c4ccb5e0",
+    "genrecon/modules/sparse/config.py": "8d387717074795288069491be53eb842ed31226f7f5ed838ec1a81e6432bc473",
+    "genrecon/modules/sparse/conv/__init__.py": "bb597a40e45aff64ffeeee19f5963c0f1bfc814aa90dc1db5626d7ec53b788ef",
+    "genrecon/modules/sparse/conv/config.py": "7b78edf883df2b7524786494cf689a1571ffe489f49d12ad6988d332c7d92a78",
+    "genrecon/modules/sparse/conv/conv.py": "037b262394ec7386aeaa25e598b1b8662484888a66d6737b2fc9cee98649172a",
+    "genrecon/modules/sparse/conv/conv_flex_gemm.py": "9562215703e94ed29e0f24202e5b0a2cbcee03fc5069478c6212519a80c9a1d8",
+    "genrecon/modules/sparse/conv/conv_reference.py": "d08086879d00f5da539c428d672b1399bc6340d28c5b9a676b0ba79767be3a2c",
+    "genrecon/modules/sparse/conv/conv_spconv.py": "76c3dadee41d479cb5941e387886eba0120dc29bde6568b185fb669a8bd160e2",
+    "genrecon/modules/sparse/conv/conv_torchsparse.py": "b4f9d4b2ebc6d9579e21a1ef2a1fa91a49672bbfad0a9829ad697f21919cfebc",
+    "genrecon/modules/sparse/linear.py": "e0fa7ddbee85af77792d8cc0c1d42295e2b2279eabc16dea0257c602e4b9ca1f",
+    "genrecon/modules/sparse/nonlinearity.py": "1fa94fd708de14c3e4b0d25fbd02427971ae92f05340250d10a317efa92d1916",
+    "genrecon/modules/sparse/norm.py": "24ca1fd03bd20d5dc5a137836f28da93c08fa46299e2a85544ae3d56367e0674",
+    "genrecon/modules/sparse/spatial/__init__.py": "269a147eea3347ce4321c430d51288f44c4c64f4c829ecc46de7ec8e84b67dda",
+    "genrecon/modules/sparse/spatial/basic.py": "b55945e87cc72af3051c06a817f2da7c815d4cbc893fbfc3950db6094aa222d4",
+    "genrecon/modules/sparse/spatial/spatial2channel.py": "3d21bc8730ed8f627b8ba29edc5eb51caf084e93a0e7c86a3a9bf9f2cea36aaf",
+    "genrecon/modules/sparse/transformer/__init__.py": "e8cafd2f42cc723c9a89ee96b6baa4cb2e0c6ff8531c4546cacd4666b1ff174e",
+    "genrecon/modules/sparse/transformer/blocks.py": "0aa787b91b3bec52dc86d29590f2c708201d36ae1dec35df1d54db0742e33cab",
+    "genrecon/modules/sparse/transformer/modulated.py": "d32150ce4ad28e77f686e35d4d155f4fbcba6ad7d51a12b5c1f70a654155a8f1",
+    "genrecon/modules/spatial.py": "b75ea4d71aa48c5b6a660b0756a1a3653bca69e6615f8c78bc3669ebd2620493",
+    "genrecon/modules/transformer/__init__.py": "e8cafd2f42cc723c9a89ee96b6baa4cb2e0c6ff8531c4546cacd4666b1ff174e",
+    "genrecon/modules/transformer/blocks.py": "eb406c3a47706ea100558c3338f969e74e4e0c24b5d8b16319377281d84e0d40",
+    "genrecon/modules/transformer/modulated.py": "b5f00119c65f89fe860d32bc42431079830cb2ba26fdf23ea96d7ac1d00f71ee",
+    "genrecon/modules/utils.py": "5aa3eb194672201f0a415037026a33ed0abc09716a828078ab2a8319fa562dbd",
+    "genrecon/pipelines/__init__.py": "53f0e95adc1cb316716ae8395cbe67c3542097baf51397e2470f5c00b38f5f90",
+    "genrecon/pipelines/base.py": "7d1ea5b4fe2e47bd309de39ba064ca3794bff38801522454ac682c76071c47fa",
+    "genrecon/pipelines/full_scene_images_to_3d.py": "44f4505ca060404f7837e9958abf52db60fc1aaa0fcf9f7bb195b543dcb13efc",
+    "genrecon/pipelines/images_to_3d.py": "4c6c6db418e8c58c1193af0ba2a65279aa587a6b096fc19ee9d11e957cd1e4e1",
+    "genrecon/pipelines/joint_decode.py": "60eac384cef68ee6fa787af264fa34c837c1af1c8e1cc047cb0daf2bafe060c9",
+    "genrecon/pipelines/samplers/__init__.py": "b1dee0e56352745cc4bbd5d7b8d8877f733589a1493b9d7958c9f2baafbb6409",
+    "genrecon/pipelines/samplers/base.py": "e734f4b8f0e55c7df09373fd9e023766e9f66fb14ff0d34fc8cb66bc50f7ca16",
+    "genrecon/pipelines/samplers/classifier_free_guidance_mixin.py": "cc95e3dea3a03cbfa15f14881159e69db4da70cd1ac8f83628cb954ed40b98c7",
+    "genrecon/pipelines/samplers/flow_euler.py": "ee2fbf609306c105e25fbd4a1a894f2df3602705c629ad99eadaecefeab7df6d",
+    "genrecon/pipelines/samplers/guidance_interval_mixin.py": "4e6109bad85a4a8846fe857db6870d1fda72d60a0f34ebb76f255ca4ae35d480",
+    "genrecon/pipelines/samplers/multi_diff_orchestrator.py": "1ffa1783b08eb9554a40391818b8e5be14455951ea44e79c86ef75014fc36e9b",
+    "genrecon/pipelines/setup_utils.py": "922d7b37fdcaec37925733ad00bb4725bd52bc29b8c42504e2a0ae8d44a7c975",
+    "genrecon/pipelines/types.py": "30fbd7c3a4c18d10afa76f89646cf6fceb17bff8d3bbfa1f7cf5e8edb7eef463",
+    "genrecon/renderers/__init__.py": "a7f88d7e7410eb58d82b61a5879d5a385ae2e067e6fefd7d4ff1ab093ec8a4f0",
+    "genrecon/renderers/mesh_renderer.py": "e1e307d4f3c926ada09a7267b6dacc6bc5f737cb44f7a8cb0711f15c701fb03a",
+    "genrecon/renderers/pbr_mesh_renderer.py": "8612845659db629908ec99453774944ce7b970272355007fa828cb2dd1082adb",
+    "genrecon/renderers/voxel_renderer.py": "5306a1ec7f44417636fa1b6ae8166528c111fa16a3cc3bde626ffa69db4357a8",
+    "genrecon/representations/__init__.py": "b435de365a9e62b95965614af5622c55f3aba544b2f530445b52d3e853f8a04a",
+    "genrecon/representations/mesh/__init__.py": "514cfc8cb0db45839053862ba91e2999e3ac9079e4d057aec1969407efce2291",
+    "genrecon/representations/mesh/base.py": "63e6e4c142c7f64276e3f899c19542c68d223bc9f4824fbb1141be5913aac745",
+    "genrecon/representations/voxel/__init__.py": "d61ba63b0671a389e4c531892c3a4e6b0f54c59e3d880ed2a0a633d4108b6814",
+    "genrecon/representations/voxel/voxel_model.py": "b22a60c540a8dac3a094cf04f30d212ca69f6e4b87560f8ca460633d4be0337a",
+    "genrecon/trainers/__init__.py": "782a8170329cf7559e831b61a048734f24e9360728c64aac5a9692a1dba92b54",
+    "genrecon/trainers/basic.py": "66de49f95c4f1bde92357ff00727b1ce8be7e84854f234a5fe4e6f2c60e17fd4",
+    "genrecon/trainers/flow_matching/flow_matching.py": "813b798d0f3fb5785c66e209f9b1bcd41867eebe229294d2c6b3b2e9ee47b22f",
+    "genrecon/trainers/flow_matching/mixins/classifier_free_guidance.py": "92a5613d6ff4df9300caf594d7a9ed52d5fcdad4b32c6794d4f0d6dcf90667ba",
+    "genrecon/trainers/flow_matching/mixins/image_conditioned.py": "037e8a47fc20aeae4d322ee967034229876009c2ed3c8880d742bb13226f244f",
+    "genrecon/trainers/flow_matching/sparse_flow_matching.py": "1b29f918bbf38a9c3b12dd1d2923bdb0e958712b4e53ed59f1c7a75a25d1d130",
+    "genrecon/trainers/utils.py": "6f6a46552de85cca80279a9d62275369deb12afce8e8a3442235ae7af6640d56",
+    "genrecon/trainers/vae/pbr_vae.py": "4fd04f0bac238d53eccd5ce6190ceecc42e8407abdcfe52de36a8c95bc362f7b",
+    "genrecon/trainers/vae/shape_vae.py": "82e36df7ce86f22316da1eea3965b5ecf9d8db5bad103eed69aeedb40ff85b3e",
+    "genrecon/trainers/vae/sparse_structure_vae.py": "e8165c41f45b9009dd1d3ff7b9eff1d0eaa30d44b7006bdc6f27ec1e7ee104b1",
+    "genrecon/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "genrecon/utils/data_utils.py": "5c6719bb4db0ec1f9d3e6544acc888acf4b2e9302e136c9a3eb5924fa677d6c4",
+    "genrecon/utils/dist_utils.py": "1be657f511d712b68d6ae63ed8547eeb75c79b5bef6774e95f2ba59763558bd9",
+    "genrecon/utils/elastic_utils.py": "f4f32029da251d00c5043cc203e49aadc278e1d8fd2333de8e21d87c62fe7859",
+    "genrecon/utils/general_utils.py": "63605e431ccb766779b7447f550f649c94e8c9e76e70ef2718aca39f79be5342",
+    "genrecon/utils/grad_clip_utils.py": "2dfbe56bcdc2bfbcf8290e15afe133d53b7071392a7456e48540e25e91d01a2f",
+    "genrecon/utils/loss_utils.py": "7b4db9902f9c1b378ae808e2b77b0c5d2851d36db63a8d514bc8aac1eb88894c",
+    "genrecon/utils/mesh_utils.py": "0bf31c88d97bed372918ca25f13311daf3e469e65059745a86f528b00b3fff18",
+    "genrecon/utils/model_wrapper_utils.py": "f26bd73d1c006497b14edc1c443d8a1aa98a02b918a9916caee7b18fdeaaadec",
+    "genrecon/utils/random_utils.py": "2fd02b42fe386d672ffe82731a6be53764f32399d47206bfb5a9fa6e44e9bf2b",
+    "genrecon/utils/render_utils.py": "0880fc195a15144d7caf1aa7873e00763b960e7e4e37aba78b2cc653c3dcd19f",
+    "genrecon/utils/vis_utils.py": "ce2f5d5cb72cc7db6b6689bf540b790a450fdea2334421b68bcffca95e43ed75",
+    "experiments/tenstorrent/attention_diagnostic.py": "6238f26504a043a1e32e35dc1cc23c3ce6e6a7b54a2af7b6be71bcfaa235e820",
+    "experiments/tenstorrent/attention_observation.py": "3ab6cca63291acc599f38079a9c54081d21ca930a687b6ff421c524dc9691b31",
+    "experiments/tenstorrent/attention_precision.py": "e7be490e4996d8b6aee053ac4dc9dbe41c8acde24adcac787de0c08b40976888",
+    "experiments/tenstorrent/attention_stages.py": "ce77a43d0496edec08bb21dd037df2cb3687843eda669e82747cdc6a627e8ab9",
+    "experiments/tenstorrent/block_diagnostic.py": "f1dcb47e35295b41ded44d3e139982a869918c903367d19706a40016e889f0f6",
+    "experiments/tenstorrent/build_profile_sdk.py": "899292b2888333de759a380ea311b01f43be7a94362fe9e6aeadda38973f932a",
+    "experiments/tenstorrent/cached_flow_sampler.py": "0e3129d38fa06cb28218d4d002ecb516d6498c0757d476cb0ded4f1fb75070df",
+    "experiments/tenstorrent/canonical_ttnn_matmul_probe.py": "7ebc6c0fa68703389a3b5d2ae211a07cc8a70f0a460a40cd68300ba192abb8f9",
+    "experiments/tenstorrent/codegen_probe.py": "48cf2927a4a024450d4795e911b03210c6d8fb8b51fe8e956ca8d659aba228b4",
+    "experiments/tenstorrent/compare_occupancy.py": "5a1730565b8f0e44f63333d01b02e86661305b49c55200f8982323d84fbd25f3",
+    "experiments/tenstorrent/conditioning_cache.py": "c25566d0b81f9fdc2ee9ab3f253cf433455444014244388c64f3ef48834619e7",
+    "experiments/tenstorrent/conditioning_cache_comparison.py": "41bcd6303a8a9f449690e96fe79bfd76d13ebd990494c5b75b1ca181db56725d",
+    "experiments/tenstorrent/conditioning_cache_probe.py": "e3d09b5daa2c5a5b61351019363e6e3affd330d259f01739700b4094864b1575",
+    "experiments/tenstorrent/convert_dino_timm.py": "ec381558b3b1ff9848369683cd4e373380157a69a99150286487cde7790f16fa",
+    "experiments/tenstorrent/experiment_identity.py": "afa47021add8086734fd6cf0420f47574f82b6d41c74aaf7d6bf9860488cdcd6",
+    "experiments/tenstorrent/fetch_checkpoints.py": "1d23b62ca72fd9b79686d21d28e1f9b0a962d7733050e61aae9986f72b1e1ce1",
+    "experiments/tenstorrent/flow_observation.py": "f268a4889f44bb28a3223f80f12273b45a88f57348e08abc95503d111f820bf8",
+    "experiments/tenstorrent/flow_probes.py": "70ed38b0c2629586bf3f3e39acba09965b0c3b43372c69c4f3497c5b141aecae",
+    "experiments/tenstorrent/fp32_first_block_analysis.py": "951731d443d48d47572c9234953335c0c2eb8a9878e890a510347aae842a5eb2",
+    "experiments/tenstorrent/fp32_flow_diagnostic.py": "009d3993136fbbc549f1ad87e8960e5945285f4431f7453dbbe1ef07df708a4b",
+    "experiments/tenstorrent/fp32_matmul_probe.py": "0b65e3dd16349d0efbeec7e0650ac4f832aefa1a57ae7b7d8e665adc7a8382be",
+    "experiments/tenstorrent/frozen_conditioning.py": "857a1e2b5ef108b6a9a14a309293d1b61a409d5d09bd5db22cec7bf6d22a400c",
+    "experiments/tenstorrent/frozen_conditioning_probe.py": "1c9ba01fdb58a11ca61daaa6a6eb2e98d79d803e3390592df2e8a6721c3aafa0",
+    "experiments/tenstorrent/generate_decoder_fixture.py": "a13dc2c338f379a7c9bc07dc024c20ed6456af39af6c70fa757bbc06c8e2f93f",
+    "experiments/tenstorrent/grouped_flow.py": "2982e788ccb7a3b8a37b3cec1c81b801dd9f758535ee85347e83914bf974252b",
+    "experiments/tenstorrent/inference_attention.py": "3f3488c9afd0242c8ba233a62e2a8b46c1c130ca6199df1698b5991c5efd78ab",
+    "experiments/tenstorrent/inference_lora.py": "3a9909aad5ecaaba15d1ace0aed295184f46a3cfd0a7c3e19a9694605d345246",
+    "experiments/tenstorrent/inference_precision.py": "a249c8ad935dc099c6ec940cadda007a608cbda3f8fb74383d7d17626518c34a",
+    "experiments/tenstorrent/inference_rope.py": "3eb16df953a8d247e88c64500163cb68fa03b4f09d8191a934f9c77f446819f7",
+    "experiments/tenstorrent/jax_matmul_dtype_probe.py": "c24852e6c0240d06a0988ce5b646be5ebe6a674deb1da8ff238c0be6741a396e",
+    "experiments/tenstorrent/learned_attention_diagnostic.py": "569d25011ff849acd6e615adbf7fe61a43bb47c2bbd27982a9e63398ae80cb15",
+    "experiments/tenstorrent/matmul_reduction_probe.py": "19cf2750ba654fe89031fb17ab97f55726edec1ebcb37349f0d247c3328d664c",
+    "experiments/tenstorrent/native_environment.py": "9600079d3bebdb7840f172ab56eb31c5143d5cddbbab0e63b3d15d2b3ec5d503",
+    "experiments/tenstorrent/outer_product_sum.py": "736425f95feb16b0412a4e9042e7c9c57363266a90ad8016a0fd9a31c2cc67ff",
+    "experiments/tenstorrent/output_head_diagnostic.py": "03af7ba7bd498ae633970359ec1f4fcaaa837476e356a8782de72096ee68aa7d",
+    "experiments/tenstorrent/precision_reference.py": "1c303da046d2f3821f7eb77c212ce017e7324ecc844323893a98204c298e3020",
+    "experiments/tenstorrent/prepare_ss_inputs.py": "0796c755195cd41f5dcecb9e723331ca2ce9d95bbdb32583e770b8796d71aa78",
+    "experiments/tenstorrent/probes.py": "7fc93a492dbce558e71ebd2e455a7ada33852425928615c2fd78f990838777f9",
+    "experiments/tenstorrent/profile_report.py": "6e34a2e50ecd998712c06bcf589b8b3cddd1744be1e401c4ec9ba3875b0476ee",
+    "experiments/tenstorrent/reference.py": "f0c453efa7b68141ddf184df6c52cb707f84bccce43a04f313998fa5629b663c",
+    "experiments/tenstorrent/reference_cache.py": "9bf8017165ce4cb207d0e4a0dcca1f16d1aa83d12b6755d37320ea2971e82656",
+    "experiments/tenstorrent/restore_poster_inputs.py": "fefe0f526a08db40e7d9e785e72e527a808cc1d55a775261c7d90b1d7f76f6af",
+    "experiments/tenstorrent/results/autoresearch/023-authorized-original-dino/verify.py": "c6c2319b4bd36e32035197f8c400c3ffb3841f74586560ebeb9546d985fe51ac",
+    "experiments/tenstorrent/rope_layout_probe.py": "aae62adc51208845d9ef28fc5e7c015ca918e3f171ee61684e496c1a1006f89a",
+    "experiments/tenstorrent/run.py": "ae08dd6044b9f053f513f56419bcc4d0ef5cd93c50b3959e2e9b29c21e38ec33",
+    "experiments/tenstorrent/scene_pipeline.py": "0e6ce0369db63cbb873752cbb2312c446af12ea0a23c09e26483e8521926b967",
+    "experiments/tenstorrent/scene_pipeline_worker.py": "39cfadef59efd22778488205198c5a1ee4dfb07fab354eb65da803708089a604",
+    "experiments/tenstorrent/scene_sampling.py": "100a20d7bbf1047d0c87b5500da7daec4823b0d7a78b005db8765b94c0ce8146",
+    "experiments/tenstorrent/softmax_diagnostic.py": "87ced6120934ed448df6353f807b51973677d8aa5504e9b66a9026846002f7c2",
+    "experiments/tenstorrent/sparse_conv_probe.py": "ac6d3450f3c70af49d6f0589c54b51c11f6170fda67632b14b8b849c6c45bfc8",
+    "experiments/tenstorrent/sparse_decoder_probe.py": "d36bb9ed9e71c17115d83ba47d76d27456a759d77bfef8938646da49f2480a78",
+    "experiments/tenstorrent/sparse_decoder_scene_probe.py": "cb97660668b22c72487e1ba9899c13404451855a2e1dbf1521b38c842f93ab78",
+    "experiments/tenstorrent/test_attention_diagnostic.py": "fdaf6aabb903ef455c958821eef930293d4d6491602a09d19abb5ace131e4275",
+    "experiments/tenstorrent/test_attention_observation.py": "1808a301d4e02da557c63faca56b4f139aa877c10072bab86cbd4a5439bacd2e",
+    "experiments/tenstorrent/test_attention_stages.py": "659aec4bf83f530607f3e73c851f3146028aac9b50a8b6097b8b7faaf1a89a47",
+    "experiments/tenstorrent/test_conditioning_cache.py": "2c18d5b6d21502c819d5b765feccb85198c7471a5dd7898f2566061d891e0497",
+    "experiments/tenstorrent/test_conditioning_cache_comparison.py": "c4dc207f847f1a260b502cc5ea5d20e0241a090690c088c9c195460b95f02622",
+    "experiments/tenstorrent/test_decoder_fixture.py": "c37a6f2d490f4df602917b4ac2ee921d73026e8908b38ab8d500635aa64f26e3",
+    "experiments/tenstorrent/test_decoder_scene_comparison.py": "76f0ee6fbd1a366a7aa00c1f78aa0138b0449a6963f3c99847e129c28abb562f",
+    "experiments/tenstorrent/test_experiment_identity.py": "bc3e2d9ce42f3c54c83227be8e71425f918299e2c1a5627211017ad827ef8a47",
+    "experiments/tenstorrent/test_flow_adapter.py": "0cadfc58f671b4ef2410779412e50f83fcafeb27618844687a818fc6a149b6d4",
+    "experiments/tenstorrent/test_flow_observation.py": "ef0c7bc591ec3e37e74b7fc204c949940804f78d063d721d3d3158a5a0480816",
+    "experiments/tenstorrent/test_fp32_matmul_probe.py": "086910770bd26823890e607516ec217c268599a4ba3e21272f0d6365f6ca6c8f",
+    "experiments/tenstorrent/test_frozen_conditioning.py": "0ee22f8709247fa845309f3c2122896109f2884c24511b096f2f15ce4c11e6d2",
+    "experiments/tenstorrent/test_inference_attention.py": "7fb2fd22fa7c45c30cfb650cae6acc3532ad1c095956a8afee6b808fb993c03f",
+    "experiments/tenstorrent/test_inference_lora.py": "7f2036891d835068dcf69d87c7134e7ee119b611d193479e44884eb7e6ac19ab",
+    "experiments/tenstorrent/test_inference_precision.py": "f99bce65fd759a8f8203ae32bd87ead9b843e7e96f154e8ea82882a784ae992f",
+    "experiments/tenstorrent/test_inference_rope.py": "860dc8bb32138bb267202a3a65f43e534c8302feea591b2094d798c1222e0be8",
+    "experiments/tenstorrent/test_native_environment.py": "54ba70ec64258a21038b4faf392d3e72bd9dd67d406fb21f42bfeb3ff72fb0ba",
+    "experiments/tenstorrent/test_occupancy_comparison.py": "665ab42d13dc53825288728a63e5b66f6d149eb6d3ddef9fce3f8b0934fb0faa",
+    "experiments/tenstorrent/test_outer_product_sum.py": "6132a46e4abc2144d0b63b3c793da5b83d42189436325f9d5d67643916782db1",
+    "experiments/tenstorrent/test_precision_reference.py": "4a0c2544509454e4523fd4f64c555964d2a85288e6c48518a9d31aff3fc9792c",
+    "experiments/tenstorrent/test_profile_report.py": "d10a97849e92ffe988647d4a889186010745320341bf5583eeacc95c133eb026",
+    "experiments/tenstorrent/test_reference_cache.py": "42a5856c267c3b0defa6223a0bd8de7dc7d44b0c698e643a7b66319d13ab8856",
+    "experiments/tenstorrent/test_scene_sampling.py": "6b7b848660fef7fc5f58e3dd0e40807ada54d27a9fe1247f2cdbfea5e8030dd8",
+    "experiments/tenstorrent/test_sdpa.py": "1d86a4c7604328a7e73679c388e54e795edbd39fb18af03eea4c6fb9897138a4",
+    "experiments/tenstorrent/test_softmax_diagnostic.py": "1c635fbc01a56ed1a9ad333f66a1dd0eac7a550f6aea63a04197b3cb4177b546",
+    "experiments/tenstorrent/test_sparse_decoder.py": "98044e91277c4ff60fe887bc8c8f6b24121fcff3064719bf535f7107bb20ac27",
+    "experiments/tenstorrent/test_ss_inputs.py": "3549555c842fd3b28e5a65f23d3e46f54de00c34eb0312a6a65fc9526f4deed4",
+    "experiments/tenstorrent/test_trajectory.py": "c511824a01655baf69d77a82d6dec95cdcb28a58b751b02fc790bccd648d118c",
+    "experiments/tenstorrent/test_validation.py": "871d2311416e397a2ec0a83783deb2fb2b798b3c9686619a99bb38658725aec3",
+    "experiments/tenstorrent/trajectory.py": "5bdcf601bbe1ee98913b1eeb6b403c85346e40601e227b98707d3a828db61965",
+    "experiments/tenstorrent/validation.py": "3154c406ae4398e69e40887edfeeede260fab0c9acb9492310e1203224125076"
+  },
+  "timing_scope": "resident model; fresh input H2D, forward, D2H and synchronization",
+  "cpu_threads": 16,
+  "reference_precision": "float32",
+  "weights": "pretrained",
+  "checkpoint": {
+    "url": "https://kaldir.vc.cit.tum.de/genrecon/shape_slat.pt",
+    "bytes": 5410532174,
+    "etag": "\"1427e2b4e-6503179da85ac\"",
+    "sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb"
+  },
+  "checkpoint_state": "root",
+  "strict_loading": true,
+  "config": "configs/gen/slat_flow_img2shape/genrecon_512.json",
+  "dtype": "pipeline mixed precision: BF16 torso, FP32 embedding/output/norm",
+  "input_kind": "seeded synthetic",
+  "blocks": 30,
+  "active_voxels": 512,
+  "cpu_original_equivalence": "torch.testing.assert_close passed for all 30 sparse blocks and IO",
+  "cpu_original_equivalence_precision": "float32",
+  "adaptation": "single chunk active tokens as a dense sequence; all native sparse weights including LoRA preserved",
+  "host_work": "fixed coordinates and RoPE phases; precomputed image conditions",
+  "parameters": 1344155168,
+  "inputs": [
+    {
+      "shape": [
+        512,
+        32
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        1,
+        1029,
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    {
+      "shape": [
+        512,
+        1024
+      ],
+      "dtype": "torch.float32"
+    }
+  ],
+  "cpu_seconds": 4.200687873002607,
+  "cpu_trajectory": {
+    "seconds": 68.68841063097352,
+    "forwards": [
+      {
+        "seconds": 3.277579487010371,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 3.280800327018369,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 3.2813957940088585,
+        "t": [
+          970.5882568359375
+        ]
+      },
+      {
+        "seconds": 3.272933899948839,
+        "t": [
+          970.5882568359375
+        ]
+      },
+      {
+        "seconds": 3.259025370993186,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 3.277717221993953,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 3.2519792480161414,
+        "t": [
+          900.0
+        ]
+      },
+      {
+        "seconds": 3.2592601560172625,
+        "t": [
+          900.0
+        ]
+      },
+      {
+        "seconds": 3.244380002026446,
+        "t": [
+          857.1428833007812
+        ]
+      },
+      {
+        "seconds": 3.2395423449925147,
+        "t": [
+          857.1428833007812
+        ]
+      },
+      {
+        "seconds": 3.2469768650480546,
+        "t": [
+          807.6923217773438
+        ]
+      },
+      {
+        "seconds": 3.2404632800025865,
+        "t": [
+          807.6923217773438
+        ]
+      },
+      {
+        "seconds": 3.2509654139867052,
+        "t": [
+          750.0
+        ]
+      },
+      {
+        "seconds": 3.240318689029664,
+        "t": [
+          750.0
+        ]
+      },
+      {
+        "seconds": 3.2741924020228907,
+        "t": [
+          681.8181762695312
+        ]
+      },
+      {
+        "seconds": 3.2836790319997817,
+        "t": [
+          681.8181762695312
+        ]
+      },
+      {
+        "seconds": 3.25222612102516,
+        "t": [
+          600.0
+        ]
+      },
+      {
+        "seconds": 3.3034184529678896,
+        "t": [
+          600.0
+        ]
+      },
+      {
+        "seconds": 3.274074301996734,
+        "t": [
+          500.0
+        ]
+      },
+      {
+        "seconds": 3.289936780987773,
+        "t": [
+          375.0
+        ]
+      },
+      {
+        "seconds": 3.3623797009931877,
+        "t": [
+          214.2857208251953
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "step": 1,
+        "t": 1.0,
+        "t_prev": 0.9705882352941178,
+        "seconds": 6.561819589987863,
+        "forwards": 2
+      },
+      {
+        "step": 2,
+        "t": 0.9705882352941178,
+        "t_prev": 0.9374999999999999,
+        "seconds": 6.556450364005286,
+        "forwards": 2
+      },
+      {
+        "step": 3,
+        "t": 0.9374999999999999,
+        "t_prev": 0.9,
+        "seconds": 6.538857681967784,
+        "forwards": 2
+      },
+      {
+        "step": 4,
+        "t": 0.9,
+        "t_prev": 0.8571428571428571,
+        "seconds": 6.513539085048251,
+        "forwards": 2
+      },
+      {
+        "step": 5,
+        "t": 0.8571428571428571,
+        "t_prev": 0.8076923076923076,
+        "seconds": 6.486017037997954,
+        "forwards": 2
+      },
+      {
+        "step": 6,
+        "t": 0.8076923076923076,
+        "t_prev": 0.75,
+        "seconds": 6.48952351504704,
+        "forwards": 2
+      },
+      {
+        "step": 7,
+        "t": 0.75,
+        "t_prev": 0.6818181818181819,
+        "seconds": 6.4933518129982986,
+        "forwards": 2
+      },
+      {
+        "step": 8,
+        "t": 0.6818181818181819,
+        "t_prev": 0.6,
+        "seconds": 6.559940992970951,
+        "forwards": 2
+      },
+      {
+        "step": 9,
+        "t": 0.6,
+        "t_prev": 0.5,
+        "seconds": 6.55776556400815,
+        "forwards": 2
+      },
+      {
+        "step": 10,
+        "t": 0.5,
+        "t_prev": 0.3750000000000001,
+        "seconds": 3.2747509959735908,
+        "forwards": 1
+      },
+      {
+        "step": 11,
+        "t": 0.3750000000000001,
+        "t_prev": 0.21428571428571436,
+        "seconds": 3.290604075009469,
+        "forwards": 1
+      },
+      {
+        "step": 12,
+        "t": 0.21428571428571436,
+        "t_prev": 0.0,
+        "seconds": 3.36304831400048,
+        "forwards": 1
+      }
+    ],
+    "parameters": {
+      "steps": 12,
+      "guidance_strength": 7.5,
+      "guidance_rescale": 0.5,
+      "guidance_interval": [
+        0.6,
+        1.0
+      ],
+      "rescale_t": 3.0
+    },
+    "sampler_config_sha256": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0",
+    "scope": "One complete original 12-step trajectory, fixed noise and synthetic conditioning; no reconstruction-quality assessment"
+  },
+  "cpu_trajectory_cache": {
+    "directory": "/home/user/tt-scratchpad/genrecon/shape512-cpu-reference-cache-v1",
+    "manifest_sha256": "ea9d61ba0394e5ac74dff57c91c423b6c85c700681a5406eb740503f31bc43cb",
+    "verified_checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+    "reference_sha256": "df43fe45e2ce7d44ecdc16b9ef82e7f90a03a1bf9a17651fb991e4f37ebcf9fc",
+    "load_validate_seconds": 5.407868593989406,
+    "note": "Stock FP32 trajectory reused after strict identity/hash checks; stored CPU duration describes the original computation, not this run."
+  },
+  "prepared_rope_blocks": 30,
+  "rope_prepare_seconds": 0.014054667961318046,
+  "reference_note": "Unmodified stock model; error includes all preparation and device arithmetic",
+  "prepared_cpu_relative_l2": [
+    0.0
+  ],
+  "prepared_attention_modules": 60,
+  "effective_attention_modes": {
+    "self:fp32_reciprocal": 30,
+    "cross:fp32_reciprocal": 30
+  },
+  "attention_cpu_relative_l2": [
+    1.6326304096568405e-06
+  ],
+  "attention_note": "Attention preparation retains learned weights and its outer dtype; stable FP32 unfused exp/reciprocal, with QK/AV precision selected by attention_mode. Any subsequent whole-model device precision change is reported separately. Error includes all preparation and device arithmetic.",
+  "device_precision_preparation": {
+    "changed_parameters": 780,
+    "changed_buffers": 0,
+    "dtype_attributes": 1,
+    "parameter_dtype_counts_before": {
+      "torch.float32": 220,
+      "torch.bfloat16": 780
+    },
+    "parameter_dtype_counts_after": {
+      "torch.float32": 1000
+    },
+    "parameter_bytes_before": 2723457152,
+    "parameter_bytes_after": 5376620672,
+    "note": "Original stock CPU reference unchanged. Promote already loaded/quantized values, not original full-precision checkpoint values. Complex and integer buffers preserved."
+  },
+  "device_precision_cpu_relative_l2": [
+    1.6326304096568405e-06
+  ],
+  "device_input_dtypes": [
+    "torch.float32",
+    "torch.float32",
+    "torch.float32",
+    "torch.float32"
+  ],
+  "device_type": "TT",
+  "first_inference_seconds": 184.66353649599478,
+  "outputs": [
+    {
+      "shape": [
+        512,
+        32
+      ],
+      "dtype": "torch.float32",
+      "relative_l2_error": 0.03656881536712377,
+      "pcc": 0.9993299841880798,
+      "max_abs_error": 0.20944824814796448,
+      "all_finite": true,
+      "passed": true
+    }
+  ],
+  "warm_latency_ms": [
+    799.8202499584295,
+    799.5614110259339,
+    799.3537799920887
+  ],
+  "warm_latency_median_ms": 799.5614110259339,
+  "dynamo_before_trajectory": {
+    "calls_captured": 5098,
+    "unique_graphs": 1
+  },
+  "device_trajectory": {
+    "seconds": 16.795197019004263,
+    "forwards": [
+      {
+        "seconds": 0.7987660889630206,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 0.7940332429716364,
+        "t": [
+          1000.0
+        ]
+      },
+      {
+        "seconds": 0.7958896689815447,
+        "t": [
+          970.5882568359375
+        ]
+      },
+      {
+        "seconds": 0.7988306399784051,
+        "t": [
+          970.5882568359375
+        ]
+      },
+      {
+        "seconds": 0.8000458040041849,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 0.7940140740247443,
+        "t": [
+          937.5
+        ]
+      },
+      {
+        "seconds": 0.7982989589800127,
+        "t": [
+          900.0
+        ]
+      },
+      {
+        "seconds": 0.7952722699847072,
+        "t": [
+          900.0
+        ]
+      },
+      {
+        "seconds": 0.7971536259865388,
+        "t": [
+          857.1428833007812
+        ]
+      },
+      {
+        "seconds": 0.7946696779690683,
+        "t": [
+          857.1428833007812
+        ]
+      },
+      {
+        "seconds": 0.7927524810074829,
+        "t": [
+          807.6923217773438
+        ]
+      },
+      {
+        "seconds": 0.7935642939992249,
+        "t": [
+          807.6923217773438
+        ]
+      },
+      {
+        "seconds": 0.7953449120395817,
+        "t": [
+          750.0
+        ]
+      },
+      {
+        "seconds": 0.7951029110117815,
+        "t": [
+          750.0
+        ]
+      },
+      {
+        "seconds": 0.803988073952496,
+        "t": [
+          681.8181762695312
+        ]
+      },
+      {
+        "seconds": 0.7959087339695543,
+        "t": [
+          681.8181762695312
+        ]
+      },
+      {
+        "seconds": 0.8062169820186682,
+        "t": [
+          600.0
+        ]
+      },
+      {
+        "seconds": 0.8001954210340045,
+        "t": [
+          600.0
+        ]
+      },
+      {
+        "seconds": 0.8005064119934104,
+        "t": [
+          500.0
+        ]
+      },
+      {
+        "seconds": 0.7985956459888257,
+        "t": [
+          375.0
+        ]
+      },
+      {
+        "seconds": 0.7984214159660041,
+        "t": [
+          214.2857208251953
+        ]
+      }
+    ],
+    "steps": [
+      {
+        "step": 1,
+        "t": 1.0,
+        "t_prev": 0.9705882352941178,
+        "seconds": 1.5969805960194208,
+        "forwards": 2
+      },
+      {
+        "step": 2,
+        "t": 0.9705882352941178,
+        "t_prev": 0.9374999999999999,
+        "seconds": 1.5990041939658113,
+        "forwards": 2
+      },
+      {
+        "step": 3,
+        "t": 0.9374999999999999,
+        "t_prev": 0.9,
+        "seconds": 1.5970986299798824,
+        "forwards": 2
+      },
+      {
+        "step": 4,
+        "t": 0.9,
+        "t_prev": 0.8571428571428571,
+        "seconds": 1.597035999991931,
+        "forwards": 2
+      },
+      {
+        "step": 5,
+        "t": 0.8571428571428571,
+        "t_prev": 0.8076923076923076,
+        "seconds": 1.5950278260279447,
+        "forwards": 2
+      },
+      {
+        "step": 6,
+        "t": 0.8076923076923076,
+        "t_prev": 0.75,
+        "seconds": 1.5896406969986856,
+        "forwards": 2
+      },
+      {
+        "step": 7,
+        "t": 0.75,
+        "t_prev": 0.6818181818181819,
+        "seconds": 1.5957643809961155,
+        "forwards": 2
+      },
+      {
+        "step": 8,
+        "t": 0.6818181818181819,
+        "t_prev": 0.6,
+        "seconds": 1.60524478595471,
+        "forwards": 2
+      },
+      {
+        "step": 9,
+        "t": 0.6,
+        "t_prev": 0.5,
+        "seconds": 1.6173893209779635,
+        "forwards": 2
+      },
+      {
+        "step": 10,
+        "t": 0.5,
+        "t_prev": 0.3750000000000001,
+        "seconds": 0.8018541869823821,
+        "forwards": 1
+      },
+      {
+        "step": 11,
+        "t": 0.3750000000000001,
+        "t_prev": 0.21428571428571436,
+        "seconds": 0.7997353299870156,
+        "forwards": 1
+      },
+      {
+        "step": 12,
+        "t": 0.21428571428571436,
+        "t_prev": 0.0,
+        "seconds": 0.799530258984305,
+        "forwards": 1
+      }
+    ],
+    "parameters": {
+      "steps": 12,
+      "guidance_strength": 7.5,
+      "guidance_rescale": 0.5,
+      "guidance_interval": [
+        0.6,
+        1.0
+      ],
+      "rescale_t": 3.0
+    },
+    "sampler_config_sha256": "fb8edbde99ebb2cf79bb65921468863404dc8744aaf967475fb439d20567b1b0",
+    "scope": "One complete original 12-step trajectory, fixed noise and synthetic conditioning; no reconstruction-quality assessment",
+    "timing_scope": "Resident weights and preuploaded conditions; input/output transfer, synchronized model calls, original CPU Euler/CFG arithmetic and instrumentation. Preparation, CPU reference, compilation/warmups and artifact I/O excluded."
+  },
+  "dynamo_after_trajectory": {
+    "calls_captured": 5098,
+    "unique_graphs": 1
+  },
+  "recompiled_during_trajectory": false,
+  "trajectory_vs_stock_cpu_fp32": {
+    "fixture_identity_verified": true,
+    "identity_note": "Condition/config hashes match",
+    "final": {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.29991133282335974,
+      "pcc": 0.9545747629508539,
+      "max_abs": 4.071747064590454
+    },
+    "pred_x_t": [
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0028944270340278103,
+        "pcc": 0.999995821062988,
+        "max_abs": 0.01641368865966797
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.007112396107289125,
+        "pcc": 0.999974772612964,
+        "max_abs": 0.03863987326622009
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.010948094223165096,
+        "pcc": 0.9999401090374042,
+        "max_abs": 0.09856683015823364
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.016714529048300193,
+        "pcc": 0.9998608726014617,
+        "max_abs": 0.11645592749118805
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.027654718520926,
+        "pcc": 0.9996172313286705,
+        "max_abs": 0.26331016421318054
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.04329967546383943,
+        "pcc": 0.9990615619810246,
+        "max_abs": 0.4235581010580063
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.06696519614098022,
+        "pcc": 0.9977557748032556,
+        "max_abs": 0.44241705536842346
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.11414068907232165,
+        "pcc": 0.9934616381540715,
+        "max_abs": 0.7123139426112175
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.20667440602285797,
+        "pcc": 0.9784890108527412,
+        "max_abs": 1.6008352637290955
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.2327262849789,
+        "pcc": 0.9726884778765409,
+        "max_abs": 2.137697994709015
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.2665608873707861,
+        "pcc": 0.9641304820812578,
+        "max_abs": 2.9968557357788086
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.29991133282335974,
+        "pcc": 0.9545747629508539,
+        "max_abs": 4.071747064590454
+      }
+    ],
+    "pred_x_0": [
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.05361354040690247,
+        "pcc": 0.9986946742322598,
+        "max_abs": 0.558065265417099
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.09935919538130833,
+        "pcc": 0.9953239700714551,
+        "max_abs": 1.151641845703125
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.12121359601620517,
+        "pcc": 0.99260355214485,
+        "max_abs": 1.7815258502960205
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.14067065825247638,
+        "pcc": 0.9901823390743376,
+        "max_abs": 2.238207697868347
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.2156248516243693,
+        "pcc": 0.9766084631488657,
+        "max_abs": 4.293039917945862
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.23714398452871846,
+        "pcc": 0.9718498879610554,
+        "max_abs": 2.512750506401062
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.29578507032939083,
+        "pcc": 0.9556282574812621,
+        "max_abs": 4.596509099006653
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.40402205508568373,
+        "pcc": 0.9177383818990279,
+        "max_abs": 4.744113206863403
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.5351520174432804,
+        "pcc": 0.8565271349740894,
+        "max_abs": 8.732509136199951
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.29945358799830046,
+        "pcc": 0.9546669582412849,
+        "max_abs": 3.7482917308807373
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.30444122780579624,
+        "pcc": 0.9531749535523335,
+        "max_abs": 4.142411470413208
+      },
+      {
+        "shape_match": true,
+        "finite": true,
+        "passed": false,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.29991273612689756,
+        "pcc": 0.9545743375242929,
+        "max_abs": 4.071756362915039
+      }
+    ],
+    "all_states_pass_smoke": false
+  },
+  "trajectory_artifacts_sha256": {
+    "trajectory-reference.pt": "df43fe45e2ce7d44ecdc16b9ef82e7f90a03a1bf9a17651fb991e4f37ebcf9fc",
+    "trajectory-tt.pt": "9ab5ef422a9ecf823b32ef7ad2bda8eb28b5c92a8374c161c9bdb99bae81b40d"
+  },
+  "xla_executed_fallback_ops": [],
+  "xla_aten_counters": {},
+  "returncode": 1
+}

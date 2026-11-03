@@ -1,0 +1,23 @@
+{
+  "status": "completed_native_runtime_trace_correctness_control",
+  "every_native_state_bitwise_ordinary": true,
+  "captured_body_matrix_operations": 457,
+  "native_trace_capture_and_replay_present": true,
+  "sampler_seconds": 16.795197019004263,
+  "steps": 12,
+  "denoiser_calls": 21,
+  "no_fallback_or_trajectory_recompilation": true,
+  "original_stock_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "timing_limit": "Concurrent 32-worker host SDK build: timing retained as raw observation only, no speedup claim.",
+  "decision": "Runtime trace preserves the full original native trajectory on this synthetic512 fixture; strict CPU gates still fail. No default promotion.",
+  "reproduce": "Use result083 command with --runtime-trace --trace-region-size 67108864 and a fresh output directory."
+}
