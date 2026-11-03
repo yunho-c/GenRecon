@@ -1,0 +1,27 @@
+{
+  "status": "completed_fresh_original_texture512_native_control_stock_quality_failed",
+  "source_commit": "29507d0b54b2bd5307e8473c101a386ad1fcab6d",
+  "scope": "Original pretrained texture512; FP32 promoted pipeline-quantized weights; real_pairs_flat_head_first RoPE; FP32 reciprocal attention; HiFi4; all original learned objects/LoRA; fixed32-channel shape concat;12steps18calls. Synthetic seeded inputs on one n150.",
+  "stock_CPU_reference": "../107-texture512-stock-cpu-reference/manifest.json",
+  "stock_CPU_reference_sha256": "449719febb0a05b5597d7e5e52191b5b147e4814426b7c8e07714ba390dc995f",
+  "native_trajectory_sha256": "7bedf11fde04f434f4bcf72ac49569586e49683c13699046949c771da79546ab",
+  "native_final_vs_stock_CPU": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.10517075593740585,
+    "pcc": 0.9944466976224953,
+    "max_abs": 2.1296298503875732
+  },
+  "fallback_ops": [],
+  "aten_counters": {},
+  "trajectory_recompiled": false,
+  "native_main_counts": {
+    "matrix_ops": 457,
+    "cross_KV_head_packs": 30
+  },
+  "sampler_seconds": 14.467343083000742,
+  "limits": "Initial native control timing overlapped cached candidate CPU preparation; not paired speed evidence. Strict relativeL2<=0.1 and PCC>=0.99 unchanged: stock CPU final error0.105171 fails. Candidate CPU/native equivalence and ABBA still pending."
+}
