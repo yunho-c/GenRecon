@@ -143,6 +143,14 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "name": "Guarded learned self/cross attention and precise QK control",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/087-learned-attention-outer-control",
+      "source_commit": "2774de0",
+      "status": "running",
+      "note": "Use exact accepted full-flow079 attention inputs. Require ordinary isolated attention equal full source, observer equal ordinary, exact repeats and no fallback. QKV outer-sum accuracy/cost is measured separately; generic dot precision alone does not establish sampler quality."
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }

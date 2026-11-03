@@ -761,6 +761,24 @@ options; the harness now rejects that usage. Runtime IR, rather than requested
 metadata, establishes fidelity. The K=1 product rewrites to a broadcast multiply,
 so its exact result is separate from matrix-unit arithmetic.
 
+The [arbitrary FP32 single-term control](results/autoresearch/065-arbitrary-fp32-single-term/summary.json)
+also matches CPU bitwise. The [balanced outer-product diagnostic](results/autoresearch/066-balanced-outer-product/summary.json)
+builds dot products from that multiply path and balanced additions. All nine
+native cases match the CPU formula bitwise, including both cancellation cases;
+random K=128 error versus CPU matmul is 2.18e-7. This costs 64.2ms versus 3.89ms
+for the isolated native matrix product. It is an accuracy diagnostic with
+substantial extra work, not a fast attention implementation. Reproduce with
+`fp32_matmul_probe.py --product-mode outer_sum --output-dir <new>`.
+
+`learned_attention_diagnostic.py --capture-directory <accepted079>
+--output-dir <new>` checks isolated pretrained self/cross attention against
+the accepted full-flow outputs, then checks an attention observer against
+ordinary isolated execution. Only bitwise accepted captures support local
+projection, normalization, score, softmax and AV comparisons. QKV-only native
+and outer-sum trials consume the same observed Q/K/V values; their baseline
+must also match the captured attended output before full-model attribution.
+These isolated timings include output transfer and do not predict sampler time.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
