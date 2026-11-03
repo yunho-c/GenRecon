@@ -1,0 +1,193 @@
+imports
+2026-11-03 05:19:31.313 | WARNING  | torch_plugin_tt:__init__:40 - TT plugin is setting XLA_STABLEHLO_COMPILE to 1. This is required for TT PJRT plugin to work correctly.
+[SPARSE] Conv backend: none; Attention backend: sdpa
+waiting_for_device
+2026-11-03 05:19:31.430 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:228)
+2026-11-03 05:19:31.430 | info     |             UMD | Cluster constructor started. (cluster.cpp:348)
+2026-11-03 05:19:31.430 | info     |             UMD | Creating TopologyDiscovery for architecture: wormhole_b0 (topology_discovery.cpp:95)
+2026-11-03 05:19:31.430 | info     |             UMD | Starting topology discovery. (topology_discovery.cpp:114)
+2026-11-03 05:19:31.432 | info     |             UMD | Established firmware bundle version: 19.11.0 (topology_discovery.cpp:574)
+2026-11-03 05:19:31.432 | info     |             UMD | Completed topology discovery. (topology_discovery.cpp:118)
+2026-11-03 05:19:31.628 | info     |             UMD | Opening local chip ids/PCIe ids: {0}/[3] and remote chip ids {} (cluster.cpp:168)
+2026-11-03 05:19:31.628 | info     |             UMD | IOMMU: disabled (cluster.cpp:142)
+2026-11-03 05:19:31.628 | info     |             UMD | KMD version: 2.3.0 (cluster.cpp:145)
+2026-11-03 05:19:31.628 | info     |             UMD | Cluster constructor completed. (cluster.cpp:544)
+2026-11-03 05:19:31.630 | info     |             UMD | Starting devices in cluster (cluster.cpp:1048)
+2026-11-03 05:19:31.633 | info     |             UMD | Starting devices in cluster completed. (cluster.cpp:1056)
+2026-11-03 05:19:31.839 | info     |     Distributed | Using auto discovery to generate mesh graph. (metal_env.cpp:405)
+2026-11-03 05:19:31.839 | info     |     Distributed | Constructing control plane using auto-discovery (no mesh graph descriptor). (metal_env.cpp:467)
+2026-11-03 05:19:31.840 | warning  |          Always | Unknown motherboard 'H12DSG-O-CPU' for chip_id=0 (bus_id=0x25) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-11-03 05:19:31.840 | info     |          Fabric | Logical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {0:1} (topology_mapper_utils.cpp:2452)
+2026-11-03 05:19:31.840 | info     |          Fabric | Physical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {0:1} (topology_mapper_utils.cpp:2460)
+2026-11-03 05:19:31.853 | info     |    BuildKernels | Using pre-compiled firmware from: /home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/tt-metal/tt_metal/pre-compiled/8594746407955848821/ (build_env_manager.cpp:347)
+2026-11-03 05:19:31.860 | warning  |           Metal | Dispatch telemetry SMC buffer is unavailable (dispatch_telemetry.cpp:53)
+2026-11-03 05:19:31.861 | warning  |           Metal | Dispatch telemetry SMC buffer is unavailable (dispatch_telemetry.cpp:53)
+2026-11-03 05:19:31.914 | warning  |           Metal | Dispatch telemetry SMC buffer is unavailable (dispatch_telemetry.cpp:53)
+2026-11-03 05:19:31.923 | info     |    BuildKernels | Using pre-compiled firmware from: /home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/tt-metal/tt_metal/pre-compiled/8594746407955848821/ (build_env_manager.cpp:347)
+2026-11-03 05:19:31.929 | warning  |           Metal | Dispatch telemetry SMC buffer is unavailable (dispatch_telemetry.cpp:53)
+2026-11-03 05:19:31.929 | warning  |           Metal | Dispatch telemetry SMC buffer is unavailable (dispatch_telemetry.cpp:53)
+2026-11-03 05:19:31.958 | info     |           Metal | Enabling program cache on MeshDevice 1 (mesh_device.cpp:1061)
+2026-11-03 05:19:31.958445: W torch_xla/csrc/runtime/profiler.cpp:88] Profiler API not found for PJRT plugin
+k2
+k2
+Traceback (most recent call last):
+  File "/home/user/GitHub/GenRecon/experiments/tenstorrent/matmul_reduction_probe.py", line 164, in <module>
+    main()
+  File "/home/user/GitHub/GenRecon/experiments/tenstorrent/matmul_reduction_probe.py", line 107, in main
+    value = compiled(*resident).cpu()
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py", line 472, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py", line 1024, in compile_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/GitHub/GenRecon/experiments/tenstorrent/matmul_reduction_probe.py", line 59, in forward
+    def forward(self, a, b):
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py", line 1263, in _fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_functorch/aot_autograd.py", line 1200, in forward
+    return compiled_fn(full_args)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 580, in runtime_wrapper
+    all_outs = call_func_at_runtime_with_args(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/utils.py", line 138, in call_func_at_runtime_with_args
+    out = normalize_as_list(f(args))
+                            ^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 783, in wrapper
+    return compiled_fn(runtime_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 1011, in inner_fn
+    outs = compiled_fn(args)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/utils.py", line 105, in g
+    return f(*args)
+           ^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/tt_torch/backend/backend.py", line 629, in __call__
+    return self._call_experimental_compile(full_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/tt_torch/backend/backend.py", line 601, in _call_experimental_compile
+    self.compiled_graph = bridge.extract_compiled_graph(self.module, full_args)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch_xla/_dynamo/dynamo_bridge.py", line 737, in extract_compiled_graph
+    return extract_compiled_graph_helper(xla_model, xla_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch_xla/_dynamo/dynamo_bridge.py", line 859, in extract_compiled_graph_helper
+    return partition_fx_graph_for_cpu_fallback(xla_model, xla_args,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch_xla/_dynamo/dynamo_bridge.py", line 762, in partition_fx_graph_for_cpu_fallback
+    collector.run(*xla_args)
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/fx/interpreter.py", line 200, in run
+    self.env[node] = self.run_node(node)
+                     ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch_xla/_dynamo/dynamo_bridge.py", line 652, in run_node
+    result = super().run_node(n)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/fx/interpreter.py", line 297, in run_node
+    return getattr(self, n.op)(n.target, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/fx/interpreter.py", line 380, in call_function
+    return target(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_ops.py", line 865, in __call__
+    return self._op(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/tt_torch/torch_overrides.py", line 149, in __torch_function__
+    return func(*args, **(kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_ops.py", line 865, in __call__
+    return self._op(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_compile.py", line 54, in inner
+    return disable_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_dynamo/eval_frame.py", line 1263, in _fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_functorch/_aot_autograd/runtime_wrappers.py", line 409, in __torch_dispatch__
+    res = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_ops.py", line 865, in __call__
+    return self._op(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+NotImplementedError: Could not run 'aten::mm.dtype' with arguments from the 'CPU' backend. This could be because the operator doesn't exist for this backend, or was omitted during the selective/custom build process (if using custom build). If you are a Facebook employee using PyTorch on mobile, please visit https://fburl.com/ptmfixes for possible resolutions. 'aten::mm.dtype' is only available for these backends: [XLA, Meta, BackendSelect, Python, FuncTorchDynamicLayerBackMode, Functionalize, Named, Conjugate, Negative, ZeroTensor, ADInplaceOrView, AutogradOther, AutogradCPU, AutogradCUDA, AutogradHIP, AutogradXLA, AutogradMPS, AutogradIPU, AutogradXPU, AutogradHPU, AutogradVE, AutogradLazy, AutogradMTIA, AutogradMAIA, AutogradPrivateUse1, AutogradPrivateUse2, AutogradPrivateUse3, AutogradMeta, AutogradNestedTensor, Tracer, AutocastCPU, AutocastMTIA, AutocastMAIA, AutocastXPU, AutocastXLA, AutocastMPS, AutocastCUDA, FuncTorchBatched, BatchedNestedTensor, FuncTorchVmapMode, Batched, VmapMode, FuncTorchGradWrapper, PythonTLSSnapshot, FuncTorchDynamicLayerFrontMode, PreDispatch, PythonDispatcher].
+
+XLA: registered at torch_xla/csrc/aten_fallback.cpp:460 [backend fallback]
+Meta: registered at /home/user/tt-forge-venv/lib/python3.12/site-packages/torch/_meta_registrations.py:53 [kernel]
+BackendSelect: fallthrough registered at /pytorch/aten/src/ATen/core/BackendSelectFallbackKernel.cpp:3 [backend fallback]
+Python: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:198 [backend fallback]
+FuncTorchDynamicLayerBackMode: registered at /pytorch/aten/src/ATen/functorch/DynamicLayer.cpp:477 [backend fallback]
+Functionalize: registered at /pytorch/aten/src/ATen/FunctionalizeFallbackKernel.cpp:384 [backend fallback]
+Named: registered at /pytorch/aten/src/ATen/core/NamedRegistrations.cpp:5 [backend fallback]
+Conjugate: registered at /pytorch/aten/src/ATen/ConjugateFallback.cpp:17 [backend fallback]
+Negative: registered at /pytorch/aten/src/ATen/native/NegateFallback.cpp:18 [backend fallback]
+ZeroTensor: registered at /pytorch/aten/src/ATen/ZeroTensorFallback.cpp:115 [backend fallback]
+ADInplaceOrView: fallthrough registered at /pytorch/aten/src/ATen/core/VariableFallbackKernel.cpp:103 [backend fallback]
+AutogradOther: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradCPU: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradCUDA: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradHIP: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradXLA: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradMPS: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradIPU: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradXPU: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradHPU: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradVE: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradLazy: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradMTIA: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradMAIA: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradPrivateUse1: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradPrivateUse2: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradPrivateUse3: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradMeta: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+AutogradNestedTensor: registered at /pytorch/torch/csrc/autograd/generated/VariableType_3.cpp:20155 [autograd kernel]
+Tracer: registered at /pytorch/torch/csrc/autograd/generated/TraceType_3.cpp:15245 [kernel]
+AutocastCPU: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:336 [backend fallback]
+AutocastMTIA: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:480 [backend fallback]
+AutocastMAIA: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:518 [backend fallback]
+AutocastXPU: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:556 [backend fallback]
+AutocastXLA: fallthrough registered at torch_xla/csrc/autocast_mode.cpp:25 [backend fallback]
+AutocastMPS: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:221 [backend fallback]
+AutocastCUDA: fallthrough registered at /pytorch/aten/src/ATen/autocast_mode.cpp:177 [backend fallback]
+FuncTorchBatched: registered at /pytorch/aten/src/ATen/functorch/LegacyBatchingRegistrations.cpp:727 [backend fallback]
+BatchedNestedTensor: registered at /pytorch/aten/src/ATen/functorch/LegacyBatchingRegistrations.cpp:754 [backend fallback]
+FuncTorchVmapMode: fallthrough registered at /pytorch/aten/src/ATen/functorch/VmapModeRegistrations.cpp:22 [backend fallback]
+Batched: registered at /pytorch/aten/src/ATen/LegacyBatchingRegistrations.cpp:1072 [backend fallback]
+VmapMode: fallthrough registered at /pytorch/aten/src/ATen/VmapModeRegistrations.cpp:32 [backend fallback]
+FuncTorchGradWrapper: registered at /pytorch/aten/src/ATen/functorch/TensorWrapper.cpp:210 [backend fallback]
+PythonTLSSnapshot: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:206 [backend fallback]
+FuncTorchDynamicLayerFrontMode: registered at /pytorch/aten/src/ATen/functorch/DynamicLayer.cpp:473 [backend fallback]
+PreDispatch: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:210 [backend fallback]
+PythonDispatcher: registered at /pytorch/aten/src/ATen/core/PythonFallbackKernel.cpp:202 [backend fallback]
+
+
+While executing %mm : [num_users=1] = call_function[target=torch.ops.aten.mm.dtype](args = (%mark_argument_attributes, %mark_argument_attributes_1, torch.float32), kwargs = {})
+Original traceback:
+  File "/home/user/GitHub/GenRecon/experiments/tenstorrent/matmul_reduction_probe.py", line 60, in forward
+    return torch.mm(a, b, out_dtype=torch.float32)
+  File "/home/user/tt-forge-venv/lib/python3.12/site-packages/tt_torch/torch_overrides.py", line 149, in __torch_function__
+    return func(*args, **(kwargs or {}))
+
+Use tlparse to see full graph. (https://github.com/pytorch/tlparse?tab=readme-ov-file#tlparse-parse-structured-pt2-logs)
+2026-11-03 05:19:37.129 | warning  |           Metal | Dispatch telemetry SMC buffer is unavailable (dispatch_telemetry.cpp:53)
+2026-11-03 05:19:37.141 | info     |    BuildKernels | JIT cache stats: 8/21 hits (38.1%) [8 cached, 5 build-once dedup, 0 merged artifacts, 0 merged genfiles] (build_cache_telemetry.cpp:207)
+2026-11-03 05:19:37.141 | info     |    BuildKernels | JIT telemetry: 3 registered TelemetryTokens (build_cache_telemetry.cpp:230)
+2026-11-03 05:19:37.144 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:513)
+2026-11-03 05:19:37.144 | info     |             UMD | Closing devices in cluster (cluster.cpp:1061)
+2026-11-03 05:19:37.148 | info     |             UMD | Closing devices in cluster completed. (cluster.cpp:1070)
+2026-11-03 05:19:37.148 | info     |             UMD | Cluster destructor started. (cluster.cpp:778)
+2026-11-03 05:19:37.149 | info     |             UMD | Cluster destructor completed. (cluster.cpp:781)

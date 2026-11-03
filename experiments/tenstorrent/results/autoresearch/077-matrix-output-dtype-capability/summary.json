@@ -1,0 +1,10 @@
+{
+  "status": "completed_frontend_output_dtype_capability_control",
+  "finding": "Explicit torch.mm BF16-source/FP32-output API reaches Torch/XLA aten::mm.dtype fallback and fails in the unavailable CPU implementation before native matrix IR is emitted. Ordinary BF16 input/output runs natively but final output remains BF16, with relative errors0.001661/0.001689/0.001815 atK2/32/128 versus FP32 CPU. It is not an FP32-output precision workaround.",
+  "scope": "Synthetic exactly BF16-representable inputs from seed62; canonical Forge1.4.0, fresh process per policy. No full-model changes.",
+  "explicit_api": "torch.mm(a_bf16,b_bf16,out_dtype=torch.float32)",
+  "explicit_native_matrix_executed": false,
+  "ordinary_native_output_dtype": "torch.bfloat16",
+  "decision": "Retain explicit failure; do not silently cast ordinary BF16 output to FP32 and claim FP32 accumulation/output. Test same PJRT compiler/runtime via installed JAX preferred_element_type and inspect actual native input/result types.",
+  "reproduce": "matmul_reduction_probe.py --matmul-mode <bf16_fp32 or bf16> --lengths 2 32 128 --output-dir <new>, source d7fa80a"
+}
