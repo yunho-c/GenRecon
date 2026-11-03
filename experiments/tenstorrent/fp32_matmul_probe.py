@@ -43,6 +43,8 @@ def main():
     args = parser.parse_args()
     if args.runs<1:
         parser.error('runs must be positive')
+    if len(args.math_fidelities)!=1:
+        parser.error('Use a fresh process for each fidelity: the native graph cache can reuse prior settings despite torch.compiler.reset()')
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True,exist_ok=False)
     for name in ('LD_LIBRARY_PATH','PYTHONPATH','TT_METAL_HOME','TT_METAL_RUNTIME_ROOT'):
@@ -113,6 +115,10 @@ def main():
             torch_xla.set_custom_compile_options(options)
             compiled=torch.compile(MatrixProduct().eval(),backend='tt',fullgraph=True)
             resident=(left.to(device),right.to(device))
+            readback=[value.cpu() for value in resident]
+            input_roundtrip=[torch.equal(value,original) for value,original in zip(readback,(left,right),strict=True)]
+            if not all(input_roundtrip):
+                raise ValueError('Input device roundtrip changed FP32 values')
             metrics.clear_all()
             with torch.no_grad():
                 actual=compiled(*resident).cpu()
@@ -124,6 +130,7 @@ def main():
             row={'requested_compile_options':options,
                  'input_digests':[tensor_digest(left),tensor_digest(right)],
                  'input_shapes':[list(left.shape),list(right.shape)],
+                 'input_roundtrip_bitwise':input_roundtrip,
                  'output_dtype':str(actual.dtype),'native_vs_cpu':compare_tensors(actual,reference),
                  'reference_minmax':[reference.min().item(),reference.max().item()],
                  'native_minmax':[actual.min().item(),actual.max().item()],
