@@ -10,7 +10,7 @@ import math
 import torch
 from torch import nn
 
-ATTENTION_MODES = ('fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax')
+ATTENTION_MODES = ('fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax', 'fp32_self_outer_qk')
 
 
 def reciprocal_attention(q, k, v, mode='fp32_reciprocal', head_first=False):
@@ -21,12 +21,17 @@ def reciprocal_attention(q, k, v, mode='fp32_reciprocal', head_first=False):
     permutation = (0, 1, 2, 3) if head_first else (0, 2, 1, 3)
     a, b = [value.to(score_dtype).permute(permutation) for value in (q, k)]
     # Promote before scaling even when the QK product retains the outer dtype.
-    scores = (a @ b.transpose(-2, -1)).float() * (1 / math.sqrt(q.shape[-1]))
+    if mode == 'fp32_self_outer_qk':
+        from experiments.tenstorrent.outer_product_sum import outer_product_sum
+        product = outer_product_sum(a, b.transpose(-2, -1))
+    else:
+        product = a @ b.transpose(-2, -1)
+    scores = product.float() * (1 / math.sqrt(q.shape[-1]))
     shifted = scores - scores.amax(dim=-1, keepdim=True)
     exponentials = torch.exp(shifted)
     # Division would fuse this back into the native approximate softmax.
     probabilities = exponentials * torch.reciprocal(exponentials.sum(dim=-1, keepdim=True))
-    av_dtype = torch.float32 if mode == 'fp32_reciprocal' else q.dtype
+    av_dtype = torch.float32 if mode in ('fp32_reciprocal', 'fp32_self_outer_qk') else q.dtype
     c = v.to(av_dtype).permute(permutation)
     return (probabilities.to(av_dtype) @ c).permute(0, 2, 1, 3).to(q.dtype)
 
@@ -45,6 +50,8 @@ class ReciprocalAttention(nn.Module):
             self.attention = attention
             self.fixed_rope = None
         self.head_first = self.fixed_rope is not None and self.fixed_rope.head_first
+        if mode == 'fp32_self_outer_qk' and self.attention._type != 'self':
+            self.mode = 'fp32_reciprocal'
         self.eval()
 
     def forward(self, x, context=None, phases=None):
@@ -99,3 +106,9 @@ def prepare_attention(model, mode):
     for owner, name, attention in planned:
         setattr(owner, name, ReciprocalAttention(attention, mode))
     return len(planned)
+
+
+def attention_mode_counts(model):
+    from collections import Counter
+    return dict(Counter(module.attention._type+':'+module.mode for module in model.modules()
+                        if isinstance(module, ReciprocalAttention)))

@@ -779,6 +779,19 @@ and outer-sum trials consume the same observed Q/K/V values; their baseline
 must also match the captured attended output before full-model attribution.
 These isolated timings include output transfer and do not predict sampler time.
 
+The [learned self-attention trial](results/autoresearch/067-learned-attention-outer/summary.json)
+passes every source guard. On identical observed Q/K/V, core error falls
+1.47% to 0.193%, while time rises 5.61ms to 97.4ms. Cross-attention isolation
+and observation fail bitwise equality; those rejected captures support no
+component attribution. Both outcomes are retained.
+
+`--attention-mode fp32_self_outer_qk` enables the diagnostic only for
+self-attention QK. Cross-attention retains ordinary FP32 reciprocal attention;
+reports count the effective policies separately. Learned projections, norms,
+RoPE, AV, all tokens and the original sampler schedule remain intact. This
+opt-in mode has higher cost; complete original trajectories and identically
+prepared CPU controls are required before interpreting quality or performance.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

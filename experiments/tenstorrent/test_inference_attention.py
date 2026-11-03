@@ -16,7 +16,7 @@ from experiments.tenstorrent.precision_reference import PipelinePrecisionMode
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
 @pytest.mark.parametrize('kind,real_rope', [('self', False), ('self', True), ('self', 'head_first'), ('self', 'flat_head_first'), ('self', 'split_fp32'), ('cross', False)])
-@pytest.mark.parametrize('mode', ['fp32_reciprocal', 'fp32_scores_bf16_av'])
+@pytest.mark.parametrize('mode', ['fp32_reciprocal', 'fp32_scores_bf16_av', 'fp32_self_outer_qk'])
 def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_rope, mode):
     torch.set_num_threads(4)
     torch.manual_seed(53)
@@ -51,6 +51,9 @@ def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_ro
         assert prepare_attention(model, mode) == 1
         actual = model.self_attn(x, context=context, phases=phases)
     assert actual.dtype == dtype
+    if mode == 'fp32_self_outer_qk':
+        expected_mode = 'fp32_self_outer_qk' if kind == 'self' else 'fp32_reciprocal'
+        assert model.self_attn.mode == expected_mode
     assert identities == {id(p) for p in model.parameters()}
     for a, b in zip(model.parameters(), values, strict=True):
         torch.testing.assert_close(a, b, rtol=0, atol=0)
@@ -127,8 +130,8 @@ def test_matrix_precision_boundaries_and_uniform_attention(mode, dtype, head_fir
     expected = torch.full_like(q, 15.5)
     torch.testing.assert_close(actual, expected, rtol=0, atol=0)
     first = dtype if mode == 'bf16_qk_fp32_softmax' else torch.float32
-    second = torch.float32 if mode == 'fp32_reciprocal' else dtype
-    assert observer.dtypes == [first, second]
+    second = torch.float32 if mode in ('fp32_reciprocal', 'fp32_self_outer_qk') else dtype
+    assert observer.dtypes == ([second] if mode == 'fp32_self_outer_qk' else [first, second])
 
 
 def test_fp32_preparation_modes_share_the_original_formula():
@@ -137,4 +140,15 @@ def test_fp32_preparation_modes_share_the_original_formula():
     values = (torch.randn(2, 17, 4, 12), torch.randn(2, 9, 4, 12), torch.randn(2, 9, 4, 12))
     expected = PrecisionAttention('legacy')(*values)
     for mode in ATTENTION_MODES:
-        torch.testing.assert_close(reciprocal_attention(*values, mode), expected, rtol=0, atol=0)
+        tolerance = 2e-6 if mode == 'fp32_self_outer_qk' else 0
+        torch.testing.assert_close(reciprocal_attention(*values, mode), expected, rtol=tolerance, atol=tolerance)
+
+
+def test_self_precise_qk_reports_cross_attention_as_original_reciprocal():
+    from experiments.tenstorrent.inference_attention import attention_mode_counts
+    model = nn.Module()
+    model.self_attn = MultiHeadAttention(48,4,type='self')
+    model.cross_attn = MultiHeadAttention(48,4,ctx_channels=24,type='cross')
+    model.eval()
+    assert prepare_attention(model,'fp32_self_outer_qk') == 2
+    assert attention_mode_counts(model) == {'self:fp32_self_outer_qk':1,'cross:fp32_reciprocal':1}

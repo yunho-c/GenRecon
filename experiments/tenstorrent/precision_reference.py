@@ -58,7 +58,7 @@ def main():
     p.add_argument('--flow-inputs', type=Path, help='Prepared real-image inputs; currently supports --stage ss')
     p.add_argument('--precision', choices=('pipeline', 'float32'), default='pipeline')
     p.add_argument('--rope-mode', choices=('stock', 'real_pairs', 'real_pairs_head_first', 'real_pairs_flat_head_first', 'real_pairs_fp32_split'), default='stock')
-    p.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax'), default='stock')
+    p.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax', 'fp32_self_outer_qk'), default='stock')
     p.add_argument('--output-dir', type=Path, required=True)
     args = p.parse_args()
     if args.flow_inputs is not None and args.stage != 'ss':
@@ -106,8 +106,9 @@ def main():
                 flatten=args.rope_mode in ('real_pairs_flat_head_first', 'real_pairs_fp32_split'),
                 fp32_split=args.rope_mode=='real_pairs_fp32_split')
         if args.attention_mode != 'stock':
-            from experiments.tenstorrent.inference_attention import prepare_attention
+            from experiments.tenstorrent.inference_attention import prepare_attention, attention_mode_counts
             report['prepared_attention_modules'] = prepare_attention(model,args.attention_mode)
+            report['effective_attention_modes'] = attention_mode_counts(model)
         if args.precision == 'float32':
             from experiments.tenstorrent.inference_precision import prepare_float32_device
             report['precision_preparation'] = prepare_float32_device(model)

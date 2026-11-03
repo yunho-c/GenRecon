@@ -148,8 +148,9 @@ def worker(args):
                     ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
                     for ref, out in zip(reference, candidate, strict=True)]
         if args.attention_mode != 'stock':
-            from experiments.tenstorrent.inference_attention import prepare_attention
+            from experiments.tenstorrent.inference_attention import prepare_attention, attention_mode_counts
             result['prepared_attention_modules'] = prepare_attention(model, args.attention_mode)
+            result['effective_attention_modes'] = attention_mode_counts(model)
             context = float32_reference(model) if args.reference_precision == 'float32' else nullcontext(model)
             with torch.no_grad(), context:
                 prepared = outputs(model(*reference_inputs))
@@ -291,7 +292,7 @@ def main():
     parser.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
     parser.add_argument("--rope-mode", choices=("stock", "real_pairs", "real_pairs_head_first", "real_pairs_flat_head_first", "real_pairs_fp32_split"), default="stock")
-    parser.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax'), default='stock')
+    parser.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax', 'fp32_self_outer_qk'), default='stock')
     parser.add_argument('--device-precision', choices=('pipeline', 'float32'), default='pipeline',
                         help='FP32 device diagnostic promotes the already quantized model after original CPU references')
     parser.add_argument('--native-ir', action='store_true', help='Dump actual native compiler IR with dry run disabled')
