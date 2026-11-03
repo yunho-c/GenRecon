@@ -1248,6 +1248,27 @@ paired trial schedules/counters/timing arithmetic and actual runtime IR without
 opening hardware. Compressed duplicate tapes refer to results108/109 only after
 their exact serialized bytes were checked against the new runs.
 
+The [generated texture denoiser calibration](results/autoresearch/112-texture-generated-sdk-calibration/summary.json)
+retains all 457 matrix operations and matches canonical/isolated-SDK outputs
+bitwise, with exact repeats. The [complete generated sampler control](results/autoresearch/114-native-matched-generated-texture-sampler/summary.json)
+then matches every original native texture state across 12 steps and 18 calls,
+including fixed shape concatenation. The [profiling harness extension](results/autoresearch/113-texture-full-sampler-profiler-extension/summary.json)
+keeps shape's 21-call and texture's 18-call contracts distinct and rejects
+incomplete native device rows or byte ranges. Twenty-five focused checks pass.
+
+For a native control other than the historical shape110 control, add
+`--repair-native-time-frequencies --native-time-frequency-ir <native-runtime.mlir>`
+to the generated SDK sampler launcher. Plain or gzip IR is accepted only if its
+complete 128-value timestep-frequency constant exactly matches the sealed
+original. Only the two previously recorded one-ULP template differences may be
+restored; arbitrary template changes and ambiguous or different native constants
+are rejected. The report records the actual IR and native-control hashes, and
+every generated sampler state must still match the independently sealed native
+trajectory. Use `--profile --device-profile-only` only after this calibration;
+the native C++ report parser selects the original call count by recorded stage.
+These calibration results do not establish a speedup or resolve the failed stock
+CPU quality gates.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

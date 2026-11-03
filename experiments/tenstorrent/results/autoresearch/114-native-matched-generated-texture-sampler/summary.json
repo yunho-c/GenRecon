@@ -1,0 +1,53 @@
+{
+  "status": "completed_original18call_generated_texture_sampler_native_control",
+  "scope": "Original shape/texture Euler/CFG sampler through a sealed generated TTNN graph.\n\nChanging inputs are freshly uploaded on every call. Learned weights and the\ncompiler const-eval cache remain resident. Require a sealed canonical forward\nand every state of the canonical native trajectory to match bitwise. Original\nstock CPU trajectory gates are reported unchanged, including inherited failures.\n",
+  "all_original_states_bitwise_native142": true,
+  "original_steps": 12,
+  "original_calls": 18,
+  "fixed_shape_concat_retained": true,
+  "canonical_generated_forward_bitwise": true,
+  "native_frequency_repair": {
+    "kind": "restore_native_timestep_frequency_constant",
+    "source": "/home/user/GitHub/GenRecon/experiments/tenstorrent/results/autoresearch/108-texture512-fresh-native-control/runtime-ttnn.mlir.gz",
+    "native_ir_uncompressed_sha256": "ca023e43c2d9399f4a4b10e1f47568dfbabe0e7ace93712c82e3b6e6d484bbb0",
+    "changed_indices": [
+      12,
+      106
+    ],
+    "differences": [
+      {
+        "index": 12,
+        "native": 0.4216964840888977,
+        "eager_cpu": 0.4216965138912201,
+        "ulp_difference": -1
+      },
+      {
+        "index": 106,
+        "native": 0.00048696750309318304,
+        "eager_cpu": 0.0004869675321970135,
+        "ulp_difference": -1
+      }
+    ],
+    "bound_native_control_result_sha256": "222f132b089826a07a758ab591650e12928315c02521ae321ea73b29bec5dc55",
+    "constant_reference_ir_uncompressed_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1"
+  },
+  "stock_CPU_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.10517075593740585,
+    "pcc": 0.9944466976224953,
+    "max_abs": 2.1296298503875732
+  },
+  "generated_sampler_wall_seconds": 13.914628906000871,
+  "marked_model_seconds_sum": 13.876605454133824,
+  "fresh_upload_preparation_seconds_sum": 0.02135105594061315,
+  "native_library_identities": {
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/_ttnncpp.so": "d65f8177140701f21e100ea59a3ec935fbac6d94c9114a6d6311e01544e9a437",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/build/lib/libtt_metal.so": "7cdbf7fe954add65a1e37121c0d55934dc29a63dca4d9aa4499f579e083928c4",
+    "/home/user/tt-scratchpad/genrecon/profile-sdk-f1/source/ttnn/ttnn/_ttnn.so": "f5a2a8b1594bc9127b6660802af1d76b1827baeefc3757c55e0a212ebb275453"
+  },
+  "limits": "Alternate generated execution boundary calibration at original12steps18calls; one unprofiled run is not a speedup distribution. All original weights/LoRA, fixed shape concat, conditions/noise and Euler/CFG retained. Stock CPU strict quality gate remains failed. Full device capture148 is separately pending."
+}

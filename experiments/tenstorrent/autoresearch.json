@@ -121,7 +121,8 @@
     "results/autoresearch/110-texture512-matching-source-controls/summary.json",
     "results/autoresearch/111-transposed-texture-cache-abba/summary.json",
     "results/autoresearch/112-texture-generated-sdk-calibration/summary.json",
-    "results/autoresearch/113-texture-full-sampler-profiler-extension/summary.json"
+    "results/autoresearch/113-texture-full-sampler-profiler-extension/summary.json",
+    "results/autoresearch/114-native-matched-generated-texture-sampler/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -231,7 +232,8 @@
     "Fresh same-source texture ordinary142 reproduces every byte of native140 trajectory, no fallback/recompile and unchanged failed stockCPU gates. Cache143 complete CPU trajectories match ordinary bitwise, and fixed native-control identity gate validates203 shared sources. Candidate native performance/equivalence still pending. Reuse duplicate committed tapes only after exact serialized-byte verification.",
     "Texture heads_t passes full pretrained CPU/native guards and all12 paired ABBA trajectories: median14.475406s to11.670494s,19.3771% lower including fresh both-branch prefill (median0.351319s). Every native state matches fresh ordinary142, original12steps18calls/fixedshapeconcat/learnedobjects/LoRA retained, no fallback or measured recompilation.32 focused tests and independent compressed-evidence audit pass. Strict stock CPU final relativeL2=0.105170756/PCC=0.994446698 still fails. Synthetic512 on one n150 only; raw/production defaults unchanged.",
     "Pretrained FP32 flat-RoPE texture denoiser generated export retains457 matrixops and preparedCPU error2.1093e-6. Canonical and isolated matching-revision SDK outputs/repeats match bitwise, with explicit declared uint32 index cast repair. Warm medians are boundary calibration, not performance improvement or complete native sampler equality. Proceed to full18call generated sampler control with sealed native frequency proof, then complete device-op profiling.",
-    "Generated sampler/C++ full-window parser now support original texture12steps18calls and fixed shape concat. Other controls require explicit nativeIR containing exactly the sealed128-value timestep frequency vector before restoring only two original one-ULP differences; final native trajectory equality still mandatory.25 focused tests pass, including rejected partial/changed native proofs and legacy shape compatibility. Complete texture native calibration/profiling pending."
+    "Generated sampler/C++ full-window parser now support original texture12steps18calls and fixed shape concat. Other controls require explicit nativeIR containing exactly the sealed128-value timestep frequency vector before restoring only two original one-ULP differences; final native trajectory equality still mandatory.25 focused tests pass, including rejected partial/changed native proofs and legacy shape compatibility. Complete texture native calibration/profiling pending.",
+    "Generated texture sampler147 reproduces every native142 state bitwise over original12steps18calls, with original learnedweights/LoRA/fixedshapeconcat and CPU Euler/CFG. Explicit nativeIR proves full128-value frequencyconstant matches original; only originaltwo one-ULP values restored. Canonical generated forward also exact, SDKlibraries isolated.13.9146s unprofiled run is boundary calibration, not performance improvement; strict stockCPU error0.105171 still fails. Complete device-op capture148 underway."
   ],
   "next_actions": [
     "Profile complete original texture18call sampler and optimized conditioning-cache graphs on matching-revision SDK, requiring canonical forward/every-native-state calibration and complete per-call C++ timing coverage. Extend native-exact cache to matched real-image shape/texture fixtures and larger active-token counts before promotion.",
@@ -241,6 +243,13 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Extend matching-revision marked profiles to optimized6181-token shape, occupancy and texture modules. Separate preuploaded-activation generated execution from transfer-inclusive PJRT sampler timing, and retain original full-trajectory quality gates."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "run": 148,
+      "purpose": "Complete original18call native-equal texture sampler device profile; validate every native CPP byte range/row before attribution",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/148-texture-complete-native-device-profile",
+      "tool_session": 2381
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
