@@ -39,6 +39,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--runs',type=int,default=3)
+    parser.add_argument('--math-fidelities',nargs='+',choices=('hifi4','hifi3'),default=['hifi4'])
     args = parser.parse_args()
     if args.runs<1:
         parser.error('runs must be positive')
@@ -48,7 +49,7 @@ def main():
         os.environ.pop(name,None)
     os.environ.update(PJRT_DEVICE='TT',ATTN_BACKEND='sdpa',
                       SPARSE_ATTN_BACKEND='sdpa',SPARSE_CONV_BACKEND='none')
-    report={'status':'running','scope':__doc__,'seed':62,
+    report={'status':'running','scope':__doc__,'seed':62,'math_fidelities':args.math_fidelities,
             'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
             'cases':{}}
     def phase(name):
@@ -71,16 +72,32 @@ def main():
         a=torch.randn(512,128)
         b=torch.randn(128,512)
         identity=torch.eye(128)
+        cancel_a=torch.zeros(512,128)
+        cancel_b=torch.zeros(128,128)
+        cancel_a[:,0],cancel_a[:,1]=1+2**-12,1.
+        cancel_b[0,:],cancel_b[1,:]=4096.,-4096.
+        bf16_cancel_a=torch.zeros(512,128)
+        bf16_cancel_b=torch.zeros(128,128)
+        bf16_cancel_a[:,0],bf16_cancel_a[:,1]=1+2**-7,1.
+        bf16_cancel_b[0,:],bf16_cancel_b[1,:]=1+2**-7,-(1+2**-6)
         cases={'identity_fp32':(a,identity),
                'identity_bf16_values_fp32_storage':(a.bfloat16().float(),identity),
                'product_fp32':(a,b),
-               'product_bf16_values_fp32_storage':(a.bfloat16().float(),b.bfloat16().float())}
+               'product_bf16_values_fp32_storage':(a.bfloat16().float(),b.bfloat16().float()),
+               'product_bf16_values_k32':(a[:,:32].contiguous().bfloat16().float(),b[:32,:].contiguous().bfloat16().float()),
+               'product_bf16_values_k1':(a[:,:1].contiguous().bfloat16().float(),b[:1,:].contiguous().bfloat16().float()),
+               'cancellation_fp32':(cancel_a,cancel_b),
+               'cancellation_bf16_values':(bf16_cancel_a,bf16_cancel_b)}
+        torch.testing.assert_close(cancel_a @ cancel_b,torch.ones(512,128),rtol=0,atol=0)
+        torch.testing.assert_close(bf16_cancel_a @ bf16_cancel_b,torch.full((512,128),2**-14),rtol=0,atol=0)
+        cases={((name if args.math_fidelities==['hifi4'] else fidelity+'_'+name)):(fidelity,left,right)
+               for fidelity in args.math_fidelities for name,(left,right) in cases.items()}
         phase('waiting_for_device')
         lock=os.open('/tmp/genrecon-tt-pjrt.lock',os.O_CREAT|os.O_RDWR,0o600)
         fcntl.flock(lock,fcntl.LOCK_EX)
         device=torch_xla.device()
         outputs={}
-        for name,(left,right) in cases.items():
+        for name,(fidelity,left,right) in cases.items():
             phase(name)
             reference=left @ right
             counterfactuals={'tf32_truncated_inputs':quantize_tf32(left) @ quantize_tf32(right),
@@ -88,10 +105,10 @@ def main():
                             'tf32_truncated_output':quantize_tf32(reference),
                             'tf32_rounded_output':quantize_tf32(reference,True),
                             'bf16_rounded_output':reference.bfloat16().float()}
-            if name.startswith('identity'):
+            if 'identity' in name:
                 torch.testing.assert_close(reference,left,rtol=0,atol=0)
             torch.compiler.reset()
-            options={'optimization_level':0,'math_fidelity':'hifi4','dry_run':'false',
+            options={'optimization_level':0,'math_fidelity':fidelity,'dry_run':'false',
                      'export_path':str(args.output_dir/(name+'-native-ir'))}
             torch_xla.set_custom_compile_options(options)
             compiled=torch.compile(MatrixProduct().eval(),backend='tt',fullgraph=True)
@@ -108,6 +125,8 @@ def main():
                  'input_digests':[tensor_digest(left),tensor_digest(right)],
                  'input_shapes':[list(left.shape),list(right.shape)],
                  'output_dtype':str(actual.dtype),'native_vs_cpu':compare_tensors(actual,reference),
+                 'reference_minmax':[reference.min().item(),reference.max().item()],
+                 'native_minmax':[actual.min().item(),actual.max().item()],
                  'native_bitwise_cpu':torch.equal(actual,reference),'warm_seconds':times,
                  'counterfactuals':{key:{'native_vs_cpu_counterfactual':compare_tensors(actual,value),
                                          'native_bitwise_cpu_counterfactual':torch.equal(actual,value)}
