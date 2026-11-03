@@ -1,0 +1,10 @@
+{
+  "identity_fp32": true,
+  "identity_bf16_values_fp32_storage": true,
+  "product_fp32": true,
+  "product_bf16_values_fp32_storage": true,
+  "product_bf16_values_k32": true,
+  "product_bf16_values_k1": true,
+  "cancellation_fp32": true,
+  "cancellation_bf16_values": true
+}

@@ -40,6 +40,7 @@ def main():
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--runs',type=int,default=3)
     parser.add_argument('--math-fidelities',nargs='+',choices=('hifi4','hifi3'),default=['hifi4'])
+    parser.add_argument('--product-mode',choices=('native','outer_sum'),default='native')
     args = parser.parse_args()
     if args.runs<1:
         parser.error('runs must be positive')
@@ -52,6 +53,7 @@ def main():
     os.environ.update(PJRT_DEVICE='TT',ATTN_BACKEND='sdpa',
                       SPARSE_ATTN_BACKEND='sdpa',SPARSE_CONV_BACKEND='none')
     report={'status':'running','scope':__doc__,'seed':62,'math_fidelities':args.math_fidelities,
+            'product_mode':args.product_mode,
             'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
             'cases':{}}
     def phase(name):
@@ -66,11 +68,13 @@ def main():
         from experiments.tenstorrent.experiment_identity import sha256
         from experiments.tenstorrent.trajectory import tensor_digest
         from experiments.tenstorrent.validation import compare_tensors
+        from experiments.tenstorrent.outer_product_sum import OuterProductSum
         torch.set_num_threads(4)
         torch.manual_seed(report['seed'])
         report['versions']={name:importlib.metadata.version(name)
                             for name in ('torch','torch-xla','tt-forge','pjrt-plugin-tt')}
         report['script_sha256']=sha256(Path(__file__))
+        report['outer_product_source_sha256']=sha256(Path(__file__).with_name('outer_product_sum.py'))
         a=torch.randn(512,128)
         b=torch.randn(128,512)
         identity=torch.eye(128)
@@ -103,6 +107,12 @@ def main():
         for name,(fidelity,left,right) in cases.items():
             phase(name)
             reference=left @ right
+            module=MatrixProduct().eval() if args.product_mode=='native' else OuterProductSum().eval()
+            with torch.no_grad():
+                cpu_formula=module(left,right)
+            cpu_check=compare_tensors(cpu_formula,reference,max_relative_l2=2e-6,min_pcc=.999999999)
+            if not cpu_check['passed']:
+                raise ValueError('CPU alternative changes matrix arithmetic beyond FP32 association tolerance')
             counterfactuals={'tf32_truncated_inputs':quantize_tf32(left) @ quantize_tf32(right),
                             'tf32_rounded_inputs':quantize_tf32(left,True) @ quantize_tf32(right,True),
                             'tf32_truncated_output':quantize_tf32(reference),
@@ -114,7 +124,7 @@ def main():
             options={'optimization_level':0,'math_fidelity':fidelity,'dry_run':'false',
                      'export_path':str(args.output_dir/(name+'-native-ir'))}
             torch_xla.set_custom_compile_options(options)
-            compiled=torch.compile(MatrixProduct().eval(),backend='tt',fullgraph=True)
+            compiled=torch.compile(module,backend='tt',fullgraph=True)
             resident=(left.to(device),right.to(device))
             readback=[value.cpu() for value in resident]
             input_roundtrip=[torch.equal(value,original) for value,original in zip(readback,(left,right),strict=True)]
@@ -133,6 +143,9 @@ def main():
                  'input_shapes':[list(left.shape),list(right.shape)],
                  'input_roundtrip_bitwise':input_roundtrip,
                  'output_dtype':str(actual.dtype),'native_vs_cpu':compare_tensors(actual,reference),
+                 'cpu_formula_vs_matmul':cpu_check,
+                 'native_vs_cpu_formula':compare_tensors(actual,cpu_formula),
+                 'native_bitwise_cpu_formula':torch.equal(actual,cpu_formula),
                  'reference_minmax':[reference.min().item(),reference.max().item()],
                  'native_minmax':[actual.min().item(),actual.max().item()],
                  'native_bitwise_cpu':torch.equal(actual,reference),'warm_seconds':times,

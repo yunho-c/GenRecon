@@ -1,0 +1,127 @@
+{
+  "status": "completed_precise_single_term_control",
+  "scope": "Test native FP32 matmul preservation and explicit rounding counterfactuals.\n\nSeeded synthetic matrices, not learned attention or complete-model attribution.\nIdentity operands remain dynamic native inputs. All inputs and outputs use\nFP32 storage; some cases intentionally contain exactly BF16-representable values.\n",
+  "single_term": {
+    "requested_compile_options": {
+      "optimization_level": 0,
+      "math_fidelity": "hifi4",
+      "dry_run": "false",
+      "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/085-fp32-single-term-control/product_fp32_k1-native-ir"
+    },
+    "input_digests": [
+      "dbff697cbbdd8e6809709effdda0fc93015f410206f8e3fc73aef40801b3f62d",
+      "13bf91140503438dfd8216f6c877601d0576e1c7e84ef05fcb9bf6fe14ff7df5"
+    ],
+    "input_shapes": [
+      [
+        512,
+        1
+      ],
+      [
+        1,
+        512
+      ]
+    ],
+    "input_roundtrip_bitwise": [
+      true,
+      true
+    ],
+    "output_dtype": "torch.float32",
+    "native_vs_cpu": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0000000000000002,
+      "max_abs": 0.0
+    },
+    "reference_minmax": [
+      -11.040756225585938,
+      11.161908149719238
+    ],
+    "native_minmax": [
+      -11.040756225585938,
+      11.161908149719238
+    ],
+    "native_bitwise_cpu": true,
+    "warm_seconds": [
+      0.0027294710162095726,
+      0.0017577970284037292,
+      0.001872866996563971
+    ],
+    "counterfactuals": {
+      "tf32_truncated_inputs": {
+        "native_vs_cpu_counterfactual": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007965703017910862,
+          "pcc": 0.9999999529088395,
+          "max_abs": 0.011109352111816406
+        },
+        "native_bitwise_cpu_counterfactual": false
+      },
+      "tf32_rounded_inputs": {
+        "native_vs_cpu_counterfactual": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0002957246072450368,
+          "pcc": 0.9999999563391377,
+          "max_abs": 0.005123138427734375
+        },
+        "native_bitwise_cpu_counterfactual": false
+      },
+      "tf32_truncated_output": {
+        "native_vs_cpu_counterfactual": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00041595667244114534,
+          "pcc": 0.9999999761525163,
+          "max_abs": 0.007706642150878906
+        },
+        "native_bitwise_cpu_counterfactual": false
+      },
+      "tf32_rounded_output": {
+        "native_vs_cpu_counterfactual": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00020713019047432834,
+          "pcc": 0.9999999785497788,
+          "max_abs": 0.003520965576171875
+        },
+        "native_bitwise_cpu_counterfactual": false
+      },
+      "bf16_rounded_output": {
+        "native_vs_cpu_counterfactual": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.001661578112377668,
+          "pcc": 0.9999986195848252,
+          "max_abs": 0.03055095672607422
+        },
+        "native_bitwise_cpu_counterfactual": false
+      }
+    },
+    "executed_fallback_ops": [],
+    "aten_counters": {}
+  },
+  "finding": "For seeded arbitrary FP32 values, the K1 product lowered to broadcast multiply matches CPU bitwise across512x512 outputs, with exact input roundtrips and repeats and no fallback. All eight previous HiFi4 controls repeat bitwise in this independent process. This confirms a precise multiplication primitive for these inputs; it does not establish multi-term dot-product accuracy, speed or full-model quality.",
+  "decision": "Test balanced outer-product accumulation as a numerical diagnostic before learned attention. Preserve native baseline and measure its extra cost; no default changes.",
+  "reproduce": "fp32_matmul_probe.py --math-fidelities hifi4 --output-dir <new>; arbitrary FP32 K1 case added at sourcea06fd95."
+}
