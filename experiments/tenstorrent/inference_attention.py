@@ -13,12 +13,13 @@ from torch import nn
 ATTENTION_MODES = ('fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax')
 
 
-def reciprocal_attention(q, k, v, mode='fp32_reciprocal'):
-    """BTHD attention with original output dtype and explicit inner precision."""
+def reciprocal_attention(q, k, v, mode='fp32_reciprocal', head_first=False):
+    """BTHD output; explicit precision and optional BHSD input layout."""
     if mode not in ATTENTION_MODES:
         raise ValueError('Unknown prepared attention mode')
     score_dtype = q.dtype if mode == 'bf16_qk_fp32_softmax' else torch.float32
-    a, b = [value.to(score_dtype).permute(0, 2, 1, 3) for value in (q, k)]
+    permutation = (0, 1, 2, 3) if head_first else (0, 2, 1, 3)
+    a, b = [value.to(score_dtype).permute(permutation) for value in (q, k)]
     # Promote before scaling even when the QK product retains the outer dtype.
     scores = (a @ b.transpose(-2, -1)).float() * (1 / math.sqrt(q.shape[-1]))
     shifted = scores - scores.amax(dim=-1, keepdim=True)
@@ -26,7 +27,7 @@ def reciprocal_attention(q, k, v, mode='fp32_reciprocal'):
     # Division would fuse this back into the native approximate softmax.
     probabilities = exponentials * torch.reciprocal(exponentials.sum(dim=-1, keepdim=True))
     av_dtype = torch.float32 if mode == 'fp32_reciprocal' else q.dtype
-    c = v.to(av_dtype).permute(0, 2, 1, 3)
+    c = v.to(av_dtype).permute(permutation)
     return (probabilities.to(av_dtype) @ c).permute(0, 2, 1, 3).to(q.dtype)
 
 
@@ -43,6 +44,7 @@ class ReciprocalAttention(nn.Module):
         else:
             self.attention = attention
             self.fixed_rope = None
+        self.head_first = self.fixed_rope is not None and self.fixed_rope.head_first
         self.eval()
 
     def forward(self, x, context=None, phases=None):
@@ -60,11 +62,13 @@ class ReciprocalAttention(nn.Module):
             q, k = attn.q_rms_norm(q), attn.k_rms_norm(k)
         if attn.use_rope:
             if self.fixed_rope is not None:
+                if self.head_first:
+                    q, k, v = [value.permute(0, 2, 1, 3) for value in (q, k, v)]
                 q, k = self.fixed_rope(q), self.fixed_rope(k)
             else:
                 q = RotaryPositionEmbedder.apply_rotary_embedding(q, phases)
                 k = RotaryPositionEmbedder.apply_rotary_embedding(k, phases)
-        h = reciprocal_attention(q, k, v, self.mode)
+        h = reciprocal_attention(q, k, v, self.mode, head_first=self.head_first)
         return attn.to_out(h.reshape(batch, tokens, channels))
 
 

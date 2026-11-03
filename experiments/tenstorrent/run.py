@@ -134,7 +134,7 @@ def worker(args):
         if args.rope_mode != "stock":
             from experiments.tenstorrent.inference_rope import prepare_real_rope
             start = time.perf_counter()
-            result["prepared_rope_blocks"] = prepare_real_rope(model)
+            result["prepared_rope_blocks"] = prepare_real_rope(model, head_first=args.rope_mode == 'real_pairs_head_first')
             result["rope_prepare_seconds"] = time.perf_counter() - start
             result["reference_note"] = "Unmodified stock model; error includes all preparation and device arithmetic"
             context = float32_reference(model) if args.reference_precision == "float32" else nullcontext(model)
@@ -272,7 +272,7 @@ def main():
     parser.add_argument("--optimization-level", type=int, choices=(0, 1, 2), default=None)
     parser.add_argument('--math-fidelity', choices=('lofi','hifi2','hifi3','hifi4','ttnn_default'), default=None)
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
-    parser.add_argument("--rope-mode", choices=("stock", "real_pairs"), default="stock")
+    parser.add_argument("--rope-mode", choices=("stock", "real_pairs", "real_pairs_head_first"), default="stock")
     parser.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax'), default='stock')
     parser.add_argument('--native-ir', action='store_true', help='Dump actual native compiler IR with dry run disabled')
     parser.add_argument('--synthetic-trajectory', '--sampler-trajectory', action='store_true',

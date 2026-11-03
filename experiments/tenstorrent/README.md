@@ -620,6 +620,14 @@ the CPU head on those values already produces 6.77% prediction error vs stock
 differences. It does not separate native normalization from projection errors,
 or establish the same attribution for other stages or scenes.
 
+`run.py --rope-mode real_pairs_head_first` is an experimental dense/fixed-sequence
+layout. It moves Q/K to `[batch,heads,tokens,dim]` for real-pair RoPE and retains
+that layout through SDPA or the reciprocal attention kernel. Original learned
+Q/K normalization precedes the move; weights, LoRA and outer dtypes are retained.
+CPU checks cover bitwise RoPE equivalence with 12 heads, complete blocks and
+both attention precision modes. Native sparse attention is explicitly rejected.
+Tile-padding reduction and complete-flow speed/accuracy remain to be measured.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

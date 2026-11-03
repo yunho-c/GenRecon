@@ -15,7 +15,7 @@ from experiments.tenstorrent.precision_reference import PipelinePrecisionMode
 
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
-@pytest.mark.parametrize('kind,real_rope', [('self', False), ('self', True), ('cross', False)])
+@pytest.mark.parametrize('kind,real_rope', [('self', False), ('self', True), ('self', 'head_first'), ('cross', False)])
 @pytest.mark.parametrize('mode', ['fp32_reciprocal', 'fp32_scores_bf16_av'])
 def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_rope, mode):
     torch.set_num_threads(4)
@@ -28,7 +28,7 @@ def test_preparation_preserves_weights_lora_and_outer_dtype(dtype, kind, real_ro
             nn.init.normal_(parameter, std=.05)
     attention.apply(lambda module: convert_module_to(module, dtype))
     phases = RotaryPositionEmbedder(12, 3)(torch.randint(0, 32, (17, 3)))
-    original = RealRoPESelfAttention(attention, RealPairRoPE(phases)) if real_rope else attention
+    original = RealRoPESelfAttention(attention, RealPairRoPE(phases, head_first=real_rope == 'head_first')) if real_rope else attention
     model = nn.Module()
     model.self_attn = original
     model.eval()
@@ -99,7 +99,8 @@ def test_combined_block_prepares_both_attention_paths_and_rejects_unknown_wrappe
 
 @pytest.mark.parametrize('mode', ATTENTION_MODES)
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
-def test_matrix_precision_boundaries_and_uniform_attention(mode, dtype):
+@pytest.mark.parametrize('head_first', [False, True])
+def test_matrix_precision_boundaries_and_uniform_attention(mode, dtype, head_first):
     from torch.utils._python_dispatch import TorchDispatchMode
 
     class ObserveProducts(TorchDispatchMode):
@@ -115,8 +116,11 @@ def test_matrix_precision_boundaries_and_uniform_attention(mode, dtype):
     q, k = torch.zeros(1, 17, 4, 12, dtype=dtype), torch.zeros(1, 32, 4, 12, dtype=dtype)
     v = torch.arange(32, dtype=dtype)[None, :, None, None].expand(1, 32, 4, 12)
     observer = ObserveProducts()
+    values = (q, k, v)
+    if head_first:
+        values = tuple(x.permute(0, 2, 1, 3) for x in values)
     with torch.no_grad(), PipelinePrecisionMode(), observer:
-        actual = reciprocal_attention(q, k, v, mode)
+        actual = reciprocal_attention(*values, mode, head_first=head_first)
     expected = torch.full_like(q, 15.5)
     torch.testing.assert_close(actual, expected, rtol=0, atol=0)
     first = dtype if mode == 'bf16_qk_fp32_softmax' else torch.float32

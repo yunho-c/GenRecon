@@ -25,7 +25,8 @@ def test_adjacent_complex_pair_equivalence(dtype, tokens, head_dim):
 
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
-def test_complete_block_with_nonzero_lora(dtype):
+@pytest.mark.parametrize('head_first', [False, True])
+def test_complete_block_with_nonzero_lora(dtype, head_first):
     torch.set_num_threads(4)
     torch.manual_seed(21)
     model = nn.Module()
@@ -42,7 +43,7 @@ def test_complete_block_with_nonzero_lora(dtype):
     x, mod, context = torch.randn(2, 17, 48).to(dtype), torch.randn(2, 288).to(dtype), torch.randn(2, 9, 24).to(dtype)
     with torch.no_grad():
         expected = model.block(x, mod, context, model.phases)
-        assert prepare_real_rope(model) == 1
+        assert prepare_real_rope(model, head_first=head_first) == 1
         actual = model.block(x, mod, context, model.phases)
     torch.testing.assert_close(actual.float(), expected.float(), rtol=2e-6, atol=2e-6)
 
@@ -51,6 +52,28 @@ def test_changed_layout_rejected():
     rope = RealPairRoPE(torch.ones(17, 8, dtype=torch.complex64))
     with pytest.raises(ValueError, match='layout'):
         rope(torch.randn(1, 18, 4, 16))
+
+
+@pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])
+@pytest.mark.parametrize('tokens', [17, 129])
+def test_head_first_rope_bitwise_to_token_first(dtype, tokens):
+    torch.manual_seed(56)
+    phases = RotaryPositionEmbedder(128, 3)(torch.randint(0, 64, (tokens, 3)))
+    x = torch.randn(2, tokens, 12, 128).to(dtype)
+    expected = RealPairRoPE(phases)(x)
+    actual = RealPairRoPE(phases, head_first=True)(x.permute(0, 2, 1, 3)).permute(0, 2, 1, 3)
+    torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+
+
+def test_head_first_native_sparse_rejected_before_mutation():
+    from genrecon.modules.sparse.attention import SparseMultiHeadAttention
+    model = nn.Module()
+    model.self_attn = SparseMultiHeadAttention(48, 4)
+    original = model.self_attn
+    model.eval()
+    with pytest.raises(ValueError, match='dense/fixed-sequence'):
+        prepare_real_rope(model, head_first=True)
+    assert model.self_attn is original
 
 
 @pytest.mark.parametrize('dtype', [torch.float32, torch.bfloat16])

@@ -9,20 +9,26 @@ from torch import nn
 
 
 class RealPairRoPE(nn.Module):
-    def __init__(self, phases):
+    def __init__(self, phases, head_first=False):
         super().__init__()
         if phases.device.type != 'cpu' or not phases.is_complex() or phases.ndim != 2:
             raise ValueError('Expected fixed CPU complex phases [tokens, head_dim/2]')
         tokens, pairs = phases.shape
         self.tokens, self.head_dim = tokens, pairs*2
+        self.head_first = head_first
         ids = torch.arange(self.head_dim)
         signs = torch.where(ids % 2 == 0, -1., 1.)
         self.register_buffer('partner_ids', ids ^ 1)
-        self.register_buffer('cosine', phases.real.repeat_interleave(2, -1)[None, :, None, :].contiguous())
-        self.register_buffer('signed_sine', (phases.imag.repeat_interleave(2, -1)*signs)[None, :, None, :].contiguous())
+        cosine = phases.real.repeat_interleave(2, -1)[None, :, None, :]
+        sine = (phases.imag.repeat_interleave(2, -1)*signs)[None, :, None, :]
+        if head_first:
+            cosine, sine = cosine.transpose(1, 2), sine.transpose(1, 2)
+        self.register_buffer('cosine', cosine.contiguous())
+        self.register_buffer('signed_sine', sine.contiguous())
 
     def forward(self, x):
-        if x.ndim != 4 or x.shape[1] != self.tokens or x.shape[-1] != self.head_dim:
+        token_axis = 2 if self.head_first else 1
+        if x.ndim != 4 or x.shape[token_axis] != self.tokens or x.shape[-1] != self.head_dim:
             raise ValueError('RoPE candidate requires the prepared token/head layout')
         # Gather before promotion: BF16 input pairs stay exactly representable.
         partner = torch.index_select(x, -1, self.partner_ids).float()
@@ -45,7 +51,12 @@ class RealRoPESelfAttention(nn.Module):
         q, k, v = attn.to_qkv(x).reshape(batch, tokens, 3, attn.num_heads, -1).unbind(2)
         if attn.qk_rms_norm:
             q, k = attn.q_rms_norm(q), attn.k_rms_norm(k)
-        h = scaled_dot_product_attention(self.rope(q), self.rope(k), v)
+        if self.rope.head_first:
+            from torch.nn import functional as F
+            q, k, v = [value.permute(0, 2, 1, 3) for value in (q, k, v)]
+            h = F.scaled_dot_product_attention(self.rope(q), self.rope(k), v).permute(0, 2, 1, 3)
+        else:
+            h = scaled_dot_product_attention(self.rope(q), self.rope(k), v)
         return attn.to_out(h.reshape(batch, tokens, channels))
 
 
@@ -72,11 +83,17 @@ class FixedSparseRealRoPE(nn.Module):
         return q_embed, k.replace(self.rope(k.feats.unsqueeze(0))[0])
 
 
-def prepare_real_rope(model):
+def prepare_real_rope(model, head_first=False):
     from genrecon.modules.attention import MultiHeadAttention
     from genrecon.modules.sparse.attention import SparseMultiHeadAttention
     if model.training:
         raise ValueError('Real RoPE preparation requires model.eval()')
+    if head_first:
+        from genrecon.modules.attention import config
+        if config.BACKEND != 'sdpa':
+            raise ValueError('Head-first RoPE requires the sdpa backend')
+        if any(isinstance(module, SparseMultiHeadAttention) for module in model.modules()):
+            raise ValueError('Head-first RoPE supports dense/fixed-sequence attention only')
     count = 0
     for owner in list(model.modules()):
         phases = getattr(owner, 'phases', None)
@@ -105,7 +122,7 @@ def prepare_real_rope(model):
             if attn._type != 'self' or attn.attn_mode != 'full':
                 raise ValueError('Only full fixed-layout self-attention is supported')
             if shared_rope is None:
-                shared_rope = RealPairRoPE(phases)
+                shared_rope = RealPairRoPE(phases, head_first=head_first)
             if attn.head_dim != shared_rope.head_dim:
                 raise ValueError('Attention head dimension disagrees with prepared phases')
             if fixed_sparse:
