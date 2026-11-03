@@ -1,0 +1,19 @@
+{
+  "status": "completed_fresh_ordinary_native_control",
+  "all_states_bitwise_original110": true,
+  "fresh_prototype_source_identities_recorded": true,
+  "no_fallback_or_trajectory_recompile": true,
+  "original_stock_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "sampler_seconds": 16.802759722981136,
+  "limits": "Concurrent candidate CPU reference work; timing retained only as observation, not paired performance evidence. Original12steps/21calls and failed stock CPU gates unchanged.",
+  "next": "Require the new heads-cache candidate to match every state before shared-weight ABBA timing."
+}
