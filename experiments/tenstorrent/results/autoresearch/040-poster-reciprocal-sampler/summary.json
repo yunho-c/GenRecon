@@ -1,0 +1,62 @@
+{
+  "status": "completed_numerical_gates_failed",
+  "scope": "Real poster crop, exact original Facebook DINO conditioning, same pretrained occupancy flow and LoRA, all 4096 latent tokens, original 12 steps/22 forwards, all 60 self/cross modules use FP32 postscale exp/reciprocal attention with real-pair RoPE.",
+  "preparation_cpu_relative_l2": [
+    2.189547428870473e-07
+  ],
+  "reference_cache": {
+    "directory": "/home/user/tt-scratchpad/genrecon/poster-ss-cpu-reference-cache-v2",
+    "manifest_sha256": "cb507a8892d571ed4ea176b8e43bfb725802cf252ee713d6ffd0702afee762c2",
+    "verified_checkpoint_sha256": "e18c1caddb2357dbf5839f0f7e1569c50d855fcb47e0871483d99c91a14e2bb7",
+    "reference_sha256": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+    "load_validate_seconds": 2.4792372760130093,
+    "note": "Stock FP32 trajectory reused after strict identity/hash checks; stored CPU duration describes the original computation, not this run."
+  },
+  "native_ir_counts": {
+    "softmax": 0,
+    "exp": 60,
+    "matmul": 270
+  },
+  "candidate_warm_ms": 5895.670923986472,
+  "control_warm_ms": 4009.6320110023953,
+  "candidate_sampler_seconds": 129.72596816602163,
+  "control_sampler_seconds": 88.12095422000857,
+  "sampler_time_ratio": 1.472135308954318,
+  "candidate_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.6074017333941918,
+    "pcc": 0.8052576796358678,
+    "max_abs": 3.521012783050537
+  },
+  "control_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.7487718740159082,
+    "pcc": 0.6772299777194757,
+    "max_abs": 4.076196074485779
+  },
+  "candidate_vs_cpu_precision_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.5472125802133717,
+    "pcc": 0.8444301614433168,
+    "max_abs": 3.468815803527832
+  },
+  "fallback_ops": [],
+  "aten_counters": {},
+  "trajectory_recompiled": false,
+  "finding": "Real-poster latent error decreases from 0.7488 to 0.6074 vs FP32 and from 0.7174 to 0.5472 vs the CPU precision diagnostic. This costs 129.73s vs 88.12s for the original 22-forward sampler (47.2% longer). Single-forward error is 0.03324. Numerical gates remain failed; the process returncode 1 records those gates, not a native runtime crash.",
+  "decision": "Retain opt-in as a precision/latency tradeoff, without production promotion or preserved-quality claims. Assess geometry using the common FP32 occupancy decoder in result041.",
+  "timing_scope": "Resident weights and preuploaded conditions; input/output transfer, synchronized model calls, original CPU Euler/CFG arithmetic and instrumentation. Preparation, CPU reference, compilation/warmups and artifact I/O excluded.",
+  "reproduce": "run.py --cases ss_flow --flow-inputs <restored poster inputs.pt> --sampler-trajectory --cpu-trajectory-cache <restored sealed poster cache> --rope-mode real_pairs --attention-mode fp32_reciprocal --native-ir --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 3 --timeout 3600 --output-dir <new>"
+}
