@@ -1,0 +1,82 @@
+{
+  "status": "completed_original_sampler_cache_experiment",
+  "scope": "Measure dynamic conditioning prefill plus the complete original shape sampler.\n\nExperimental FP32 two-graph execution, retaining every checkpoint parameter,\ntoken and original Euler/CFG operation. Exact prepared CPU trajectories and the\nsealed stock CPU reference are checked before native compilation. Timing covers\ntwo resident prefill calls plus all 21 synchronized denoiser calls; compilation,\nwarmups, raw-condition upload and artifact I/O are reported separately/excluded.\n",
+  "finding": "Pretrained shape512 dynamic conditioning cache takes 15.948857s including 0.066751s native prefill and 15.882106s original12-step/21-call sampler, versus 16.865315s ordinary control (5.43% lower). Final stock-CPU relative error 0.299911 versus control 0.299911; strict gates pass: False. Every prepared CPU sampler state is bitwise ordinary. Every native sampler state is bitwise the ordinary native control. Both native graphs retain learned math/LoRA with no fallback/recompile. Full scene quality remains unverified; no production promotion.",
+  "prefill_pair_seconds": 0.06675090501084924,
+  "cached_sampler_seconds": 15.88210591598181,
+  "prefill_plus_sampler_seconds": 15.94885682099266,
+  "control_sampler_seconds": 16.865314755996224,
+  "time_ratio": 0.9456601938201165,
+  "cache_bytes_per_branch": 473702400,
+  "candidate_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "control_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "candidate_vs_control": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.0,
+    "pcc": 0.9999999999999992,
+    "max_abs": 0.0
+  },
+  "native_ir": {
+    "prefill": {
+      "linear_matmul_ops": 32,
+      "conditioning_products": 32,
+      "self_qk_ops": 0,
+      "cross_qk_ops": 0,
+      "bf16_matrix_ops": 0,
+      "all_hifi4_fp32_destination": true,
+      "sha256": "846cd66f4638128925b1712482822ea1d3fca8cbe049f1482c26121d29c93123"
+    },
+    "cached_body": {
+      "linear_matmul_ops": 425,
+      "conditioning_products": 0,
+      "self_qk_ops": 30,
+      "cross_qk_ops": 30,
+      "bf16_matrix_ops": 0,
+      "all_hifi4_fp32_destination": true,
+      "sha256": "fc933940f7fd92e5d55ac491f3496d969bbf1ce39ba69681ef8fab23d460b5b3"
+    },
+    "control": {
+      "linear_matmul_ops": 457,
+      "conditioning_products": 32,
+      "self_qk_ops": 30,
+      "cross_qk_ops": 30,
+      "bf16_matrix_ops": 0,
+      "all_hifi4_fp32_destination": true,
+      "sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1"
+    }
+  },
+  "identity": {
+    "all_shared_sources_identical": true,
+    "checkpoint_versions_seed_inputs_identical": true,
+    "all_fixture_conditions_noise_coords_identical": true,
+    "cached_cpu_all_states_bitwise_ordinary": true,
+    "cached_native_all_states_bitwise_control": true
+  },
+  "timing_limit": "Single complete trajectory each, not a latency distribution. Resident weights and preuploaded raw conditions. Candidate adds synchronized native prefill pair; both paths include x/t H2D, output D2H and original CPU Euler/CFG arithmetic. Compilation, warmups, reference/preparation and artifact I/O excluded. First-use prefix effects prevented by warming both branches.",
+  "quality_limit": "Synthetic shape512, already-BF16-quantized weights promoted to FP32 and unchanged original stock FP32 gates. Not full-precision raw weights, a CUDA oracle, a real-scene geometry/material assessment or default1024 cascade.",
+  "decision": "Keep execution opt-in while pursuing strict numerical gates and real-scene validation; do not promote a failing full trajectory even when faster.",
+  "reproduce": "cached_flow_sampler.py --cpu-trajectory-cache <sealed-shape512-cache> --output-dir <new> --cpu-threads 16 (source ba05579)",
+  "tests": "12 focused CPU tests pass. Full pretrained CPU ordinary/cached trajectories match bitwise at every state; native trajectory matches the ordinary native control bitwise at every state. Physical checkpoint, shared source hashes, SDK versions, noise/coordinates/conditions and original sampler/config are verified. Strict stock-CPU gates remain failed."
+}

@@ -882,3 +882,14 @@ raw-condition upload, compile/warmup and artifact writes are excluded. Both
 prefill branches are warmed before measuring their retained device caches.
 Use `--cpu-only` to run the complete CPU control without opening the device.
 This experimental path has no default production effect.
+
+The [complete pretrained cache experiment](results/autoresearch/073-pretrained-conditioning-cache/summary.json)
+takes 15.949s including 66.8ms prefill, versus the matched ordinary control's
+16.865s (5.43% lower in one complete trajectory each). Every native sampler
+state matches the control bitwise; every CPU cached state also matches ordinary
+prepared CPU execution bitwise. Native IR moves 32 conditioning matrix products
+from the 457-product denoiser into prefill, leaving 425 products per body call
+and all 30 self/cross QK products intact. Both guidance caches occupy 903.52MiB.
+No fallback or sampler recompilation occurs. The inherited 29.99% final error
+against stock CPU still fails the unchanged gates. This opt-in synthetic512
+result requires repeated timing and real-scene validation before promotion.
