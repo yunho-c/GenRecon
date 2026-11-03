@@ -30,6 +30,7 @@ def main():
     parser.add_argument('--source-cache', type=Path)
     parser.add_argument('--uv', default=shutil.which('uv'))
     parser.add_argument('--jobs', type=int, default=16)
+    parser.add_argument('--runtime-lock', type=Path, help='Pinned Python dependencies from a recorded SDK setup')
     parser.add_argument('--configure-only', action='store_true')
     args = parser.parse_args()
     if args.jobs < 1 or not args.uv:
@@ -85,6 +86,10 @@ def main():
         report['submodules'] = subprocess.check_output(['git', 'submodule', 'status', '--recursive'], cwd=source, text=True).splitlines()
         if not python.exists():
             run([args.uv, 'venv', '--python', sys.executable, '--seed', venv], 'create_venv')
+        if args.runtime_lock:
+            report['runtime_lock_sha256'] = hashlib.sha256(args.runtime_lock.read_bytes()).hexdigest()
+            run([args.uv, 'pip', 'install', '--python', python, '-r', args.runtime_lock.resolve(),
+                 '--extra-index-url', 'https://download.pytorch.org/whl/cpu'], 'install_locked_runtime')
         run([args.uv, 'pip', 'install', '--python', python, '-e', source], 'install_source_package')
         run([args.uv, 'pip', 'install', '--python', python, '--index-url',
              'https://download.pytorch.org/whl/cpu', 'torch==2.11.0+cpu'], 'install_cpu_torch')
