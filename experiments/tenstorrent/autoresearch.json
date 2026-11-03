@@ -120,7 +120,8 @@
     "results/autoresearch/109-texture-cache-cpu-and-identity-fix/summary.json",
     "results/autoresearch/110-texture512-matching-source-controls/summary.json",
     "results/autoresearch/111-transposed-texture-cache-abba/summary.json",
-    "results/autoresearch/112-texture-generated-sdk-calibration/summary.json"
+    "results/autoresearch/112-texture-generated-sdk-calibration/summary.json",
+    "results/autoresearch/113-texture-full-sampler-profiler-extension/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -229,7 +230,8 @@
     "Pretrained heads_t texture cached CPU trajectory matches every ordinary prepared state bitwise and retains original learned identities. Candidate141 fails before device opening: native-control placeholder returned64 input channels instead of32 predicted texture channels. Fix uses fixture.noise features;32 focused checks include original shape/texture identity acceptance and changed texture shape-concat rejection. No native/performance conclusion from141; rerun fresh controls without relaxing shared-source checks.",
     "Fresh same-source texture ordinary142 reproduces every byte of native140 trajectory, no fallback/recompile and unchanged failed stockCPU gates. Cache143 complete CPU trajectories match ordinary bitwise, and fixed native-control identity gate validates203 shared sources. Candidate native performance/equivalence still pending. Reuse duplicate committed tapes only after exact serialized-byte verification.",
     "Texture heads_t passes full pretrained CPU/native guards and all12 paired ABBA trajectories: median14.475406s to11.670494s,19.3771% lower including fresh both-branch prefill (median0.351319s). Every native state matches fresh ordinary142, original12steps18calls/fixedshapeconcat/learnedobjects/LoRA retained, no fallback or measured recompilation.32 focused tests and independent compressed-evidence audit pass. Strict stock CPU final relativeL2=0.105170756/PCC=0.994446698 still fails. Synthetic512 on one n150 only; raw/production defaults unchanged.",
-    "Pretrained FP32 flat-RoPE texture denoiser generated export retains457 matrixops and preparedCPU error2.1093e-6. Canonical and isolated matching-revision SDK outputs/repeats match bitwise, with explicit declared uint32 index cast repair. Warm medians are boundary calibration, not performance improvement or complete native sampler equality. Proceed to full18call generated sampler control with sealed native frequency proof, then complete device-op profiling."
+    "Pretrained FP32 flat-RoPE texture denoiser generated export retains457 matrixops and preparedCPU error2.1093e-6. Canonical and isolated matching-revision SDK outputs/repeats match bitwise, with explicit declared uint32 index cast repair. Warm medians are boundary calibration, not performance improvement or complete native sampler equality. Proceed to full18call generated sampler control with sealed native frequency proof, then complete device-op profiling.",
+    "Generated sampler/C++ full-window parser now support original texture12steps18calls and fixed shape concat. Other controls require explicit nativeIR containing exactly the sealed128-value timestep frequency vector before restoring only two original one-ULP differences; final native trajectory equality still mandatory.25 focused tests pass, including rejected partial/changed native proofs and legacy shape compatibility. Complete texture native calibration/profiling pending."
   ],
   "next_actions": [
     "Profile complete original texture18call sampler and optimized conditioning-cache graphs on matching-revision SDK, requiring canonical forward/every-native-state calibration and complete per-call C++ timing coverage. Extend native-exact cache to matched real-image shape/texture fixtures and larger active-token counts before promotion.",

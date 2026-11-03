@@ -1,0 +1,6 @@
+{
+  "status": "completed_texture_full_sampler_profiling_harness_CPU_guards",
+  "change": "Generated sampler worker accepts original texture18-call schedule, preserves fixed32-channel shape concat and native/control/source/checkpoint/fixture seals. Device report validates original21shape/18texturecalls and complete per-read rows/byte ranges. Explicit native-frequency IR proof permits other controls only when the entire128-value native frequency vector exactly matches the sealed original; only original two one-ULP template differences may be restored.",
+  "tests": "25 focused checks pass, including texture/shape schedule identities, changed shape concat rejection, altered/duplicate/missing native frequency literals, native drift rejection below smoke threshold, native C++ incomplete/overlap/nonfinite rows and historical shape compatibility.",
+  "native_calibration": "Pending original18call complete generated texture native/control equality; forward canonical/SDK controls retained in112. No complete texture device timing attribution from this harness extension alone."
+}

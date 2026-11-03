@@ -20,7 +20,7 @@ def main():
     parser.add_argument('--export-dir', type=Path, required=True)
     parser.add_argument('--native-control-result', type=Path, required=True)
     parser.add_argument('--sampler-native-control-dir', type=Path,
-        help='Run the original shape sampler and require every state bitwise equal to this sealed native control')
+        help='Run the original shape/texture sampler and require every state bitwise equal to this sealed native control')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--profile', action='store_true')
     parser.add_argument('--compact-profile', action='store_true',
@@ -29,6 +29,7 @@ def main():
         help='Sampler: capture native per-call C++ device timings and Python host timers without Tracy host collection')
     parser.add_argument('--repair-embedding-indices', action='store_true')
     parser.add_argument('--repair-native-time-frequencies', action='store_true')
+    parser.add_argument('--native-time-frequency-ir', type=Path)
     parser.add_argument('--runs', type=int, default=3)
     args = parser.parse_args()
     if args.runs < 1:
@@ -37,6 +38,8 @@ def main():
         parser.error('compact-profile requires profile')
     if args.repair_native_time_frequencies and not args.sampler_native_control_dir:
         parser.error('repair-native-time-frequencies requires sampler-native-control-dir')
+    if args.native_time_frequency_ir and not args.repair_native_time_frequencies:
+        parser.error('native-time-frequency-ir requires repair-native-time-frequencies')
     if args.device_profile_only and (not args.profile or not args.sampler_native_control_dir):
         parser.error('device-profile-only requires profile and sampler-native-control-dir')
     from experiments.tenstorrent.native_environment import clean_native_environment
@@ -92,6 +95,8 @@ def main():
         command += ['--repair-embedding-indices']
     if args.repair_native_time_frequencies:
         command += ['--repair-native-time-frequencies']
+    if args.native_time_frequency_ir:
+        command += ['--native-time-frequency-ir', str(args.native_time_frequency_ir.resolve())]
     if args.profile:
         command += ['--flush-device-profiler']
         if not args.device_profile_only:

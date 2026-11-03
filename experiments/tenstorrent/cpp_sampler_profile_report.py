@@ -22,11 +22,16 @@ def summarize_cpp_sampler(data, result, *, expected_operations=4219, expected_ma
             not result.get('native_control', {}).get('bitwise_equal') or not result.get('trials') or
             len(result.get('warmup_calls', [])) != 3):
         raise ValueError('Expected a complete native-matched sampler and three first/warm calls')
+    stage = result.get('stage', 'shape')
+    if stage not in ('shape', 'tex') or result.get('case', stage+'_flow_tensor') != stage+'_flow_tensor':
+        raise ValueError('Expected a matching shape/texture sampler stage and case')
+    expected_calls = {'shape': 21, 'tex': 18}[stage]
     header = next(csv.reader(io.StringIO(data.split(b'\n', 1)[0].decode())))
     required = {'GLOBAL CALL COUNT', 'OP NAME', 'DEVICE KERNEL DURATION [ns]'}
     if not required.issubset(header):
         raise ValueError('Native C++ device timing columns are absent')
-    output = {'scope': __doc__, 'all_states_bitwise_native': True,
+    output = {'scope': __doc__, 'stage': stage, 'original_calls_per_trial': expected_calls,
+        'all_states_bitwise_native': True,
         'original_stock_cpu_gates_pass': all(t['vs_stock_cpu']['all_states_pass_smoke'] for t in result['trials']),
         'device_operations': 0, 'matrix_operations': 0, 'kernel_sum_ns': 0.,
         'host_model_seconds_sum': 0., 'upload_preparation_seconds_sum': 0.,
@@ -71,10 +76,10 @@ def summarize_cpp_sampler(data, result, *, expected_operations=4219, expected_ma
     labels = set()
     for trial in result['trials']:
         calls = trial['calls']
-        if (not trial.get('all_states_bitwise_native') or len(calls) != 21 or
-                len(trial['sampler']['steps']) != 12 or len(trial['sampler']['forwards']) != 21 or
+        if (not trial.get('all_states_bitwise_native') or len(calls) != expected_calls or
+                len(trial['sampler']['steps']) != 12 or len(trial['sampler']['forwards']) != expected_calls or
                 sum(c['positive'] for c in calls) != 12):
-            raise ValueError('Original native-matched12-step/21-call schedule is missing')
+            raise ValueError(f'Original native-matched12-step/{expected_calls}-call schedule is missing')
         current = {'instrumented_sampler_wall_seconds': trial['sampler']['seconds'],
             'model_adapter_seconds_sum': sum(c['seconds'] for c in trial['sampler']['forwards']),
             'outside_model_adapter_seconds': trial['sampler']['seconds']-

@@ -1,4 +1,4 @@
-"""Original shape Euler/CFG sampler through a sealed generated TTNN graph.
+"""Original shape/texture Euler/CFG sampler through a sealed generated TTNN graph.
 
 Changing inputs are freshly uploaded on every call. Learned weights and the
 compiler const-eval cache remain resident. Require a sealed canonical forward
@@ -50,12 +50,34 @@ def assert_bitwise_trajectory(actual, expected):
             raise ValueError('Generated sampler differs from native control at '+key)
 
 
-def restore_native_time_frequencies(template, control_sha256):
-    """Restore only the two fixed constants sealed by native control083/110."""
+def sampler_fixture(case, inputs, expected, stock):
+    """Validate exact sampler identity, including texture's fixed shape concat."""
+    import torch
+    from experiments.tenstorrent.trajectory import TrajectoryFixture, compare_trajectories
+    from experiments.tenstorrent.scene_sampling import features
+    stages = {'shape_flow_tensor': 'shape', 'tex_flow_tensor': 'tex'}
+    if case not in stages:
+        raise ValueError('Expected a shape or texture tensor-flow sampler')
+    fixture = TrajectoryFixture(stages[case], inputs, expected['coords'])
+    zero_prediction = torch.zeros_like(features(fixture.noise))
+    identity, _ = fixture.run(lambda x, t, cond: zero_prediction)
+    compare_trajectories(identity, expected)
+    compare_trajectories(identity, stock)
+    return fixture
+
+
+def restore_native_time_frequencies(template, control_sha256, *, native_ir=None):
+    """Restore only two known values, proven against an explicit native IR.
+
+    Historical control110 keeps its original sealed evidence path. Other native
+    controls require an explicit IR containing exactly the same complete128-value
+    constant; neither additional template changes nor different constants pass.
+    The final independent native-trajectory gate remains mandatory.
+    """
     import torch
     evidence = ROOT/'experiments/tenstorrent/results/autoresearch'
     previous = json.loads((evidence/'093-rejected-generated-sampler-boundary/sdk-execute.json').read_text())
-    if control_sha256 != previous['sampler_native_control']['result_sha256']:
+    if control_sha256 != previous['sampler_native_control']['result_sha256'] and native_ir is None:
         raise ValueError('Native frequency repair requires the sealed original control110')
     record = json.loads((evidence/'093-rejected-generated-sampler-boundary/frequency-differences.json').read_text())
     path = evidence/'083-clean-start-sampler-control/runtime-ttnn.mlir.gz'
@@ -74,9 +96,22 @@ def restore_native_time_frequencies(template, control_sha256):
             any(template[item['index']].item() != item['eager_cpu'] or
                 native[item['index']].item() != item['native'] for item in record['differences'])):
         raise ValueError('Only the two recorded one-ULP timestep constants may be restored')
-    return native, {'kind': 'restore_native_timestep_frequency_constant',
+    repair = {'kind': 'restore_native_timestep_frequency_constant',
         'source': str(path.relative_to(ROOT)), 'native_ir_uncompressed_sha256': record['native_ir_uncompressed_sha256'],
-        'changed_indices': changed, 'differences': record['differences']}
+        'changed_indices': changed, 'differences': record['differences'],
+        'bound_native_control_result_sha256': control_sha256}
+    if native_ir is not None:
+        explicit_path = Path(native_ir).resolve()
+        explicit = explicit_path.read_bytes()
+        if explicit_path.suffix == '.gz':
+            explicit = gzip.decompress(explicit)
+        literals = re.findall(r'dense<"0x([0-9A-Fa-f]+)"\s*>\s*:\s*tensor<1x128xf32>', explicit.decode())
+        if (len(literals) != 1 or len(literals[0]) != 128*4*2 or
+                bytes.fromhex(literals[0]) != native.numpy().tobytes()):
+            raise ValueError('Explicit native IR must contain exactly the sealed128-value frequency constant')
+        repair.update(source=str(explicit_path), native_ir_uncompressed_sha256=hashlib.sha256(explicit).hexdigest(),
+                      constant_reference_ir_uncompressed_sha256=record['native_ir_uncompressed_sha256'])
+    return native, repair
 
 
 def main():
@@ -89,12 +124,16 @@ def main():
     parser.add_argument('--repair-embedding-indices', action='store_true')
     parser.add_argument('--repair-native-time-frequencies', action='store_true',
         help='Restore only the two fixed timestep frequencies from sealed native control083/110')
+    parser.add_argument('--native-time-frequency-ir', type=Path,
+        help='Other native controls: require the exact sealed128-value frequency constant in this native IR (plain/gzip)')
     parser.add_argument('--profile-markers', action='store_true')
     parser.add_argument('--flush-device-profiler', action='store_true')
     parser.add_argument('--runs', type=int, default=1)
     args = parser.parse_args()
     if args.runs < 1:
         parser.error('runs must be positive')
+    if args.native_time_frequency_ir and not args.repair_native_time_frequencies:
+        parser.error('native-time-frequency-ir requires repair-native-time-frequencies')
     directory, result = args.directory.resolve(), args.result.resolve()
     if result.exists():
         raise FileExistsError(result)
@@ -116,14 +155,16 @@ def main():
     try:
         import torch
         torch.set_num_threads(16)
-        from experiments.tenstorrent.trajectory import TrajectoryFixture, compare_trajectories
+        from experiments.tenstorrent.trajectory import compare_trajectories
         export = json.loads((directory/'export.json').read_text())
-        if (export.get('status') != 'exported_unvalidated' or export.get('case') != 'shape_flow_tensor' or
+        if (export.get('status') != 'exported_unvalidated' or export.get('case') not in ('shape_flow_tensor', 'tex_flow_tensor') or
                 export.get('device_precision') != 'float32' or export.get('attention_mode') != 'fp32_reciprocal' or
                 export.get('rope_mode') != 'real_pairs_flat_head_first' or
                 export['compiler_options'].get('math_fidelity') != 'hifi4' or
                 export['compiler_options'].get('optimization_level') != 0):
-            raise ValueError('Expected the calibrated current FP32 shape export')
+            raise ValueError('Expected a calibrated current FP32 shape/texture export')
+        report['case'] = export['case']
+        report['stage'] = export['case'].split('_')[0]
         if sha256(directory/'reference.pt') != export['reference_sha256']:
             raise ValueError('Export reference changed')
         for name, digest in export['artifact_sha256'].items():
@@ -160,10 +201,7 @@ def main():
         expected = payloads['trajectory-tt.pt']
         reference = torch.load(directory/'reference.pt', weights_only=True, map_location='cpu')
         inputs = reference['inputs']
-        fixture = TrajectoryFixture('shape', inputs, expected['coords'])
-        identity, _ = fixture.run(lambda x, t, cond: torch.zeros_like(x))
-        compare_trajectories(identity, expected)
-        compare_trajectories(identity, payloads['trajectory-reference.pt'])
+        fixture = sampler_fixture(export['case'], inputs, expected, payloads['trajectory-reference.pt'])
         report['sampler_native_control'] = {'directory': str(control_dir),
             'result_sha256': sha256(control_dir/'result.json'), 'source_hashes_checked': len(shared),
             'checkpoint_sha256': control['checkpoint']['sha256'],
@@ -269,7 +307,8 @@ def main():
             if args.repair_native_time_frequencies:
                 index = mapping.index(None)
                 templates[index], repair = restore_native_time_frequencies(
-                    templates[index], report['sampler_native_control']['result_sha256'])
+                    templates[index], report['sampler_native_control']['result_sha256'],
+                    native_ir=args.native_time_frequency_ir)
                 report.setdefault('compatibility_repairs', []).append(repair)
             for trial in range(args.runs):
                 phase('sampler_trial_'+str(trial))
@@ -288,8 +327,9 @@ def main():
                 assert_bitwise_trajectory(trajectory, expected)
                 row['all_states_bitwise_native'] = True
                 phase('validated_trial_'+str(trial))
+        count = {'shape': 21, 'tex': 18}[fixture.stage]
         report['timing_scope'] = ('Fresh five-activation H2D/layout preparation and synchronization timed separately. '
-            'Marked model calls include generated denoiser and output D2H. Original CPU Euler/CFG and all12steps/21calls retained. '
+            f'Marked model calls include generated denoiser and output D2H. Original CPU Euler/CFG and all12steps/{count}calls retained. '
             'Instrumented sampler wall includes per-call profiler flushing; marked model/transfer windows exclude flushing. '
             'Resident original weights and const-eval cache; compilation and warmups excluded from sampler trials.')
         report['warmup_calls'] = calls[:3]
