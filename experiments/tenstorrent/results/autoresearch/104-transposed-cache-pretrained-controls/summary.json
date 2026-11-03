@@ -1,0 +1,28 @@
+{
+  "status": "completed_pretrained_cpu_and_fresh_native_anchor",
+  "fresh_ordinary_native_all_states_bitwise110": true,
+  "transposed_cache_CPU_all_states_bitwise_ordinary_prepared": true,
+  "original12steps21calls_and_parameter_identities_retained": true,
+  "ordinary_stock_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "cached_cpu_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.00010576068979808947,
+    "pcc": 0.9999999943930896,
+    "max_abs": 0.002023458480834961
+  },
+  "logical_cache_bytes_per_branch": 473702400,
+  "limits": "Candidate native body/paired trial validation is ongoing and not established by this CPU/control artifact. No speed claim. Original stock CPU native gates remain failed."
+}
