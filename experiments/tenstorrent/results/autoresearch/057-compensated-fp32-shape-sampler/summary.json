@@ -1,0 +1,27 @@
+{
+  "status": "completed_candidate_matched_layout_control_pending",
+  "candidate_seconds": 18.810102040006313,
+  "candidate_warm_ms": 895.6922719953582,
+  "candidate_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.2957783532050028,
+    "pcc": 0.9558297978904786,
+    "max_abs": 3.868248462677002
+  },
+  "candidate_vs_prepared_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29579357835737907,
+    "pcc": 0.9558252657245503,
+    "max_abs": 3.868252754211426
+  },
+  "candidate_all_states_pass_gates": false,
+  "finding": "Complete compensated FP32 shape512 sampler finishes in18.810s with final relative L2 0.295778 vs original stock FP32, still failing strict gates. All21 model calls retained, no fallback or recompilation. Single-forward error0.03716 passes but does not predict complete trajectory accuracy. Matched same-layout ordinary-gather control is still compiling; no causal attribution or promotion."
+}
