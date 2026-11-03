@@ -90,8 +90,8 @@
     "For accepted full shape captures, CPU execution of the original head on actual TT hidden values has 6.77% error vs the stock prediction; observed TT prediction error is 6.69%. Combined native head arithmetic differs only 0.522% from CPU on identical TT hidden values. Hidden error is 1.97%, normalized-hidden error 1.71%. The learned projection amplifies upstream differences; a separate output-head precision fix is low priority on this fixture. These metrics are not additive error components."
   ],
   "next_actions": [
-    "Run real-poster full sampler with fp32_scores_bf16_av, then compare common-decoder occupancy to FP32 reciprocal and SDPA controls. Keep QK FP32: observed BF16 score quantization strongly degrades sharp self attention.",
-    "Refresh the FP32 reciprocal full-model baseline after extracting shared arithmetic. Isolated native outputs are bitwise equal to legacy expressions, but full-model lowering needs independent confirmation. Use sealed CPU cache and preserve all original schedule/settings.",
+    "Finish confirmed live run057 and run058. Compare every refreshed FP32 sampler state bitwise with legacy run054 before interpreting helper extraction as unchanged. Compare candidate timing and all original 12 states against the sealed stock reference and refreshed control; all 60 attention modules must be prepared, with no fallback/recompilation.",
+    "Finish queued common-decoder run061, inspect actual controller process/session19359 and log. Compare new BF16-AV occupancy against refreshed FP32 and legacy grids under strict fixture identity; retain any numerical failures and commit/push each completed result.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
@@ -101,12 +101,27 @@
     {
       "name": "057-poster-reciprocal-control",
       "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/057-poster-reciprocal-control",
-      "status_at_last_check": "running CPU reference/preparation; actual worker confirmed"
+      "pid_at_last_check": 313274,
+      "status_at_last_check": "running comparison",
+      "prepared_attention_modules": 60,
+      "note": "Actual worker confirmed; verify PID arguments and result before treating as live or terminal. Do not restart on observation timeout."
     },
     {
       "name": "058-poster-bf16-av",
       "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/058-poster-bf16-av",
-      "status_at_last_check": "running CPU reference/preparation; actual worker confirmed"
+      "pid_at_last_check": 313284,
+      "status_at_last_check": "running waiting_for_device",
+      "prepared_attention_modules": 60,
+      "note": "Actual worker confirmed; verify PID arguments and result before treating as live or terminal. Do not restart on observation timeout."
+    },
+    {
+      "name": "061-poster-av-occupancy",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/061-poster-av-occupancy",
+      "pid_at_last_check": 318379,
+      "status_at_last_check": "live controller waiting for run058 terminal completion",
+      "tool_session_id": 19359,
+      "log": "/home/user/tt-scratchpad/genrecon/autoresearch/061-run.log",
+      "purpose": "Common FP32 decoder for real-RoPE SDPA, legacy/refreshed FP32 reciprocal, BF16 AV and CPU precision diagnostic."
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
