@@ -1,0 +1,344 @@
+{
+  "status": "completed_native_precision_counterfactual",
+  "scope": "Test native FP32 matmul preservation and explicit rounding counterfactuals.\n\nSeeded synthetic matrices, not learned attention or complete-model attribution.\nIdentity operands remain dynamic native inputs. All inputs and outputs use\nFP32 storage; some cases intentionally contain exactly BF16-representable values.\n",
+  "finding": "On seeded FP32 matrices, native multiplication by a dynamic identity operand matches ten-fraction-bit TF32 truncation bitwise and differs0.00041749 from the original input. BF16-representable values in FP32 storage survive identity bitwise. Random FP32 product error is0.00171543; after CPU input-truncation counterfactual it remains0.00107494. Random BF16-representable product error is0.00074521. Thus the identity proves a precision limit for that operation, while simple input/output rounding alone does not explain general matrix error. All native operations use HiFi4/FP32 operands and accumulation, exact repeats and no fallback.",
+  "cases": {
+    "identity_fp32": {
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0004174871043838143,
+        "pcc": 0.9999999758895027,
+        "max_abs": 0.0019516944885253906
+      },
+      "native_bitwise_cpu": false,
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000009,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.000511521103919931,
+            "pcc": 0.9999999325457479,
+            "max_abs": 0.001953125
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000009,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.000511521103919931,
+            "pcc": 0.9999999325457479,
+            "max_abs": 0.001953125
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0016868109811152615,
+            "pcc": 0.999998635047238,
+            "max_abs": 0.0078125
+          },
+          "native_bitwise_cpu_counterfactual": false
+        }
+      },
+      "median_seconds": 0.0018265850376337767
+    },
+    "identity_bf16_values_fp32_storage": {
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000346,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu": true,
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        }
+      },
+      "median_seconds": 0.0013371940003708005
+    },
+    "product_fp32": {
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0017154340527533224,
+        "pcc": 0.9999997155871655,
+        "max_abs": 0.1058197021484375
+      },
+      "native_bitwise_cpu": false,
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.001074935420840893,
+            "pcc": 0.9999997720423482,
+            "max_abs": 0.07986068725585938
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.001766034410902758,
+            "pcc": 0.9999996284399927,
+            "max_abs": 0.10915756225585938
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0014252037395255629,
+            "pcc": 0.9999996916753634,
+            "max_abs": 0.09352874755859375
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0017275514549352467,
+            "pcc": 0.9999996944827276,
+            "max_abs": 0.1119537353515625
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0023887422215048055,
+            "pcc": 0.9999983416609102,
+            "max_abs": 0.2122039794921875
+          },
+          "native_bitwise_cpu_counterfactual": false
+        }
+      },
+      "median_seconds": 0.0033337599597871304
+    },
+    "product_bf16_values_fp32_storage": {
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0007452099783918314,
+        "pcc": 0.9999998398230919,
+        "max_abs": 0.08157730102539062
+      },
+      "native_bitwise_cpu": false,
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0007452099783918314,
+            "pcc": 0.9999998398230919,
+            "max_abs": 0.08157730102539062
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0007452099783918314,
+            "pcc": 0.9999998398230919,
+            "max_abs": 0.08157730102539062
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006207129303231914,
+            "pcc": 0.9999998163638079,
+            "max_abs": 0.061443328857421875
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0007732364126816132,
+            "pcc": 0.9999998181854582,
+            "max_abs": 0.09269332885742188
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0018164392055703498,
+            "pcc": 0.9999984710021057,
+            "max_abs": 0.167816162109375
+          },
+          "native_bitwise_cpu_counterfactual": false
+        }
+      },
+      "median_seconds": 0.0020817560143768787
+    }
+  },
+  "native_ir": {
+    "identity_fp32": {
+      "matmul": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout2>, tensor<128x128xf32, #ttnn_layout3>) -> tensor<512x128xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "identity_bf16_values_fp32_storage": "No independent dump: native graph cache reused the same input shapes/dtypes.",
+    "product_fp32": {
+      "matmul": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout3>, tensor<128x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "product_bf16_values_fp32_storage": "No independent dump: native graph cache reused the same input shapes/dtypes."
+  },
+  "decision": "Keep storage/arithmetic precision distinct. Test controlled cancellation with exactly representable outputs and BF16-representable operands under HiFi4/HiFi3 before choosing compensated attention math. This synthetic diagnostic does not attribute all full-model error or establish sampler quality.",
+  "tests": "Four CPU quantization tests pass: signed truncation, round-to-even ties and exact BF16 representability. Four native cases repeat exactly with no fallback or aten counters.",
+  "reproduce": "fp32_matmul_probe.py --output-dir <new> (seed62, four original cases; source commit11af59d)."
+}

@@ -1,0 +1,449 @@
+{
+  "status": "completed_native_matmul_probe",
+  "scope": "Test native FP32 matmul preservation and explicit rounding counterfactuals.\n\nSeeded synthetic matrices, not learned attention or complete-model attribution.\nIdentity operands remain dynamic native inputs. All inputs and outputs use\nFP32 storage; some cases intentionally contain exactly BF16-representable values.\n",
+  "seed": 62,
+  "source_commit": "11af59d60207b1b6e8f967869a8b734c8d17e040",
+  "cases": {
+    "identity_fp32": {
+      "requested_compile_options": {
+        "optimization_level": 0,
+        "math_fidelity": "hifi4",
+        "dry_run": "false",
+        "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/081-fp32-matrix-preservation/identity_fp32-native-ir"
+      },
+      "input_digests": [
+        "efcc3cb0be7eb6e439d302d2cf6eeb5e3050bb45bf671a267a00789e4b295754",
+        "e923ba7372ab61463fc8b482df5827234f316a6887d60a470dfeefdce56dd72b"
+      ],
+      "input_shapes": [
+        [
+          512,
+          128
+        ],
+        [
+          128,
+          128
+        ]
+      ],
+      "output_dtype": "torch.float32",
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0004174871043838143,
+        "pcc": 0.9999999758895027,
+        "max_abs": 0.0019516944885253906
+      },
+      "native_bitwise_cpu": false,
+      "warm_seconds": [
+        0.0025924280053004622,
+        0.0018265850376337767,
+        0.0018152749980799854
+      ],
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000009,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.000511521103919931,
+            "pcc": 0.9999999325457479,
+            "max_abs": 0.001953125
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000009,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.000511521103919931,
+            "pcc": 0.9999999325457479,
+            "max_abs": 0.001953125
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0016868109811152615,
+            "pcc": 0.999998635047238,
+            "max_abs": 0.0078125
+          },
+          "native_bitwise_cpu_counterfactual": false
+        }
+      },
+      "executed_fallback_ops": [],
+      "aten_counters": {}
+    },
+    "identity_bf16_values_fp32_storage": {
+      "requested_compile_options": {
+        "optimization_level": 0,
+        "math_fidelity": "hifi4",
+        "dry_run": "false",
+        "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/081-fp32-matrix-preservation/identity_bf16_values_fp32_storage-native-ir"
+      },
+      "input_digests": [
+        "ed8fb396548dd14d66145c7cb6b45e8a8fab31f7643ac5eb46e218d2ef70a7b0",
+        "e923ba7372ab61463fc8b482df5827234f316a6887d60a470dfeefdce56dd72b"
+      ],
+      "input_shapes": [
+        [
+          512,
+          128
+        ],
+        [
+          128,
+          128
+        ]
+      ],
+      "output_dtype": "torch.float32",
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000346,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu": true,
+      "warm_seconds": [
+        0.0017100149998441339,
+        0.0012802930432371795,
+        0.0013371940003708005
+      ],
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000346,
+            "max_abs": 0.0
+          },
+          "native_bitwise_cpu_counterfactual": true
+        }
+      },
+      "executed_fallback_ops": [],
+      "aten_counters": {}
+    },
+    "product_fp32": {
+      "requested_compile_options": {
+        "optimization_level": 0,
+        "math_fidelity": "hifi4",
+        "dry_run": "false",
+        "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/081-fp32-matrix-preservation/product_fp32-native-ir"
+      },
+      "input_digests": [
+        "efcc3cb0be7eb6e439d302d2cf6eeb5e3050bb45bf671a267a00789e4b295754",
+        "9a2288dd412b5c22c96436031eaf5b9e9bec292a7fadb1427abff178c59bc832"
+      ],
+      "input_shapes": [
+        [
+          512,
+          128
+        ],
+        [
+          128,
+          512
+        ]
+      ],
+      "output_dtype": "torch.float32",
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0017154340527533224,
+        "pcc": 0.9999997155871655,
+        "max_abs": 0.1058197021484375
+      },
+      "native_bitwise_cpu": false,
+      "warm_seconds": [
+        0.0038283219910226762,
+        0.003010649001225829,
+        0.0033337599597871304
+      ],
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.001074935420840893,
+            "pcc": 0.9999997720423482,
+            "max_abs": 0.07986068725585938
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.001766034410902758,
+            "pcc": 0.9999996284399927,
+            "max_abs": 0.10915756225585938
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0014252037395255629,
+            "pcc": 0.9999996916753634,
+            "max_abs": 0.09352874755859375
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0017275514549352467,
+            "pcc": 0.9999996944827276,
+            "max_abs": 0.1119537353515625
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0023887422215048055,
+            "pcc": 0.9999983416609102,
+            "max_abs": 0.2122039794921875
+          },
+          "native_bitwise_cpu_counterfactual": false
+        }
+      },
+      "executed_fallback_ops": [],
+      "aten_counters": {}
+    },
+    "product_bf16_values_fp32_storage": {
+      "requested_compile_options": {
+        "optimization_level": 0,
+        "math_fidelity": "hifi4",
+        "dry_run": "false",
+        "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/081-fp32-matrix-preservation/product_bf16_values_fp32_storage-native-ir"
+      },
+      "input_digests": [
+        "ed8fb396548dd14d66145c7cb6b45e8a8fab31f7643ac5eb46e218d2ef70a7b0",
+        "682ec62605e0221aeb2d95e954cc8fc2970fc44776548d36b9c1d62ef8840c05"
+      ],
+      "input_shapes": [
+        [
+          512,
+          128
+        ],
+        [
+          128,
+          512
+        ]
+      ],
+      "output_dtype": "torch.float32",
+      "native_vs_cpu": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0007452099783918314,
+        "pcc": 0.9999998398230919,
+        "max_abs": 0.08157730102539062
+      },
+      "native_bitwise_cpu": false,
+      "warm_seconds": [
+        0.0019094449817202985,
+        0.0023009569849818945,
+        0.0020817560143768787
+      ],
+      "counterfactuals": {
+        "tf32_truncated_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0007452099783918314,
+            "pcc": 0.9999998398230919,
+            "max_abs": 0.08157730102539062
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_inputs": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0007452099783918314,
+            "pcc": 0.9999998398230919,
+            "max_abs": 0.08157730102539062
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_truncated_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006207129303231914,
+            "pcc": 0.9999998163638079,
+            "max_abs": 0.061443328857421875
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "tf32_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0007732364126816132,
+            "pcc": 0.9999998181854582,
+            "max_abs": 0.09269332885742188
+          },
+          "native_bitwise_cpu_counterfactual": false
+        },
+        "bf16_rounded_output": {
+          "native_vs_cpu_counterfactual": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0018164392055703498,
+            "pcc": 0.9999984710021057,
+            "max_abs": 0.167816162109375
+          },
+          "native_bitwise_cpu_counterfactual": false
+        }
+      },
+      "executed_fallback_ops": [],
+      "aten_counters": {}
+    }
+  },
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "script_sha256": "e19debb814243550fca83637083d145d259432c61cb723ec937edd5f34b554d8",
+  "outputs_sha256": "665c628ee26f5a08c02cecc72fb60457f1d69cf4c80177d03d19505568f7046b"
+}
