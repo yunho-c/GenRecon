@@ -101,7 +101,8 @@
     "results/autoresearch/090-fp32-flat-sdk-calibration/summary.json",
     "results/autoresearch/091-current-fp32-flat-profile/summary.json",
     "results/autoresearch/092-compact-profile-control/summary.json",
-    "results/autoresearch/093-rejected-generated-sampler-boundary/summary.json"
+    "results/autoresearch/093-rejected-generated-sampler-boundary/summary.json",
+    "results/autoresearch/094-native-matched-generated-sampler/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -191,10 +192,11 @@
     "Current FP32 flat-RoPE reciprocal-attention shape512 full denoiser export retains all457 matrix operations and matches original sampler110 noise/positive conditions. Prepared CPU error1.63e-6; matching SDK and canonical generated outputs are bitwise equal with exact repeats, warm medians0.770672/0.771296s. Full-trajectory gates remain unchanged and failed historically.",
     "Current FP32 flat-RoPE denoiser marked capture preserves canonical output bitwise with4219 complete rows and457 matrix products in each of five windows. Warm776.01ms wall/760.51ms kernel sum: matrix26.73%, reshape26.47%, binary20.36%. Three reshape input groups total180.85ms. Preserve original quality gates; target exact layout paths and original-schedule sampler profiling rather than treating these as whole-sampler percentages.",
     "Compact profiling retains all4219 actual native per-operation device timings and identical operation/shape counts in each of five windows, with bitwise canonical output. It omits3.6GiB raw per-core CSV and reduces the Tracy trace from135MiB to42MiB on this control. Per-operation metrics remain complete; use full captures for per-core timelines. No sampler speedup claim.",
-    "First complete dynamic generated sampler is rejected: Forge and SDK states agree bitwise, but native PJRT diverges at step5 and final relative error is0.068157 versus native/0.310530 versus stock CPU. Two fixed timestep-frequency values differ by one ULP between eager-generated and native constants. Retain native equality guard and test exact constant restoration before using full-sampler profiles."
+    "First complete dynamic generated sampler is rejected: Forge and SDK states agree bitwise, but native PJRT diverges at step5 and final relative error is0.068157 versus native/0.310530 versus stock CPU. Two fixed timestep-frequency values differ by one ULP between eager-generated and native constants. Retain native equality guard and test exact constant restoration before using full-sampler profiles.",
+    "Restoring only the two sealed native timestep-frequency constants eliminates all generated/PJRT sampler drift: every state is bitwise canonical110 across original12steps/21calls. Unprofiled generated sampler16.2328s includes fresh five-activation uploads; this is not a speedup claim. Original stock CPU error0.299911 and strict failed gates are unchanged. Full original-schedule profiling can now proceed with native-equal arithmetic."
   ],
   "next_actions": [
-    "Use validated compact matching-revision profiling to execute/profile the original12-step/21-call shape sampler through dynamic generated activations. Five-input mapping is sealed in091; require every state bitwise canonical110 and unchanged stock CPU gates. Then compare dynamic conditioning prefill/body costs.",
+    "Capture all21 original-schedule sampler calls with the native-equal generated boundary and compact matching-revision profiler, using both explicit compatibility repairs. Require every trajectory state bitwise canonical110, complete per-call operation rows and original CPU gates; keep model, transfer and buffer-flush timing scopes separate.",
     "Investigate the exact current-recipe reshape paths behind the three input groups totaling180.85ms. Bind operation IDs to native IR and test a layout-aware QKV/attention rewrite with learned LoRA retained; require CPU and native trajectory controls before any promotion.",
     "Use the measured native conditioning-prefill cache as an opt-in execution boundary; pursue strict full-trajectory numerical gates, isolate native prefill errors against identical CPU caches, and validate real-scene inputs before promotion. Retain original12steps/21calls and include both branch prefill costs in comparisons.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",

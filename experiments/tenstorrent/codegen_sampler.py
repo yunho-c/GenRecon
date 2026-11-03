@@ -7,10 +7,13 @@ stock CPU trajectory gates are reported unchanged, including inherited failures.
 """
 import argparse
 import fcntl
+import gzip
+import hashlib
 import importlib.util
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import time
@@ -47,6 +50,35 @@ def assert_bitwise_trajectory(actual, expected):
             raise ValueError('Generated sampler differs from native control at '+key)
 
 
+def restore_native_time_frequencies(template, control_sha256):
+    """Restore only the two fixed constants sealed by native control083/110."""
+    import torch
+    evidence = ROOT/'experiments/tenstorrent/results/autoresearch'
+    previous = json.loads((evidence/'093-rejected-generated-sampler-boundary/sdk-execute.json').read_text())
+    if control_sha256 != previous['sampler_native_control']['result_sha256']:
+        raise ValueError('Native frequency repair requires the sealed original control110')
+    record = json.loads((evidence/'093-rejected-generated-sampler-boundary/frequency-differences.json').read_text())
+    path = evidence/'083-clean-start-sampler-control/runtime-ttnn.mlir.gz'
+    data = gzip.decompress(path.read_bytes())
+    if hashlib.sha256(data).hexdigest() != record['native_ir_uncompressed_sha256']:
+        raise ValueError('Native frequency IR seal changed')
+    body = data.decode().split('func.func private @main_const_eval_133()', 1)[1].split('return', 1)[0]
+    literal = re.search(r'dense<"0x([0-9A-Fa-f]+)"\s*>\s*:\s*tensor<1x128xf32>', body)
+    if literal is None:
+        raise ValueError('Expected fixed timestep frequency constant is absent')
+    native = torch.frombuffer(bytearray.fromhex(literal[1]), dtype=torch.float32).clone()
+    if template.dtype != torch.float32 or template.shape != (128,):
+        raise ValueError('Expected original FP32 timestep-frequency vector')
+    changed = torch.nonzero(native != template).flatten().tolist()
+    if (changed != [item['index'] for item in record['differences']] or
+            any(template[item['index']].item() != item['eager_cpu'] or
+                native[item['index']].item() != item['native'] for item in record['differences'])):
+        raise ValueError('Only the two recorded one-ULP timestep constants may be restored')
+    return native, {'kind': 'restore_native_timestep_frequency_constant',
+        'source': str(path.relative_to(ROOT)), 'native_ir_uncompressed_sha256': record['native_ir_uncompressed_sha256'],
+        'changed_indices': changed, 'differences': record['differences']}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--directory', type=Path, required=True)
@@ -55,6 +87,8 @@ def main():
     parser.add_argument('--sampler-native-control-dir', type=Path, required=True)
     parser.add_argument('--checkpoints', type=Path, default=Path.home()/'models/genrecon')
     parser.add_argument('--repair-embedding-indices', action='store_true')
+    parser.add_argument('--repair-native-time-frequencies', action='store_true',
+        help='Restore only the two fixed timestep frequencies from sealed native control083/110')
     parser.add_argument('--profile-markers', action='store_true')
     parser.add_argument('--flush-device-profiler', action='store_true')
     parser.add_argument('--runs', type=int, default=1)
@@ -98,6 +132,9 @@ def main():
         report['export_sha256'] = sha256(directory/'export.json')
         control_dir = args.sampler_native_control_dir.resolve()
         control = json.loads((control_dir/'result.json').read_text())
+        report['torch'] = torch.__version__
+        if report['torch'] != control['versions']['torch']:
+            raise ValueError('Sampler CPU arithmetic Torch version differs from native control')
         if (control.get('phase') != 'complete' or control.get('status') not in ('passed', 'numerical_mismatch') or
                 control.get('xla_executed_fallback_ops') or control.get('xla_aten_counters') or
                 control.get('recompiled_during_trajectory')):
@@ -165,7 +202,7 @@ def main():
                     raise ValueError('Unexpected adjacent-pair index values')
                 return ttnn.to_dtype(output, ttnn.uint32)
             setattr(module, symbol, corrected_indices)
-            report['compatibility_repairs'] = forward.get('compatibility_repairs')
+            report['compatibility_repairs'] = list(forward.get('compatibility_repairs', []))
         if bool(forward.get('compatibility_repairs')) != args.repair_embedding_indices:
             raise ValueError('Canonical forward repair differs')
         phase('prepare_weights_and_dynamic_inputs')
@@ -221,6 +258,11 @@ def main():
             report['native_control'] = {'result_sha256': sha256(forward_path), 'bitwise_equal': True}
             for index, cond in enumerate((fixture.positive, fixture.negative)):
                 infer(inputs[0], inputs[1], cond, 'GENRECON_WARMUP_'+str(index))
+            if args.repair_native_time_frequencies:
+                index = mapping.index(None)
+                templates[index], repair = restore_native_time_frequencies(
+                    templates[index], report['sampler_native_control']['result_sha256'])
+                report.setdefault('compatibility_repairs', []).append(repair)
             for trial in range(args.runs):
                 phase('sampler_trial_'+str(trial))
                 begin = len(calls)
@@ -229,10 +271,14 @@ def main():
                 trajectory, measurements = fixture.run(dynamic_forward)
                 torch.save(trajectory, result.parent/f'trajectory-{trial}.pt')
                 checks = compare_trajectories(trajectory, payloads['trajectory-reference.pt'])
+                row = {'sampler': measurements, 'calls': calls[begin:],
+                    'all_states_bitwise_native': False, 'vs_stock_cpu': checks,
+                    'vs_native': compare_trajectories(trajectory, expected),
+                    'artifact_sha256': sha256(result.parent/f'trajectory-{trial}.pt')}
+                report.setdefault('trials', []).append(row)
+                phase('check_trial_'+str(trial))
                 assert_bitwise_trajectory(trajectory, expected)
-                report.setdefault('trials', []).append({'sampler': measurements, 'calls': calls[begin:],
-                    'all_states_bitwise_native': True, 'vs_stock_cpu': checks,
-                    'artifact_sha256': sha256(result.parent/f'trajectory-{trial}.pt')})
+                row['all_states_bitwise_native'] = True
                 phase('validated_trial_'+str(trial))
         report['timing_scope'] = ('Fresh five-activation H2D/layout preparation and synchronization timed separately. '
             'Marked model calls include generated denoiser and output D2H. Original CPU Euler/CFG and all12steps/21calls retained. '

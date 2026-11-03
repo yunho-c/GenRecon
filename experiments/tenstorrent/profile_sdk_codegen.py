@@ -26,12 +26,15 @@ def main():
     parser.add_argument('--compact-profile', action='store_true',
         help='Keep native per-operation C++ device timings; omit per-core marker CSV/Tracy copies')
     parser.add_argument('--repair-embedding-indices', action='store_true')
+    parser.add_argument('--repair-native-time-frequencies', action='store_true')
     parser.add_argument('--runs', type=int, default=3)
     args = parser.parse_args()
     if args.runs < 1:
         parser.error('runs must be positive')
     if args.compact_profile and not args.profile:
         parser.error('compact-profile requires profile')
+    if args.repair_native_time_frequencies and not args.sampler_native_control_dir:
+        parser.error('repair-native-time-frequencies requires sampler-native-control-dir')
     from experiments.tenstorrent.native_environment import clean_native_environment
     from experiments.tenstorrent.experiment_identity import sha256
     sdk, output = args.sdk_workspace.resolve(), args.output_dir.resolve()
@@ -78,6 +81,8 @@ def main():
         command += ['--sampler-native-control-dir', str(args.sampler_native_control_dir.resolve())]
     if args.repair_embedding_indices:
         command += ['--repair-embedding-indices']
+    if args.repair_native_time_frequencies:
+        command += ['--repair-native-time-frequencies']
     if args.profile:
         command += ['--profile-markers', '--flush-device-profiler']
     report = {'status': 'running', 'command': command, 'metal_commit': commit,

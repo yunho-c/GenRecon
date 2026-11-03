@@ -1080,6 +1080,24 @@ Tracy trace falls from 135MiB to 42MiB and the 3.6GiB per-core CSV is omitted.
 Host metadata and explicit markers remain. Use a full capture when per-core
 timelines are needed; compact mode makes no sampler speedup or quality claim.
 
+The [first complete generated sampler control](results/autoresearch/093-rejected-generated-sampler-boundary/summary.json)
+was rejected: both SDKs agreed bitwise, but diverged from PJRT at step5. Two
+eager-exported timestep-frequency constants differed by one FP32 ULP from the
+native compiler constants. The [explicit restoration control](results/autoresearch/094-native-matched-generated-sampler/summary.json)
+restores only those two sealed values and recovers every native sampler state
+bitwise over the original 12 steps and 21 calls. It uses the original CPU
+Euler/CFG implementation, all conditions/tokens and learned weights/LoRA.
+The unchanged strict stock CPU final error remains 0.299911; defaults stay stock.
+
+Use `--sampler-native-control-dir <sealed110/shape_flow_tensor>` and
+`--repair-native-time-frequencies` with the existing generated SDK launcher and
+its recorded embedding-index repair. This research repair is bound to the exact
+committed native IR/control and rejects unrelated constant changes. Five
+activation uploads are timed separately from marked model calls. In instrumented
+runs, total sampler wall includes per-call profiler flushing; individual
+model/transfer windows exclude that flushing. The one unprofiled 16.23s result
+is execution-boundary calibration, not a speedup distribution or quality claim.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

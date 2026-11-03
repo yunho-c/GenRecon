@@ -3,9 +3,13 @@ os.environ['SPARSE_CONV_BACKEND'] = 'none'
 os.environ['SPARSE_ATTN_BACKEND'] = 'sdpa'
 
 import copy
+import json
+import math
+from pathlib import Path
 import pytest
 import torch
-from experiments.tenstorrent.codegen_sampler import match_activation_inputs, assert_bitwise_trajectory
+from experiments.tenstorrent.codegen_sampler import (match_activation_inputs, assert_bitwise_trajectory,
+                                                     restore_native_time_frequencies)
 from experiments.tenstorrent.trajectory import TrajectoryFixture, compare_trajectories
 
 
@@ -33,3 +37,18 @@ def test_native_bitwise_gate_rejects_drift_below_stock_smoke_threshold():
     assert compare_trajectories(changed, payload)['all_states_pass_smoke']
     with pytest.raises(ValueError, match='pred_x_t'):
         assert_bitwise_trajectory(changed, payload)
+
+
+def test_fixed_frequency_restoration_is_bound_to_exact_native_control_and_values():
+    evidence = Path(__file__).parent/'results/autoresearch/093-rejected-generated-sampler-boundary'
+    control = json.loads((evidence/'sdk-execute.json').read_text())['sampler_native_control']['result_sha256']
+    original = torch.exp(-math.log(10000)*torch.arange(128, dtype=torch.float32)/128)
+    native, repair = restore_native_time_frequencies(original, control)
+    assert repair['changed_indices'] == [12, 106]
+    assert torch.nonzero(native != original).flatten().tolist() == [12, 106]
+    assert torch.all((native.view(torch.int32)-original.view(torch.int32)).abs() <= 1)
+    with pytest.raises(ValueError, match='control110'):
+        restore_native_time_frequencies(original, 'different-control')
+    corrupted = original.clone(); corrupted[0] += .001
+    with pytest.raises(ValueError, match='two recorded'):
+        restore_native_time_frequencies(corrupted, control)

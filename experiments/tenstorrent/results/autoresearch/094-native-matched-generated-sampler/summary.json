@@ -1,0 +1,54 @@
+{
+  "status": "completed_every_state_bitwise_native_sampler_control",
+  "all12steps_and21calls_retained": true,
+  "all_states_bitwise_original_native": true,
+  "two_fixed_frequency_values_restored_from_committed_native_ir": true,
+  "sampler_seconds": 16.232788307999726,
+  "model_seconds_sum": 16.184326383052394,
+  "preparation_seconds_sum": 0.02481705800164491,
+  "original_stock_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    },
+    {
+      "kind": "restore_native_timestep_frequency_constant",
+      "source": "experiments/tenstorrent/results/autoresearch/083-clean-start-sampler-control/runtime-ttnn.mlir.gz",
+      "native_ir_uncompressed_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1",
+      "changed_indices": [
+        12,
+        106
+      ],
+      "differences": [
+        {
+          "index": 12,
+          "native": 0.4216964840888977,
+          "eager_cpu": 0.4216965138912201,
+          "ulp_difference": -1
+        },
+        {
+          "index": 106,
+          "native": 0.00048696750309318304,
+          "eager_cpu": 0.0004869675321970135,
+          "ulp_difference": -1
+        }
+      ]
+    }
+  ],
+  "finding": "Restoring only two one-ULP timestep-frequency constants from canonical runtime IR eliminates the generated/native trajectory drift entirely. Original guidance, schedule, latent/conditions, learned weights and LoRA remain.",
+  "timing_scope": "Fresh five-activation H2D/layout preparation and synchronization timed separately. Marked model calls include generated denoiser and output D2H. Original CPU Euler/CFG and all12steps/21calls retained. Instrumented sampler wall includes per-call profiler flushing; marked model/transfer windows exclude flushing. Resident original weights and const-eval cache; compilation and warmups excluded from sampler trials.",
+  "limits": "Single synthetic512 trajectory on n150. Separate generated boundary with fresh five-activation uploads. One timing, not speedup evidence; strict stock CPU quality gates remain failed.",
+  "tests": "17 focused checks pass, including exact native-control/constant seals, rejected unrelated constant changes, ambiguous input mapping and one-state drift below ordinary smoke thresholds.",
+  "reproduce": "profile_sdk_codegen.py --sdk-workspace <f1-sdk> --export-dir <sealed120> --native-control-result <canonical122/execute.json> --sampler-native-control-dir <sealed110/shape_flow_tensor> --output-dir <new> --repair-embedding-indices --repair-native-time-frequencies --runs 1"
+}
