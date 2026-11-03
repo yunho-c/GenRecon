@@ -7,6 +7,7 @@ This is a one-operation capability control, not full-model performance evidence.
 """
 import argparse
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -70,8 +71,14 @@ def main():
         report['metal_commit'] = commit
         report['script_sha256'] = sha256(Path(__file__))
         import torch
-        from experiments.tenstorrent.trajectory import tensor_digest
         from experiments.tenstorrent.validation import compare_tensors
+        # Match the sealed trajectory digest without importing the full GenRecon
+        # model stack into the intentionally minimal profiling environment.
+        def tensor_digest(value):
+            value = value.detach().cpu().contiguous()
+            digest = hashlib.sha256(f'{value.dtype}:{list(value.shape)}'.encode())
+            digest.update(value.view(torch.uint8).numpy().tobytes())
+            return digest.hexdigest()
         torch.set_num_threads(4)
         shifts = torch.arange(512) % 32
         a = torch.stack((torch.ones(512), torch.pow(2., -shifts.float())), dim=1)
