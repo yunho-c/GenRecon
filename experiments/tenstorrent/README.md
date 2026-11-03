@@ -593,6 +593,14 @@ confirms zero native softmax and 60 FP32 exponential sequences, with no fallback
 or trajectory recompilation. Single-forward relative error is 5.62%, but final
 sampler error remains 39.2% vs FP32 and 40.0% vs the CPU precision diagnostic.
 The isolated softmax improvement has not resolved full-trajectory drift.
+The [matched shape control](results/autoresearch/039-matched-reciprocal-shape/summary.json)
+confirms a 13–14% runtime increase and slightly worse final sampler error.
+On the [real poster sampler](results/autoresearch/040-poster-reciprocal-sampler/summary.json),
+runtime rises from 88.12s to 129.73s, while final latent error falls from 74.9%
+to 60.7%. The [common-decoder occupancy comparison](results/autoresearch/041-poster-reciprocal-occupancy/summary.json)
+improves IoU vs FP32 from 0.514 to 0.678 (CPU precision diagnostic: 0.868).
+This is an opt-in accuracy/latency tradeoff on one crop. Numerical gates still
+fail, and mesh/material quality has not been established.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning

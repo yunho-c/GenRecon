@@ -1,0 +1,94 @@
+{
+  "status": "completed_geometry_latency_tradeoff_not_promoted",
+  "scope": "Decode matched sampler latents with the same FP32 CPU occupancy decoder.\n\nIsolates sampler differences from TT decoder differences on one scene crop.\nReports numerical failures alongside occupancy overlap; no mesh-quality claim\nor automatic quality promotion from an IoU value.\n",
+  "decoder_precision": "Same official decoder, FP32 CPU for every latent; fixed zero threshold and original max-pool 2",
+  "decoder_sha256": {
+    ".json": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5",
+    ".safetensors": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+  },
+  "source_artifacts_sha256": {
+    "cpu_fp32": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+    "stock_tt": "ff53739c4906045211ed31b8bb442f451929244baace074564a7418ac8f8886f",
+    "real_rope_tt": "2e1cd790d3dbd9cc131be599421443032ed90965e83093fa8b8a4337dc423f36",
+    "cpu_precision": "dc6e675837c17aa2795eda0437d932ebf06ba45ce906b27947e2e115f618771d",
+    "reciprocal_tt": "d2506f117fd9500586696e523a1ef19994a5a895fb45635ddf8d4bb2fe4c7949"
+  },
+  "grid_shape": [
+    1,
+    1,
+    32,
+    32,
+    32
+  ],
+  "overlap_vs_cpu_fp32": {
+    "stock_tt": {
+      "actual_occupied": 4163,
+      "reference_occupied": 6464,
+      "intersection": 3585,
+      "union": 7042,
+      "iou": 0.5090883271797785,
+      "dice": 0.6746965277124306,
+      "false_positive": 578,
+      "false_negative": 2879
+    },
+    "real_rope_tt": {
+      "actual_occupied": 4241,
+      "reference_occupied": 6464,
+      "intersection": 3632,
+      "union": 7073,
+      "iou": 0.5135020500494839,
+      "dice": 0.6785614198972443,
+      "false_positive": 609,
+      "false_negative": 2832
+    },
+    "cpu_precision": {
+      "actual_occupied": 6510,
+      "reference_occupied": 6464,
+      "intersection": 6030,
+      "union": 6944,
+      "iou": 0.8683755760368663,
+      "dice": 0.9295514105133343,
+      "false_positive": 480,
+      "false_negative": 434
+    },
+    "reciprocal_tt": {
+      "actual_occupied": 5690,
+      "reference_occupied": 6464,
+      "intersection": 4909,
+      "union": 7245,
+      "iou": 0.6775707384403037,
+      "dice": 0.8077999012670726,
+      "false_positive": 781,
+      "false_negative": 1555
+    }
+  },
+  "reciprocal_vs_cpu_precision": {
+    "actual_occupied": 5690,
+    "reference_occupied": 6510,
+    "intersection": 5118,
+    "union": 7082,
+    "iou": 0.7226772098277323,
+    "dice": 0.8390163934426229,
+    "false_positive": 572,
+    "false_negative": 1392
+  },
+  "control_grids_bitwise_equal_previous_result030": {
+    "cpu_fp32": true,
+    "stock_tt": true,
+    "real_rope_tt": true
+  },
+  "sampler_seconds": {
+    "real_rope_sdpa": 88.12095422000857,
+    "real_rope_fp32_reciprocal": 129.72596816602163
+  },
+  "finding": "Under the same original FP32 CPU decoder and zero threshold, real-poster occupied-grid IoU vs FP32 improves from 0.5135 with real-RoPE SDPA to 0.6776 with FP32 reciprocal attention; occupied voxels rise from 4241 to 5690 vs reference 6464. IoU vs CPU precision diagnostic improves from 0.5361 to 0.7227. CPU precision diagnostic vs FP32 remains 0.8684. Controls decode bitwise identically to retained historical grids.",
+  "decision": "Keep as opt-in accuracy/latency experiment: about 47% more sampler time buys better occupancy agreement on one crop, but strict latent gates still fail and synthetic shape does not improve. Do not promote globally, claim preserved mesh/material quality, or treat FP32 CPU as CUDA ground truth.",
+  "tests": "Common decoder consumed strict fixture-matched original sampler payloads; finite logits and original threshold/pooling checked. Retained all trajectory failures, full overlaps, reference hashes and boolean grids.",
+  "reproduce": "compare_occupancy.py --reference <sealed poster CPU reference.pt> --candidates stock_tt=<stock payload> real_rope_tt=<real-RoPE payload> cpu_precision=<CPU precision trajectory> reciprocal_tt=<result040 payload> --threads 16 --output-dir <new>",
+  "retained_precision_control_grids_bitwise": {
+    "cpu_fp32": true,
+    "stock_tt": true,
+    "real_rope_tt": true,
+    "cpu_precision": true
+  }
+}
