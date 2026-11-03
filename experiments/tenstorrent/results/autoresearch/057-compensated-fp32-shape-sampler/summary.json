@@ -1,7 +1,10 @@
 {
-  "status": "completed_candidate_matched_layout_control_pending",
+  "status": "completed_full_sampler_and_matched_layout_control",
+  "scope": "Synthetic shape512, original learned weights/LoRA, FP32 model tensors and reciprocal attention. Same flattened head-first layout; only gather compensation differs between current candidate/control. Original stock FP32 acceptance reference and gates retained.",
   "candidate_seconds": 18.810102040006313,
+  "control_seconds": 16.866170855995733,
   "candidate_warm_ms": 895.6922719953582,
+  "control_warm_ms": 798.5126959974878,
   "candidate_vs_stock_final": {
     "shape_match": true,
     "finite": true,
@@ -12,16 +15,38 @@
     "pcc": 0.9558297978904786,
     "max_abs": 3.868248462677002
   },
-  "candidate_vs_prepared_cpu_final": {
+  "control_vs_stock_final": {
     "shape_match": true,
     "finite": true,
     "passed": false,
     "max_relative_l2": 0.1,
     "min_pcc": 0.99,
-    "relative_l2": 0.29579357835737907,
-    "pcc": 0.9558252657245503,
-    "max_abs": 3.868252754211426
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
   },
   "candidate_all_states_pass_gates": false,
-  "finding": "Complete compensated FP32 shape512 sampler finishes in18.810s with final relative L2 0.295778 vs original stock FP32, still failing strict gates. All21 model calls retained, no fallback or recompilation. Single-forward error0.03716 passes but does not predict complete trajectory accuracy. Matched same-layout ordinary-gather control is still compiling; no causal attribution or promotion."
+  "control_all_states_pass_gates": false,
+  "native_ir": {
+    "candidate": {
+      "native_ir_sha256": "79ffd7ef2aa327a46cf8a998a1007dc3808aff259ea412ba0d43305c9a3830af",
+      "linear_matmul_ops": 457,
+      "linear_matmul_ops_with_bf16_operands": 0,
+      "embedding_ops": 180,
+      "self_subtract_ops": 0,
+      "bf16_multiply_ops": 180
+    },
+    "control": {
+      "native_ir_sha256": "9cef26791a40dd014cf642c03a28eafe53502b110b443566500fd51656789b0e",
+      "linear_matmul_ops": 457,
+      "linear_matmul_ops_with_bf16_operands": 0,
+      "embedding_ops": 60,
+      "self_subtract_ops": 0,
+      "bf16_multiply_ops": 0
+    }
+  },
+  "finding": "Complete original shape512 sampler with compensated lookup has final relative L2 0.295778 versus 0.299911 with the same flattened layout and ordinary gather. Runtime 18.810s versus 16.866s; all21 original model calls retained. Prior token-first FP32 control has final error 0.293611 and time 18.888s. No fallback or recompilation. Local lookup accuracy does not by itself establish whole-sampler quality.",
+  "decision": "Retain as an opt-in diagnostic. Keep production defaults and original strict gates; extend real-scene validation before any promotion.",
+  "controls": "Same stock reference signature, exact semantic fixture identity and reference bytes, physical checkpoint rescan, same prepared model/helper hashes, complete12steps/21forwards, no fallback or recompilation. See result058 for complete prepared CPU control.",
+  "reproduce": "run.py --cases shape_flow_tensor --attention-mode fp32_reciprocal --device-precision float32 --native-ir --sampler-trajectory --reference-precision float32 --optimization-level 0 --cpu-threads 16 --runs 3 --cpu-trajectory-cache <restored-shape512-cache> --rope-mode <real_pairs_fp32_split or real_pairs_flat_head_first> --timeout 3600 --output-dir <new>"
 }

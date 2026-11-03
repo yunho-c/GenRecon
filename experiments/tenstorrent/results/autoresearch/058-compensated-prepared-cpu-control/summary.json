@@ -1,6 +1,5 @@
 {
-  "status": "completed_full_prepared_cpu_control_native_comparison_pending",
-  "scope": "Original shape51212steps/21forwards, compensated head-first flattened RoPE and FP32 reciprocal attention, promoted already-quantized learned weights, original stock FP32 acceptance reference.",
+  "status": "completed_full_prepared_cpu_control",
   "cpu_vs_stock_final": {
     "shape_match": true,
     "finite": true,
@@ -12,11 +11,21 @@
     "max_abs": 0.0014427900314331055
   },
   "cpu_all_states_pass_gates": true,
+  "native_vs_prepared_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29579357835737907,
+    "pcc": 0.9558252657245503,
+    "max_abs": 3.868252754211426
+  },
   "source_hash_counts": {
     "candidate": 163,
     "control": 163
   },
   "verified_checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
-  "finding": "Complete compensated FP32 CPU control passes every original state gate with final relative L2 0.0000642969 (0.00643%) against stock. All shared model/helper source hashes match both pending native experiments, and physical checkpoint SHA256 is verified. Native execution comparisons are pending; this is not a CUDA oracle.",
+  "finding": "The compensated prepared FP32 CPU model has complete-sampler final relative L2 0.000064297 versus stock; all-state gates pass: True. Native candidate differs 0.295794 from the identically prepared CPU trajectory. Physical checkpoint bytes and all shared model/helper hashes are verified. This is a CPU control, not a CUDA oracle.",
   "reproduce": "precision_reference.py --stage shape --precision float32 --rope-mode real_pairs_fp32_split --attention-mode fp32_reciprocal --threads 16 --output-dir <new>"
 }

@@ -697,6 +697,15 @@ about 1e-8 relative L2. This adds kernel cost and has only been checked on norma
 activation ranges. Use `--rope-mode real_pairs_fp32_split` for opt-in full-flow
 validation; sampler quality and speed require separate measurements.
 
+The [complete matched shape sampler](results/autoresearch/057-compensated-fp32-shape-sampler/summary.json)
+limits that local gain: final error is 29.58% with compensation versus 29.99%
+with the same flattened layout and ordinary gather, while runtime increases
+16.866s to 18.810s. Both fail the original gates. All 21 model calls execute
+without fallback or recompilation. The [complete compensated CPU control](results/autoresearch/058-compensated-prepared-cpu-control/summary.json)
+passes every state gate with 0.00643% final drift against stock; native error
+remains 29.58% against that identical prepared model. Source hashes and physical
+checkpoint bytes match. Lookup compensation remains an opt-in diagnostic.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

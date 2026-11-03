@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "native_ir_sha256": "79ffd7ef2aa327a46cf8a998a1007dc3808aff259ea412ba0d43305c9a3830af",
+    "linear_matmul_ops": 457,
+    "linear_matmul_ops_with_bf16_operands": 0,
+    "embedding_ops": 180,
+    "self_subtract_ops": 0,
+    "bf16_multiply_ops": 180
+  },
+  "control": {
+    "native_ir_sha256": "9cef26791a40dd014cf642c03a28eafe53502b110b443566500fd51656789b0e",
+    "linear_matmul_ops": 457,
+    "linear_matmul_ops_with_bf16_operands": 0,
+    "embedding_ops": 60,
+    "self_subtract_ops": 0,
+    "bf16_multiply_ops": 0
+  }
+}
