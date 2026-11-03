@@ -588,6 +588,11 @@ intact. The stock CPU references are captured before preparation. A 30-block
 cross-attention flow must report **60 prepared attention modules**. Preparation
 rejects unknown wrappers instead of silently skipping them; all helper imports
 use the same package path. This is an opt-in experiment, with defaults unchanged.
+The [complete shape trial](results/autoresearch/038-full-reciprocal-shape/summary.json)
+confirms zero native softmax and 60 FP32 exponential sequences, with no fallback
+or trajectory recompilation. Single-forward relative error is 5.62%, but final
+sampler error remains 39.2% vs FP32 and 40.0% vs the CPU precision diagnostic.
+The isolated softmax improvement has not resolved full-trajectory drift.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning

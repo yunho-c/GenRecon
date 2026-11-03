@@ -1,0 +1,42 @@
+{
+  "status": "completed_failed_trajectory_gates",
+  "scope": "Complete pretrained 30-block shape flow, all 60 self/cross-attention modules prepared, 512 synthetic active tokens, original 12-step/21-forward sampler. No reconstruction-quality claim.",
+  "prepared_attention_modules": 60,
+  "cpu_preparation_relative_l2": [
+    1.6326304096568405e-06
+  ],
+  "native_ir_counts": {
+    "softmax": 0,
+    "exp": 60,
+    "matmul": 270
+  },
+  "native_ir_dtype_note": "All 60 exp tensors are FP32: 30 self [1,12,512,512] and 30 cross [1,12,512,1029]. Original outer BF16 boundaries preserved.",
+  "warm_ms": 713.8700110372156,
+  "trajectory_seconds": 14.978874242980964,
+  "vs_stock_cpu_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.39209709518855723,
+    "pcc": 0.9222903931425314,
+    "max_abs": 4.086635112762451
+  },
+  "vs_cpu_precision_diagnostic_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.39967044143174557,
+    "pcc": 0.9195117291486238,
+    "max_abs": 4.714199781417847
+  },
+  "fallback_ops": [],
+  "trajectory_recompiled": false,
+  "finding": "Local softmax accuracy improvement does not resolve complete sampler drift: final relative L2 0.392 vs original FP32, 0.400 vs matched CPU precision diagnostic. Single-forward error is 0.0562. No promotion. Current matched stock-attention control is still running separately.",
+  "cpu_cache_note": "Retained CPU cache manifest refers to decompressed trajectory-reference.pt.gz as reference.pt. Original CPU outputs match independent run053 CPU outputs bitwise, including all steps, noise, coordinates and fixture hashes. Physical checkpoint hash is verified on reuse.",
+  "tests": "27 focused CPU checks pass, including combined full-block preparation, original parameter identities/values/LoRA, both outer dtypes and rejection of unsupported wrappers. Hardware no-fallback/recompile checks pass; numerical trajectory gates fail as retained.",
+  "next": "Compare modern matched stock-attention control; test real-poster occupancy through common FP32 decoder. Do not infer real geometry from this synthetic shape experiment."
+}

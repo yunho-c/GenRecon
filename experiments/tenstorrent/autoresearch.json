@@ -45,7 +45,8 @@
     "results/autoresearch/034-attention-postscale/summary.json",
     "results/autoresearch/035-attention-stage-errors/summary.json",
     "results/autoresearch/036-softmax-formulations/summary.json",
-    "results/autoresearch/037-cross-only-reciprocal-control/summary.json"
+    "results/autoresearch/037-cross-only-reciprocal-control/summary.json",
+    "results/autoresearch/038-full-reciprocal-shape/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -75,11 +76,12 @@
     "On identical learned first-block Q/K/V, FP32 postscale attention reduces self-attention error from 0.102 to 0.0272; cross-attention remains about 0.0182. Stage capture matches ordinary final output bitwise. Local QK error is below 0.0006, scale is exact, and native softmax error is 0.0399 self / 0.0236 cross on identical TT scores.",
     "Stable exp times reciprocal(sum(exp)) avoids the compiler DivOp softmax fusion and reduces local softmax error to 0.000631 self / 0.000255 cross, with exact repeats and no fallback. Direct exp/div fuses back to native softmax. Approximate-exp defaults in exact SDK sources are a hypothesis, not a toggle-tested causal finding. exp2 was rejected for CPU fallback.",
     "An initial full-flow attention run prepared only 30 cross-attention modules because top-level and package imports created different RoPE wrapper classes. Retain it as a partial-attention control, not the complete candidate. Canonical package imports and fail-closed unknown-wrapper checks prevent silent partial preparation.",
-    "Cross-only 30-module reciprocal control completed: 14.35s trajectory, final relative L2 0.435 vs original FP32 and 0.416 vs matched CPU precision diagnostic, no fallback or recompile. It does not improve trajectory agreement. Native IR retains 30 BF16 softmax and replaces only 30 cross softmax. Complete 60-module experiment remains separate."
+    "Cross-only 30-module reciprocal control completed: 14.35s trajectory, final relative L2 0.435 vs original FP32 and 0.416 vs matched CPU precision diagnostic, no fallback or recompile. It does not improve trajectory agreement. Native IR retains 30 BF16 softmax and replaces only 30 cross softmax. Complete 60-module experiment remains separate.",
+    "Local softmax accuracy improvement does not resolve complete sampler drift: final relative L2 0.392 vs original FP32, 0.400 vs matched CPU precision diagnostic. Single-forward error is 0.0562. No promotion. Current matched stock-attention control is still running separately."
   ],
   "next_actions": [
-    "Finish shape512 complete FP32 reciprocal attention trajectory using canonical imports: require 60 prepared self/cross modules, no fallback/recompilation, all original 12 steps and stock FP32 references. Retain run051 as a 30-module cross-only control. Inspect actual native IR for replacement coverage and dtypes.",
-    "If complete shape attention improves full-trajectory accuracy, evaluate the same candidate on the real-poster ss_flow fixture using the sealed original CPU cache and common occupancy decoder. Local softmax gains alone do not establish sampler or scene quality.",
+    "Finish modern matched shape SDPA control run053 and compare fixture identity, bitwise CPU reference and full trajectories against run052. All 60 native softmax replacements are confirmed in run052, but trajectory accuracy is still poor.",
+    "Finish real-poster reciprocal-attention run054 with the sealed original CPU cache; decode through the same FP32 occupancy decoder and compare topology with stock/real-RoPE controls. This diagnostic is warranted by different real conditioning but does not promote the candidate from synthetic results.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
@@ -87,11 +89,14 @@
   ],
   "live_experiments": [
     {
-      "name": "052-shape-full-reciprocal",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/052-shape-full-reciprocal",
-      "purpose": "Complete 60-module self/cross reciprocal attention with real-pair RoPE; original references and schedule",
-      "status_at_last_check": "running CPU build/reference",
-      "note": "Verify actual process and prepared count before interpreting."
+      "name": "053-shape-real-rope-control",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/053-shape-real-rope-control",
+      "status_at_last_check": "running compile_and_first_inference"
+    },
+    {
+      "name": "054-poster-full-reciprocal",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/054-poster-full-reciprocal",
+      "status_at_last_check": "running build/CPU preparation"
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
