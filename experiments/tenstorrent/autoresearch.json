@@ -121,6 +121,28 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "name": "compensated FP32 complete shape sampler",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/075-shape-compensated-fp32",
+      "status": "launched",
+      "source_commit": "00271fb",
+      "note": "Original12steps/21forwards; native IR, same sealed stock CPU reference, all strict gates retained."
+    },
+    {
+      "name": "prepared compensated CPU control",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/076-prepared-compensated-cpu",
+      "status": "launched",
+      "source_commit": "00271fb",
+      "note": "Complete identical prepared FP32 CPU model; separate helper algebra from native error."
+    },
+    {
+      "name": "matched flat FP32 shape control",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/077-shape-flat-fp32-control",
+      "status": "launched",
+      "source_commit": "00271fb",
+      "note": "Same head-first flattened layout as075, ordinary gather. Device lock serializes native work. Separates lookup compensation from layout effects."
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
