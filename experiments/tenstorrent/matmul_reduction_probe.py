@@ -1,7 +1,9 @@
 """Measure FP32 matrix-reduction error with exactly BF16-representable inputs.
 
 Seed62 matches the earlier matrix probe. All native storage remains FP32;
-only the reduction length changes, using prefixes of the same original data.
+Reduction mode varies dot length using prefixes of the same original data.
+Active-terms mode retains one K2 matrix graph and changes only input values,
+isolating the two products and reversing their order without recompilation.
 This is a synthetic mechanism diagnostic, not learned-model attribution.
 """
 import argparse
@@ -23,13 +25,14 @@ sys.path.insert(0, str(ROOT))
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir', type=Path, required=True)
+    parser.add_argument('--mode', choices=('reduction', 'active_terms'), default='reduction')
     args = parser.parse_args()
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=False)
     for key in ('LD_LIBRARY_PATH', 'PYTHONPATH', 'TT_METAL_HOME', 'TT_METAL_RUNTIME_ROOT'):
         os.environ.pop(key, None)
     os.environ.update(PJRT_DEVICE='TT', ATTN_BACKEND='sdpa', SPARSE_ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
-    report = {'status': 'running', 'scope': __doc__, 'seed': 62, 'cases': {},
+    report = {'status': 'running', 'scope': __doc__, 'seed': 62, 'mode': args.mode, 'cases': {},
               'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
 
     def phase(value):
@@ -54,27 +57,42 @@ def main():
         torch.manual_seed(62)
         left = torch.randn(512, 128).bfloat16().float()
         right = torch.randn(128, 512).bfloat16().float()
+        if args.mode == 'reduction':
+            cases = {str(length): (left[:, :length].contiguous(), right[:length].contiguous())
+                     for length in (1, 2, 4, 8, 16, 32, 64, 128)}
+        else:
+            a, b = left[:, :2].contiguous(), right[:2].contiguous()
+            a0, a1, b0, b1 = a.clone(), a.clone(), b.clone(), b.clone()
+            a0[:, 1] = 0; a1[:, 0] = 0; b0[1] = 0; b1[0] = 0
+            cases = {'full_k2': (a, b), 'first_only': (a, b0), 'second_only': (a, b1),
+                     'first_only_zero_a': (a0, b), 'second_only_zero_a': (a1, b),
+                     'reversed_k2': (a.flip(-1).contiguous(), b.flip(0).contiguous()),
+                     'positive_products': (a.abs(), b.abs()),
+                     'integer_values': ((a*16).round(), (b*16).round())}
         phase('waiting_for_device')
         lock = os.open('/tmp/genrecon-tt-pjrt.lock', os.O_CREAT | os.O_RDWR, 0o600)
         fcntl.flock(lock, fcntl.LOCK_EX)
         device = torch_xla.device()
         outputs = {}
-        for length in (1, 2, 4, 8, 16, 32, 64, 128):
-            phase('k'+str(length))
-            a, b = left[:, :length].contiguous(), right[:length].contiguous()
+        compiled = None
+        for name, (a, b) in cases.items():
+            label = 'k'+name if args.mode == 'reduction' else name
+            phase(label)
             torch.testing.assert_close(a, a.bfloat16().float(), rtol=0, atol=0)
             torch.testing.assert_close(b, b.bfloat16().float(), rtol=0, atol=0)
             expected = a@b
             exact = (a.double()@b.double()).float()
-            torch.compiler.reset()
-            directory = args.output_dir/('k'+str(length)+'-native-ir')
-            torch_xla.set_custom_compile_options({'optimization_level': 0, 'math_fidelity': 'hifi4',
-                                                  'dry_run': 'false', 'export_path': str(directory)})
-            compiled = torch.compile(MatrixProduct().eval(), backend='tt', fullgraph=True)
+            if compiled is None or args.mode == 'reduction':
+                torch.compiler.reset()
+                directory = args.output_dir/(label+'-native-ir')
+                torch_xla.set_custom_compile_options({'optimization_level': 0, 'math_fidelity': 'hifi4',
+                                                      'dry_run': 'false', 'export_path': str(directory)})
+                compiled = torch.compile(MatrixProduct().eval(), backend='tt', fullgraph=True)
             resident = a.to(device), b.to(device)
             if not all(torch.equal(value.cpu(), original) for value, original in zip(resident, (a, b), strict=True)):
                 raise ValueError('Input roundtrip altered exact BF16-representable values')
             metrics.clear_all()
+            before = dict(torch._dynamo.utils.counters['stats'])
             with torch.no_grad():
                 value = compiled(*resident).cpu()
                 latencies = []
@@ -94,16 +112,30 @@ def main():
                    'matrix_ops': matrix_ops, 'runtime_ir_sha256': sha256(path),
                    'executed_fallback_ops': list(metrics.executed_fallback_ops()),
                    'aten_counters': {name: metrics.counter_value(name) for name in metrics.counter_names() if name.startswith('aten::')}}
-            report['cases'][str(length)] = row
+            row['dynamo_before'] = before
+            row['dynamo_after'] = dict(torch._dynamo.utils.counters['stats'])
+            row['xla_compile_samples'] = {key: metrics.metric_data(key)[0] for key in metrics.metric_names() if 'Compile' in key and 'Cached' not in key}
+            report['cases'][name] = row
+            if args.mode == 'active_terms' and name != 'full_k2' and (
+                    row['dynamo_before'] != row['dynamo_after'] or any(row['xla_compile_samples'].values())):
+                raise ValueError('Changing only active terms recompiled the matrix graph')
             if row['executed_fallback_ops'] or row['aten_counters']:
                 raise ValueError('Reduction diagnostic used fallback')
             if any('math_fidelity = hifi4, fp32_dest_acc_en = true' not in op or 'xbf16' in op for op in matrix_ops):
                 raise ValueError('Native matrix arithmetic does not retain the requested FP32/HiFi4 configuration')
-            outputs[str(length)] = value
-            (args.output_dir/('k'+str(length)+'-metrics.txt')).write_text(metrics.metrics_report())
+            outputs[name] = value
+            (args.output_dir/(label+'-metrics.txt')).write_text(metrics.metrics_report())
+        if args.mode == 'active_terms':
+            isolated = outputs['first_only']+outputs['second_only']
+            report['controls'] = {
+                'native_full_vs_cpu_sum_of_isolated_native_products': compare_tensors(outputs['full_k2'], isolated),
+                'isolated_native_sum_vs_cpu_full': compare_tensors(isolated, cases['full_k2'][0]@cases['full_k2'][1]),
+                'full_vs_reversed_native': compare_tensors(outputs['full_k2'], outputs['reversed_k2']),
+                'first_zero_operand_bitwise': torch.equal(outputs['first_only'], outputs['first_only_zero_a']),
+                'second_zero_operand_bitwise': torch.equal(outputs['second_only'], outputs['second_only_zero_a'])}
         torch.save(outputs, args.output_dir/'outputs.pt')
         report['outputs_sha256'] = sha256(args.output_dir/'outputs.pt')
-        report['status'] = 'completed_native_reduction_diagnostic'
+        report['status'] = 'completed_native_reduction_diagnostic' if args.mode == 'reduction' else 'completed_native_active_term_control'
         phase('complete')
     except Exception as exc:
         report.update(status='failed', error=repr(exc), traceback=traceback.format_exc())
