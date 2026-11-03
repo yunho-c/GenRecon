@@ -1,0 +1,213 @@
+{
+  "status": "completed_native_mantissa_split_control",
+  "finding": "Six-fraction-bit high parts plus exact residuals reconstruct original BF16-representable inputs, but native products summed on CPU retain essentially the full reduction error. Left/right split relative errors atK128 are0.00074380/0.00074758 versus unsplit0.00074521; CPU association controls differ only9.3e-8. All full products repeat historical native output bitwise. Each length reuses one actual matrix graph for all five value-only cases, with no changed-value compilation or fallback. This operand-mantissa split is not a useful precision remedy.",
+  "scope": "15 native synthetic matrix cases, FP32 storage/HiFi4; decomposition and final partial-product addition occur on CPU. This is a mechanism control, not a native decomposed implementation or performance claim.",
+  "controls": {
+    "2": {
+      "left": {
+        "native_partial_products_summed_on_cpu_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0001397318320697288,
+          "pcc": 0.9999999902875347,
+          "max_abs": 0.00201416015625
+        },
+        "cpu_partial_formula_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 3.969762222684408e-09,
+          "pcc": 0.9999999999999978,
+          "max_abs": 9.5367431640625e-07
+        },
+        "native_partial_sum_vs_cpu_partial_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00013973189274316805,
+          "pcc": 0.9999999902875251,
+          "max_abs": 0.00201416015625
+        },
+        "native_partial_products_summed_on_cpu_bitwise_full": false
+      },
+      "right": {
+        "native_partial_products_summed_on_cpu_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00013961402721577863,
+          "pcc": 0.9999999903034675,
+          "max_abs": 0.00201416015625
+        },
+        "cpu_partial_formula_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 3.3362907714706533e-09,
+          "pcc": 0.9999999999999983,
+          "max_abs": 4.76837158203125e-07
+        },
+        "native_partial_sum_vs_cpu_partial_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00013961401833158604,
+          "pcc": 0.9999999903034681,
+          "max_abs": 0.00201416015625
+        },
+        "native_partial_products_summed_on_cpu_bitwise_full": false
+      }
+    },
+    "32": {
+      "left": {
+        "native_partial_products_summed_on_cpu_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00031306605679953656,
+          "pcc": 0.9999999518997982,
+          "max_abs": 0.019382476806640625
+        },
+        "cpu_partial_formula_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 4.0986762878431465e-08,
+          "pcc": 0.9999999999999971,
+          "max_abs": 3.814697265625e-06
+        },
+        "native_partial_sum_vs_cpu_partial_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00031306599529971305,
+          "pcc": 0.9999999518998102,
+          "max_abs": 0.019378662109375
+        },
+        "native_partial_products_summed_on_cpu_bitwise_full": false
+      },
+      "right": {
+        "native_partial_products_summed_on_cpu_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00031287419589231684,
+          "pcc": 0.9999999519511754,
+          "max_abs": 0.01923370361328125
+        },
+        "cpu_partial_formula_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 4.097933817439703e-08,
+          "pcc": 0.9999999999999972,
+          "max_abs": 3.814697265625e-06
+        },
+        "native_partial_sum_vs_cpu_partial_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00031287425999911196,
+          "pcc": 0.999999951951154,
+          "max_abs": 0.019231796264648438
+        },
+        "native_partial_products_summed_on_cpu_bitwise_full": false
+      }
+    },
+    "128": {
+      "left": {
+        "native_partial_products_summed_on_cpu_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007438037178751743,
+          "pcc": 0.9999998404060659,
+          "max_abs": 0.06740188598632812
+        },
+        "cpu_partial_formula_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.294647643879222e-08,
+          "pcc": 0.9999999999999992,
+          "max_abs": 1.52587890625e-05
+        },
+        "native_partial_sum_vs_cpu_partial_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007438037727349776,
+          "pcc": 0.9999998404060854,
+          "max_abs": 0.06740379333496094
+        },
+        "native_partial_products_summed_on_cpu_bitwise_full": false
+      },
+      "right": {
+        "native_partial_products_summed_on_cpu_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007475838558303838,
+          "pcc": 0.9999998389383632,
+          "max_abs": 0.06090545654296875
+        },
+        "cpu_partial_formula_vs_cpu_full": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 9.283914430521045e-08,
+          "pcc": 1.0000000000000004,
+          "max_abs": 1.52587890625e-05
+        },
+        "native_partial_sum_vs_cpu_partial_formula": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007475842108575724,
+          "pcc": 0.999999838938281,
+          "max_abs": 0.06090545654296875
+        },
+        "native_partial_products_summed_on_cpu_bitwise_full": false
+      }
+    }
+  },
+  "decision": "Reject this six-fraction-bit split. Test exact power-of-two products with controlled exponent gaps to locate arithmetic loss when combining terms before selecting another precision implementation.",
+  "reproduce": "matmul_reduction_probe.py --mode mantissa_split --lengths 2 32 128 --output-dir <new> (source b16435f)"
+}

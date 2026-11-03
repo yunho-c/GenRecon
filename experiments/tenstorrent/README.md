@@ -957,3 +957,13 @@ previous PyTorch FP32-input controls, retaining the same reduction errors.
 The different frontend establishes native mixed-type capability, not an accuracy
 fix or a different SDK result. Reproduce the latter with
 `jax_matmul_dtype_probe.py --source-dtype <bfloat16 or float32> --output-dir <new>`.
+
+The [six-fraction-bit operand split](results/autoresearch/079-mantissa-side-control/summary.json)
+reconstructs each input exactly from high and residual parts but does not fix
+native reduction error. At K128, left/right split products summed on CPU differ
+0.00074380/0.00074758 versus unsplit 0.00074521; identical CPU decomposition
+controls differ only 9.3e-8. Fifteen native cases reuse one matrix graph per
+length, without value-change recompilation or fallback. This is a rejected
+mechanism control; decomposition and final addition occur on CPU and establish
+no native implementation or speedup. Reproduce with
+`matmul_reduction_probe.py --mode mantissa_split --lengths 2 32 128 --output-dir <new>`.
