@@ -1,0 +1,22 @@
+{
+  "status": "completed_dynamic_prefill_cache_control",
+  "scope": "Tiny two-graph conditioning cache control across scenes, branches and noise.\n\nNonzero LoRA and all original learned objects are retained. Prefill is dynamic\nnative work with explicit timing and synchronization; the denoiser receives one\nselected resident cache tuple. This smoke does not establish pretrained speed.\n",
+  "finding": "Tiny two-scene native conditioning cache passes both branches and changed-noise smoke gates, exact repeats and old-scene cache replay, without fallback or recompilation. All six dynamic conditioning products are in native prefill main; cached denoiser main has31 matrix operations and zero conditioning products. CPU outputs are bitwise original, with learned parameter identities and nonzero LoRA retained. No pretrained speed or quality claim.",
+  "native_main": {
+    "prefill": {
+      "linear_matmul_ops": 6,
+      "conditioning_products": 6
+    },
+    "body": {
+      "linear_matmul_ops": 31,
+      "conditioning_products": 0
+    }
+  },
+  "prefill_pair_seconds": {
+    "0": 0.44487551297061145,
+    "1": 0.0036487760371528566
+  },
+  "timing_limit": "First pair0.4449s versus later-scene0.00365s includes first-use effects despite one positive warmup. Tiny body latency samples are24.5-50.7ms including output transfer; not a pretrained speed benchmark or stable distribution. Full benchmark must warm both prefill branches before measured prefill.",
+  "decision": "Proceed to complete pretrained shape512 original sampler with dynamic prefill cost included, exact prepared CPU trajectory control, unchanged stock gates, and original12steps/21denoiser calls.",
+  "reproduce": "conditioning_cache_probe.py --output-dir <new> (Forge1.4.0, source bfdfaaa)"
+}

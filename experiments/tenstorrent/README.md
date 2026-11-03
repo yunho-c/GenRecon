@@ -862,3 +862,13 @@ file lock. CPU reference work and downloads can overlap; TT workers cannot.
 
 Reference: [TT-XLA documentation](https://docs.tenstorrent.com/tt-xla/) and
 [performance/precision options](https://docs.tenstorrent.com/tt-xla/performance.html).
+
+The [dynamic two-graph cache control](results/autoresearch/072-dynamic-conditioning-cache/summary.json)
+reuses explicit native prefill outputs across two scenes, both guidance branches
+and changed noise without fallback or recompilation. CPU results are bitwise
+original and old-scene caches survive scene switching. Native prefill contains
+all six conditioning products; the tiny denoiser contains none. This establishes
+cache behavior, not pretrained performance. First-use effects remain visible in
+prefill timing; full sampler experiments must warm both branches and report
+prefill plus the complete original trajectory. Reproduce with
+`conditioning_cache_probe.py --output-dir <new>`.
