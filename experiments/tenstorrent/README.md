@@ -628,6 +628,13 @@ CPU checks cover bitwise RoPE equivalence with 12 heads, complete blocks and
 both attention precision modes. Native sparse attention is explicitly rejected.
 Tile-padding reduction and complete-flow speed/accuracy remain to be measured.
 
+The [complete BF16-AV poster trial](results/autoresearch/045-poster-bf16-av-sampler/summary.json)
+measures 128.155s vs the refreshed FP32 control's 129.725s. Its
+[common-decoder occupancy IoU](results/autoresearch/046-poster-bf16-av-occupancy/summary.json)
+improves from 0.678 to 0.713, with all control grids unchanged bitwise. This
+single-crop accuracy result and small measured runtime decrease require broader
+validation; strict latent gates remain failed and defaults stay unchanged.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

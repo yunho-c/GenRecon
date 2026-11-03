@@ -1,0 +1,103 @@
+{
+  "status": "completed_single_crop_accuracy_improvement",
+  "scope": "Decode matched sampler latents with the same FP32 CPU occupancy decoder.\n\nIsolates sampler differences from TT decoder differences on one scene crop.\nReports numerical failures alongside occupancy overlap; no mesh-quality claim\nor automatic quality promotion from an IoU value.\n",
+  "decoder_precision": "Same official decoder, FP32 CPU for every latent; fixed zero threshold and original max-pool 2",
+  "decoder_sha256": {
+    ".json": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5",
+    ".safetensors": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+  },
+  "source_artifacts_sha256": {
+    "cpu_fp32": "2a7328c3ca78bf537205591244f2dba20c5b2ba4fbb655b8d943534500b500ef",
+    "real_rope_sdpa": "2e1cd790d3dbd9cc131be599421443032ed90965e83093fa8b8a4337dc423f36",
+    "legacy_fp32": "d2506f117fd9500586696e523a1ef19994a5a895fb45635ddf8d4bb2fe4c7949",
+    "refreshed_fp32": "d2506f117fd9500586696e523a1ef19994a5a895fb45635ddf8d4bb2fe4c7949",
+    "bf16_av": "1df6516969be5d41ff6a0d1f39f5d497e4abeabf90236ea612962e922b41097c",
+    "cpu_precision": "dc6e675837c17aa2795eda0437d932ebf06ba45ce906b27947e2e115f618771d"
+  },
+  "control_grids_bitwise_to_prior": {
+    "cpu_fp32": true,
+    "real_rope_sdpa": true,
+    "legacy_fp32": true,
+    "refreshed_fp32": true,
+    "cpu_precision": true
+  },
+  "overlap_vs_stock_fp32": {
+    "real_rope_sdpa": {
+      "actual_occupied": 4241,
+      "reference_occupied": 6464,
+      "intersection": 3632,
+      "union": 7073,
+      "iou": 0.5135020500494839,
+      "dice": 0.6785614198972443,
+      "false_positive": 609,
+      "false_negative": 2832
+    },
+    "legacy_fp32": {
+      "actual_occupied": 5690,
+      "reference_occupied": 6464,
+      "intersection": 4909,
+      "union": 7245,
+      "iou": 0.6775707384403037,
+      "dice": 0.8077999012670726,
+      "false_positive": 781,
+      "false_negative": 1555
+    },
+    "refreshed_fp32": {
+      "actual_occupied": 5690,
+      "reference_occupied": 6464,
+      "intersection": 4909,
+      "union": 7245,
+      "iou": 0.6775707384403037,
+      "dice": 0.8077999012670726,
+      "false_positive": 781,
+      "false_negative": 1555
+    },
+    "bf16_av": {
+      "actual_occupied": 5660,
+      "reference_occupied": 6464,
+      "intersection": 5047,
+      "union": 7077,
+      "iou": 0.7131552917903067,
+      "dice": 0.8325635103926097,
+      "false_positive": 613,
+      "false_negative": 1417
+    },
+    "cpu_precision": {
+      "actual_occupied": 6510,
+      "reference_occupied": 6464,
+      "intersection": 6030,
+      "union": 6944,
+      "iou": 0.8683755760368663,
+      "dice": 0.9295514105133343,
+      "false_positive": 480,
+      "false_negative": 434
+    }
+  },
+  "bf16_av_vs_cpu_precision": {
+    "actual_occupied": 5660,
+    "reference_occupied": 6510,
+    "intersection": 5246,
+    "union": 6924,
+    "iou": 0.7576545349508954,
+    "dice": 0.8621199671322926,
+    "false_positive": 414,
+    "false_negative": 1264
+  },
+  "bf16_av_vs_refreshed_fp32": {
+    "actual_occupied": 5660,
+    "reference_occupied": 5690,
+    "intersection": 5314,
+    "union": 6036,
+    "iou": 0.8803843605036448,
+    "dice": 0.9363876651982379,
+    "false_positive": 346,
+    "false_negative": 376
+  },
+  "sampler_seconds": {
+    "fp32_reciprocal": 129.7250297869905,
+    "fp32_scores_bf16_av": 128.15515011397656
+  },
+  "finding": "Real-poster BF16 AV improves occupancy IoU vs the same FP32 reference from 0.6776 to 0.7132, with 5660 occupied voxels vs 6464 reference. False positives/negatives fall from 781/1555 to 613/1417. Sampler time is 128.155s vs 129.725s in the paired run (1.21% lower). All legacy/refreshed reference control grids decode bitwise identically.",
+  "decision": "Retain opt-in: it improves this crop with a small observed time decrease, but strict latent gates still fail. No global/default promotion, statistical speed claim or mesh/material-quality claim. Additional scenes and full shape/texture trajectories remain necessary.",
+  "reproduce": "compare_occupancy.py --reference <sealed CPU cache/reference.pt> --candidates real_rope_sdpa=<run031> legacy_fp32=<run054> refreshed_fp32=<run057> bf16_av=<run058> cpu_precision=<CPU diagnostic> --threads 16 --output-dir <new>"
+}

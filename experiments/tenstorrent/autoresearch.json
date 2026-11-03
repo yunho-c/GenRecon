@@ -53,7 +53,8 @@
     "results/autoresearch/042-attention-precision-boundaries/summary.json",
     "results/autoresearch/043-output-head-attribution/summary.json",
     "results/autoresearch/044-refreshed-poster-control/summary.json",
-    "results/autoresearch/045-poster-bf16-av-sampler/summary.json"
+    "results/autoresearch/045-poster-bf16-av-sampler/summary.json",
+    "results/autoresearch/046-poster-bf16-av-occupancy/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -91,10 +92,11 @@
     "BF16 AV preserves isolated accuracy: self error 0.01290 to 0.01293, cross 0.00644 to 0.00618. Isolated measured times fall about 13% self and 3% cross vs the extracted FP32 baseline, but these millisecond operator timings do not predict full-flow speed. BF16 QK raises self error to 0.0999; its CPU quantization diagnostic already incurs 0.1014, so keep QK FP32 for the next full-flow candidate.",
     "For accepted full shape captures, CPU execution of the original head on actual TT hidden values has 6.77% error vs the stock prediction; observed TT prediction error is 6.69%. Combined native head arithmetic differs only 0.522% from CPU on identical TT hidden values. Hidden error is 1.97%, normalized-hidden error 1.71%. The learned projection amplifies upstream differences; a separate output-head precision fix is low priority on this fixture. These metrics are not additive error components.",
     "Every refreshed TT sampler state and final sample matches the legacy FP32 reciprocal run bitwise. Sampler time 129.725s matches prior129.726s closely. Extracting shared arithmetic did not alter this full-model execution. Strict reference gates still fail at final relative L2 0.6074; this control is not a promotion.",
-    "BF16 AV decreases real-poster final latent error vs stock FP32 from 0.6074 to 0.5750. Forward latency is 5824.9ms vs 5886.1ms; complete sampler timings are retained below. This is an exploratory matched run on one crop, not proof of general accuracy or a statistically established small speed gain."
+    "BF16 AV decreases real-poster final latent error vs stock FP32 from 0.6074 to 0.5750. Forward latency is 5824.9ms vs 5886.1ms; complete sampler timings are retained below. This is an exploratory matched run on one crop, not proof of general accuracy or a statistically established small speed gain.",
+    "Real-poster BF16 AV improves occupancy IoU vs the same FP32 reference from 0.6776 to 0.7132, with 5660 occupied voxels vs 6464 reference. False positives/negatives fall from 781/1555 to 613/1417. Sampler time is 128.155s vs 129.725s in the paired run (1.21% lower). All legacy/refreshed reference control grids decode bitwise identically."
   ],
   "next_actions": [
-    "Archive completed common-decoder run061. Refreshed FP32 states match legacy bitwise; compare all control grids and assess BF16-AV occupancy against both FP32 and CPU precision diagnostic.",
+    "Finish live run062 head-first shape layout; verify actual worker and compare all states bitwise to run053, not only CPU smoke. Inspect native IR logical/tiled sizes for RoPE. If promising, extend to the real-poster BF16-AV sampler with the same sealed stock reference and common occupancy decoder.",
     "Finish run062 head-first shape layout. Compare all sampler states with modern real-RoPE SDPA control run053 under strict identity and native IR padding/dtype inspection. If exact and faster, extend to real-poster BF16-AV sampler and common-decoder occupancy.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
