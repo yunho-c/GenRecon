@@ -1,0 +1,902 @@
+{
+  "status": "completed_native_power_two_control",
+  "scope": "Measure FP32 matrix-reduction error with exactly BF16-representable inputs.\n\nSeed62 matches the earlier matrix probe. Native storage defaults to FP32;\n--matmul-mode tests BF16 sources with either ordinary BF16 or explicit FP32 output.\nReduction mode varies dot length using prefixes of the same original data.\nActive-terms mode retains one K2 matrix graph and changes only input values,\nisolating the two products and reversing their order without recompilation.\nMantissa-split mode separates each BF16-representable operand into a six-fraction-\nbit high part and an exact residual on CPU, then measures each native product.\nPower-two mode measures 1 +/- 2**(-s), s=0..31, through one unchanged K2 graph.\nThis is a synthetic mechanism diagnostic, not learned-model attribution.\n",
+  "seed": 62,
+  "mode": "power_two",
+  "matmul_mode": "fp32",
+  "cases": {
+    "full_k2": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "6b0143e82ca0c87a502365439106e38c6ecfa9ef761b49b24247912400dcceb3",
+        "27c65abe51462ce4de3ae46b9e9e8d16e5667a1c3ed15e54f7f290350a15c60e"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 0.00048828125
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 0.00048828125
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999563,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.0024325099657289684,
+        0.0029538810485973954,
+        0.0029091709875501692
+      ],
+      "native_input_dtypes": [
+        "torch.float32",
+        "torch.float32"
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {},
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {
+        "CompileTime": 1
+      }
+    },
+    "first_only": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "6b0143e82ca0c87a502365439106e38c6ecfa9ef761b49b24247912400dcceb3",
+        "5a871fb599b0ee7a26d9805f4f5390347cd6e5ae969368179c4929a76ecc7eef"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": null,
+        "max_abs": 0.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": null,
+        "max_abs": 0.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": null,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": true,
+      "native_bitwise_float64_rounded": true,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.0030262030195444822,
+        0.002418440009932965,
+        0.0022340990253724158
+      ],
+      "native_input_dtypes": [
+        "torch.float32",
+        "torch.float32"
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "second_only": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "6b0143e82ca0c87a502365439106e38c6ecfa9ef761b49b24247912400dcceb3",
+        "6430374917154abfe20a0ea7ff7e8e7af5b928da6cacb9ac95bd36791ee88fe1"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000913,
+        "max_abs": 0.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000913,
+        "max_abs": 0.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000913,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": true,
+      "native_bitwise_float64_rounded": true,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.0022639590315520763,
+        0.0019877880113199353,
+        0.002222538983915001
+      ],
+      "native_input_dtypes": [
+        "torch.float32",
+        "torch.float32"
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "reversed_k2": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "ab5f7ae4a74039aac73175212dd4be7c36f8918f32ca2f112ef3a46ab07a3610",
+        "e2b76d337dd84aa0b1c974fa40710ca8ac2230432e55bc05f5ea58ddad59f36c"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 0.00048828125
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 0.00048828125
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999563,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.0022216890356503427,
+        0.0020559480180963874,
+        0.0016959169879555702
+      ],
+      "native_input_dtypes": [
+        "torch.float32",
+        "torch.float32"
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "negative_base": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "6b0143e82ca0c87a502365439106e38c6ecfa9ef761b49b24247912400dcceb3",
+        "abfac768b032341d9b32ce1516809845d05867833540c5d7383b2cc91dd0a4fe"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907451,
+        "max_abs": 0.00048828125
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907451,
+        "max_abs": 0.00048828125
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999534,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.00187195697799325,
+        0.0018814170034602284,
+        0.0021626189700327814
+      ],
+      "native_input_dtypes": [
+        "torch.float32",
+        "torch.float32"
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "scaled_up": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "d1dfd99dbbef30564fdc3175e6b427ba75fa55087b3f9dd79b32f25c36486a0c",
+        "27c65abe51462ce4de3ae46b9e9e8d16e5667a1c3ed15e54f7f290350a15c60e"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 32.0
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 32.0
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999563,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.0018949980149045587,
+        0.001944417948834598,
+        0.0019433079869486392
+      ],
+      "native_input_dtypes": [
+        "torch.float32",
+        "torch.float32"
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    },
+    "scaled_down": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "106f838444822de6f10ea7d4045a95480fc7222e2bd98d453a321545ab238dc3",
+        "27c65abe51462ce4de3ae46b9e9e8d16e5667a1c3ed15e54f7f290350a15c60e"
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 7.450580596923828e-09
+      },
+      "native_vs_cpu_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 9.76562496325684e-05,
+        "pcc": 0.9999998807907464,
+        "max_abs": 7.450580596923828e-09
+      },
+      "cpu_fp32_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999563,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_bitwise_float64_rounded": false,
+      "output_dtype": "torch.float32",
+      "warm_seconds": [
+        0.00201355799799785,
+        0.0018225880339741707,
+        0.0018267969717271626
+      ],
+      "native_input_dtypes": [
+        "torch.float32",
+        "torch.float32"
+      ],
+      "input_roundtrip_bitwise": true,
+      "native_repeats_bitwise": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      ],
+      "runtime_ir_sha256": "8ac6b97d6010ef2752493f48415b07c433f3309410e1a59b2f51b5f87ce04ff2",
+      "executed_fallback_ops": [],
+      "aten_counters": {},
+      "dynamo_before": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "dynamo_after": {
+        "calls_captured": 1,
+        "unique_graphs": 1
+      },
+      "xla_compile_samples": {}
+    }
+  },
+  "source_commit": "79e13b55d8b7b8fc2835bec62cb2a85a67f300d6",
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "source_sha256": {
+    "experiments/tenstorrent/matmul_reduction_probe.py": "a6ce6b8035d2020e1994b6be4603688b43c62c347a4698548352d513d2776d06",
+    "experiments/tenstorrent/fp32_matmul_probe.py": "0b65e3dd16349d0efbeec7e0650ac4f832aefa1a57ae7b7d8e665adc7a8382be"
+  },
+  "controls": {
+    "native_full_vs_cpu_sum_of_isolated_native_products": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 9.76562496325684e-05,
+      "pcc": 0.9999998807907464,
+      "max_abs": 0.00048828125
+    },
+    "isolated_native_sum_vs_cpu_full": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 0.9999999999999563,
+      "max_abs": 0.0
+    },
+    "full_vs_reversed_native": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0,
+      "max_abs": 0.0
+    },
+    "common_scale_up_bitwise": true,
+    "common_scale_down_bitwise": true
+  },
+  "exponent_grid": {
+    "0": {
+      "cpu_positive": 2.0,
+      "cpu_negative": 0.0,
+      "native_positive": [
+        2.0
+      ],
+      "native_negative": [
+        0.0
+      ]
+    },
+    "1": {
+      "cpu_positive": 1.5,
+      "cpu_negative": 0.5,
+      "native_positive": [
+        1.5
+      ],
+      "native_negative": [
+        0.5
+      ]
+    },
+    "2": {
+      "cpu_positive": 1.25,
+      "cpu_negative": 0.75,
+      "native_positive": [
+        1.25
+      ],
+      "native_negative": [
+        0.75
+      ]
+    },
+    "3": {
+      "cpu_positive": 1.125,
+      "cpu_negative": 0.875,
+      "native_positive": [
+        1.125
+      ],
+      "native_negative": [
+        0.875
+      ]
+    },
+    "4": {
+      "cpu_positive": 1.0625,
+      "cpu_negative": 0.9375,
+      "native_positive": [
+        1.0625
+      ],
+      "native_negative": [
+        0.9375
+      ]
+    },
+    "5": {
+      "cpu_positive": 1.03125,
+      "cpu_negative": 0.96875,
+      "native_positive": [
+        1.03125
+      ],
+      "native_negative": [
+        0.96875
+      ]
+    },
+    "6": {
+      "cpu_positive": 1.015625,
+      "cpu_negative": 0.984375,
+      "native_positive": [
+        1.015625
+      ],
+      "native_negative": [
+        0.984375
+      ]
+    },
+    "7": {
+      "cpu_positive": 1.0078125,
+      "cpu_negative": 0.9921875,
+      "native_positive": [
+        1.0078125
+      ],
+      "native_negative": [
+        0.9921875
+      ]
+    },
+    "8": {
+      "cpu_positive": 1.00390625,
+      "cpu_negative": 0.99609375,
+      "native_positive": [
+        1.00390625
+      ],
+      "native_negative": [
+        0.99609375
+      ]
+    },
+    "9": {
+      "cpu_positive": 1.001953125,
+      "cpu_negative": 0.998046875,
+      "native_positive": [
+        1.001953125
+      ],
+      "native_negative": [
+        0.998046875
+      ]
+    },
+    "10": {
+      "cpu_positive": 1.0009765625,
+      "cpu_negative": 0.9990234375,
+      "native_positive": [
+        1.0009765625
+      ],
+      "native_negative": [
+        0.9990234375
+      ]
+    },
+    "11": {
+      "cpu_positive": 1.00048828125,
+      "cpu_negative": 0.99951171875,
+      "native_positive": [
+        1.0009765625
+      ],
+      "native_negative": [
+        0.9990234375
+      ]
+    },
+    "12": {
+      "cpu_positive": 1.000244140625,
+      "cpu_negative": 0.999755859375,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "13": {
+      "cpu_positive": 1.0001220703125,
+      "cpu_negative": 0.9998779296875,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "14": {
+      "cpu_positive": 1.00006103515625,
+      "cpu_negative": 0.99993896484375,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "15": {
+      "cpu_positive": 1.000030517578125,
+      "cpu_negative": 0.999969482421875,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "16": {
+      "cpu_positive": 1.0000152587890625,
+      "cpu_negative": 0.9999847412109375,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "17": {
+      "cpu_positive": 1.0000076293945312,
+      "cpu_negative": 0.9999923706054688,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "18": {
+      "cpu_positive": 1.0000038146972656,
+      "cpu_negative": 0.9999961853027344,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "19": {
+      "cpu_positive": 1.0000019073486328,
+      "cpu_negative": 0.9999980926513672,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "20": {
+      "cpu_positive": 1.0000009536743164,
+      "cpu_negative": 0.9999990463256836,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "21": {
+      "cpu_positive": 1.0000004768371582,
+      "cpu_negative": 0.9999995231628418,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "22": {
+      "cpu_positive": 1.000000238418579,
+      "cpu_negative": 0.9999997615814209,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "23": {
+      "cpu_positive": 1.0000001192092896,
+      "cpu_negative": 0.9999998807907104,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "24": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 0.9999999403953552,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "25": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "26": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "27": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "28": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "29": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "30": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "31": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    }
+  },
+  "outputs_sha256": "f491ca41bce9b241ee8ff04dc030fffb47fa2eb151f6faba7bf96a58e3b610f8"
+}

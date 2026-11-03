@@ -1,0 +1,368 @@
+{
+  "status": "completed_native_power_two_control",
+  "finding": "One actual FP32/HiFi4 K2 native matrix operation combining exact power-of-two products gives1+2^-11 as1+2^-10 and1-2^-11 as1-2^-10. Terms2^-12 through2^-23 disappear for both signs, despite FP32-representable source sums; negative2^-24 also disappears. Each isolated product is native-exact and their CPU sum matches the full CPU result. Reversing terms and scaling both by2^16 or2^-16 preserve native behavior. All seven value-only cases share one graph without compilation/fallback. This demonstrates precision loss during native product combination, not an identified internal instruction or full-model error share.",
+  "scope": "Measure FP32 matrix-reduction error with exactly BF16-representable inputs.\n\nSeed62 matches the earlier matrix probe. Native storage defaults to FP32;\n--matmul-mode tests BF16 sources with either ordinary BF16 or explicit FP32 output.\nReduction mode varies dot length using prefixes of the same original data.\nActive-terms mode retains one K2 matrix graph and changes only input values,\nisolating the two products and reversing their order without recompilation.\nMantissa-split mode separates each BF16-representable operand into a six-fraction-\nbit high part and an exact residual on CPU, then measures each native product.\nPower-two mode measures 1 +/- 2**(-s), s=0..31, through one unchanged K2 graph.\nThis is a synthetic mechanism diagnostic, not learned-model attribution.\n",
+  "exponent_grid": {
+    "0": {
+      "cpu_positive": 2.0,
+      "cpu_negative": 0.0,
+      "native_positive": [
+        2.0
+      ],
+      "native_negative": [
+        0.0
+      ]
+    },
+    "1": {
+      "cpu_positive": 1.5,
+      "cpu_negative": 0.5,
+      "native_positive": [
+        1.5
+      ],
+      "native_negative": [
+        0.5
+      ]
+    },
+    "2": {
+      "cpu_positive": 1.25,
+      "cpu_negative": 0.75,
+      "native_positive": [
+        1.25
+      ],
+      "native_negative": [
+        0.75
+      ]
+    },
+    "3": {
+      "cpu_positive": 1.125,
+      "cpu_negative": 0.875,
+      "native_positive": [
+        1.125
+      ],
+      "native_negative": [
+        0.875
+      ]
+    },
+    "4": {
+      "cpu_positive": 1.0625,
+      "cpu_negative": 0.9375,
+      "native_positive": [
+        1.0625
+      ],
+      "native_negative": [
+        0.9375
+      ]
+    },
+    "5": {
+      "cpu_positive": 1.03125,
+      "cpu_negative": 0.96875,
+      "native_positive": [
+        1.03125
+      ],
+      "native_negative": [
+        0.96875
+      ]
+    },
+    "6": {
+      "cpu_positive": 1.015625,
+      "cpu_negative": 0.984375,
+      "native_positive": [
+        1.015625
+      ],
+      "native_negative": [
+        0.984375
+      ]
+    },
+    "7": {
+      "cpu_positive": 1.0078125,
+      "cpu_negative": 0.9921875,
+      "native_positive": [
+        1.0078125
+      ],
+      "native_negative": [
+        0.9921875
+      ]
+    },
+    "8": {
+      "cpu_positive": 1.00390625,
+      "cpu_negative": 0.99609375,
+      "native_positive": [
+        1.00390625
+      ],
+      "native_negative": [
+        0.99609375
+      ]
+    },
+    "9": {
+      "cpu_positive": 1.001953125,
+      "cpu_negative": 0.998046875,
+      "native_positive": [
+        1.001953125
+      ],
+      "native_negative": [
+        0.998046875
+      ]
+    },
+    "10": {
+      "cpu_positive": 1.0009765625,
+      "cpu_negative": 0.9990234375,
+      "native_positive": [
+        1.0009765625
+      ],
+      "native_negative": [
+        0.9990234375
+      ]
+    },
+    "11": {
+      "cpu_positive": 1.00048828125,
+      "cpu_negative": 0.99951171875,
+      "native_positive": [
+        1.0009765625
+      ],
+      "native_negative": [
+        0.9990234375
+      ]
+    },
+    "12": {
+      "cpu_positive": 1.000244140625,
+      "cpu_negative": 0.999755859375,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "13": {
+      "cpu_positive": 1.0001220703125,
+      "cpu_negative": 0.9998779296875,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "14": {
+      "cpu_positive": 1.00006103515625,
+      "cpu_negative": 0.99993896484375,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "15": {
+      "cpu_positive": 1.000030517578125,
+      "cpu_negative": 0.999969482421875,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "16": {
+      "cpu_positive": 1.0000152587890625,
+      "cpu_negative": 0.9999847412109375,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "17": {
+      "cpu_positive": 1.0000076293945312,
+      "cpu_negative": 0.9999923706054688,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "18": {
+      "cpu_positive": 1.0000038146972656,
+      "cpu_negative": 0.9999961853027344,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "19": {
+      "cpu_positive": 1.0000019073486328,
+      "cpu_negative": 0.9999980926513672,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "20": {
+      "cpu_positive": 1.0000009536743164,
+      "cpu_negative": 0.9999990463256836,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "21": {
+      "cpu_positive": 1.0000004768371582,
+      "cpu_negative": 0.9999995231628418,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "22": {
+      "cpu_positive": 1.000000238418579,
+      "cpu_negative": 0.9999997615814209,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "23": {
+      "cpu_positive": 1.0000001192092896,
+      "cpu_negative": 0.9999998807907104,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "24": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 0.9999999403953552,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "25": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "26": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "27": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "28": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "29": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "30": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    },
+    "31": {
+      "cpu_positive": 1.0,
+      "cpu_negative": 1.0,
+      "native_positive": [
+        1.0
+      ],
+      "native_negative": [
+        1.0
+      ]
+    }
+  },
+  "controls": {
+    "native_full_vs_cpu_sum_of_isolated_native_products": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 9.76562496325684e-05,
+      "pcc": 0.9999998807907464,
+      "max_abs": 0.00048828125
+    },
+    "isolated_native_sum_vs_cpu_full": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 0.9999999999999563,
+      "max_abs": 0.0
+    },
+    "full_vs_reversed_native": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0,
+      "max_abs": 0.0
+    },
+    "common_scale_up_bitwise": true,
+    "common_scale_down_bitwise": true
+  },
+  "matrix_ops": [
+    "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xf32, #ttnn_layout3>, tensor<2x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+  ],
+  "no_value_change_compilation_or_fallback": true,
+  "decision": "Use this exact arithmetic control when evaluating native kernel/accumulator changes. Reject dtype-only and simple mantissa-split remedies already tested; avoid claiming tensor FP32 storage means full FP32 arithmetic. Original sampler and real-scene gates remain unchanged.",
+  "limits": "Synthetic K2 mechanism diagnostic only. The shared native operation and SDK configuration are verified; the executing microkernel/instruction sequence is not captured. No kernel patch or end-to-end quality improvement is established.",
+  "reproduce": "matmul_reduction_probe.py --mode power_two --output-dir <new> (source79e13b5)"
+}

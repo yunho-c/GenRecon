@@ -967,3 +967,13 @@ length, without value-change recompilation or fallback. This is a rejected
 mechanism control; decomposition and final addition occur on CPU and establish
 no native implementation or speedup. Reproduce with
 `matmul_reduction_probe.py --mode mantissa_split --lengths 2 32 128 --output-dir <new>`.
+
+The [exact power-of-two combination control](results/autoresearch/080-power-two-combination/summary.json)
+uses one native FP32/HiFi4 K2 graph to evaluate `1 +/- 2**(-s)` for s=0..31.
+At s=11 the small term doubles; at s=12..23 it disappears, although FP32 can
+represent both signed sums. The isolated native products are exact and their
+CPU sum matches the original CPU matrix result. Reversing terms and common
+scaling by `2**16` or `2**-16` preserve native behavior. All seven value-only
+cases avoid compilation/fallback. This demonstrates native combination loss;
+it does not identify an internal instruction or establish a kernel remedy.
+Reproduce with `matmul_reduction_probe.py --mode power_two --output-dir <new>`.
