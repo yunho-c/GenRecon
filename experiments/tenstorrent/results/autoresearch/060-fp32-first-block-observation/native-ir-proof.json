@@ -1,0 +1,14 @@
+{
+  "ordinary": {
+    "linear_matmul_ops": 457,
+    "linear_matmul_bf16_operands": 0,
+    "linear_matmul_hifi4_fp32_accumulation": 457,
+    "runtime_ir_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1"
+  },
+  "captured": {
+    "linear_matmul_ops": 457,
+    "linear_matmul_bf16_operands": 0,
+    "linear_matmul_hifi4_fp32_accumulation": 457,
+    "runtime_ir_sha256": "7a026b4def5102acbfdaa35a82fe01faeb9d28b44d2cdec4e4e5e89a1deec449"
+  }
+}

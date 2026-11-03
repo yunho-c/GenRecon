@@ -730,6 +730,12 @@ digests and tensor artifacts. Combined attention, MLP and output-head errors
 are reported separately from propagated differences; they are not additive
 contributions to the final prediction error.
 
+The [FP32 detailed capture](results/autoresearch/060-fp32-first-block-observation/summary.json)
+passes that hardware guard: its final output matches the ordinary forward
+bitwise, all 45 states repeat exactly, and no fallback occurs. Native IR retains
+FP32 linear/matmul operands with HiFi4 accumulation. First-block/native depth
+states and both runtime IRs are retained for controlled local analysis.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
