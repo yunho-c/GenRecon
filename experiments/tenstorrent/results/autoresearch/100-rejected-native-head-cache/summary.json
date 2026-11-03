@@ -1,0 +1,38 @@
+{
+  "status": "rejected_native_head_cache_candidate",
+  "cpu_every_state_bitwise_ordinary": true,
+  "native_vs_ordinary_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.10205274660198976,
+    "pcc": 0.9947856552840086,
+    "max_abs": 1.7864612340927124
+  },
+  "native_vs_stock_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.30623595186154023,
+    "pcc": 0.9526621754697706,
+    "max_abs": 4.099067449569702
+  },
+  "original12steps21calls_retained": true,
+  "observed_prefill_plus_sampler_seconds_not_speedup_evidence": 13.51778966607526,
+  "native_functions": {
+    "prefill": {
+      "main_matrix_ops": 32,
+      "context_head_pack_ops": 30
+    },
+    "body": {
+      "main_matrix_ops": 425,
+      "context_head_pack_ops": 0
+    }
+  },
+  "decision": "Exact native trajectory guard rejected the candidate before ABBA trials; no performance promotion. Diagnostic will separate raw KV projection, normalization/head packing and the split cache boundary.",
+  "limits": "No speedup claim from the unpaired timing. Fallback counters were not finalized after early equality rejection; do not assert absence from missing metadata."
+}
