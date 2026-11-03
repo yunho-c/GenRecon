@@ -1,0 +1,23 @@
+{
+  "status": "completed_shared_weight_pretrained_boundary_diagnostic",
+  "cpu_all_paths_bitwise_original": true,
+  "both_original_condition_branches": true,
+  "native_findings": {
+    "positive": {
+      "head_prefill_KV_bitwise_pack_after_raw": true,
+      "fused_pack_cross_bitwise_raw_cross": true,
+      "split_pack_cross_relative_l2_vs_raw": 0.0006075351615560585,
+      "head_prefill_cross_bitwise_split_cross": true
+    },
+    "negative": {
+      "head_prefill_KV_bitwise_pack_after_raw": true,
+      "fused_pack_cross_bitwise_raw_cross": true,
+      "split_pack_cross_relative_l2_vs_raw": 0.0004181200319677537,
+      "head_prefill_cross_bitwise_split_cross": true
+    }
+  },
+  "lowering_observation": "Raw/fused attention normalizes keys in transposed BHDT layout and emits QK matmul transpose_b=false. Split cached BHND keys enter QK with transpose_b=true. This is an observed lowering difference, not yet a specific faulty instruction.",
+  "next": "Test a transposed-key cache boundary so QK uses the original BHDT/transpose_b=false form, then require original native all-state equality before timing.",
+  "limits": "One teacher-forced first-block query on original learned weights and two condition branches. No complete-sampler speed or quality promotion.",
+  "checks": "All cross outputs repeat bitwise; no native fallback/counters.66 focused CPU tests pass, including exact diagnostic paths and shared learned objects."
+}

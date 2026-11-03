@@ -108,7 +108,8 @@
     "results/autoresearch/097-head-packed-cache-prototype/summary.json",
     "results/autoresearch/098-fresh-head-cache-ordinary-control/summary.json",
     "results/autoresearch/099-head-cache-pretrained-cpu/summary.json",
-    "results/autoresearch/100-rejected-native-head-cache/summary.json"
+    "results/autoresearch/100-rejected-native-head-cache/summary.json",
+    "results/autoresearch/101-head-cache-boundary-diagnostic/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -205,7 +206,8 @@
     "Opt-in heads cache prototype moves cross-KV key normalization and head packing into dynamic prefill. All original learned objects/LoRA remain; raw cache stays default.70 focused CPU checks pass, including bitwise scene/branch/noise/time controls and invalid-plan rejection. Pretrained native equivalence/performance remain unverified.",
     "Fresh ordinary native baseline133 with current prototype source identities preserves every original110 state bitwise, without fallback or trajectory recompilation. Original stock CPU final error0.299911 still fails. Timing overlapped candidate CPU reference work and is not paired performance evidence.",
     "Pretrained head-packed KV cache CPU trajectory is bitwise the ordinary prepared model at every original12-step/21-call state, with original learned parameter identities. Logical cache payload remains473702400bytes per branch across90 tensors. Native equivalence is separately rejected; CPU equality alone is insufficient.",
-    "Pretrained native heads-cache candidate is rejected before ABBA: everyCPUstate is exact, but final native-vs-ordinary relative L2 is0.102053 and stock-CPU error0.306236. Observed13.5178s prefill+sampler is not accepted speedup evidence. Body moves context head packing into prefix, but a native arithmetic/boundary difference must be isolated first. Raw cache remains default."
+    "Pretrained native heads-cache candidate is rejected before ABBA: everyCPUstate is exact, but final native-vs-ordinary relative L2 is0.102053 and stock-CPU error0.306236. Observed13.5178s prefill+sampler is not accepted speedup evidence. Body moves context head packing into prefix, but a native arithmetic/boundary difference must be isolated first. Raw cache remains default.",
+    "Shared-weight first-block diagnostic: native headed-prefill KV equals native pack-after-raw bitwise; fused pack+cross equals raw cross bitwise, but splitting pack/cross yields0.000607535 positive/0.000418120 negative relative error. Raw/fused key normalization is lowered in transposed BHDT with QK transpose_b=false; cached BHND uses transpose_b=true. Test transposed-key boundary before any speed claim."
   ],
   "next_actions": [
     "Isolate rejected heads-cache native difference using shared-weight raw KV prefill, normalized/head-packed prefill, pack-after-raw and fused/split first-block cross-attention controls. Preserve exact native/CPU gates and do not promote the faster unpaired candidate.",
