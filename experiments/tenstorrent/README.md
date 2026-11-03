@@ -1269,6 +1269,29 @@ the native C++ report parser selects the original call count by recorded stage.
 These calibration results do not establish a speedup or resolve the failed stock
 CPU quality gates.
 
+The [complete native texture device profile](results/autoresearch/115-complete-native-texture-sampler-profile/summary.json)
+now validates all 18 calls, each with 4,219 device records and 457 matrix
+products: 75,942 sampler operations and 8,226 matrix products. All 88,599
+first/warm/sampler records are tied to complete, contiguous profiler-read byte
+ranges, with no unassigned trailing rows. Every native trajectory state matches
+the independently sealed ordinary control. Sampler kernel durations sum to
+13.596s: matrix 3.653s (26.87%), reshape 3.611s (26.56%), and binary operations
+2.758s (20.29%). These are summed kernel-time shares. Host model timers sum to
+13.886s and fresh uploads/preparation to 43.1ms. Instrumented wall is 133.313s,
+including 104.947s of profiler flushing and other host work; it is not ordinary
+sampler latency. Original stock CPU quality gates remain failed.
+
+Reproduce using `profile_sdk_codegen.py` with the calibrated texture export,
+canonical generated forward, fresh ordinary native sampler control, recorded
+index repair and native-frequency IR proof, then `--profile --device-profile-only`.
+Run `cpp_sampler_profile_report.py --cpp-csv <native.csv> --sampler-result
+<execute.json> --output <new.json>` to validate all windows. The result115
+`verify.py` audits the retained compressed CSV bytes, exact trajectory, constant
+repair binding and complete report without hardware. Preserve the raw CSV bytes
+when decompressing: the recorded byte ranges are part of the evidence. This
+profiles the ordinary graph; optimized-cache kernel attribution is separate
+from the prefill-inclusive performance result111.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

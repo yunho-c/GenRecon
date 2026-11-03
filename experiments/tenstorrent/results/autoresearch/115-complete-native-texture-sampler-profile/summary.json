@@ -1,0 +1,83 @@
+{
+  "status": "completed_native_equal_original_texture_sampler_device_profile",
+  "scope": "Original pretrained synthetic texture512, one n150;12steps18calls with fixed shape concat, original learnedweights/LoRA and CPU Euler/CFG. Matching-revision profiling SDK is calibrated to canonical generated output and every native142 sampler state.",
+  "all_states_bitwise_native": true,
+  "complete_sampler_calls": 18,
+  "device_rows_per_call": 4219,
+  "matrix_ops_per_call": 457,
+  "sampler_device_operations": 75942,
+  "sampler_matrix_operations": 8226,
+  "all_first_warm_sampler_native_rows": 88599,
+  "all_native_byte_ranges_contiguous_and_complete": true,
+  "kernel_sum_seconds": 13.595731069,
+  "host_model_seconds_sum": 13.885557517001871,
+  "fresh_upload_preparation_seconds_sum": 0.0430532451136969,
+  "profiler_flush_seconds_sum": 104.94678421982098,
+  "instrumented_sampler_wall_seconds": 133.31261244503548,
+  "outside_model_adapter_seconds": 14.427346605749335,
+  "top_kernel_operations": [
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 8226,
+      "kernel_sum_ns": 3652640382.0,
+      "share_of_kernel_sum": 0.2686608291575056
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 2700,
+      "kernel_sum_ns": 3611416053.0,
+      "share_of_kernel_sum": 0.2656286767273949
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 26478,
+      "kernel_sum_ns": 2758184614.0,
+      "share_of_kernel_sum": 0.2028713719035685
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 10332,
+      "kernel_sum_ns": 1127501979.0,
+      "share_of_kernel_sum": 0.08293058852648595
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 7020,
+      "kernel_sum_ns": 663143453.0,
+      "share_of_kernel_sum": 0.04877585836572272
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 7020,
+      "kernel_sum_ns": 590716233.0,
+      "share_of_kernel_sum": 0.04344865531702876
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 4320,
+      "kernel_sum_ns": 422844893.0,
+      "share_of_kernel_sum": 0.031101298698393665
+    }
+  ],
+  "unchanged_stock_CPU_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.10517075593740585,
+    "pcc": 0.9944466976224953,
+    "max_abs": 2.1296298503875732
+  },
+  "cpp_csv_uncompressed_sha256": "c6f1ac08ddcbf05f34f47efdb87744a1814537ffd052dd67972f8db5d2add015",
+  "source_sha256": "d47a341f61c030424bd9ea221d3af5dd12ae88e73ac315fa87351c3c2fb8198b",
+  "focused_tests": "25 passed in113",
+  "verification": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/results/autoresearch/115-complete-native-texture-sampler-profile/verify.py",
+  "interpretation": "Kernel sums are actual operation durations, not critical-path wall attribution. First/warm calls excluded from sampler aggregates. Host model timers exclude upload preparation and profiler flushing; instrumented sampler wall includes flushing and is not ordinary latency. This report does not infer input shapes or depend on optional Tracy host visualization.",
+  "limits": [
+    "Actual native operation names/durations and complete per-call ranges, no optional Tracy host capture dependency. Input shapes/per-core timelines are outside this CPP report scope.",
+    "Kernel-sum shares do not additively attribute ordinary wall-time or establish exact speed contributions. Instrumented wall includes104.947s flushing and other host work; not ordinary latency.",
+    "Unchanged strict stock CPU final relativeL2=0.105170756/PCC=0.994446698 still fails. No production/default or reconstruction-quality promotion.",
+    "This profile is the ordinary denoiser execution. The native-exact19.38% cached timing is measured separately in111; an optimized cache device profile remains separate work."
+  ]
+}
