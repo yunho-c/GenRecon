@@ -1,0 +1,75 @@
+{
+  "status": "complete_marked_current_recipe_matching_revision_profile",
+  "recipe": "Full pretrained shape512, FP32 promotion of learned quantized values, flat head-first real RoPE, reciprocal FP32 attention, HiFi4.",
+  "all_outputs_bitwise_canonical": true,
+  "all_repeats_exact": true,
+  "all_five_windows_complete": true,
+  "device_operations_per_window": 4219,
+  "matrix_operations_per_window": 457,
+  "measured_wall_ms": 776.010442,
+  "measured_kernel_sum_ms": 760.5075,
+  "operation_kernel_ms": {
+    "MatmulDeviceOperation": 203.285072,
+    "ReshapeViewDeviceOperation": 201.271754,
+    "BinaryNgDeviceOperation": 154.853361,
+    "UnaryDeviceOperation": 64.025114,
+    "TransposeDeviceOperation": 37.122209,
+    "SliceDeviceOperation": 33.27914,
+    "ReduceDeviceOperation": 23.669653,
+    "FillPadDeviceOperation": 13.153124,
+    "PermuteDeviceOperation": 7.354614,
+    "TypecastDeviceOperation": 6.307776,
+    "LayerNormDeviceOperation": 6.25407,
+    "EmbeddingsDeviceOperation": 6.06777,
+    "UntilizeDeviceOperation": 3.612222,
+    "TilizeWithValPaddingDeviceOperation": 0.182125,
+    "TilizeDeviceOperation": 0.066223,
+    "ConcatDeviceOperation": 0.003273
+  },
+  "largest_reshape_input_groups": [
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 66650379.0,
+      "host_sum_ns": 114761.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_X_PAD[LOGICAL]": "3072[3072]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 59917587.0,
+      "host_sum_ns": 226800.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 54284298.0,
+      "host_sum_ns": 119143.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "4608[4608]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    }
+  ],
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "interpretation": "Matrix26.73%, reshape26.47%, binary20.36% of summed kernel durations. The top three reshape input groups total180.85ms of201.27ms reshape kernel time. Inspect their exact native IR before choosing a layout rewrite.",
+  "limits": "One marked warm denoiser forward; kernel sums are not critical-path sampler percentages. Original strict stock CPU full-trajectory gates remain failed. No default or scene-quality promotion.",
+  "fixture_discovery": "Five generated activations map exactly to fixed128-frequency vector, timestep, context, projected condition and current latent. This mapping enables original-schedule dynamic sampler profiling without rebuilding learned weights.",
+  "next": "Validate optional compact native-C++ timing capture125 against this full raw-marker capture, then profile original sampler calls and conditioning cache; investigate dominant reshape layouts."
+}

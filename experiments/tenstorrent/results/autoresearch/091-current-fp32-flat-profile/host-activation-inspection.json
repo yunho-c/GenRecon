@@ -1,0 +1,74 @@
+[
+  {
+    "file": "arg8.tensorbin",
+    "shape": [
+      128
+    ],
+    "dtype": "torch.float32",
+    "matching_input_indices": [],
+    "range": [
+      0.00010746075713541359,
+      1.0
+    ]
+  },
+  {
+    "file": "arg9.tensorbin",
+    "shape": [
+      1
+    ],
+    "dtype": "torch.float32",
+    "matching_input_indices": [
+      1
+    ],
+    "range": [
+      600.0,
+      600.0
+    ]
+  },
+  {
+    "file": "arg19.tensorbin",
+    "shape": [
+      1,
+      1029,
+      1024
+    ],
+    "dtype": "torch.float32",
+    "matching_input_indices": [
+      2
+    ],
+    "range": [
+      -4.539831161499023,
+      4.878222942352295
+    ]
+  },
+  {
+    "file": "arg33.tensorbin",
+    "shape": [
+      512,
+      1024
+    ],
+    "dtype": "torch.float32",
+    "matching_input_indices": [
+      3
+    ],
+    "range": [
+      -4.883590221405029,
+      4.696035861968994
+    ]
+  },
+  {
+    "file": "arg674.tensorbin",
+    "shape": [
+      512,
+      32
+    ],
+    "dtype": "torch.float32",
+    "matching_input_indices": [
+      0
+    ],
+    "range": [
+      -3.6933116912841797,
+      3.828334331512451
+    ]
+  }
+]

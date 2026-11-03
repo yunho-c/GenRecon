@@ -1063,6 +1063,14 @@ canonical/SDK generated outputs and repeats are bitwise equal. Warm medians are
 separate marked profile of current arithmetic; full-trajectory gates remain
 unchanged, and this forward smoke pass does not establish scene quality.
 
+The [current-recipe marked profile](results/autoresearch/091-current-fp32-flat-profile/summary.json)
+retains 4,219 complete device rows and all 457 matrix operations in each of five
+windows, with bitwise canonical output. Its warm window is 776.01ms, with
+760.51ms summed kernel durations: matrix 26.73%, reshape 26.47%, binary 20.36%.
+The three largest reshape input groups total 180.85ms of 201.27ms reshape time.
+The retained shapes and native IR identify concrete layout investigations;
+these percentages remain kernel-sum shares, not full sampler wall attribution.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

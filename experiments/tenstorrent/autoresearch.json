@@ -98,7 +98,8 @@
     "results/autoresearch/087-profile-sdk-device-control/summary.json",
     "results/autoresearch/088-matched-sdk-denoiser-control/summary.json",
     "results/autoresearch/089-matching-revision-shape-profile/summary.json",
-    "results/autoresearch/090-fp32-flat-sdk-calibration/summary.json"
+    "results/autoresearch/090-fp32-flat-sdk-calibration/summary.json",
+    "results/autoresearch/091-current-fp32-flat-profile/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -185,7 +186,8 @@
     "Matching-revision isolated Tracy SDK runs unprofiled and profiled canonical K2 controls bitwise, with all native libraries confined to its workspace. Explicit TT_METAL_PROFILER_DIR yields3840 actual device timing rows. Device profiling capability is established; full-module calibration and marked denoiser captures remain.",
     "Full pretrained30-block shape512 generated denoiser on matching-revision SDK reproduces canonical generated execution bitwise and repeats exactly. Warm medians0.605576s canonical/0.601118s SDK are calibration observations under preloaded-activation boundary, not an optimization claim. Instrumented marked capture and current FP32/flat-RoPE recipe export follow.",
     "Matched-revision full shape512 generated profile preserves canonical output bitwise and has4403 complete rows in every first/warm/measured window. Measured604.54ms wall/588.36ms kernel sum; reshape32.62%, matmul20.18%, binary18.04% of kernel sums. These are not whole-sampler wall percentages. Keep quality gates and defaults unchanged; current FP32 flat-RoPE recipe calibration follows.",
-    "Current FP32 flat-RoPE reciprocal-attention shape512 full denoiser export retains all457 matrix operations and matches original sampler110 noise/positive conditions. Prepared CPU error1.63e-6; matching SDK and canonical generated outputs are bitwise equal with exact repeats, warm medians0.770672/0.771296s. Full-trajectory gates remain unchanged and failed historically."
+    "Current FP32 flat-RoPE reciprocal-attention shape512 full denoiser export retains all457 matrix operations and matches original sampler110 noise/positive conditions. Prepared CPU error1.63e-6; matching SDK and canonical generated outputs are bitwise equal with exact repeats, warm medians0.770672/0.771296s. Full-trajectory gates remain unchanged and failed historically.",
+    "Current FP32 flat-RoPE denoiser marked capture preserves canonical output bitwise with4219 complete rows and457 matrix products in each of five windows. Warm776.01ms wall/760.51ms kernel sum: matrix26.73%, reshape26.47%, binary20.36%. Three reshape input groups total180.85ms. Preserve original quality gates; target exact layout paths and original-schedule sampler profiling rather than treating these as whole-sampler percentages."
   ],
   "next_actions": [
     "Use the calibrated matching-revision profiling SDK to capture marked complete denoisers and dynamic conditioning prefill/body. Prioritize the current FP32 flat-RoPE reciprocal-attention recipe; require bitwise canonical controls and complete device rows before assigning kernel costs.",
@@ -196,9 +198,9 @@
   ],
   "live_experiments": [
     {
-      "run": 124,
-      "purpose": "Marked current FP32 flat-RoPE shape denoiser device profile after bitwise canonical calibration",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/124-profile-sdk-fp32-flat-capture"
+      "run": 125,
+      "purpose": "Validate compact native C++ per-operation profile against full raw-marker capture124",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/125-profile-sdk-compact-control"
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
