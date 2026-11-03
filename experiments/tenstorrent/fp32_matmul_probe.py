@@ -88,6 +88,7 @@ def main():
                'product_bf16_values_fp32_storage':(a.bfloat16().float(),b.bfloat16().float()),
                'product_bf16_values_k32':(a[:,:32].contiguous().bfloat16().float(),b[:32,:].contiguous().bfloat16().float()),
                'product_bf16_values_k1':(a[:,:1].contiguous().bfloat16().float(),b[:1,:].contiguous().bfloat16().float()),
+               'product_fp32_k1':(a[:,:1].contiguous(),b[:1,:].contiguous()),
                'cancellation_fp32':(cancel_a,cancel_b),
                'cancellation_bf16_values':(bf16_cancel_a,bf16_cancel_b)}
         torch.testing.assert_close(cancel_a @ cancel_b,torch.ones(512,128),rtol=0,atol=0)
