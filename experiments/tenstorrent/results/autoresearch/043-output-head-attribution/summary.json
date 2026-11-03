@@ -1,0 +1,115 @@
+{
+  "status": "completed_teacher_forced_head_diagnostic",
+  "scope": "Teacher-force the original CPU output head with accepted captured TT states.\n\nCombined normalization/projection error is observable from the captured hidden\nstate and prediction, without changing device lowering. CPU stage comparisons\nmeasure propagation/amplification; these errors are not additive components.\n",
+  "measurements": {
+    "cpu_precision": {
+      "hidden_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.008058476276931802,
+        "pcc": 0.9999674886013433,
+        "max_abs": 47.04150390625
+      },
+      "cpu_normalized_hidden_vs_stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.007742726056235039,
+        "pcc": 0.9999700250965069,
+        "max_abs": 0.2689354717731476
+      },
+      "cpu_head_on_hidden_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.028845511098052286,
+        "pcc": 0.9995848329355278,
+        "max_abs": 0.14326508343219757
+      },
+      "observed_prediction_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.028845511098052286,
+        "pcc": 0.9995848329355278,
+        "max_abs": 0.14326508343219757
+      },
+      "observed_prediction_vs_cpu_head_on_same_hidden": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999994,
+        "max_abs": 0.0
+      }
+    },
+    "tt": {
+      "hidden_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.019695334934972324,
+        "pcc": 0.9998502597788873,
+        "max_abs": 105.7109375
+      },
+      "cpu_normalized_hidden_vs_stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.017096457435066218,
+        "pcc": 0.9998538555721841,
+        "max_abs": 0.521661564707756
+      },
+      "cpu_head_on_hidden_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.067659584050985,
+        "pcc": 0.99778039752224,
+        "max_abs": 0.31111055612564087
+      },
+      "observed_prediction_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.06691406440448987,
+        "pcc": 0.9977801825908912,
+        "max_abs": 0.31577765941619873
+      },
+      "observed_prediction_vs_cpu_head_on_same_hidden": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.005218893808863692,
+        "pcc": 0.999998197700878,
+        "max_abs": 0.023204565048217773
+      }
+    }
+  },
+  "finding": "For accepted full shape captures, CPU execution of the original head on actual TT hidden values has 6.77% error vs the stock prediction; observed TT prediction error is 6.69%. Combined native head arithmetic differs only 0.522% from CPU on identical TT hidden values. Hidden error is 1.97%, normalized-hidden error 1.71%. The learned projection amplifies upstream differences; a separate output-head precision fix is low priority on this fixture. These metrics are not additive error components.",
+  "controls": "Physical checkpoint and all source artifact SHA256 values verified. Original FP32 and pipeline-precision CPU head outputs reconstruct saved full-model predictions bitwise. Source TT capture equals ordinary full-model final output bitwise and repeats exactly. No new device lowering or kernels were introduced.",
+  "decision": "Prioritize attention/torso accuracy and performance experiments; preserve full-trajectory checks. This diagnosis concerns one shape forward and does not establish the same attribution for occupancy or other scenes.",
+  "reproduce": "output_head_diagnostic.py --capture-directory <accepted block capture> --checkpoint <original shape_slat.pt> --output-dir <new>",
+  "retention": "Full selected hidden states, observed predictions and teacher-forced CPU predictions retained, along with source/checkpoint/script hashes. Full original 32-state capture is reproducible via block_diagnostic.py."
+}

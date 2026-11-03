@@ -50,7 +50,8 @@
     "results/autoresearch/039-matched-reciprocal-shape/summary.json",
     "results/autoresearch/040-poster-reciprocal-sampler/summary.json",
     "results/autoresearch/041-poster-reciprocal-occupancy/summary.json",
-    "results/autoresearch/042-attention-precision-boundaries/summary.json"
+    "results/autoresearch/042-attention-precision-boundaries/summary.json",
+    "results/autoresearch/043-output-head-attribution/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -85,7 +86,8 @@
     "Candidate reduces single-forward relative L2 from 0.06691 to 0.05618 but final sampler error increases from 0.38258 to 0.39210 and costs about 13\u201314% more time. Native local softmax gains are insufficient to improve this trajectory.",
     "Real-poster latent error decreases from 0.7488 to 0.6074 vs FP32 and from 0.7174 to 0.5472 vs the CPU precision diagnostic. This costs 129.73s vs 88.12s for the original 22-forward sampler (47.2% longer). Single-forward error is 0.03324. Numerical gates remain failed; the process returncode 1 records those gates, not a native runtime crash.",
     "Under the same original FP32 CPU decoder and zero threshold, real-poster occupied-grid IoU vs FP32 improves from 0.5135 with real-RoPE SDPA to 0.6776 with FP32 reciprocal attention; occupied voxels rise from 4241 to 5690 vs reference 6464. IoU vs CPU precision diagnostic improves from 0.5361 to 0.7227. CPU precision diagnostic vs FP32 remains 0.8684. Controls decode bitwise identically to retained historical grids.",
-    "BF16 AV preserves isolated accuracy: self error 0.01290 to 0.01293, cross 0.00644 to 0.00618. Isolated measured times fall about 13% self and 3% cross vs the extracted FP32 baseline, but these millisecond operator timings do not predict full-flow speed. BF16 QK raises self error to 0.0999; its CPU quantization diagnostic already incurs 0.1014, so keep QK FP32 for the next full-flow candidate."
+    "BF16 AV preserves isolated accuracy: self error 0.01290 to 0.01293, cross 0.00644 to 0.00618. Isolated measured times fall about 13% self and 3% cross vs the extracted FP32 baseline, but these millisecond operator timings do not predict full-flow speed. BF16 QK raises self error to 0.0999; its CPU quantization diagnostic already incurs 0.1014, so keep QK FP32 for the next full-flow candidate.",
+    "For accepted full shape captures, CPU execution of the original head on actual TT hidden values has 6.77% error vs the stock prediction; observed TT prediction error is 6.69%. Combined native head arithmetic differs only 0.522% from CPU on identical TT hidden values. Hidden error is 1.97%, normalized-hidden error 1.71%. The learned projection amplifies upstream differences; a separate output-head precision fix is low priority on this fixture. These metrics are not additive error components."
   ],
   "next_actions": [
     "Run real-poster full sampler with fp32_scores_bf16_av, then compare common-decoder occupancy to FP32 reciprocal and SDPA controls. Keep QK FP32: observed BF16 score quantization strongly degrades sharp self attention.",
@@ -95,6 +97,17 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "name": "057-poster-reciprocal-control",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/057-poster-reciprocal-control",
+      "status_at_last_check": "running CPU reference/preparation; actual worker confirmed"
+    },
+    {
+      "name": "058-poster-bf16-av",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/058-poster-bf16-av",
+      "status_at_last_check": "running CPU reference/preparation; actual worker confirmed"
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }

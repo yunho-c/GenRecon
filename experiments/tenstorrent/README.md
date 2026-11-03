@@ -611,6 +611,15 @@ and softmax. BF16 denotes the original torso dtype; FP32 CPU preparation checks
 retain FP32. Both modes are opt-in through `run.py --attention-mode` and require
 full sampler/quality checks. They do not change weights or sampler schedules.
 
+`output_head_diagnostic.py` applies the original CPU head to accepted captured
+hidden states, verifying checkpoint/artifact hashes and exact reconstruction
+of both CPU references. The [teacher-forced result](results/autoresearch/043-output-head-attribution/summary.json)
+finds 0.52% combined head arithmetic error on identical TT hidden values, while
+the CPU head on those values already produces 6.77% prediction error vs stock
+(observed TT: 6.69%). This shape forward points toward amplified upstream
+differences. It does not separate native normalization from projection errors,
+or establish the same attribution for other stages or scenes.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

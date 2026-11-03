@@ -1,0 +1,122 @@
+{
+  "status": "completed_teacher_forced_head_diagnostic",
+  "scope": "Teacher-force the original CPU output head with accepted captured TT states.\n\nCombined normalization/projection error is observable from the captured hidden\nstate and prediction, without changing device lowering. CPU stage comparisons\nmeasure propagation/amplification; these errors are not additive components.\n",
+  "script_sha256": "03af7ba7bd498ae633970359ec1f4fcaaa837476e356a8782de72096ee68aa7d",
+  "torch": "2.11.0+cpu",
+  "checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+  "source_capture_sha256": "7a47e115d029dd5303d49ac8f0be8ce0aca0a42d99c9e6505d17eb546af16b23",
+  "source_artifacts_sha256": {
+    "cpu-precision-diagnostic.pt": "dc58882ecd2dcb2a418a11c7cd5ca84d6421689b98e993bf593816ec5fc5ee9d",
+    "captured-tt.pt": "ae924e151070fb78e7c121846da90e25789191a62c34738b58d7b48f9667dafe",
+    "ordinary-tt.pt": "1c9f2a1a682bb1ab0ad1768892734afbbac8f1b87b728737c51e343fc8009973",
+    "cpu-fp32.pt": "e6629d2b7999d012dfa6e087942a1a15ffcd27bc71579282e90e09f4fbb3606c"
+  },
+  "original_cpu_head_reconstruction_bitwise": true,
+  "measurements": {
+    "cpu_precision": {
+      "hidden_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.008058476276931802,
+        "pcc": 0.9999674886013433,
+        "max_abs": 47.04150390625
+      },
+      "cpu_normalized_hidden_vs_stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.007742726056235039,
+        "pcc": 0.9999700250965069,
+        "max_abs": 0.2689354717731476
+      },
+      "cpu_head_on_hidden_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.028845511098052286,
+        "pcc": 0.9995848329355278,
+        "max_abs": 0.14326508343219757
+      },
+      "observed_prediction_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.028845511098052286,
+        "pcc": 0.9995848329355278,
+        "max_abs": 0.14326508343219757
+      },
+      "observed_prediction_vs_cpu_head_on_same_hidden": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999994,
+        "max_abs": 0.0
+      }
+    },
+    "tt": {
+      "hidden_vs_stock_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.019695334934972324,
+        "pcc": 0.9998502597788873,
+        "max_abs": 105.7109375
+      },
+      "cpu_normalized_hidden_vs_stock": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.017096457435066218,
+        "pcc": 0.9998538555721841,
+        "max_abs": 0.521661564707756
+      },
+      "cpu_head_on_hidden_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.067659584050985,
+        "pcc": 0.99778039752224,
+        "max_abs": 0.31111055612564087
+      },
+      "observed_prediction_vs_stock_prediction": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.06691406440448987,
+        "pcc": 0.9977801825908912,
+        "max_abs": 0.31577765941619873
+      },
+      "observed_prediction_vs_cpu_head_on_same_hidden": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.005218893808863692,
+        "pcc": 0.999998197700878,
+        "max_abs": 0.023204565048217773
+      }
+    }
+  },
+  "states_sha256": "b524b8f967bd6fadd739bcbf7a59052ccbd089e72a97d691609e7e6db044efe3"
+}
