@@ -872,3 +872,13 @@ cache behavior, not pretrained performance. First-use effects remain visible in
 prefill timing; full sampler experiments must warm both branches and report
 prefill plus the complete original trajectory. Reproduce with
 `conditioning_cache_probe.py --output-dir <new>`.
+
+`cached_flow_sampler.py --cpu-trajectory-cache <sealed-shape512-cache>
+--output-dir <new>` benchmarks the pretrained shape512 cache path. It first
+requires every prepared CPU state to match ordinary prepared execution bitwise,
+retaining the stock CPU reference and original acceptance gates. Native timing
+includes the positive/negative prefill pair plus the complete original sampler;
+raw-condition upload, compile/warmup and artifact writes are excluded. Both
+prefill branches are warmed before measuring their retained device caches.
+Use `--cpu-only` to run the complete CPU control without opening the device.
+This experimental path has no default production effect.
