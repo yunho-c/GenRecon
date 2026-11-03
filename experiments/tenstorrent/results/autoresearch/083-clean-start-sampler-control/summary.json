@@ -1,0 +1,27 @@
+{
+  "status": "completed_clean_process_original_sampler_control",
+  "finding": "Fresh complete original shape512 sampler launched with SDK/Python/library paths sanitized before process startup is bitwise the previous ordinary native control at every state. All five loaded PJRT/compiler/runtime native libraries match canonical wheel RECORD, audited during cold compile before timings. Original12steps/21calls take16.829994s with no fallback/recompilation. Final stock-CPU error remains0.299911. The startup-isolation fix preserves existing numerical findings; this single run is not a new speedup claim.",
+  "source_commit": "3de873304af0ca1f9bb00f8adc325039c6bfc1c0",
+  "sampler_seconds": 16.82999415200902,
+  "every_native_state_bitwise_previous_control": true,
+  "original_model_reference_inference_sources_identical": true,
+  "checked_core_source_count": 117,
+  "checkpoint_versions_seed_inputs_fixture_identical": true,
+  "native_library_audit": "native-library-audit.json",
+  "no_inherited_sdk_search_variables_at_worker_entry": true,
+  "original_stock_cpu_gates_pass": false,
+  "final_vs_stock_cpu": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "tests": "14 focused environment/cache checks pass, including subprocess evidence that both wrapper launch and self-reexec remove inherited Python and loader paths before script startup while preserving unrelated settings. Complete pretrained native trajectory remains bitwise the sealed earlier control.",
+  "limits": "Same synthetic512 fixture on one n150; one fresh sampler measurement, not a latency distribution or real-scene geometry/material validation. Original source weights remain quantized values promoted to FP32.",
+  "decision": "Keep process-start isolation in active harnesses. Pursue matched-revision profiling-enabled SDK build and retain exact native/source/trajectory controls; original quality gates remain unchanged.",
+  "reproduce": "run.py --cases shape_flow_tensor --rope-mode real_pairs_flat_head_first --attention-mode fp32_reciprocal --device-precision float32 --math-fidelity hifi4 --native-ir --sampler-trajectory --cpu-trajectory-cache <sealed-shape512> --reference-precision float32 --optimization-level 0 --cpu-threads 16 --runs 3 --timeout 1200 --output-dir <new>"
+}

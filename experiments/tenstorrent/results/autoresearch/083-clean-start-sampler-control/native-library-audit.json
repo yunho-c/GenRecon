@@ -1,0 +1,27 @@
+{
+  "pid": 540362,
+  "phase_at_audit": "compile_and_first_inference",
+  "libraries": {
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnncpp.so": {
+      "sha256": "6c9b0144218f7412a85ed99be8e05704b7da2b171cd02dadf611aa1697c9177e",
+      "matches_wheel_record": true
+    },
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/libTTMLIRCompiler.so": {
+      "sha256": "8bafb0f018bb33c79c0b92d691ffa33a9e64d344555d6f4c890fd1a599c4cb69",
+      "matches_wheel_record": true
+    },
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/libTTMLIRRuntime.so": {
+      "sha256": "d1545ec0f6a52d9d480254b7fe136b2d294a9f8eea94145dac0621a4340baf15",
+      "matches_wheel_record": true
+    },
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/libtt_metal.so": {
+      "sha256": "7b7e42b9b33f320a4761db8546780b40a005ea63212ff9bd5711b4c8efc9b564",
+      "matches_wheel_record": true
+    },
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/pjrt_plugin_tt.so": {
+      "sha256": "592ce4dd0232518fde86006d647c8b1c5ea2123add32c3eedab1d10d2d69189e",
+      "matches_wheel_record": true
+    }
+  },
+  "purpose": "Controller audit during cold compile, before warmed sampler measurement."
+}

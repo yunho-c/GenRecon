@@ -999,3 +999,14 @@ observed direct-TTNN ABI failure from clearing loader variables after startup.
 For paired controls, CLI launcher files are excluded from arithmetic-source
 identity checks; original model/reference/inference/cache helper hashes and
 all checkpoint/fixture/SDK identity checks remain enforced.
+
+The [fresh clean-start sampler control](results/autoresearch/083-clean-start-sampler-control/summary.json)
+reproduces every original native sampler state bitwise after process-start SDK
+isolation. Five loaded PJRT/compiler/runtime libraries match their wheel RECORD
+hashes, audited before warmed timing. The complete 12-step/21-call trajectory
+takes 16.830s with no fallback/recompilation; the inherited 29.99% stock-CPU
+error remains. Fourteen focused environment/cache tests pass. This validates
+the launcher fix and numerical provenance, not a new performance gain. The
+[standalone canonical profiler probe](results/autoresearch/082-canonical-profiler-rejection/summary.json)
+also confirms the wheel's Tracy rejection before device opening. Matching
+source revision and bundled profiler symbols do not imply profiling is enabled.
