@@ -66,7 +66,8 @@
     "results/autoresearch/055-rejected-cast-roundtrip-split/summary.json",
     "results/autoresearch/056-compensated-fp32-lookup/summary.json",
     "results/autoresearch/058-compensated-prepared-cpu-control/summary.json",
-    "results/autoresearch/057-compensated-fp32-shape-sampler/summary.json"
+    "results/autoresearch/057-compensated-fp32-shape-sampler/summary.json",
+    "results/autoresearch/059-matched-fp32-hifi3/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -119,22 +120,15 @@
     "Complete compensated FP32 CPU control passes every original state gate with final relative L2 0.0000642969 (0.00643%) against stock. All shared model/helper source hashes match both pending native experiments, and physical checkpoint SHA256 is verified. Native execution comparisons are pending; this is not a CUDA oracle.",
     "Complete compensated FP32 shape512 sampler finishes in18.810s with final relative L2 0.295778 vs original stock FP32, still failing strict gates. All21 model calls retained, no fallback or recompilation. Single-forward error0.03716 passes but does not predict complete trajectory accuracy. Matched same-layout ordinary-gather control is still compiling; no causal attribution or promotion.",
     "Complete original shape512 sampler with compensated lookup has final relative L2 0.295778 versus 0.299911 with the same flattened layout and ordinary gather. Runtime 18.810s versus 16.866s; all21 original model calls retained. Prior token-first FP32 control has final error 0.293611 and time 18.888s. No fallback or recompilation. Local lookup accuracy does not by itself establish whole-sampler quality.",
-    "The compensated prepared FP32 CPU model has complete-sampler final relative L2 0.000064297 versus stock; all-state gates pass: True. Native candidate differs 0.295794 from the identically prepared CPU trajectory. Physical checkpoint bytes and all shared model/helper hashes are verified. This is a CPU control, not a CUDA oracle."
+    "The compensated prepared FP32 CPU model has complete-sampler final relative L2 0.000064297 versus stock; all-state gates pass: True. Native candidate differs 0.295794 from the identically prepared CPU trajectory. Physical checkpoint bytes and all shared model/helper hashes are verified. This is a CPU control, not a CUDA oracle.",
+    "On the identical FP32-tensor, flattened-RoPE shape512 sampler, HiFi3 final relative L2 is 0.301752 versus HiFi4 0.299911; runtime 16.895s versus 16.866s. Actual runtime IR confirms all457 learned linear/matmul operations use requested HiFi3/HiFi4 with FP32 accumulation and FP32 operands. Original12steps/21forwards, stock reference, physical checkpoint and model/helper sources match; no fallback or recompilation. The runtime warning motivated a test, not an assumed accuracy improvement."
   ],
   "next_actions": [
-    "Complete native run078 with FP32 model tensors and HiFi3 versus matched HiFi4 run077. Verify actual native compute configurations, source/reference/fixture identity and complete original21-forward trajectory; do not infer full accuracy from the runtime warning or old BF16 trial.",
+    "Investigate FP32 normalization, nonlinearities and learned projections on identical actual TT activations. Require captured final output to match ordinary execution bitwise before attribution. Complete matched lookup and fidelity controls retain about30% final error while prepared CPU error is about0.0064%; neither local lookup compensation nor HiFi3 resolves the sampler gap.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [
-    {
-      "name": "matched flat FP32 HiFi3 sampler",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/078-shape-flat-fp32-hifi3",
-      "status": "launched",
-      "source_commit": "e524d50",
-      "note": "Only requested math fidelity changes versus completed run077. Native runtime warns HiFi4 can be less accurate with FP32 accumulation on Wormhole; run077 IR explicitly uses HiFi4+FP32 accumulation. Prior result012 tested a different BF16-pipeline recipe. Original schedule, learned weights, sealed reference and strict gates retained."
-    }
-  ],
+  "live_experiments": [],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }

@@ -1,0 +1,16 @@
+{
+  "candidate": {
+    "runtime_ir_sha256": "f32a45d060d2ff54870801a6ab51c10a9f622aaee5393debfa3ee0c94de56218",
+    "linear_matmul_ops": 457,
+    "linear_matmul_ops_with_expected_fidelity": 457,
+    "linear_matmul_ops_with_fp32_accumulation": 457,
+    "linear_matmul_ops_with_bf16_operands": 0
+  },
+  "control": {
+    "runtime_ir_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1",
+    "linear_matmul_ops": 457,
+    "linear_matmul_ops_with_expected_fidelity": 457,
+    "linear_matmul_ops_with_fp32_accumulation": 457,
+    "linear_matmul_ops_with_bf16_operands": 0
+  }
+}

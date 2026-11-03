@@ -1,0 +1,1 @@
+2026-11-03 02:51:35.719 | warning  |              Op | On Wormhole with fp32 accumulation, output accuracy can be worse with HiFi4 than HiFi3 due to a hardware bug. Prefer using HiFi3 with fp32 accumulation on Wormhole. (compute_kernel_config.cpp:66)

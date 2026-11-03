@@ -1,0 +1,60 @@
+{
+  "status": "completed_matched_fp32_fidelity_trial",
+  "scope": "Original synthetic shape512 sampler, FP32 model tensors, ordinary flattened head-first RoPE, FP32 reciprocal attention. Only requested math fidelity differs. Distinct from result012 BF16-pipeline/stock-attention HiFi3 trial.",
+  "candidate_seconds": 16.89514209103072,
+  "control_seconds": 16.866170855995733,
+  "time_ratio": 1.001717712649916,
+  "candidate_warm_ms": 803.0635489849374,
+  "control_warm_ms": 798.5126959974878,
+  "candidate_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.3017516815566186,
+    "pcc": 0.9540306944268685,
+    "max_abs": 3.2696964740753174
+  },
+  "control_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "candidate_all_states_pass_gates": false,
+  "candidate_vs_control_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.15982530363563008,
+    "pcc": 0.9872037482018111,
+    "max_abs": 3.064359188079834
+  },
+  "native_ir": {
+    "candidate": {
+      "runtime_ir_sha256": "f32a45d060d2ff54870801a6ab51c10a9f622aaee5393debfa3ee0c94de56218",
+      "linear_matmul_ops": 457,
+      "linear_matmul_ops_with_expected_fidelity": 457,
+      "linear_matmul_ops_with_fp32_accumulation": 457,
+      "linear_matmul_ops_with_bf16_operands": 0
+    },
+    "control": {
+      "runtime_ir_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1",
+      "linear_matmul_ops": 457,
+      "linear_matmul_ops_with_expected_fidelity": 457,
+      "linear_matmul_ops_with_fp32_accumulation": 457,
+      "linear_matmul_ops_with_bf16_operands": 0
+    }
+  },
+  "finding": "On the identical FP32-tensor, flattened-RoPE shape512 sampler, HiFi3 final relative L2 is 0.301752 versus HiFi4 0.299911; runtime 16.895s versus 16.866s. Actual runtime IR confirms all457 learned linear/matmul operations use requested HiFi3/HiFi4 with FP32 accumulation and FP32 operands. Original12steps/21forwards, stock reference, physical checkpoint and model/helper sources match; no fallback or recompilation. The runtime warning motivated a test, not an assumed accuracy improvement.",
+  "decision": "Reject HiFi3 as an accuracy fix on this FP32 fixture: final error is slightly higher, both original gate sets fail and measured runtime is essentially unchanged. Keep production defaults and stock gates; isolate native primitive errors on identical inputs before another complete sampler trial.",
+  "retention": "Candidate complete trajectory/raw report/metrics, both actual runtime IRs, matched control raw report, strict all-state comparisons and observed runtime warning retained. Control trajectory and stock cache already retained in results057/038.",
+  "reproduce": "Repeat run.py shape_flow_tensor with real_pairs_flat_head_first, fp32_reciprocal, device-precision float32, reference-precision float32, native-ir, original sampler-trajectory, sealed shape512 cache, optimization-level0, cpu-threads16, runs3, timeout3600, and --math-fidelity hifi3; compare against run077 HiFi4 IR/control."
+}

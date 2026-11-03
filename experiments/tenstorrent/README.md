@@ -706,6 +706,14 @@ passes every state gate with 0.00643% final drift against stock; native error
 remains 29.58% against that identical prepared model. Source hashes and physical
 checkpoint bytes match. Lookup compensation remains an opt-in diagnostic.
 
+The runtime's Wormhole HiFi4/FP32-accumulation warning also motivated a
+[matched FP32 HiFi3 trial](results/autoresearch/059-matched-fp32-hifi3/summary.json).
+Actual runtime IR confirms all 457 linear/matmul operations use the requested
+fidelity with FP32 operands and accumulation. HiFi3 gives 30.18% final error
+versus HiFi4's 29.99%, with essentially unchanged sampler time (16.895s versus
+16.866s). It does not fix accuracy on this fixture. This is distinct from the
+earlier BF16-pipeline HiFi3 experiment; defaults and gates remain unchanged.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
