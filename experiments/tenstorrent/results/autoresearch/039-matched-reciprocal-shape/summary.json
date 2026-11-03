@@ -1,0 +1,50 @@
+{
+  "status": "completed_matched_no_promotion",
+  "scope": "Same original pretrained shape model, 512 synthetic tokens, real-pair RoPE, original 12-step/21-forward schedule. Control uses stock SDPA; candidate uses FP32 postscale reciprocal attention in all 60 modules.",
+  "pairing": "Reference-source/checkpoint/config/version signatures equal; independent stock CPU references bitwise equal at all states and fixture hashes/noise/coordinates match.",
+  "control_warm_ms": 625.6621099892072,
+  "candidate_warm_ms": 713.8700110372156,
+  "candidate_forward_time_ratio": 1.1409832873682089,
+  "control_trajectory_seconds": 13.212558440980501,
+  "candidate_trajectory_seconds": 14.978874242980964,
+  "candidate_trajectory_time_ratio": 1.1336846160333338,
+  "control_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.3825820592158971,
+    "pcc": 0.9254034312188536,
+    "max_abs": 3.4050293266773224
+  },
+  "candidate_vs_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.39209709518855723,
+    "pcc": 0.9222903931425314,
+    "max_abs": 4.086635112762451
+  },
+  "candidate_vs_control_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.3718453440283258,
+    "pcc": 0.9314876108651757,
+    "max_abs": 3.2062453031539917
+  },
+  "no_fallback_or_recompile": true,
+  "control_native_ir_counts": {
+    "softmax": 60,
+    "exp": 0,
+    "matmul": 270
+  },
+  "finding": "Candidate reduces single-forward relative L2 from 0.06691 to 0.05618 but final sampler error increases from 0.38258 to 0.39210 and costs about 13–14% more time. Native local softmax gains are insufficient to improve this trajectory.",
+  "historical_note": "Refreshed control final and every trajectory state match historical run021 bitwise; historical missing identity fields do not replace the new independently verified pairing.",
+  "decision": "Keep default stock; reject this formulation as a shape-sampler optimization on this fixture. Retain real-poster experiment to assess its effect under real conditioning and common-decoder topology."
+}

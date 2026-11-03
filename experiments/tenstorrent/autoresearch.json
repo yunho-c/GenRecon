@@ -46,7 +46,8 @@
     "results/autoresearch/035-attention-stage-errors/summary.json",
     "results/autoresearch/036-softmax-formulations/summary.json",
     "results/autoresearch/037-cross-only-reciprocal-control/summary.json",
-    "results/autoresearch/038-full-reciprocal-shape/summary.json"
+    "results/autoresearch/038-full-reciprocal-shape/summary.json",
+    "results/autoresearch/039-matched-reciprocal-shape/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -77,10 +78,11 @@
     "Stable exp times reciprocal(sum(exp)) avoids the compiler DivOp softmax fusion and reduces local softmax error to 0.000631 self / 0.000255 cross, with exact repeats and no fallback. Direct exp/div fuses back to native softmax. Approximate-exp defaults in exact SDK sources are a hypothesis, not a toggle-tested causal finding. exp2 was rejected for CPU fallback.",
     "An initial full-flow attention run prepared only 30 cross-attention modules because top-level and package imports created different RoPE wrapper classes. Retain it as a partial-attention control, not the complete candidate. Canonical package imports and fail-closed unknown-wrapper checks prevent silent partial preparation.",
     "Cross-only 30-module reciprocal control completed: 14.35s trajectory, final relative L2 0.435 vs original FP32 and 0.416 vs matched CPU precision diagnostic, no fallback or recompile. It does not improve trajectory agreement. Native IR retains 30 BF16 softmax and replaces only 30 cross softmax. Complete 60-module experiment remains separate.",
-    "Local softmax accuracy improvement does not resolve complete sampler drift: final relative L2 0.392 vs original FP32, 0.400 vs matched CPU precision diagnostic. Single-forward error is 0.0562. No promotion. Current matched stock-attention control is still running separately."
+    "Local softmax accuracy improvement does not resolve complete sampler drift: final relative L2 0.392 vs original FP32, 0.400 vs matched CPU precision diagnostic. Single-forward error is 0.0562. No promotion. Current matched stock-attention control is still running separately.",
+    "Candidate reduces single-forward relative L2 from 0.06691 to 0.05618 but final sampler error increases from 0.38258 to 0.39210 and costs about 13–14% more time. Native local softmax gains are insufficient to improve this trajectory."
   ],
   "next_actions": [
-    "Finish modern matched shape SDPA control run053 and compare fixture identity, bitwise CPU reference and full trajectories against run052. All 60 native softmax replacements are confirmed in run052, but trajectory accuracy is still poor.",
+    "Run053 matched control is complete and bitwise matches historical output. Further shape accuracy work should isolate normalization, projection and BF16 rounding on identical captured inputs; do not assume a more accurate local operator improves the entire sampler.",
     "Finish real-poster reciprocal-attention run054 with the sealed original CPU cache; decode through the same FP32 occupancy decoder and compare topology with stock/real-RoPE controls. This diagnostic is warranted by different real conditioning but does not promote the candidate from synthetic results.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
@@ -89,14 +91,10 @@
   ],
   "live_experiments": [
     {
-      "name": "053-shape-real-rope-control",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/053-shape-real-rope-control",
-      "status_at_last_check": "running compile_and_first_inference"
-    },
-    {
       "name": "054-poster-full-reciprocal",
       "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/054-poster-full-reciprocal",
-      "status_at_last_check": "running build/CPU preparation"
+      "status_at_last_check": "running, 60 modules prepared, waiting for device/compile",
+      "note": "Check actual worker and result; real-image numerical and topology diagnostic only."
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."

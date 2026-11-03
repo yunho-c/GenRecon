@@ -1,0 +1,39 @@
+{
+  "signature_equal": true,
+  "fixture_identity_equal": true,
+  "bitwise": {
+    "samples": true,
+    "noise": true,
+    "coords": true
+  },
+  "bitwise_steps": {
+    "pred_x_t": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "pred_x_0": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  }
+}

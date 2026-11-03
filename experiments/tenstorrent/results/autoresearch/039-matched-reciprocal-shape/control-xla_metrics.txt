@@ -1,0 +1,184 @@
+Metric: DeviceLockWait
+  TotalSamples: 32
+  Accumulator: 120.571us
+  ValueRate: 000.849us / second
+  Rate: 0.225303 / second
+  Percentiles: 1%=000.790us; 5%=000.790us; 10%=001.010us; 20%=001.020us; 50%=001.280us; 80%=001.660us; 90%=001.870us; 95%=008.330us; 99%=072.390us
+Metric: InputOutputAliasCount
+  TotalSamples: 1
+  Accumulator: 0.00
+  Percentiles: 1%=0.00; 5%=0.00; 10%=0.00; 20%=0.00; 50%=0.00; 80%=0.00; 90%=0.00; 95%=0.00; 99%=0.00
+Metric: IrValueTensorToXlaData
+  TotalSamples: 68
+  Accumulator: 004ms367.718us
+  ValueRate: 024.111us / second
+  Rate: 0.375381 / second
+  Percentiles: 1%=014.590us; 5%=020.580us; 10%=025.540us; 20%=029.690us; 50%=039.430us; 80%=113.391us; 90%=126.041us; 95%=132.811us; 99%=166.501us
+Metric: LazyTracing
+  TotalSamples: 36463
+  Accumulator: 29s532ms171.328us
+  ValueRate: 332ms997.686us / second
+  Rate: 12.1179 / second
+  Percentiles: 1%=003.160us; 5%=003.910us; 10%=005.270us; 20%=007.130us; 50%=011.960us; 80%=031.271us; 90%=067.730us; 95%=182.061us; 99%=609ms666.313us
+Metric: RunCachedGraphInputData
+  TotalSamples: 27
+  Accumulator: 034ms702.620us
+  ValueRate: 001ms205.133us / second
+  Rate: 0.965462 / second
+  Percentiles: 1%=946.354us; 5%=001ms034.835us; 10%=001ms059.864us; 20%=001ms132.885us; 50%=001ms253.795us; 80%=001ms372.356us; 90%=001ms437.456us; 95%=001ms440.916us; 99%=001ms464.237us
+Metric: RunCachedGraphOutputData
+  TotalSamples: 27
+  Accumulator: 524.791us
+  ValueRate: 018.770us / second
+  Rate: 0.965674 / second
+  Percentiles: 1%=009.830us; 5%=011.700us; 10%=011.750us; 20%=013.730us; 50%=017.410us; 80%=022.760us; 90%=026.660us; 95%=036.030us; 99%=060.741us
+Metric: TensorToData
+  TotalSamples: 68
+  Accumulator: 004ms101.666us
+  ValueRate: 022.642us / second
+  Rate: 0.375381 / second
+  Percentiles: 1%=013.060us; 5%=018.970us; 10%=024.060us; 20%=027.820us; 50%=036.550us; 80%=106.430us; 90%=118.121us; 95%=125.911us; 99%=158.601us
+Metric: TensorsGraphSize
+  TotalSamples: 1
+  Accumulator: 14807.00
+  Percentiles: 1%=14807.00; 5%=14807.00; 10%=14807.00; 20%=14807.00; 50%=14807.00; 80%=14807.00; 90%=14807.00; 95%=14807.00; 99%=14807.00
+Metric: UnwrapXlaData
+  TotalSamples: 54
+  Accumulator: 008ms231.796us
+  ValueRate: 288.337us / second
+  Rate: 1.89147 / second
+  Percentiles: 1%=000.600us; 5%=000.670us; 10%=001.110us; 20%=002.160us; 50%=251.801us; 80%=306.141us; 90%=311.482us; 95%=354.302us; 99%=391.852us
+Metric: WrapXlaData
+  TotalSamples: 27
+  Accumulator: 004.510us
+  ValueRate: 000.276us / second
+  Rate: 1.6509 / second
+  Percentiles: 1%=000.070us; 5%=000.070us; 10%=000.070us; 20%=000.080us; 50%=000.170us; 80%=000.190us; 90%=000.250us; 95%=000.520us; 99%=000.520us
+Counter: CreateXlaTensor
+  Value: 25255
+Counter: DestroyLtcTensor
+  Value: 26258
+Counter: DestroyXlaTensor
+  Value: 26258
+Counter: DynamoExtractCompiledGraph
+  Value: 1
+Counter: UncachedCompile
+  Value: 1
+Counter: XlaMarkTensor
+  Value: 964
+Counter: xla::_copy_from
+  Value: 1816
+Counter: xla::_softmax
+  Value: 120
+Counter: xla::_to_copy
+  Value: 1843
+Counter: xla::add
+  Value: 1692
+Counter: xla::any
+  Value: 120
+Counter: xla::arange_out
+  Value: 2
+Counter: xla::as_strided
+  Value: 2
+Counter: xla::cat
+  Value: 2
+Counter: xla::clamp
+  Value: 240
+Counter: xla::clone
+  Value: 1127
+Counter: xla::cos
+  Value: 2
+Counter: xla::div
+  Value: 242
+Counter: xla::einsum
+  Value: 240
+Counter: xla::empty_strided_symint
+  Value: 120
+Counter: xla::empty_symint
+  Value: 1938
+Counter: xla::eq
+  Value: 120
+Counter: xla::exp
+  Value: 2
+Counter: xla::expand_copy_symint
+  Value: 1080
+Counter: xla::fill_
+  Value: 120
+Counter: xla::gelu
+  Value: 60
+Counter: xla::index_select
+  Value: 120
+Counter: xla::linalg_vector_norm
+  Value: 240
+Counter: xla::logical_not
+  Value: 240
+Counter: xla::mm
+  Value: 1090
+Counter: xla::mul
+  Value: 1826
+Counter: xla::permute_copy
+  Value: 1390
+Counter: xla::rsqrt
+  Value: 182
+Counter: xla::select_copy
+  Value: 2
+Counter: xla::sigmoid
+  Value: 4
+Counter: xla::sin
+  Value: 2
+Counter: xla::slice_copy
+  Value: 660
+Counter: xla::sub
+  Value: 182
+Counter: xla::unsqueeze_copy
+  Value: 366
+Counter: xla::var_mean
+  Value: 182
+Counter: xla::view_copy_symint
+  Value: 2528
+Counter: xla::view_symint
+  Value: 4016
+Counter: xla::where
+  Value: 120
+Metric: CompileTime
+  TotalSamples: 1
+  Accumulator: 55s330ms329.209us
+  Percentiles: 1%=55s330ms329.209us; 5%=55s330ms329.209us; 10%=55s330ms329.209us; 20%=55s330ms329.209us; 50%=55s330ms329.209us; 80%=55s330ms329.209us; 90%=55s330ms329.209us; 95%=55s330ms329.209us; 99%=55s330ms329.209us
+Metric: ExecuteTime
+  TotalSamples: 27
+  Accumulator: 28s511ms951.760us
+  ValueRate: 02s682ms149.108us / second
+  Rate: 1.65091 / second
+  Percentiles: 1%=588ms984.489us; 5%=588ms013.469us; 10%=588ms259.011us; 20%=589ms661.142us; 50%=589ms021.974us; 80%=590ms628.936us; 90%=590ms403.471us; 95%=591ms718.672us; 99%=12s194ms054.283us
+Metric: InboundData
+  TotalSamples: 27
+  Accumulator: 1.69MB
+  ValueRate: 105.63KB / second
+  Rate: 1.65043 / second
+  Percentiles: 1%=64.00KB; 5%=64.00KB; 10%=64.00KB; 20%=64.00KB; 50%=64.00KB; 80%=64.00KB; 90%=64.00KB; 95%=64.00KB; 99%=64.00KB
+Metric: OutboundData
+  TotalSamples: 68
+  Accumulator: 43.82MB
+  ValueRate: 247.73KB / second
+  Rate: 0.375381 / second
+  Percentiles: 1%=4.00B; 5%=4.00B; 10%=4.00B; 20%=4.00B; 50%=64.00KB; 80%=2.00MB; 90%=4.02MB; 95%=4.02MB; 99%=4.02MB
+Metric: TransferFromDeviceTime
+  TotalSamples: 27
+  Accumulator: 505ms182.448us
+  ValueRate: 031ms880.371us / second
+  Rate: 1.65043 / second
+  Percentiles: 1%=014ms316.284us; 5%=018ms038.802us; 10%=019ms525.703us; 20%=019ms773.424us; 50%=019ms886.305us; 80%=019ms022.636us; 90%=019ms088.126us; 95%=019ms114.516us; 99%=020ms543.448us
+Metric: TransferToDeviceTime
+  TotalSamples: 68
+  Accumulator: 004ms562.954us
+  ValueRate: 019.669us / second
+  Rate: 0.375381 / second
+  Percentiles: 1%=010.970us; 5%=016.680us; 10%=020.840us; 20%=024.600us; 50%=031.280us; 80%=095.210us; 90%=099.990us; 95%=107.951us; 99%=137.811us
+Counter: CreateCompileHandles
+  Value: 1
+Counter: CreateDataHandles
+  Value: 91
+Counter: MarkStep
+  Value: 1
+Counter: StableHloCompile
+  Value: 1

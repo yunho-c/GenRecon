@@ -1,0 +1,33 @@
+{
+  "samples": true,
+  "noise": true,
+  "coords": true,
+  "pred_x_t": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "pred_x_0": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ]
+}
