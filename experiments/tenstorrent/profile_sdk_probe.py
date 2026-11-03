@@ -41,6 +41,7 @@ def main():
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=False)
     os.environ.update(TT_METAL_LOGS_PATH=str(args.output_dir/'metal-logs'),
+        TT_METAL_PROFILER_DIR=str(args.output_dir/'profiler'),
         TT_METAL_CACHE=str(args.output_dir/'metal-cache'), TT_METAL_INSPECTOR='1',
         TT_METAL_INSPECTOR_LOG_RUNTIME_ENTRIES='1', ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
     os.environ.pop('TT_METAL_DEVICE_PROFILER', None)

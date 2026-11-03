@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "scope": "Validate an isolated profiling SDK against the sealed canonical K2 control.\n\nThe SDK's interpreter and native search paths are installed by process re-exec.\nOnly libraries under the recorded SDK workspace are accepted. Device-profile\nsuccess requires actual numeric CSV rows, not merely a profiler API or flag.\nThis is a one-operation capability control, not full-model performance evidence.\n",
+  "sdk_workspace": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1",
+  "profile_device": false,
+  "source_commit": "24d0d3966b7e2f01a5590b9e7cabc98fc79b2490",
+  "phase": "validate_sdk_and_fixture",
+  "sdk_build_result_sha256": "d5bf720c01b0d304136d62b4fc046f60fa443316cfcf6c6dba5bc49222d7f44b",
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "script_sha256": "93ee20a99400494f81dd6245a16f3dc0d906b1d997a0cf01e76a76aafff13d63",
+  "error": "ModuleNotFoundError(\"No module named 'easydict'\")",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/profile_sdk_probe.py\", line 73, in main\n    from experiments.tenstorrent.trajectory import tensor_digest\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/trajectory.py\", line 9, in <module>\n    from experiments.tenstorrent.scene_sampling import TensorFlowAdapter, MeasuredSampler, features\n  File \"/home/user/GitHub/GenRecon/experiments/tenstorrent/scene_sampling.py\", line 6, in <module>\n    from genrecon.pipelines.samplers import FlowEulerGuidanceIntervalSampler\n  File \"/home/user/GitHub/GenRecon/genrecon/pipelines/samplers/__init__.py\", line 2, in <module>\n    from .flow_euler import (\n  File \"/home/user/GitHub/GenRecon/genrecon/pipelines/samplers/flow_euler.py\", line 5, in <module>\n    from easydict import EasyDict as edict\nModuleNotFoundError: No module named 'easydict'\n"
+}

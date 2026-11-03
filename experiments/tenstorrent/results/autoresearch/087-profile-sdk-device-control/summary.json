@@ -1,0 +1,14 @@
+{
+  "status": "completed_matching_revision_device_profiler_capability",
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "all_three_repeats_bitwise_canonical": true,
+  "unprofiled_and_profiled_outputs_identical": true,
+  "actual_device_timing_rows": 3840,
+  "profiler_output_control": "TT_METAL_PROFILER_DIR explicitly selects the profiler root; TT_METAL_LOGS_PATH alone only redirects general logs.",
+  "rejected_attempts": {
+    "112": "Accidental full-model dependency import failed before opening device; local digest implementation fixed it.",
+    "114": "Device execution and bitwise check passed, but output discovery failed because profiler uses its own root. Real rows were found in SDK source default directory; fresh115 explicitly isolates and verifies them."
+  },
+  "limits": "Single canonical K2 arithmetic control on n150. Matching source revision and operation output do not establish full-module trajectory or timing-boundary equivalence.",
+  "reproduce": "python experiments/tenstorrent/profile_sdk_probe.py --sdk-workspace <built-f1-sdk> --native-control-dir <sealed-103> --output-dir <new> --profile-device"
+}
