@@ -1014,9 +1014,9 @@ source revision and bundled profiler symbols do not imply profiling is enabled.
 The [matching-revision profiling SDK configuration](results/autoresearch/084-profile-sdk-configure/summary.json)
 uses an independent checkout at Forge's Metal revision, an isolated Python3.12
 venv and recorded dependencies. CMake enables Tracy and the actual native
-runtime-options compile command contains `TRACY_ENABLE`. This establishes
-configuration only; compilation, numeric equivalence and working device profiles
-remain unverified. Existing SDKs are preserved. Reproduce with:
+runtime-options compile command contains `TRACY_ENABLE`. The initial milestone
+established configuration; the subsequent build and device controls are below.
+Existing SDKs are preserved. Reproduce configuration with:
 
 ```bash
 /home/user/tt-forge-venv/bin/python experiments/tenstorrent/build_profile_sdk.py \
@@ -1045,6 +1045,15 @@ sealed canonical `--native-control-result`; add `--profile` for marked warm
 captures, per-forward buffer flushing and a 10,000-program capacity. Library
 identities and the process-start SDK environment are recorded. Capture reports
 remain unvalidated until their device rows and measurement windows are checked.
+
+The [first matching-revision marked profile](results/autoresearch/089-matching-revision-shape-profile/summary.json)
+retains all 4,403 device rows in each of five windows and bitwise canonical
+output. Its measured window is 604.54ms, with 588.36ms of summed kernel durations:
+reshape 32.62%, matrix products 20.18%, binary operations 18.04%. These are
+kernel-sum shares for the earlier BF16 real-pair recipe, not sampler wall-time
+percentages. All operation rows and C++ device timings are retained compressed.
+Future captures select native zones and explicit signposts (`tracy -p`) to avoid
+tracing every Python function during imports and JIT compilation.
 
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler

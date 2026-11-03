@@ -52,7 +52,9 @@ def main():
         PATH=str(venv/'bin')+os.pathsep+environment.get('PATH', ''))
     command = [str(venv/'bin/python')]
     if args.profile:
-        command += ['-m', 'tracy', '-r', '--op-support-count', '10000',
+        # Explicit signposts and native TTNN zones suffice. Profiling every
+        # Python function bloats import/JIT traces and host post-processing.
+        command += ['-m', 'tracy', '-r', '-p', '--op-support-count', '10000',
                     '--tracy-tools-folder', str(build/'tools/profiler/bin'),
                     '-o', str(output/'profiler'), '--check-exit-code']
     command += [str(ROOT/'experiments/tenstorrent/codegen_probe.py'), 'execute',

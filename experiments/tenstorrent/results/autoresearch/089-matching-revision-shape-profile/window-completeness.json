@@ -1,0 +1,27 @@
+{
+  "GENRECON_FIRST": {
+    "device_operations": 4403,
+    "kernel_sum_ns": 588362099.0,
+    "wall_ns": 86640523428.0
+  },
+  "GENRECON_WARMUP_0": {
+    "device_operations": 4403,
+    "kernel_sum_ns": 587525608.0,
+    "wall_ns": 604750979.0
+  },
+  "GENRECON_WARMUP_1": {
+    "device_operations": 4403,
+    "kernel_sum_ns": 587595628.0,
+    "wall_ns": 603981726.0
+  },
+  "GENRECON_WARMUP_2": {
+    "device_operations": 4403,
+    "kernel_sum_ns": 588579402.0,
+    "wall_ns": 605525421.0
+  },
+  "GENRECON_MEASURED_0": {
+    "device_operations": 4403,
+    "kernel_sum_ns": 588363157.0,
+    "wall_ns": 604540587.0
+  }
+}
