@@ -1,0 +1,238 @@
+{
+  "status": "completed_rope_layout_probe",
+  "scope": "Check actual native RoPE layouts before full-model experiments.\n\nSeeded synthetic BF16 values, original adjacent-pair rotation, BHSD output.\nResident inputs/phases; output D2H and synchronization included in timings.\nThis kernel diagnostic establishes neither full-flow speed nor scene quality.\n",
+  "seed": 57,
+  "source_commit": "7328b2d95e28b8d9a8821e91c1bb2309fc32d4d5",
+  "cases": {
+    "512": {
+      "input_digest": "7fd73a51ae30b5505e29a6e5f5a6b4d0c4904368e4afa7d31b2890bd7f102d25",
+      "phase_digest": "2efe760f2a813ae5ba14b28a0c0462df7dcb5459ce30ad2688098e5765186b23",
+      "modes": {
+        "token_first": {
+          "warm_seconds": [
+            0.0044038090272806585,
+            0.004120197962038219,
+            0.004174638947006315,
+            0.004260788031388074,
+            0.004170517961028963
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/063-rope-layout-probe/512_token_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454022828870649,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "fallback_ops": [],
+          "aten_counters": {}
+        },
+        "contiguous_head_first": {
+          "warm_seconds": [
+            0.004319699015468359,
+            0.004170439031440765,
+            0.004228288948070258,
+            0.004383200022857636,
+            0.004374818992801011
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/063-rope-layout-probe/512_contiguous_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454022828870649,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000000366,
+            "max_abs": 0.0
+          },
+          "tt_bitwise_token_first": true
+        },
+        "flat_head_first": {
+          "warm_seconds": [
+            0.005567844957113266,
+            0.003690616984385997,
+            0.004618520033545792,
+            0.004442350007593632,
+            0.004094837990123779
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/063-rope-layout-probe/512_flat_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999943,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0005454256457244512,
+            "pcc": 0.9999998521789704,
+            "max_abs": 0.03125
+          },
+          "tt_bitwise_token_first": false
+        }
+      }
+    },
+    "4096": {
+      "input_digest": "f2a0d8443013cf3b7345e9986a350226ca1721aa3676c63a3258e10200bda561",
+      "phase_digest": "537892cc908a845a1bed8e645f3a3ac887090d5cb8a59a88024944f5d80d4b95",
+      "modes": {
+        "token_first": {
+          "warm_seconds": [
+            0.027289171994198114,
+            0.02740908198757097,
+            0.028249126044102013,
+            0.028055414033588022,
+            0.028159265988506377
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/063-rope-layout-probe/4096_token_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006473883474824675,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "fallback_ops": [],
+          "aten_counters": {}
+        },
+        "contiguous_head_first": {
+          "warm_seconds": [
+            0.025828075013123453,
+            0.022538809978868812,
+            0.022543950006365776,
+            0.022781011008191854,
+            0.02311919303610921
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/063-rope-layout-probe/4096_contiguous_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006473883474824675,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 1.0000000000015028,
+            "max_abs": 0.0
+          },
+          "tt_bitwise_token_first": true
+        },
+        "flat_head_first": {
+          "warm_seconds": [
+            0.012599535984918475,
+            0.012602966977283359,
+            0.013671691005583853,
+            0.014003051968757063,
+            0.012467415013816208
+          ],
+          "requested_compile_options": {
+            "optimization_level": 0,
+            "dry_run": "false",
+            "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/063-rope-layout-probe/4096_flat_head_first-native-ir"
+          },
+          "cpu_formula_bitwise": true,
+          "tt_vs_cpu": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0,
+            "pcc": 0.9999999999999051,
+            "max_abs": 0.0
+          },
+          "fallback_ops": [],
+          "aten_counters": {},
+          "tt_vs_token_first": {
+            "shape_match": true,
+            "finite": true,
+            "passed": true,
+            "max_relative_l2": 0.1,
+            "min_pcc": 0.99,
+            "relative_l2": 0.0006474280725765716,
+            "pcc": 0.999999792314548,
+            "max_abs": 0.015625
+          },
+          "tt_bitwise_token_first": false
+        }
+      }
+    }
+  },
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0"
+  },
+  "source_sha256": {
+    "experiments/tenstorrent/rope_layout_probe.py": "98152354527832b2a02295981630b5a5b68f85b2ea9c862310485f96160751c9",
+    "experiments/tenstorrent/inference_rope.py": "86b7b1f33d36790c5d515059fdcaa7d395864dbdc375ee78b71cd010549d40c4"
+  },
+  "outputs_sha256": "13fd76c2368f2ce5b6223d127ab7386754d9a630a34369965c56f9af02a3bc02"
+}

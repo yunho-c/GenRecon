@@ -1,0 +1,125 @@
+{
+  "status": "completed_native_kernel_layout_screen",
+  "scope": "Check actual native RoPE layouts before full-model experiments.\n\nSeeded synthetic BF16 values, original adjacent-pair rotation, BHSD output.\nResident inputs/phases; output D2H and synchronization included in timings.\nThis kernel diagnostic establishes neither full-flow speed nor scene quality.\n",
+  "metrics": {
+    "512": {
+      "token_first": {
+        "median_seconds": 0.004174638947006315,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005454022828870649,
+          "pcc": 0.9999998521789704,
+          "max_abs": 0.03125
+        },
+        "tt_bitwise_token_first": null
+      },
+      "contiguous_head_first": {
+        "median_seconds": 0.004319699015468359,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0005454022828870649,
+          "pcc": 0.9999998521789704,
+          "max_abs": 0.03125
+        },
+        "tt_bitwise_token_first": true
+      },
+      "flat_head_first": {
+        "median_seconds": 0.004442350007593632,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999943,
+          "max_abs": 0.0
+        },
+        "tt_bitwise_token_first": false
+      }
+    },
+    "4096": {
+      "token_first": {
+        "median_seconds": 0.028055414033588022,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006473883474824675,
+          "pcc": 0.999999792314548,
+          "max_abs": 0.015625
+        },
+        "tt_bitwise_token_first": null
+      },
+      "contiguous_head_first": {
+        "median_seconds": 0.022781011008191854,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0006473883474824675,
+          "pcc": 0.999999792314548,
+          "max_abs": 0.015625
+        },
+        "tt_bitwise_token_first": true
+      },
+      "flat_head_first": {
+        "median_seconds": 0.012602966977283359,
+        "tt_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 0.9999999999999051,
+          "max_abs": 0.0
+        },
+        "tt_bitwise_token_first": false
+      }
+    }
+  },
+  "native_multiply_layouts": {
+    "512_token_first": [
+      "%4 = \"ttnn.multiply\"(%3, %arg3) : (tensor<1x512x12x128xf32, #ttnn_layout8>, tensor<1x512x1x128xf32, #ttnn_layout8>) -> tensor<1x512x12x128xf32, #ttnn_layout8> loc(#loc6)",
+      "%11 = \"ttnn.multiply\"(%10, %1) : (tensor<128x6144xf32, #ttnn_layout4>, tensor<128x6144xf32, #ttnn_layout4>) -> tensor<128x6144xf32, #ttnn_layout4> loc(#loc9)"
+    ],
+    "512_contiguous_head_first": [
+      "%5 = \"ttnn.multiply\"(%4, %0) : (tensor<1x512x12x128xf32, #ttnn_layout1>, tensor<1x512x1x128xf32, #ttnn_layout1>) -> tensor<1x512x12x128xf32, #ttnn_layout1> loc(#loc6)",
+      "%12 = \"ttnn.multiply\"(%11, %1) : (tensor<128x6144xf32, #ttnn_layout4>, tensor<128x6144xf32, #ttnn_layout4>) -> tensor<128x6144xf32, #ttnn_layout4> loc(#loc9)"
+    ],
+    "512_flat_head_first": [
+      "%6 = \"ttnn.multiply\"(%5, %arg3) : (tensor<1x12x512x128xf32, #ttnn_layout12>, tensor<1x1x512x128xf32, #ttnn_layout8>) -> tensor<1x12x512x128xf32, #ttnn_layout12> loc(#loc8)",
+      "%11 = \"ttnn.multiply\"(%10, %1) : (tensor<128x6144xf32, #ttnn_layout4>, tensor<128x6144xf32, #ttnn_layout4>) -> tensor<128x6144xf32, #ttnn_layout4> loc(#loc11)"
+    ],
+    "4096_token_first": [
+      "%4 = \"ttnn.multiply\"(%3, %arg3) : (tensor<1x4096x12x128xf32, #ttnn_layout8>, tensor<1x4096x1x128xf32, #ttnn_layout8>) -> tensor<1x4096x12x128xf32, #ttnn_layout8> loc(#loc6)",
+      "%11 = \"ttnn.multiply\"(%10, %1) : (tensor<128x49152xf32, #ttnn_layout4>, tensor<128x49152xf32, #ttnn_layout4>) -> tensor<128x49152xf32, #ttnn_layout4> loc(#loc9)"
+    ],
+    "4096_contiguous_head_first": [
+      "%5 = \"ttnn.multiply\"(%4, %0) : (tensor<1x4096x12x128xf32, #ttnn_layout1>, tensor<1x4096x1x128xf32, #ttnn_layout1>) -> tensor<1x4096x12x128xf32, #ttnn_layout1> loc(#loc6)",
+      "%12 = \"ttnn.multiply\"(%11, %1) : (tensor<128x49152xf32, #ttnn_layout4>, tensor<128x49152xf32, #ttnn_layout4>) -> tensor<128x49152xf32, #ttnn_layout4> loc(#loc9)"
+    ],
+    "4096_flat_head_first": [
+      "%6 = \"ttnn.multiply\"(%5, %arg3) : (tensor<1x12x4096x128xf32, #ttnn_layout12>, tensor<1x1x4096x128xf32, #ttnn_layout8>) -> tensor<1x12x4096x128xf32, #ttnn_layout12> loc(#loc8)",
+      "%11 = \"ttnn.multiply\"(%10, %1) : (tensor<128x49152xf32, #ttnn_layout4>, tensor<128x49152xf32, #ttnn_layout4>) -> tensor<128x49152xf32, #ttnn_layout4> loc(#loc11)"
+    ]
+  },
+  "finding": "Explicit contiguous head-first inputs still leave the cosine multiply token-first in native IR, with native output bitwise equal to token-first. Flattening head/token rows changes the native cosine multiply to [1,12,T,128] with [1,1,T,128] phases. On seeded BF16 inputs, flat output matches CPU bitwise at both512 and4096 tokens; baseline relative L2 is about0.00055/0.00065. At4096, measured kernel+output-transfer median falls28.06ms to12.60ms (2.23x); at512 it increases4.17ms to4.44ms. These are kernel results, not full-flow measurements.",
+  "controls": "All six CPU formulas bitwise equal; native repeats exact, no fallback. Native IR retained for all variants and both sizes. Report records input/phase digests, seed57, versions and source hashes.",
+  "decision": "Compare a flattened token-first formulation to avoid an extra input permutation, then test the better realized layout in the complete real-poster BF16-AV sampler with stock references and common decoder. Do not extrapolate the kernel speedup to whole sampling or claim native baseline preservation: flat changes native rounding while matching this CPU fixture.",
+  "retention": "Complete raw measurements/native IR and representative values retained; full synthetic output artifact hash recorded. Inputs and outputs reproduce from pinned version, seed57 and --tokens5124096 order.",
+  "reproduce": "rope_layout_probe.py --tokens 512 4096 --runs 5 --output-dir <new> at this experiment commit"
+}

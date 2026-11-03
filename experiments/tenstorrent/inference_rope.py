@@ -53,7 +53,7 @@ class RealRoPESelfAttention(nn.Module):
             q, k = attn.q_rms_norm(q), attn.k_rms_norm(k)
         if self.rope.head_first:
             from torch.nn import functional as F
-            q, k, v = [value.permute(0, 2, 1, 3) for value in (q, k, v)]
+            q, k, v = [value.permute(0, 2, 1, 3).contiguous() for value in (q, k, v)]
             h = F.scaled_dot_product_attention(self.rope(q), self.rope(k), v).permute(0, 2, 1, 3)
         else:
             h = scaled_dot_product_attention(self.rope(q), self.rope(k), v)

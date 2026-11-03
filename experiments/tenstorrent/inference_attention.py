@@ -63,7 +63,7 @@ class ReciprocalAttention(nn.Module):
         if attn.use_rope:
             if self.fixed_rope is not None:
                 if self.head_first:
-                    q, k, v = [value.permute(0, 2, 1, 3) for value in (q, k, v)]
+                    q, k, v = [value.permute(0, 2, 1, 3).contiguous() for value in (q, k, v)]
                 q, k = self.fixed_rope(q), self.fixed_rope(k)
             else:
                 q = RotaryPositionEmbedder.apply_rotary_embedding(q, phases)

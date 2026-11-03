@@ -626,7 +626,10 @@ that layout through SDPA or the reciprocal attention kernel. Original learned
 Q/K normalization precedes the move; weights, LoRA and outer dtypes are retained.
 CPU checks cover bitwise RoPE equivalence with 12 heads, complete blocks and
 both attention precision modes. Native sparse attention is explicitly rejected.
-Tile-padding reduction and complete-flow speed/accuracy remain to be measured.
+The [first source-view trial](results/autoresearch/047-rejected-head-first-view/summary.json)
+was rejected: native IR retained token-first cosine arithmetic with extra casts,
+forward time increased, and sampled states differed substantially from control.
+Python axis order alone did not establish the intended physical layout.
 
 The [complete BF16-AV poster trial](results/autoresearch/045-poster-bf16-av-sampler/summary.json)
 measures 128.155s vs the refreshed FP32 control's 129.725s. Its
@@ -634,6 +637,14 @@ measures 128.155s vs the refreshed FP32 control's 129.725s. Its
 improves from 0.678 to 0.713, with all control grids unchanged bitwise. This
 single-crop accuracy result and small measured runtime decrease require broader
 validation; strict latent gates remain failed and defaults stay unchanged.
+
+`rope_layout_probe.py` compares source views, explicit contiguous tensors and
+flattened arithmetic before whole-model trials. The
+[native kernel probe](results/autoresearch/048-rope-layout-probe/summary.json)
+retains a head-first cosine multiply with flattened arithmetic: at 4096 tokens,
+kernel plus output-transfer time falls 28.06ms to 12.60ms and matches CPU values
+bitwise on the seeded fixture. At 512 tokens it is slightly slower. Complete-flow
+speed and quality for the flattened prototype remain unproven.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning

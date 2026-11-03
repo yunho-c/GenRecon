@@ -55,7 +55,8 @@
     "results/autoresearch/044-refreshed-poster-control/summary.json",
     "results/autoresearch/045-poster-bf16-av-sampler/summary.json",
     "results/autoresearch/046-poster-bf16-av-occupancy/summary.json",
-    "results/autoresearch/047-rejected-head-first-view/summary.json"
+    "results/autoresearch/047-rejected-head-first-view/summary.json",
+    "results/autoresearch/048-rope-layout-probe/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -95,11 +96,12 @@
     "Every refreshed TT sampler state and final sample matches the legacy FP32 reciprocal run bitwise. Sampler time 129.725s matches prior129.726s closely. Extracting shared arithmetic did not alter this full-model execution. Strict reference gates still fail at final relative L2 0.6074; this control is not a promotion.",
     "BF16 AV decreases real-poster final latent error vs stock FP32 from 0.6074 to 0.5750. Forward latency is 5824.9ms vs 5886.1ms; complete sampler timings are retained below. This is an exploratory matched run on one crop, not proof of general accuracy or a statistically established small speed gain.",
     "Real-poster BF16 AV improves occupancy IoU vs the same FP32 reference from 0.6776 to 0.7132, with 5660 occupied voxels vs 6464 reference. False positives/negatives fall from 781/1555 to 613/1417. Sampler time is 128.155s vs 129.725s in the paired run (1.21% lower). All legacy/refreshed reference control grids decode bitwise identically.",
-    "Source-level head-first views do not realize the intended device layout. Native IR retains all120 RoPE multiplies with token-first phase shapes and padded 12-head rows, with60 extra typecasts vs control. The candidate is slower (650.0ms vs625.7ms per forward, 13.63s vs13.21s sampler) and differs 30.6% from TT control at final state despite exact CPU preparation."
+    "Source-level head-first views do not realize the intended device layout. Native IR retains 60 RoPE multiplies with token-first phase shapes and padded 12-head rows, with60 extra typecasts vs control. The candidate is slower (650.0ms vs625.7ms per forward, 13.63s vs13.21s sampler) and differs 30.6% from TT control at final state despite exact CPU preparation.",
+    "Explicit contiguous head-first inputs still leave the cosine multiply token-first in native IR, with native output bitwise equal to token-first. Flattening head/token rows changes the native cosine multiply to [1,12,T,128] with [1,1,T,128] phases. On seeded BF16 inputs, flat output matches CPU bitwise at both512 and4096 tokens; baseline relative L2 is about0.00055/0.00065. At4096, measured kernel+output-transfer median falls28.06ms to12.60ms (2.23x); at512 it increases4.17ms to4.44ms. These are kernel results, not full-flow measurements."
   ],
   "next_actions": [
-    "Reject run062 source-view head-first implementation: final TTNN IR retains120 token-first RoPE multiplies and adds60 casts, with worse speed/drift. Use a small native RoPE probe to test explicit contiguous and flattened rank-two arithmetic, and verify actual physical layout before whole-model trials.",
-    "After successful layout realization, test full shape and real-poster BF16-AV samplers with sealed stock references, exact control comparisons, no fallback/recompilation, and common-decoder quality. Do not promote solely from CPU equality or nominal layout expectations.",
+    "Compare flat token-first vs flat head-first in the small native RoPE probe. Native contiguous alone did not retain intended cosine layout. Require actual native IR and bitwise CPU controls, no fallback, before integration.",
+    "Integrate the better realized RoPE layout and test complete real-poster BF16-AV sampler at4096 tokens with sealed CPU cache and common-decoder occupancy. Kernel speed is2.23x at4096 but slightly worse at512; full-flow speed/quality are unproven.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",

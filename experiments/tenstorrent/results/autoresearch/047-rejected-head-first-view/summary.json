@@ -109,7 +109,7 @@
   },
   "fallback_ops": [],
   "trajectory_recompiled": false,
-  "finding": "Source-level head-first views do not realize the intended device layout. Native IR retains all120 RoPE multiplies with token-first phase shapes and padded 12-head rows, with60 extra typecasts vs control. The candidate is slower (650.0ms vs625.7ms per forward, 13.63s vs13.21s sampler) and differs 30.6% from TT control at final state despite exact CPU preparation.",
+  "finding": "Source-level head-first views do not realize the intended device layout. Native IR retains 60 RoPE multiplies with token-first phase shapes and padded 12-head rows, with60 extra typecasts vs control. The candidate is slower (650.0ms vs625.7ms per forward, 13.63s vs13.21s sampler) and differs 30.6% from TT control at final state despite exact CPU preparation.",
   "decision": "Reject this implementation as an optimization. Test explicit contiguity and rank-two flattened head/token arithmetic in a small native kernel probe; require actual IR layout evidence before another complete-flow trial. Defaults remain unchanged.",
   "note": "StableHLO/TTIR contain head-first operations, while final native TTNN IR returns RoPE arithmetic to token-first layouts. The exact rewrite mechanism has not been isolated; do not claim Python shape order fixes physical tiling.",
   "reproduce": "run.py --cases shape_flow_tensor --rope-mode real_pairs_head_first --native-ir --sampler-trajectory --cpu-trajectory-cache <sealed shape512 cache> --reference-precision float32 --optimization-level 0 --cpu-threads 16 --runs 3 --output-dir <new> at source commit a7e1cd4"
