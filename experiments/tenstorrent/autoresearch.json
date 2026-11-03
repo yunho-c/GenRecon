@@ -59,7 +59,9 @@
     "results/autoresearch/048-rope-layout-probe/summary.json",
     "results/autoresearch/049-integrated-flat-rope/summary.json",
     "results/autoresearch/050-poster-flat-rope-sampler/summary.json",
-    "results/autoresearch/051-poster-flat-rope-occupancy/summary.json"
+    "results/autoresearch/051-poster-flat-rope-occupancy/summary.json",
+    "results/autoresearch/052-matched-fp32-device/summary.json",
+    "results/autoresearch/053-prepared-cpu-fp32-control/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -103,29 +105,18 @@
     "Explicit contiguous head-first inputs still leave the cosine multiply token-first in native IR, with native output bitwise equal to token-first. Flattening head/token rows changes the native cosine multiply to [1,12,T,128] with [1,1,T,128] phases. On seeded BF16 inputs, flat output matches CPU bitwise at both512 and4096 tokens; baseline relative L2 is about0.00055/0.00065. At4096, measured kernel+output-transfer median falls28.06ms to12.60ms (2.23x); at512 it increases4.17ms to4.44ms. These are kernel results, not full-flow measurements.",
     "Flattened head-first and token-first formulations both match CPU bitwise on the seeded BF16 fixtures. At4096, head-first prototype median13.15ms vs token-first16.39ms; integrated head-first12.18ms and bitwise equal to prototype. All eight preintegration native outputs match the independent integration process bitwise. Baseline microtiming varies between processes (about26.6\u201336.2ms at4096), so do not treat precise kernel ratios or small512-token differences as full-flow performance evidence.",
     "Flattened head-first RoPE reduces the complete poster sampler from128.155s to104.503s (1.226x,18.46% lower), with forward median5824.9ms to4755.1ms. Final relative L2 vs stock FP32 is0.5726 vs0.5750. Native IR realizes60 head-first cosine multiplies; nominal cosine-result payload is24MiB vs64MiB and phase payload2MiB vs64MiB, excluding allocator overhead. Other layout/gather operations also change, so this does not attribute all saved time to one operator.",
-    "On the same poster crop and original FP32 decoder, flattened head-first RoPE raises occupancy IoU vs stock FP32 from0.7132 to0.7274 while reducing sampler time128.155s to104.503s. Occupied count5821 vs reference6464; false positives648 vs613 control, false negatives1291 vs1417 control. All five historical control grids remain bitwise unchanged."
+    "On the same poster crop and original FP32 decoder, flattened head-first RoPE raises occupancy IoU vs stock FP32 from0.7132 to0.7274 while reducing sampler time128.155s to104.503s. Occupied count5821 vs reference6464; false positives648 vs613 control, false negatives1291 vs1417 control. All five historical control grids remain bitwise unchanged.",
+    "FP32 model tensors reduce final relative error from0.3921 to0.2936 while increasing sampler time from about14.97s to18.89s. Parameter payload grows2.723GB to5.377GB and fits this device. All457 native-IR linear/matmul operations use FP32 operands, but60 RoPE embeddings still use BF16 tables introduced by lowering. Promoting model tensors alone does not preserve FP32 through every primitive and does not resolve trajectory drift.",
+    "Prepared CPU final relative L2 vs stock is0.00010576 (0.0106%) and every original state passes existing gates. TT differs0.29359 from the same prepared CPU trajectory.114 critical model/reference/helper source hashes match native run068, and physical checkpoint hash is verified. The large native drift is not explained by the small helper algebra difference observed on CPU."
   ],
   "next_actions": [
-    "Finish confirmed live shape068 FP32 device-tensor baseline and shape069 matched pipeline-precision control. Verify all60 prepared attention modules, stock reference/cache identity, actual native linear/matmul dtypes, no fallback/recompilation, and all12 original states. The FP32 parameters total5.376GB vs2.723GB pipeline.",
-    "Compare shape069 states bitwise to previous shape052 FP32-attention/pipeline-torso control before causal interpretation. Compare FP32-device full trajectory vs sealed original stock CPU and matched pipeline control. Keep attention and RoPE policy identical to isolate dtype effects; do not infer IEEE FP32 math from storage dtypes.",
+    "Archive completed FP32 RoPE probe071 and its quantized-partner counterfactual. Native IR explicitly casts FP32 gather tables to BF16; this also occurs in all60 full-model RoPE embeddings despite FP32 model/linear dataflow.",
+    "Test a compensated gather using multiple BF16 payloads to preserve FP32 normal activations through the supported BF16 embedding path. Require eager CPU equality, actual native IR/no fallback, integrated/prototype equivalence and complete shape/real-scene validation before promotion.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [
-    {
-      "name": "068-shape-device-fp32",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/068-shape-device-fp32",
-      "status_at_last_check": "actual worker confirmed waiting for device,5.376GB parameter payload, CPU prep relative L2 1.63e-6",
-      "pid_at_last_check": 349507
-    },
-    {
-      "name": "069-shape-device-pipeline-control",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/069-shape-device-pipeline-control",
-      "status_at_last_check": "actual worker confirmed compiling",
-      "pid_at_last_check": 349540
-    }
-  ],
+  "live_experiments": [],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }

@@ -671,6 +671,20 @@ raises occupancy IoU vs stock FP32 from 0.713 to 0.727, with all five historical
 control grids unchanged bitwise. This is an opt-in improvement on one crop;
 strict latent gates still fail and mesh/material quality remains unverified.
 
+The [matched FP32-model control](results/autoresearch/052-matched-fp32-device/summary.json)
+reduces shape512 final error from 39.2% to 29.4%, with about 26% longer sampler
+time and 5.377 GB of parameter payload. Its linear/matmul operands are FP32,
+while native lowering still uses BF16 tables in all 60 RoPE gathers. The
+[complete prepared CPU control](results/autoresearch/053-prepared-cpu-fp32-control/summary.json)
+has only 0.0106% final drift against stock and passes every state gate; the large
+native error persists against that same prepared model. Model/helper source
+hashes, checkpoint bytes and full fixture identity are verified.
+
+`precision_reference.py --precision float32 --rope-mode real_pairs
+--attention-mode fp32_reciprocal` reproduces that complete prepared CPU control.
+Its default remains the original BF16-boundary diagnostic. Model preparation
+and CPU reference controls retain all original sampler settings.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

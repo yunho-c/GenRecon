@@ -1,0 +1,34 @@
+{
+  "fixture_identity_equal": true,
+  "noise_equal": true,
+  "coords_equal": true,
+  "final_bitwise": true,
+  "pred_x_t": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "pred_x_0": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ]
+}

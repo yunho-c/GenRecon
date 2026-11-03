@@ -1,0 +1,31 @@
+{
+  "status": "completed_full_prepared_cpu_control",
+  "scope": "Exact prepared FP32 shape model and original complete sampler on CPU, using the same model/helper source files as native run068. Not a CUDA oracle or a relaxed reference.",
+  "cpu_vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.00010576068979808947,
+    "pcc": 0.9999999943930896,
+    "max_abs": 0.002023458480834961
+  },
+  "cpu_all_states_pass_original_gates": true,
+  "tt_vs_same_prepared_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29359210267028335,
+    "pcc": 0.9564718913082281,
+    "max_abs": 3.9947240352630615
+  },
+  "critical_source_hashes_equal": 114,
+  "verified_checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+  "finding": "Prepared CPU final relative L2 vs stock is0.00010576 (0.0106%) and every original state passes existing gates. TT differs0.29359 from the same prepared CPU trajectory.114 critical model/reference/helper source hashes match native run068, and physical checkpoint hash is verified. The large native drift is not explained by the small helper algebra difference observed on CPU.",
+  "decision": "Keep stock gates unchanged and investigate native lowering/primitive accuracy. CPU driver now supports prepared FP32 controls alongside its original BF16-boundary diagnostic; defaults remain unchanged.",
+  "tests": "Six focused CPU precision/reference regression checks pass; actual full prepared CPU schedule and strict fixture/source/physical-checkpoint controls pass.",
+  "reproduce": "precision_reference.py --stage shape --precision float32 --rope-mode real_pairs --attention-mode fp32_reciprocal --threads 16 --output-dir <new>; compare all states with sealed stock shape512 cache."
+}

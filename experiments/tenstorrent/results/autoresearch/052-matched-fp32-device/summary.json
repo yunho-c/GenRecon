@@ -1,0 +1,54 @@
+{
+  "status": "completed_failed_gates_with_matched_control",
+  "scope": "Original shape512 model/LoRA and 12-step/21-forward sampler. Same real-pair RoPE and FP32 reciprocal attention; compare pipeline torso with FP32 model tensors, keeping original already-quantized learned values and stock reference.",
+  "parameter_bytes": {
+    "pipeline": 2723457152,
+    "float32": 5376620672
+  },
+  "candidate_warm_ms": 901.2147429748438,
+  "control_warm_ms": 712.7844340284355,
+  "candidate_seconds": 18.888136043970007,
+  "control_seconds": 15.010161318001337,
+  "time_ratio": 1.2583566321381174,
+  "candidate_vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.2936105031483299,
+    "pcc": 0.9564664158932473,
+    "max_abs": 3.994800090789795
+  },
+  "control_vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.39209709518855723,
+    "pcc": 0.9222903931425314,
+    "max_abs": 4.086635112762451
+  },
+  "candidate_vs_control_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.28607053313702546,
+    "pcc": 0.9590083653679153,
+    "max_abs": 4.4468677043914795
+  },
+  "native_ir": {
+    "linear_matmul_ops": 457,
+    "linear_matmul_ops_with_bf16_operands": 0,
+    "embedding_ops_with_bf16_table": 60
+  },
+  "no_fallback_or_recompile": true,
+  "finding": "FP32 model tensors reduce final relative error from0.3921 to0.2936 while increasing sampler time from about14.97s to18.89s. Parameter payload grows2.723GB to5.377GB and fits this device. All457 native-IR linear/matmul operations use FP32 operands, but60 RoPE embeddings still use BF16 tables introduced by lowering. Promoting model tensors alone does not preserve FP32 through every primitive and does not resolve trajectory drift.",
+  "controls": "Same model/reference/checkpoint/version/input signature; original conditions/noise/config match. Refreshed pipeline control matches every historical run052 sampler state bitwise. Prepared full CPU control in result053 stays close to stock, separating helper algebra from the observed native gap.",
+  "decision": "No promotion or weakened gates. Investigate the observed FP32-to-BF16 gather lowering and test controlled workarounds before larger FP32 scene trials. Keep dtype, operator and full-trajectory evidence separate.",
+  "retention": "New candidate trajectory retained; control tensor values already present in result038 with exact equality proof. Original stock CPU reference/cache in result038. Both actual native IRs and raw reports retained.",
+  "reproduce": "Run current run.py shape_flow_tensor with real_pairs, fp32_reciprocal, sealed shape512 CPU cache and native-ir, once with device-precision pipeline and once float32; keep all original sampler settings."
+}
