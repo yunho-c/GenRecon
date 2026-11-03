@@ -1,0 +1,9 @@
+{
+  "status": "completed_canonical_mixed_dtype_control",
+  "finding": "Canonical JAX frontend successfully emits real BF16-input/FP32-output HiFi4 matrix operations with FP32 destination accumulation atK2/32/128. Every mixed-type output is bitwise the JAX FP32-input control and previous PyTorch FP32-input output. Relative errors remain0.00013974/0.00031307/0.00074521. Explicit native BF16 sources with FP32 output do not remove the observed matrix combination/reduction loss.",
+  "scope": "Same installed PJRT-plugin-TT1.4.0/Metal revision as PyTorch probes; JAX0.7.1, exact seed62 BF16-representable values. Different frontend, same native operation/backend. Not the separate profiling SDK.",
+  "all_output_states_bitwise_canonical_fp32_controls": true,
+  "native_bf16_source_fp32_result_policy_retained": true,
+  "decision": "Reject input/output dtype policy as a remedy for this reduction loss. Use controlled mantissa decomposition or kernel accumulation controls, preserving the native IR and exact input/isolated-product guards.",
+  "reproduce": "jax_matmul_dtype_probe.py --source-dtype <bfloat16 or float32> --output-dir <new>, separate processes, source3b45ddb"
+}

@@ -946,3 +946,14 @@ inputs are exact. No changed-value case recompiles or falls back. This identifie
 additional loss while the matrix path combines terms, without locating an
 internal rounding point or assigning a complete-model error share. Reproduce
 with `matmul_reduction_probe.py --mode active_terms --output-dir <new>`.
+
+The [explicit output-dtype control](results/autoresearch/077-matrix-output-dtype-capability/summary.json)
+finds PyTorch's BF16-source/FP32-output `mm.dtype` unsupported in this Torch/XLA
+build; ordinary BF16 multiplication remains BF16 output. The [canonical JAX
+control](results/autoresearch/078-canonical-jax-mixed-output/summary.json) reaches
+the same installed PJRT compiler/runtime with genuinely BF16 native operands
+and FP32 output/accumulation. Its K2/32/128 results are bitwise both the JAX and
+previous PyTorch FP32-input controls, retaining the same reduction errors.
+The different frontend establishes native mixed-type capability, not an accuracy
+fix or a different SDK result. Reproduce the latter with
+`jax_matmul_dtype_probe.py --source-dtype <bfloat16 or float32> --output-dir <new>`.

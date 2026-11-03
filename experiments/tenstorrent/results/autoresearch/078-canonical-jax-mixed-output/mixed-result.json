@@ -1,0 +1,202 @@
+{
+  "status": "completed_native_dtype_diagnostic",
+  "scope": "Test BF16-source/FP32-result dot through the installed TT JAX PJRT frontend.\n\nSame canonical native runtime, seed62 inputs and HiFi4 as the PyTorch probes.\nThis capability diagnostic explicitly verifies emitted native operand/result\ntypes; JAX result dtype alone does not establish a mixed native matrix operation.\n",
+  "source_dtype": "bfloat16",
+  "seed": 62,
+  "cases": {
+    "2": {
+      "input_shapes": [
+        [
+          512,
+          2
+        ],
+        [
+          2,
+          512
+        ]
+      ],
+      "input_digests": [
+        "5d674b204f14d8299d1c8449d6949f130577daa6728de1240f918fac95515990",
+        "3f7515af7b82cb1f9678f575432db34565fb02b8c09fa3148465925ca838e97d"
+      ],
+      "native_input_dtypes": [
+        "bfloat16",
+        "bfloat16"
+      ],
+      "output_dtype": "float32",
+      "input_roundtrip_bitwise": true,
+      "repeats_bitwise": true,
+      "warm_seconds": [
+        0.0158863149699755,
+        0.01622273598331958,
+        0.02197856002021581
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001397395241334344,
+        "pcc": 0.9999999902864759,
+        "max_abs": 0.00201416015625
+      },
+      "native_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0001397395241334344,
+        "pcc": 0.9999999902864759,
+        "max_abs": 0.00201416015625
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_policy_retained": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x2xbf16, #ttnn_layout3>, tensor<2x512xbf16, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc11)"
+      ],
+      "runtime_ir_sha256": "7e261d5d6c23937bf058ec76a9fbe9585c2050aded2a068c946d9d623bbde397",
+      "requested_compile_options": {
+        "optimization_level": 0,
+        "math_fidelity": "hifi4",
+        "dry_run": "false",
+        "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/100-jax-bf16-fp32/k2-native-ir"
+      }
+    },
+    "32": {
+      "input_shapes": [
+        [
+          512,
+          32
+        ],
+        [
+          32,
+          512
+        ]
+      ],
+      "input_digests": [
+        "f3c5d0280d94dfcf5d521efc6458e1b589eb39e94ec9620bdb20e5a2f0b1978d",
+        "07d6d9dab1f390a3dc8418f1f3838168b0b4c94faf0875a5776d178948dc68ac"
+      ],
+      "native_input_dtypes": [
+        "bfloat16",
+        "bfloat16"
+      ],
+      "output_dtype": "float32",
+      "input_roundtrip_bitwise": true,
+      "repeats_bitwise": true,
+      "warm_seconds": [
+        0.003587105020415038,
+        0.003241272992454469,
+        0.0029710530070587993
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0003130710591545885,
+        "pcc": 0.9999999518983411,
+        "max_abs": 0.019372940063476562
+      },
+      "native_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0003130710019527457,
+        "pcc": 0.9999999518983582,
+        "max_abs": 0.01937103271484375
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_policy_retained": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x32xbf16, #ttnn_layout3>, tensor<32x512xbf16, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc11)"
+      ],
+      "runtime_ir_sha256": "1bef4e421b1cd927b9a0bf6e9f670ad0c87b34af814451ee47668779e1287fc0",
+      "requested_compile_options": {
+        "optimization_level": 0,
+        "math_fidelity": "hifi4",
+        "dry_run": "false",
+        "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/100-jax-bf16-fp32/k32-native-ir"
+      }
+    },
+    "128": {
+      "input_shapes": [
+        [
+          512,
+          128
+        ],
+        [
+          128,
+          512
+        ]
+      ],
+      "input_digests": [
+        "ed8fb396548dd14d66145c7cb6b45e8a8fab31f7643ac5eb46e218d2ef70a7b0",
+        "682ec62605e0221aeb2d95e954cc8fc2970fc44776548d36b9c1d62ef8840c05"
+      ],
+      "native_input_dtypes": [
+        "bfloat16",
+        "bfloat16"
+      ],
+      "output_dtype": "float32",
+      "input_roundtrip_bitwise": true,
+      "repeats_bitwise": true,
+      "warm_seconds": [
+        0.0032979529933072627,
+        0.0029788719839416444,
+        0.0025306299794465303
+      ],
+      "native_vs_cpu_fp32": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0007452099783918314,
+        "pcc": 0.9999998398230919,
+        "max_abs": 0.08157730102539062
+      },
+      "native_vs_float64_rounded": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0007452100812352984,
+        "pcc": 0.9999998398231166,
+        "max_abs": 0.08158111572265625
+      },
+      "native_bitwise_cpu_fp32": false,
+      "native_policy_retained": true,
+      "matrix_ops": [
+        "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xbf16, #ttnn_layout3>, tensor<128x512xbf16, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc11)"
+      ],
+      "runtime_ir_sha256": "5343d411d65c10584601b18460062a8ce2c7c12e17246fba4dde55940fe2f7f8",
+      "requested_compile_options": {
+        "optimization_level": 0,
+        "math_fidelity": "hifi4",
+        "dry_run": "false",
+        "export_path": "/home/user/tt-scratchpad/genrecon/autoresearch/100-jax-bf16-fp32/k128-native-ir"
+      }
+    }
+  },
+  "source_commit": "3b45ddba54422c507208739fba93d631f1c88430",
+  "phase": "complete",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "torch-xla": "2.9.0+git56f8e61",
+    "tt-forge": "1.4.0",
+    "pjrt-plugin-tt": "1.4.0",
+    "jax": "0.7.1",
+    "jaxlib": "0.7.1"
+  },
+  "script_sha256": "5f6229c500844da34f3a066a5ef2dee8532dd0d9c74017ed870bc5d8b8d55f90",
+  "device": "TTDevice(id=0, arch=Wormhole_b0)",
+  "device_platform": "tt",
+  "outputs_sha256": "92078989330aa061ec7982712b84f9ff727ac050b7ce5783d773e2ebb1413915"
+}
