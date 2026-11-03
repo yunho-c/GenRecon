@@ -1,0 +1,181 @@
+{
+  "status": "completed_teacher_forced_first_block",
+  "scope": "Compare accepted native boundaries with CPU operations on identical inputs.\n\nThese local errors are not additive components of model/sampler error. CPU\nreconstruction, physical checkpoint and source/artifact identity are mandatory.\n",
+  "local_errors": {
+    "input_layer": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0008221292592243363,
+      "pcc": 0.9999998809683013,
+      "max_abs": 0.02330780029296875
+    },
+    "modulation": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.00822152889197017,
+      "pcc": 0.9999993618412814,
+      "max_abs": 0.32976531982421875
+    },
+    "first_projected": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0036978845424821697,
+      "pcc": 0.9999982562608991,
+      "max_abs": 0.035798072814941406
+    },
+    "first_input": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0000000000000016,
+      "max_abs": 0.0
+    },
+    "first_norm1": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0005880109038924042,
+      "pcc": 0.9999998561157651,
+      "max_abs": 0.012462139129638672
+    },
+    "first_self_input": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 0.9999999999999974,
+      "max_abs": 0.0
+    },
+    "first_self_output": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.01571305772630971,
+      "pcc": 0.9999184234255803,
+      "max_abs": 10.972678184509277
+    },
+    "first_after_self": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0000000000000029,
+      "max_abs": 0.0
+    },
+    "first_cross_input": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.001450201773802723,
+      "pcc": 0.9999997416405464,
+      "max_abs": 0.02424335479736328
+    },
+    "first_cross_output": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.011096137062300776,
+      "pcc": 0.9999991469290713,
+      "max_abs": 0.24840927124023438
+    },
+    "first_after_cross": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 0.9999999999999902,
+      "max_abs": 0.0
+    },
+    "first_norm3": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0005556298159121686,
+      "pcc": 0.9999998626451561,
+      "max_abs": 0.023511886596679688
+    },
+    "first_mlp_input": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 0.9999999999999932,
+      "max_abs": 0.0
+    },
+    "first_mlp_output": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.00623517947114661,
+      "pcc": 0.9999926166237427,
+      "max_abs": 0.4900360107421875
+    },
+    "block_00": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0,
+      "pcc": 1.0000000000000038,
+      "max_abs": 0.0
+    },
+    "final": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.005173874803661838,
+      "pcc": 0.9999982191093065,
+      "max_abs": 0.019864559173583984
+    }
+  },
+  "native_bitwise_cpu_boundaries": [
+    "first_input",
+    "first_self_input",
+    "first_after_self",
+    "first_after_cross",
+    "first_mlp_input",
+    "block_00"
+  ],
+  "checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+  "critical_sources_verified": 112,
+  "cpu_reconstruction_bitwise": true,
+  "finding": "On identical accepted TT inputs, combined first self-attention has1.5713% local error, cross-attention1.1096%, timestep/modulation0.8222%, MLP0.6235%, projected conditioning0.3698%, and final norm/projection0.5174%. LayerNorm local errors are0.0556\u20130.1450%. All six observed pure addition/modulation/residual boundaries match CPU bitwise. These are local numerical comparisons at one seeded t600 forward, not additive contributions or causal shares of complete sampler error.",
+  "decision": "Deprioritize pure elementwise rewrites on this fixture. Isolate learned self/cross attention projections, Q/K normalization and score/AV math on actual first-block inputs, guarding ordinary/captured equality. Shared timestep caching is a separate controlled hypothesis; local ranking does not predict final sampler improvement.",
+  "retention": "Full teacher-forced metrics and source/artifact/checkpoint proof retained. Accepted native first-block inputs and outputs are in result060 selected-state artifact; original complete CPU captures are reproducible from checkpoint, seed0 and source hashes.",
+  "reproduce": "fp32_first_block_analysis.py --capture-directory <accepted-full-capture079> --output-dir <new>; CPU thread count is read from the accepted capture."
+}

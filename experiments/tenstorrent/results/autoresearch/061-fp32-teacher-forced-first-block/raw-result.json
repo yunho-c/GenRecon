@@ -1,0 +1,501 @@
+{
+  "status": "completed_teacher_forced_first_block",
+  "scope": "Compare accepted native boundaries with CPU operations on identical inputs.\n\nThese local errors are not additive components of model/sampler error. CPU\nreconstruction, physical checkpoint and source/artifact identity are mandatory.\n",
+  "script_sha256": "951731d443d48d47572c9234953335c0c2eb8a9878e890a510347aae842a5eb2",
+  "torch": "2.11.0+cpu",
+  "source_capture_sha256": "26e6dc58f132043dd3fb5518620034947a08cecec209915a51815e089463b1b3",
+  "verified_checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
+  "source_proof": {
+    "genrecon/__init__.py": true,
+    "genrecon/backends/__init__.py": true,
+    "genrecon/backends/tenstorrent/__init__.py": true,
+    "genrecon/backends/tenstorrent/precision.py": true,
+    "genrecon/backends/tenstorrent/sparse_decoder.py": true,
+    "genrecon/datasets/__init__.py": true,
+    "genrecon/datasets/components.py": true,
+    "genrecon/datasets/flexi_dual_grid.py": true,
+    "genrecon/datasets/sparse_structure_latent.py": true,
+    "genrecon/datasets/sparse_voxel_pbr.py": true,
+    "genrecon/datasets/structured_latent.py": true,
+    "genrecon/datasets/structured_latent_shape.py": true,
+    "genrecon/datasets/structured_latent_svpbr.py": true,
+    "genrecon/models/__init__.py": true,
+    "genrecon/models/sc_vaes/fdg_vae.py": true,
+    "genrecon/models/sc_vaes/sparse_unet_vae.py": true,
+    "genrecon/models/sparse_elastic_mixin.py": true,
+    "genrecon/models/sparse_structure_flow.py": true,
+    "genrecon/models/sparse_structure_vae.py": true,
+    "genrecon/models/structured_latent_flow.py": true,
+    "genrecon/modules/attention/__init__.py": true,
+    "genrecon/modules/attention/config.py": true,
+    "genrecon/modules/attention/full_attn.py": true,
+    "genrecon/modules/attention/modules.py": true,
+    "genrecon/modules/attention/rope.py": true,
+    "genrecon/modules/cond_3D/__init__.py": true,
+    "genrecon/modules/cond_3D/aggregation_net.py": true,
+    "genrecon/modules/cond_3D/projection.py": true,
+    "genrecon/modules/cond_3D/sparse_aggregation_net.py": true,
+    "genrecon/modules/cond_3D/sparse_projection.py": true,
+    "genrecon/modules/image_feature_extractor.py": true,
+    "genrecon/modules/lora.py": true,
+    "genrecon/modules/norm.py": true,
+    "genrecon/modules/sparse/__init__.py": true,
+    "genrecon/modules/sparse/attention/__init__.py": true,
+    "genrecon/modules/sparse/attention/full_attn.py": true,
+    "genrecon/modules/sparse/attention/modules.py": true,
+    "genrecon/modules/sparse/attention/rope.py": true,
+    "genrecon/modules/sparse/attention/windowed_attn.py": true,
+    "genrecon/modules/sparse/basic.py": true,
+    "genrecon/modules/sparse/config.py": true,
+    "genrecon/modules/sparse/conv/__init__.py": true,
+    "genrecon/modules/sparse/conv/config.py": true,
+    "genrecon/modules/sparse/conv/conv.py": true,
+    "genrecon/modules/sparse/conv/conv_flex_gemm.py": true,
+    "genrecon/modules/sparse/conv/conv_reference.py": true,
+    "genrecon/modules/sparse/conv/conv_spconv.py": true,
+    "genrecon/modules/sparse/conv/conv_torchsparse.py": true,
+    "genrecon/modules/sparse/linear.py": true,
+    "genrecon/modules/sparse/nonlinearity.py": true,
+    "genrecon/modules/sparse/norm.py": true,
+    "genrecon/modules/sparse/spatial/__init__.py": true,
+    "genrecon/modules/sparse/spatial/basic.py": true,
+    "genrecon/modules/sparse/spatial/spatial2channel.py": true,
+    "genrecon/modules/sparse/transformer/__init__.py": true,
+    "genrecon/modules/sparse/transformer/blocks.py": true,
+    "genrecon/modules/sparse/transformer/modulated.py": true,
+    "genrecon/modules/spatial.py": true,
+    "genrecon/modules/transformer/__init__.py": true,
+    "genrecon/modules/transformer/blocks.py": true,
+    "genrecon/modules/transformer/modulated.py": true,
+    "genrecon/modules/utils.py": true,
+    "genrecon/pipelines/__init__.py": true,
+    "genrecon/pipelines/base.py": true,
+    "genrecon/pipelines/full_scene_images_to_3d.py": true,
+    "genrecon/pipelines/images_to_3d.py": true,
+    "genrecon/pipelines/joint_decode.py": true,
+    "genrecon/pipelines/samplers/__init__.py": true,
+    "genrecon/pipelines/samplers/base.py": true,
+    "genrecon/pipelines/samplers/classifier_free_guidance_mixin.py": true,
+    "genrecon/pipelines/samplers/flow_euler.py": true,
+    "genrecon/pipelines/samplers/guidance_interval_mixin.py": true,
+    "genrecon/pipelines/samplers/multi_diff_orchestrator.py": true,
+    "genrecon/pipelines/setup_utils.py": true,
+    "genrecon/pipelines/types.py": true,
+    "genrecon/renderers/__init__.py": true,
+    "genrecon/renderers/mesh_renderer.py": true,
+    "genrecon/renderers/pbr_mesh_renderer.py": true,
+    "genrecon/renderers/voxel_renderer.py": true,
+    "genrecon/representations/__init__.py": true,
+    "genrecon/representations/mesh/__init__.py": true,
+    "genrecon/representations/mesh/base.py": true,
+    "genrecon/representations/voxel/__init__.py": true,
+    "genrecon/representations/voxel/voxel_model.py": true,
+    "genrecon/trainers/__init__.py": true,
+    "genrecon/trainers/basic.py": true,
+    "genrecon/trainers/flow_matching/flow_matching.py": true,
+    "genrecon/trainers/flow_matching/mixins/classifier_free_guidance.py": true,
+    "genrecon/trainers/flow_matching/mixins/image_conditioned.py": true,
+    "genrecon/trainers/flow_matching/sparse_flow_matching.py": true,
+    "genrecon/trainers/utils.py": true,
+    "genrecon/trainers/vae/pbr_vae.py": true,
+    "genrecon/trainers/vae/shape_vae.py": true,
+    "genrecon/trainers/vae/sparse_structure_vae.py": true,
+    "genrecon/utils/__init__.py": true,
+    "genrecon/utils/data_utils.py": true,
+    "genrecon/utils/dist_utils.py": true,
+    "genrecon/utils/elastic_utils.py": true,
+    "genrecon/utils/general_utils.py": true,
+    "genrecon/utils/grad_clip_utils.py": true,
+    "genrecon/utils/loss_utils.py": true,
+    "genrecon/utils/mesh_utils.py": true,
+    "genrecon/utils/model_wrapper_utils.py": true,
+    "genrecon/utils/random_utils.py": true,
+    "genrecon/utils/render_utils.py": true,
+    "genrecon/utils/vis_utils.py": true,
+    "experiments/tenstorrent/flow_observation.py": true,
+    "experiments/tenstorrent/flow_probes.py": true,
+    "experiments/tenstorrent/inference_attention.py": true,
+    "experiments/tenstorrent/inference_precision.py": true,
+    "experiments/tenstorrent/inference_rope.py": true,
+    "experiments/tenstorrent/reference.py": true
+  },
+  "source_artifacts_sha256": {
+    "captured-tt.pt": "1b23ee8223b063e669cc5c2e1eb30d1b76d727c0f5fbb161950a17f81ba44dc2",
+    "ordinary-tt.pt": "68057965f55aae1ef160527d7af1008e25d701b635958a8784dbd908faaa4cf8",
+    "cpu-prepared.pt": "f554e483f27d07830e59be64f786780901592740ec2e1c8bd1824b9bd6918be4",
+    "cpu-stock.pt": "a232b5f7dfc948691dfa37c45803572bc3ff91f808426ceeb5e04777e5496e7a"
+  },
+  "complete_prepared_cpu_reconstruction_bitwise": true,
+  "cpu_boundaries_reconstruct_bitwise": true,
+  "measurements": {
+    "input_layer": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0008221292592243363,
+        "pcc": 0.9999998809683013,
+        "max_abs": 0.02330780029296875
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0008221292592243363,
+        "pcc": 0.9999998809683013,
+        "max_abs": 0.02330780029296875
+      }
+    },
+    "modulation": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00822152889197017,
+        "pcc": 0.9999993618412814,
+        "max_abs": 0.32976531982421875
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00822152889197017,
+        "pcc": 0.9999993618412814,
+        "max_abs": 0.32976531982421875
+      }
+    },
+    "first_projected": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0036978845424821697,
+        "pcc": 0.9999982562608991,
+        "max_abs": 0.035798072814941406
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0036978845424821697,
+        "pcc": 0.9999982562608991,
+        "max_abs": 0.035798072814941406
+      }
+    },
+    "first_input": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000016,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_on_same_inputs": true,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.001175648363208121,
+        "pcc": 0.9999996280551405,
+        "max_abs": 0.0360260009765625
+      }
+    },
+    "first_norm1": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0005880109038924042,
+        "pcc": 0.9999998561157651,
+        "max_abs": 0.012462139129638672
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0010556061727647482,
+        "pcc": 0.9999994717495848,
+        "max_abs": 0.022858619689941406
+      }
+    },
+    "first_self_input": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999974,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_on_same_inputs": true,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00820599718112864,
+        "pcc": 0.9999979037546672,
+        "max_abs": 0.8918991088867188
+      }
+    },
+    "first_self_output": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.01571305772630971,
+        "pcc": 0.9999184234255803,
+        "max_abs": 10.972678184509277
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.020427302329122366,
+        "pcc": 0.9998593408050379,
+        "max_abs": 10.162833213806152
+      }
+    },
+    "first_after_self": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000029,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_on_same_inputs": true,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.022116846831285286,
+        "pcc": 0.9998887922337703,
+        "max_abs": 14.348089218139648
+      }
+    },
+    "first_cross_input": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.001450201773802723,
+        "pcc": 0.9999997416405464,
+        "max_abs": 0.02424335479736328
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.012390673593187842,
+        "pcc": 0.9999385472102071,
+        "max_abs": 0.32877540588378906
+      }
+    },
+    "first_cross_output": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.011096137062300776,
+        "pcc": 0.9999991469290713,
+        "max_abs": 0.24840927124023438
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.010003107853494522,
+        "pcc": 0.9999873467596705,
+        "max_abs": 0.17513465881347656
+      }
+    },
+    "first_after_cross": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999902,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_on_same_inputs": true,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.02145757211254929,
+        "pcc": 0.9998982087014548,
+        "max_abs": 14.377801895141602
+      }
+    },
+    "first_norm3": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0005556298159121686,
+        "pcc": 0.9999998626451561,
+        "max_abs": 0.023511886596679688
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.01520409014236689,
+        "pcc": 0.9998844135217609,
+        "max_abs": 1.274545431137085
+      }
+    },
+    "first_mlp_input": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 0.9999999999999932,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_on_same_inputs": true,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.019668808815440916,
+        "pcc": 0.9998078331402513,
+        "max_abs": 0.1393568515777588
+      }
+    },
+    "first_mlp_output": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00623517947114661,
+        "pcc": 0.9999926166237427,
+        "max_abs": 0.4900360107421875
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.00810265907183605,
+        "pcc": 0.9999679764672275,
+        "max_abs": 1.4631481170654297
+      }
+    },
+    "block_00": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.0,
+        "pcc": 1.0000000000000038,
+        "max_abs": 0.0
+      },
+      "native_bitwise_cpu_on_same_inputs": true,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.014828953062796559,
+        "pcc": 0.9999791239993735,
+        "max_abs": 35.31005859375
+      }
+    },
+    "final": {
+      "native_vs_cpu_on_same_inputs": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.005173874803661838,
+        "pcc": 0.9999982191093065,
+        "max_abs": 0.019864559173583984
+      },
+      "native_bitwise_cpu_on_same_inputs": false,
+      "native_vs_prepared_flow": {
+        "shape_match": true,
+        "finite": true,
+        "passed": true,
+        "max_relative_l2": 0.1,
+        "min_pcc": 0.99,
+        "relative_l2": 0.03656887809058782,
+        "pcc": 0.9993294695702368,
+        "max_abs": 0.20944863557815552
+      }
+    }
+  },
+  "interpretation": "Each CPU expectation consumes the same observed TT input values. Modulated boundaries combine parameter addition, scaling and shifts. Attention/MLP/head are combined local operations. Ranking local relative errors does not rank contributions to final sampler drift."
+}

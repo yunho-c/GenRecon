@@ -735,6 +735,13 @@ passes that hardware guard: its final output matches the ordinary forward
 bitwise, all 45 states repeat exactly, and no fallback occurs. Native IR retains
 FP32 linear/matmul operands with HiFi4 accumulation. First-block/native depth
 states and both runtime IRs are retained for controlled local analysis.
+The [teacher-forced first-block comparison](results/autoresearch/061-fp32-teacher-forced-first-block/summary.json)
+finds local relative errors of 1.57% self-attention, 1.11% cross-attention,
+0.82% shared modulation, 0.62% MLP and 0.52% final norm/projection. All six
+observed elementwise modulation/residual boundaries match CPU bitwise;
+LayerNorm errors are 0.056–0.145%. These measurements use identical native
+inputs at one seeded timestep-600 forward. They do not assign additive shares
+of full-model or sampler error, or establish quality preservation.
 
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
