@@ -21,13 +21,17 @@ sys.path.insert(0,str(ROOT))
 
 
 def main():
+    from experiments.tenstorrent.native_environment import reexec_clean_native_process
+    reexec_clean_native_process()
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir',type=Path,required=True)
+    parser.add_argument('--cache-layout',choices=('raw','heads','heads_t'),default='raw')
     args=parser.parse_args()
     args.output_dir=args.output_dir.resolve();args.output_dir.mkdir(parents=True,exist_ok=False)
     for key in ('LD_LIBRARY_PATH','PYTHONPATH','TT_METAL_HOME','TT_METAL_RUNTIME_ROOT'):os.environ.pop(key,None)
     os.environ.update(PJRT_DEVICE='TT',ATTN_BACKEND='sdpa',SPARSE_ATTN_BACKEND='sdpa',SPARSE_CONV_BACKEND='none')
-    report={'status':'running','scope':__doc__,'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()}
+    report={'status':'running','scope':__doc__,'cache_layout':args.cache_layout,
+            'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()}
     def phase(name):
         report['phase']=name;(args.output_dir/'result.json').write_text(json.dumps(report,indent=2)+'\n');print(name,flush=True)
     phase('imports')
@@ -56,7 +60,7 @@ def main():
         with torch.no_grad():
             reference={(scene,name):flow(values,t,branches[index]['context'],branches[index]['projected'])
                 for scene,branches in enumerate(scenes) for name,index,values in cases}
-        prefill,body=prepare_conditioning_cache(flow)
+        prefill,body=prepare_conditioning_cache(flow,args.cache_layout)
         assert identities=={id(value) for value in body.parameters()}
         report['parameter_identities_preserved']=True
         with torch.no_grad():
@@ -72,10 +76,10 @@ def main():
         resident={(scene,index):tuple(branch[key].to(device) for key in ('context','projected'))
             for scene,branches in enumerate(scenes) for index,branch in enumerate(branches)}
         def compile_module(module,name):
-            torch.compiler.reset();torch_xla.set_custom_compile_options({'optimization_level':0,'math_fidelity':'hifi4','dry_run':'false',
+            torch_xla.set_custom_compile_options({'optimization_level':0,'math_fidelity':'hifi4','dry_run':'false',
                 'export_path':str(args.output_dir/(name+'-native-ir'))})
             return torch.compile(module,backend='tt',fullgraph=True)
-        metrics.clear_all();phase('compile_prefill')
+        torch.compiler.reset();metrics.clear_all();phase('compile_prefill')
         compiled_prefill=compile_module(prefill,'prefill')
         with torch.no_grad():warm=compiled_prefill(*resident[0,0])
         torch_xla.sync(wait=True);del warm;gc.collect()

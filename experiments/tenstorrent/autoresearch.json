@@ -219,6 +219,25 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Extend matching-revision marked profiles to optimized6181-token shape, occupancy and texture modules. Separate preuploaded-activation generated execution from transfer-inclusive PJRT sampler timing, and retain original full-trajectory quality gates."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "run": 137,
+      "purpose": "Fresh unchanged ordinary native baseline for transposed-key cache",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/137-transposed-cache-ordinary-control",
+      "tool_session": 82460
+    },
+    {
+      "run": 138,
+      "purpose": "Complete transposed-key CPU/native equivalence and prefill-inclusive three-round ABBA if exact native state guard passes",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/138-transposed-cache-pretrained-abba",
+      "tool_session": 92462
+    },
+    {
+      "run": 139,
+      "purpose": "Two-scene native transposed cache generalization, selected-branch replay and changed-noise controls",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/139-transposed-cache-dynamic-scenes",
+      "tool_session": 37471
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
