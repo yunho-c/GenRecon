@@ -1,0 +1,20 @@
+{
+  "dynamic": {
+    "main": {
+      "linear_matmul_ops": 37,
+      "conditioning_products": 6
+    },
+    "cpu_condition_cache_calls": []
+  },
+  "frozen": {
+    "main": {
+      "linear_matmul_ops": 31,
+      "conditioning_products": 0
+    },
+    "cpu_condition_cache_calls": [
+      "%1:4 = call @cpu_hoisted_const_eval_29badb42(%arg5, %arg8, %arg9, %arg7, %arg6, %arg2, %arg9, %arg3, %arg4, %arg1, %arg0, %arg4) {ttir.cpu_hoist_call} : (tensor<1x9x24xf32, #ttnn_layout16>, tensor<96xf32, #ttnn_layout17>, tensor<96x24xf32, #ttnn_layout18>, tensor<96x4xf32, #ttnn_layout15>, tensor<4x24xf32, #ttnn_layout14>, tensor<1x9x24xf32, #ttnn_layout16>, tensor<96x24xf32, #ttnn_layout18>, tensor<96xf32, #ttnn_layout17>, tensor<96x24xf32, #ttnn_layout18>, tensor<96x4xf32, #ttnn_layout15>, tensor<4x24xf32, #ttnn_layout14>, tensor<96x24xf32, #ttnn_layout18>) -> (tensor<1x9x96xf32, #ttnn_layout20>, tensor<1x9x96xf32, #ttnn_layout20>, tensor<1x9x96xf32, #ttnn_layout20>, tensor<1x9x96xf32, #ttnn_layout20>) loc(#loc)",
+      "%1:2 = call @cpu_hoisted_const_eval_77cee45e(%arg2, %arg1, %arg3, %arg0, %arg3) {ttir.cpu_hoist_call} : (tensor<48xf32, #ttnn_layout22>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>) -> (tensor<1x17x48xf32, #ttnn_layout33>, tensor<1x17x48xf32, #ttnn_layout33>) loc(#loc)",
+      "%1:2 = call @cpu_hoisted_const_eval_77cee45e(%arg0, %arg3, %arg1, %arg2, %arg1) {ttir.cpu_hoist_call} : (tensor<48xf32, #ttnn_layout22>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>) -> (tensor<1x17x48xf32, #ttnn_layout33>, tensor<1x17x48xf32, #ttnn_layout33>) loc(#loc)"
+    ]
+  }
+}

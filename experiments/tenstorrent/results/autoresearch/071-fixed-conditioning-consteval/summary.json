@@ -1,0 +1,60 @@
+{
+  "status": "completed_tiny_fixed_conditioning_hoist_control",
+  "scope": "Seeded tiny native smoke and consteval-placement control, not model performance.\n\nUses the shared two-block nonzero-LoRA test fixture. Separate processes for\ndynamic and fixed conditioning; all branch outputs and policy metadata retained.\n",
+  "finding": "Tiny two-block frozen conditioning preserves both CPU branches bitwise and all learned parameter identities/values. Native main conditioning products fall6to0 (total main linear/matmul37to31). Runtime IR places both KV and projection caches in CPU-hoisted consteval setup. Both original branches and changed-noise output pass smoke, repeat exactly and cause no fallback/recompile. Frozen tiny resident calls are slower than dynamic; no speedup or pretrained-scene quality claim.",
+  "native_hoist": {
+    "dynamic": {
+      "main": {
+        "linear_matmul_ops": 37,
+        "conditioning_products": 6
+      },
+      "cpu_condition_cache_calls": []
+    },
+    "frozen": {
+      "main": {
+        "linear_matmul_ops": 31,
+        "conditioning_products": 0
+      },
+      "cpu_condition_cache_calls": [
+        "%1:4 = call @cpu_hoisted_const_eval_29badb42(%arg5, %arg8, %arg9, %arg7, %arg6, %arg2, %arg9, %arg3, %arg4, %arg1, %arg0, %arg4) {ttir.cpu_hoist_call} : (tensor<1x9x24xf32, #ttnn_layout16>, tensor<96xf32, #ttnn_layout17>, tensor<96x24xf32, #ttnn_layout18>, tensor<96x4xf32, #ttnn_layout15>, tensor<4x24xf32, #ttnn_layout14>, tensor<1x9x24xf32, #ttnn_layout16>, tensor<96x24xf32, #ttnn_layout18>, tensor<96xf32, #ttnn_layout17>, tensor<96x24xf32, #ttnn_layout18>, tensor<96x4xf32, #ttnn_layout15>, tensor<4x24xf32, #ttnn_layout14>, tensor<96x24xf32, #ttnn_layout18>) -> (tensor<1x9x96xf32, #ttnn_layout20>, tensor<1x9x96xf32, #ttnn_layout20>, tensor<1x9x96xf32, #ttnn_layout20>, tensor<1x9x96xf32, #ttnn_layout20>) loc(#loc)",
+        "%1:2 = call @cpu_hoisted_const_eval_77cee45e(%arg2, %arg1, %arg3, %arg0, %arg3) {ttir.cpu_hoist_call} : (tensor<48xf32, #ttnn_layout22>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>) -> (tensor<1x17x48xf32, #ttnn_layout33>, tensor<1x17x48xf32, #ttnn_layout33>) loc(#loc)",
+        "%1:2 = call @cpu_hoisted_const_eval_77cee45e(%arg0, %arg3, %arg1, %arg2, %arg1) {ttir.cpu_hoist_call} : (tensor<48xf32, #ttnn_layout22>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>, tensor<17x24xf32, #ttnn_layout30>, tensor<48x24xf32, #ttnn_layout31>) -> (tensor<1x17x48xf32, #ttnn_layout33>, tensor<1x17x48xf32, #ttnn_layout33>) loc(#loc)"
+      ]
+    }
+  },
+  "frozen_vs_dynamic_native": {
+    "positive": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0013476691208330377,
+      "pcc": 0.9999990900415859,
+      "max_abs": 0.002197265625
+    },
+    "negative": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0005626025012340006,
+      "pcc": 0.9999998407981503,
+      "max_abs": 0.0009765625
+    },
+    "changed_noise": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.001443532104579767,
+      "pcc": 0.9999989284454515,
+      "max_abs": 0.001953125
+    }
+  },
+  "tests": "Five focused CPU tests pass, including exact branches, nonzero LoRA/parameter identities, owned buffers, fixed-token checks and fail-before-mutation policies. Both native runs verify branch changes and changed noise without recompilation/fallback.",
+  "decision": "Use a separate dynamic prefill graph to form reusable per-scene caches, keeping prefill cost explicit. Fixed-scene buffers are a consteval experiment and must be rebuilt for new conditions; do not equate tiny CPU hoisting with full-size device placement or performance.",
+  "reproduce": "frozen_conditioning_probe.py --mode <dynamic or frozen> --output-dir <new>, separate processes, source331b2b9."
+}
