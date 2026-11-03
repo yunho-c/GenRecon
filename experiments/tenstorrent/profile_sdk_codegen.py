@@ -21,11 +21,15 @@ def main():
     parser.add_argument('--native-control-result', type=Path, required=True)
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--profile', action='store_true')
+    parser.add_argument('--compact-profile', action='store_true',
+        help='Keep native per-operation C++ device timings; omit per-core marker CSV/Tracy copies')
     parser.add_argument('--repair-embedding-indices', action='store_true')
     parser.add_argument('--runs', type=int, default=3)
     args = parser.parse_args()
     if args.runs < 1:
         parser.error('runs must be positive')
+    if args.compact_profile and not args.profile:
+        parser.error('compact-profile requires profile')
     from experiments.tenstorrent.native_environment import clean_native_environment
     from experiments.tenstorrent.experiment_identity import sha256
     sdk, output = args.sdk_workspace.resolve(), args.output_dir.resolve()
@@ -57,6 +61,10 @@ def main():
         command += ['-m', 'tracy', '-r', '-p', '--op-support-count', '10000',
                     '--tracy-tools-folder', str(build/'tools/profiler/bin'),
                     '-o', str(output/'profiler'), '--check-exit-code']
+        if args.compact_profile:
+            # Pinned Metal generates cpp_device_perf_report.csv before these
+            # two optional raw-marker copies. Require that report below.
+            command += ['--disable-device-data-dump-to-files', '--disable-device-data-push-to-tracy']
     command += [str(ROOT/'experiments/tenstorrent/codegen_probe.py'), 'execute',
         '--directory', str(args.export_dir.resolve()), '--result', str(output/'execute.json'),
         '--native-control-result', str(args.native_control_result.resolve()), '--runs', str(args.runs)]
@@ -69,7 +77,7 @@ def main():
         'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'environment': {k: environment[k] for k in ('LD_LIBRARY_PATH', 'PYTHONPATH', 'TT_METAL_HOME',
             'TT_METAL_RUNTIME_ROOT', 'VIRTUAL_ENV', 'TT_METAL_LOGS_PATH', 'TT_METAL_PROFILER_DIR')},
-        'profile': args.profile}
+        'profile': args.profile, 'compact_profile': args.compact_profile}
 
     def save():
         temporary = output/'launch.tmp'
@@ -88,6 +96,11 @@ def main():
         if (result.get('status') == 'passed_smoke' and result.get('native_control', {}).get('bitwise_equal')
                 and paths and all(path.is_relative_to(sdk) for path in paths)):
             report['status'] = 'completed_calibrated_execute' if not args.profile else 'completed_capture_unvalidated'
+            if args.compact_profile:
+                perf = output/'profiler/.logs/cpp_device_perf_report.csv'
+                if not perf.is_file() or len(perf.read_text().splitlines()) < 2:
+                    report['status'] = 'failed'
+                    report['error'] = 'Compact capture did not produce native per-operation device timings'
     save()
     return 0 if report['status'].startswith('completed_') else 1
 

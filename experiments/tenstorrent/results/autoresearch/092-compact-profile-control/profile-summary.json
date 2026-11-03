@@ -1,0 +1,1261 @@
+{
+  "window": "GENRECON_MEASURED_0",
+  "signpost_wall_ns": 776009777.0,
+  "device_operations": 4219,
+  "kernel_sum_ns": 760445613.0,
+  "by_operation": [
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 457,
+      "kernel_sum_ns": 202770749.0,
+      "host_sum_ns": 1796345.0,
+      "share_of_kernel_sum": 0.26664727303778923
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 150,
+      "kernel_sum_ns": 201577198.0,
+      "host_sum_ns": 609392.0,
+      "share_of_kernel_sum": 0.26507773146953506
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 1471,
+      "kernel_sum_ns": 154838093.0,
+      "host_sum_ns": 6455144.0,
+      "share_of_kernel_sum": 0.20361494675359512
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 574,
+      "kernel_sum_ns": 64053224.0,
+      "host_sum_ns": 2720368.0,
+      "share_of_kernel_sum": 0.08423117038877571
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 390,
+      "kernel_sum_ns": 37140480.0,
+      "host_sum_ns": 1341234.0,
+      "share_of_kernel_sum": 0.04884041588915051
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 390,
+      "kernel_sum_ns": 33343858.0,
+      "host_sum_ns": 1744354.0,
+      "share_of_kernel_sum": 0.043847787967973985
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 240,
+      "kernel_sum_ns": 23685184.0,
+      "host_sum_ns": 938174.0,
+      "share_of_kernel_sum": 0.031146453599174093
+    },
+    {
+      "operation": "FillPadDeviceOperation",
+      "calls": 150,
+      "kernel_sum_ns": 13183419.0,
+      "host_sum_ns": 537810.0,
+      "share_of_kernel_sum": 0.0173364390228917
+    },
+    {
+      "operation": "PermuteDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 7358775.0,
+      "host_sum_ns": 246511.0,
+      "share_of_kernel_sum": 0.00967692478488925
+    },
+    {
+      "operation": "TypecastDeviceOperation",
+      "calls": 120,
+      "kernel_sum_ns": 6317655.0,
+      "host_sum_ns": 405371.0,
+      "share_of_kernel_sum": 0.008307832791718662
+    },
+    {
+      "operation": "LayerNormDeviceOperation",
+      "calls": 91,
+      "kernel_sum_ns": 6244306.0,
+      "host_sum_ns": 332850.0,
+      "share_of_kernel_sum": 0.008211377504521155
+    },
+    {
+      "operation": "EmbeddingsDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 6072664.0,
+      "host_sum_ns": 219010.0,
+      "share_of_kernel_sum": 0.007985665110280543
+    },
+    {
+      "operation": "UntilizeDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 3613751.0,
+      "host_sum_ns": 189631.0,
+      "share_of_kernel_sum": 0.004752149184927969
+    },
+    {
+      "operation": "TilizeWithValPaddingDeviceOperation",
+      "calls": 3,
+      "kernel_sum_ns": 182066.0,
+      "host_sum_ns": 11810.0,
+      "share_of_kernel_sum": 0.00023942014640828757
+    },
+    {
+      "operation": "TilizeDeviceOperation",
+      "calls": 2,
+      "kernel_sum_ns": 61076.0,
+      "host_sum_ns": 15390.0,
+      "share_of_kernel_sum": 8.031606594329844e-05
+    },
+    {
+      "operation": "ConcatDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 3115.0,
+      "host_sum_ns": 4750.0,
+      "share_of_kernel_sum": 4.0962824253941746e-06
+    }
+  ],
+  "by_operation_and_shape": [
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 66702986.0,
+      "host_sum_ns": 122740.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_X_PAD[LOGICAL]": "3072[3072]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 59996377.0,
+      "host_sum_ns": 249421.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 54292254.0,
+      "host_sum_ns": 119061.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "4608[4608]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 330,
+      "kernel_sum_ns": 41195687.0,
+      "host_sum_ns": 1420326.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "4608[4608]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 360,
+      "kernel_sum_ns": 35389661.0,
+      "host_sum_ns": 1527915.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 32203427.0,
+      "host_sum_ns": 127050.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "8192[8192]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "8192[8192]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 150,
+      "kernel_sum_ns": 30762238.0,
+      "host_sum_ns": 637162.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_1_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 240,
+      "kernel_sum_ns": 27645712.0,
+      "host_sum_ns": 1122723.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 270,
+      "kernel_sum_ns": 23647906.0,
+      "host_sum_ns": 1219787.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReshapeViewDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 20585581.0,
+      "host_sum_ns": 118170.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 20061164.0,
+      "host_sum_ns": 116181.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "8192[8192]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_X_PAD[LOGICAL]": "8192[8192]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 19451093.0,
+      "host_sum_ns": 128430.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "4608[4608]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "4608[4608]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 19309315.0,
+      "host_sum_ns": 104840.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "4608[4608]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 16939755.0,
+      "host_sum_ns": 120350.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_1_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 16067152.0,
+      "host_sum_ns": 276491.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 15384876.0,
+      "host_sum_ns": 4840.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_X_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_1_X_PAD[LOGICAL]": "92160[92160]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "92160[92160]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 90,
+      "kernel_sum_ns": 14923910.0,
+      "host_sum_ns": 409211.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Z_PAD[LOGICAL]": "3[3]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 90,
+      "kernel_sum_ns": 14864225.0,
+      "host_sum_ns": 374010.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 14853140.0,
+      "host_sum_ns": 117910.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_X_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 90,
+      "kernel_sum_ns": 14518089.0,
+      "host_sum_ns": 315732.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 120,
+      "kernel_sum_ns": 14474015.0,
+      "host_sum_ns": 402591.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 12857308.0,
+      "host_sum_ns": 119891.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_X_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "3072[3072]",
+        "INPUT_1_X_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 11516523.0,
+      "host_sum_ns": 272030.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1029[1029]",
+        "INPUT_0_Z_PAD[LOGICAL]": "2[2]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 120,
+      "kernel_sum_ns": 11020887.0,
+      "host_sum_ns": 527094.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_1_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 10242355.0,
+      "host_sum_ns": 130181.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "8192[8192]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 240,
+      "kernel_sum_ns": 10077485.0,
+      "host_sum_ns": 1171563.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 8768136.0,
+      "host_sum_ns": 203061.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 8548602.0,
+      "host_sum_ns": 229331.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 7894738.0,
+      "host_sum_ns": 119570.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_1_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 90,
+      "kernel_sum_ns": 7135425.0,
+      "host_sum_ns": 398770.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_1_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 7024288.0,
+      "host_sum_ns": 7280.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_1_X_PAD[LOGICAL]": "46080[46080]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "46080[46080]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 6553962.0,
+      "host_sum_ns": 115871.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_1_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 6405549.0,
+      "host_sum_ns": 121701.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1029[1029]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "EmbeddingsDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 6072664.0,
+      "host_sum_ns": 219010.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "UINT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_X_PAD[LOGICAL]": "6144[6144]",
+        "INPUT_1_DATATYPE": "BFLOAT16"
+      }
+    },
+    {
+      "operation": "FillPadDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 6033396.0,
+      "host_sum_ns": 218410.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "PermuteDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 5848004.0,
+      "host_sum_ns": 114541.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1029[1029]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "FillPadDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 5751380.0,
+      "host_sum_ns": 116730.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1029[1029]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 5552549.0,
+      "host_sum_ns": 225361.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 4336660.0,
+      "host_sum_ns": 245091.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 4261125.0,
+      "host_sum_ns": 128390.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_X_PAD[LOGICAL]": "92160[92160]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 3950492.0,
+      "host_sum_ns": 125011.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1029[1029]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "LayerNormDeviceOperation",
+      "calls": 61,
+      "kernel_sum_ns": 3920932.0,
+      "host_sum_ns": 216030.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "UntilizeDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 3613751.0,
+      "host_sum_ns": 189631.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_X_PAD[LOGICAL]": "6144[6144]",
+        "INPUT_0_DATATYPE": "BFLOAT16"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 3430689.0,
+      "host_sum_ns": 135530.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_X_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_X_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TypecastDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 3224276.0,
+      "host_sum_ns": 200580.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_X_PAD[LOGICAL]": "6144[6144]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 3209360.0,
+      "host_sum_ns": 201641.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_X_PAD[LOGICAL]": "6144[6144]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TypecastDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 3093379.0,
+      "host_sum_ns": 204791.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_X_PAD[LOGICAL]": "6144[6144]",
+        "INPUT_0_DATATYPE": "BFLOAT16"
+      }
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 2758136.0,
+      "host_sum_ns": 200600.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "6144[6144]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "LayerNormDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 2323374.0,
+      "host_sum_ns": 116820.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 2038711.0,
+      "host_sum_ns": 147400.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "46080[46080]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TransposeDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 1525284.0,
+      "host_sum_ns": 211640.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 1517457.0,
+      "host_sum_ns": 284450.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_1_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_1_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "PermuteDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 1510771.0,
+      "host_sum_ns": 131970.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1029[1029]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[12]",
+        "INPUT_0_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "FillPadDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 1398643.0,
+      "host_sum_ns": 202670.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1056[1029]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ReduceDeviceOperation",
+      "calls": 30,
+      "kernel_sum_ns": 1296881.0,
+      "host_sum_ns": 113380.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "12[12]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 60,
+      "kernel_sum_ns": 733202.0,
+      "host_sum_ns": 299540.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 629145.0,
+      "host_sum_ns": 3920.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "9216[9216]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "9216[9216]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "SliceDeviceOperation",
+      "calls": 180,
+      "kernel_sum_ns": 603589.0,
+      "host_sum_ns": 787323.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "9216[9216]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TilizeWithValPaddingDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 153042.0,
+      "host_sum_ns": 3660.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1029[1029]",
+        "INPUT_0_X_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 86994.0,
+      "host_sum_ns": 5040.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 68908.0,
+      "host_sum_ns": 4970.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[32]",
+        "INPUT_1_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "32[32]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TilizeDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 57271.0,
+      "host_sum_ns": 12100.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "1024[1024]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 53806.0,
+      "host_sum_ns": 5690.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "32[32]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_X_PAD[LOGICAL]": "32[32]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TilizeWithValPaddingDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 22678.0,
+      "host_sum_ns": 3540.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "MatmulDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 16516.0,
+      "host_sum_ns": 4770.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "256[256]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_1_X_PAD[LOGICAL]": "256[256]",
+        "INPUT_1_DATATYPE": "FLOAT32",
+        "INPUT_2_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_2_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_2_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_2_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 2,
+      "kernel_sum_ns": 11327.0,
+      "host_sum_ns": 9110.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "1536[1536]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "UnaryDeviceOperation",
+      "calls": 2,
+      "kernel_sum_ns": 9193.0,
+      "host_sum_ns": 10300.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TilizeWithValPaddingDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 6346.0,
+      "host_sum_ns": 4610.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "BinaryNgDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 4941.0,
+      "host_sum_ns": 4570.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "TilizeDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 3805.0,
+      "host_sum_ns": 3290.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "512[512]",
+        "INPUT_0_X_PAD[LOGICAL]": "32[32]",
+        "INPUT_0_DATATYPE": "FLOAT32"
+      }
+    },
+    {
+      "operation": "ConcatDeviceOperation",
+      "calls": 1,
+      "kernel_sum_ns": 3115.0,
+      "host_sum_ns": 4750.0,
+      "inputs": {
+        "INPUT_0_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_0_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_0_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_0_DATATYPE": "FLOAT32",
+        "INPUT_1_W_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Z_PAD[LOGICAL]": "1[1]",
+        "INPUT_1_Y_PAD[LOGICAL]": "32[1]",
+        "INPUT_1_X_PAD[LOGICAL]": "128[128]",
+        "INPUT_1_DATATYPE": "FLOAT32"
+      }
+    }
+  ],
+  "interpretation": "Operation kernel duration sums and their shares, not wall-time attribution. Compilation and warmups excluded by signposts; transfers/dispatch may not appear as device-op rows. Shapes preserved; no inferred attention/MLP attribution."
+}

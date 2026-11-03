@@ -1,0 +1,32 @@
+{
+  "GENRECON_FIRST": {
+    "device_operations": 4219,
+    "identical_operation_shape_call_counts_to_full_capture": true,
+    "kernel_sum_ns": 760705895.0,
+    "wall_ns": 6906145674.0
+  },
+  "GENRECON_WARMUP_0": {
+    "device_operations": 4219,
+    "identical_operation_shape_call_counts_to_full_capture": true,
+    "kernel_sum_ns": 761336959.0,
+    "wall_ns": 776675849.0
+  },
+  "GENRECON_WARMUP_1": {
+    "device_operations": 4219,
+    "identical_operation_shape_call_counts_to_full_capture": true,
+    "kernel_sum_ns": 760636885.0,
+    "wall_ns": 776163937.0
+  },
+  "GENRECON_WARMUP_2": {
+    "device_operations": 4219,
+    "identical_operation_shape_call_counts_to_full_capture": true,
+    "kernel_sum_ns": 760607124.0,
+    "wall_ns": 775767955.0
+  },
+  "GENRECON_MEASURED_0": {
+    "device_operations": 4219,
+    "identical_operation_shape_call_counts_to_full_capture": true,
+    "kernel_sum_ns": 760445613.0,
+    "wall_ns": 776009777.0
+  }
+}

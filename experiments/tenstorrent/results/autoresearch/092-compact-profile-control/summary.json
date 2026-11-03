@@ -1,0 +1,22 @@
+{
+  "status": "complete_compact_native_profile_control",
+  "all_outputs_bitwise_canonical": true,
+  "all_repeats_exact": true,
+  "device_operations_each_of_five_windows": 4219,
+  "all_operation_shape_call_counts_identical_to_full_capture": true,
+  "measured_wall_ms": 776.009777,
+  "kernel_sum_ms": 760.445613,
+  "device_timing_source": "Native cpp_device_perf_report.csv generated directly from actual device markers before optional raw-file and Tracy-GUI copies. All4219 populated per-operation device timings are retained.",
+  "full_vs_compact_original_log_bytes": {
+    "124-profile-sdk-fp32-flat-capture": 7993546380,
+    "125-profile-sdk-compact-control": 3199117184
+  },
+  "full_vs_compact_tracy_bytes": {
+    "124-profile-sdk-fp32-flat-capture": 141079364,
+    "125-profile-sdk-compact-control": 43167107
+  },
+  "omitted": "Per-core marker CSV and mirrored per-core Tracy device zones; per-operation device metrics, host operation metadata and explicit markers remain. Not a per-core timeline capture.",
+  "limits": "One fixed n150 denoiser control, no new sampler speedup or quality claim. Original trajectory gates unchanged.",
+  "reproduce": "Add --profile --compact-profile to the result090 profile_sdk_codegen.py command; omit --compact-profile when per-core timelines are required.",
+  "tests": "10 profile-parser/environment checks previously passed; CLI rejects compact-profile without profile; actual five-window operation/shape counts and bitwise outputs match full capture."
+}

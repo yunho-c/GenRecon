@@ -1071,6 +1071,15 @@ The three largest reshape input groups total 180.85ms of 201.27ms reshape time.
 The retained shapes and native IR identify concrete layout investigations;
 these percentages remain kernel-sum shares, not full sampler wall attribution.
 
+The [compact profiling control](results/autoresearch/092-compact-profile-control/summary.json)
+preserves all 4,219 native device timings and identical operation/shape counts
+in each of five windows, with bitwise canonical output. Add `--compact-profile`
+alongside `--profile` to keep the native C++ per-operation report while omitting
+the per-core marker CSV and its mirrored Tracy zones. On this control, the
+Tracy trace falls from 135MiB to 42MiB and the 3.6GiB per-core CSV is omitted.
+Host metadata and explicit markers remain. Use a full capture when per-core
+timelines are needed; compact mode makes no sampler speedup or quality claim.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation
