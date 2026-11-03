@@ -86,10 +86,11 @@ def paired_trials(*, rounds, fixture, prefill, body, compiled_prefill, compiled_
             torch_xla.sync(wait=True)
             compiled_body(inputs[0].to(device), inputs[1].to(device), warm_cache).cpu()
             del warm_cache
+    calls = {'shape': 21, 'tex': 18}[fixture.stage]
     result = {'order': ['ordinary', 'cached', 'cached', 'ordinary']*rounds,
               'inline_control_compile_and_warm_seconds': time.perf_counter()-start,
               'first_cached_and_inline_all_states_bitwise_native_control': True,
-              'trials': [], 'scope': 'ABBA rounds in one process, shared original weights. Each cached trial computes and uses a fresh positive/negative native prefill pair; both paths retain all original12steps/21calls. Explicit synchronization, no compilation/warmup/artifact I/O in measured windows.'}
+              'trials': [], 'scope': f'ABBA rounds in one process, shared original weights. Each cached trial computes and uses a fresh positive/negative native prefill pair; both paths retain all original12steps/{calls}calls for {fixture.stage}. Explicit synchronization, no compilation/warmup/artifact I/O in measured windows.'}
 
     def compile_state():
         return {'dynamo': dict(torch._dynamo.utils.counters['stats']),

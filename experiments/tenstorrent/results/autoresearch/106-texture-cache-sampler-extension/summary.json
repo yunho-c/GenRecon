@@ -1,0 +1,7 @@
+{
+  "status": "completed_texture_cache_harness_CPU_controls",
+  "change": "cached_flow_sampler --stage tex selects texture checkpoint, original texture fixture including fixed32-channel shape concat and18-call schedule. Shape remains default; all cache layouts retained.",
+  "focused_tests": "30 passed; complete two-block texture trajectories with original learned LoRA objects across raw/heads/heads_t, changed shape concatenation, both guidance branches and original12steps18calls. Each cached and inline state is bitwise ordinary prepared CPU. Reference cache/trajectory guards retained.",
+  "pretrained_native_validation": "pending fresh ordinary texture reference and candidate; no texture speed/quality claim",
+  "reproduce_tests": "/home/user/tt-forge-venv/bin/python -m pytest -q experiments/tenstorrent/test_cached_texture_sampler.py experiments/tenstorrent/test_conditioning_cache.py experiments/tenstorrent/test_conditioning_cache_comparison.py experiments/tenstorrent/test_trajectory.py experiments/tenstorrent/test_reference_cache.py"
+}

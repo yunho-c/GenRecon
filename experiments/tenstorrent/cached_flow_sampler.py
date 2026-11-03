@@ -1,9 +1,10 @@
-"""Measure dynamic conditioning prefill plus the complete original shape sampler.
+"""Measure dynamic conditioning prefill plus an original shape/texture sampler.
 
 Experimental FP32 two-graph execution, retaining every checkpoint parameter,
 token and original Euler/CFG operation. Exact prepared CPU trajectories and the
 sealed stock CPU reference are checked before native compilation. Timing covers
-two resident prefill calls plus all 21 synchronized denoiser calls; compilation,
+two resident prefill calls plus all synchronized denoiser calls (21 shape,
+18 texture). Texture retains its fixed 32-channel shape concatenation. Compilation,
 warmups, raw-condition upload and artifact I/O are reported separately/excluded.
 """
 import argparse
@@ -38,6 +39,7 @@ def main():
     from experiments.tenstorrent.native_environment import reexec_clean_native_process
     reexec_clean_native_process()
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--stage', choices=('shape','tex'), default='shape')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--checkpoint-dir', type=Path, default=Path.home()/'models/genrecon')
     parser.add_argument('--cpu-trajectory-cache', type=Path, required=True)
@@ -55,7 +57,7 @@ def main():
     for key in ('LD_LIBRARY_PATH', 'PYTHONPATH', 'TT_METAL_HOME', 'TT_METAL_RUNTIME_ROOT'):
         os.environ.pop(key, None)
     os.environ.update(PJRT_DEVICE='TT', ATTN_BACKEND='sdpa', SPARSE_ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
-    report = {'status': 'running', 'scope': __doc__, 'case': 'shape_flow_tensor', 'seed': args.seed,
+    report = {'status': 'running', 'scope': __doc__, 'case': args.stage+'_flow_tensor', 'seed': args.seed,
               'cache_layout': args.cache_layout,
               'reference_precision': 'float32', 'cpu_threads': args.cpu_threads,
               'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()}
@@ -86,10 +88,11 @@ def main():
         model.eval()
         report.update(metadata)
         report['inputs'] = [{'shape': list(value.shape), 'dtype': str(value.dtype)} for value in inputs]
-        fixture = TrajectoryFixture('shape', inputs, model.coords)
+        fixture = TrajectoryFixture(args.stage, inputs, model.coords)
+        checkpoint_stem = {'shape': 'shape_slat', 'tex': 'texture_slat'}[args.stage]
         phase('load_stock_cpu_cache')
         stock, report['stock_cpu_trajectory'], report['stock_cache'] = load_cache(
-            args.cpu_trajectory_cache, report, fixture, checkpoint_path=args.checkpoint_dir/'shape_slat.pt')
+            args.cpu_trajectory_cache, report, fixture, checkpoint_path=args.checkpoint_dir/(checkpoint_stem+'.pt'))
         torch.save(stock, args.output_dir/'trajectory-stock.pt')
         report['prepared_rope_blocks'] = prepare_real_rope(model, head_first=True, flatten=True)
         report['prepared_attention_modules'] = prepare_attention(model, 'fp32_reciprocal')

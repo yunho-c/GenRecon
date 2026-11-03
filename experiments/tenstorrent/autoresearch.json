@@ -113,7 +113,8 @@
     "results/autoresearch/102-transposed-key-boundary/summary.json",
     "results/autoresearch/103-transposed-cache-dynamic-scenes/summary.json",
     "results/autoresearch/104-transposed-cache-pretrained-controls/summary.json",
-    "results/autoresearch/105-transposed-cache-abba-sampler/summary.json"
+    "results/autoresearch/105-transposed-cache-abba-sampler/summary.json",
+    "results/autoresearch/106-texture-cache-sampler-extension/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -215,7 +216,8 @@
     "Transposed-key cache boundary heads_t restores teacher-forced first-block native cross attention bitwise on both condition branches; all fused/split/prefill paths match original raw cross. QK retains transpose_b=false.71 focused CPU checks and exact XOR-evidence reconstruction pass. Full sampler/native performance still require validation.",
     "Native heads_t cache passes six two-scene/branch/noise controls, exact repeats and old-scene replay, without fallback or value-change compilation. Every changed positive cache tensor and output changes; unchanged negative cache/output remain bitwise. Native prefill has6 dynamic conditioning products, body31 total/zero conditioning products. NonzeroLoRA/learned identities retained; no pretrained speed or reconstruction claim.",
     "Transposed-key pretrained CPU trajectory preserves every ordinary prepared state bitwise, with original learned identities and logical cache payload. Fresh ordinary native137 matches every original110 state. Candidate native/paired validation is a separate pending gate; stock CPU native error remains0.299911.",
-    "Transposed-key cache heads_t passes all pretrained CPU/native state guards and twelve paired ABBA trajectories. Prefill-inclusive median falls16.869609s to13.628906s (19.2103% lower), with fresh positive/negative caches each cached trial, no fallback or measured recompilation, original12steps21calls and shared learned objects/LoRA. Prefix32/body425 matrixops and30/0 fixed cross-KV packs confirm work moved out of denoiser.92 focused tests and independent compressed-evidence audit pass. One n150 synthetic512-token shape fixture only; unchanged stock CPU final error0.299911/PCC0.954575 still fails, raw cache default and production defaults unchanged."
+    "Transposed-key cache heads_t passes all pretrained CPU/native state guards and twelve paired ABBA trajectories. Prefill-inclusive median falls16.869609s to13.628906s (19.2103% lower), with fresh positive/negative caches each cached trial, no fallback or measured recompilation, original12steps21calls and shared learned objects/LoRA. Prefix32/body425 matrixops and30/0 fixed cross-KV packs confirm work moved out of denoiser.92 focused tests and independent compressed-evidence audit pass. One n150 synthetic512-token shape fixture only; unchanged stock CPU final error0.299911/PCC0.954575 still fails, raw cache default and production defaults unchanged.",
+    "Texture cache harness adds --stage tex with original12steps18calls and fixed32-channel shape concatenation, choosing matching texture checkpoint/CPU cache.30 focused CPU tests pass; cached/inline complete trajectories remain bitwise original for all three layouts and changed shape conditioning. Pretrained/native performance remains pending. Shape and production defaults unchanged."
   ],
   "next_actions": [
     "Extend validated transposed-key heads_t conditioning cache to texture and matched real-image shape/texture fixtures using fresh same-source ordinary controls. Require CPU/native every-state equality, original schedules, no fallback/recompilation and paired prefill-inclusive timing; retain unchanged strict stock CPU quality gates.",

@@ -1202,6 +1202,15 @@ cache can be restored from result038. For an audit without hardware, run
 recorded Forge Python. It checks compressed seals, CPU/native complete tapes,
 trial schedules/counters/timing arithmetic and actual native operation counts.
 
+The [texture harness extension](results/autoresearch/106-texture-cache-sampler-extension/summary.json)
+adds `cached_flow_sampler.py --stage tex`. Use a sealed `tex_flow_tensor` stock
+CPU cache and a fresh ordinary texture native control with the same recipe.
+The original texture schedule has 12 steps and 18 calls; every call retains the
+fixed 32-channel shape latent concatenated with the current texture noise.
+Thirty focused checks include complete cached and inline CPU trajectories for
+all cache layouts and changed shape conditioning. This extension alone supplies
+no pretrained texture speed or quality result. Shape remains the default stage.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation
