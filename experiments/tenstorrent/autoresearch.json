@@ -106,7 +106,8 @@
     "results/autoresearch/095-rejected-truncated-host-capture/summary.json",
     "results/autoresearch/096-complete-native-sampler-profile/summary.json",
     "results/autoresearch/097-head-packed-cache-prototype/summary.json",
-    "results/autoresearch/098-fresh-head-cache-ordinary-control/summary.json"
+    "results/autoresearch/098-fresh-head-cache-ordinary-control/summary.json",
+    "results/autoresearch/099-head-cache-pretrained-cpu/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -201,7 +202,8 @@
     "Full original-schedule instrumented worker retains every native state bitwise and collects101256 C++ device-op rows, but Tracy host data truncates after33752 ops during call4. Complete-window parser rejects it. Do not report partial host capture as whole-sampler attribution. Next record exact per-call C++ byte ranges and Python host timing independently of optional Tracy visualization.",
     "Complete original12-step/21-call native-equal sampler profile covers88599 actual device operations/9597 matrix products, with all101256 first/warm/sampler rows tied to contiguous per-read byte ranges. Kernel sum15.971s: matrix26.71%, reshape26.50%, binary20.37%. Direct native CPP capture needs MID_RUN_DUMP and TTNN_OP_PROFILER; it avoids dependence on a truncated optional Tracy host stream. Instrumented wall174.8s includes136.4s profiler flushing and is not ordinary latency. Stock CPU quality gates unchanged/failed.",
     "Opt-in heads cache prototype moves cross-KV key normalization and head packing into dynamic prefill. All original learned objects/LoRA remain; raw cache stays default.70 focused CPU checks pass, including bitwise scene/branch/noise/time controls and invalid-plan rejection. Pretrained native equivalence/performance remain unverified.",
-    "Fresh ordinary native baseline133 with current prototype source identities preserves every original110 state bitwise, without fallback or trajectory recompilation. Original stock CPU final error0.299911 still fails. Timing overlapped candidate CPU reference work and is not paired performance evidence."
+    "Fresh ordinary native baseline133 with current prototype source identities preserves every original110 state bitwise, without fallback or trajectory recompilation. Original stock CPU final error0.299911 still fails. Timing overlapped candidate CPU reference work and is not paired performance evidence.",
+    "Pretrained head-packed KV cache CPU trajectory is bitwise the ordinary prepared model at every original12-step/21-call state, with original learned parameter identities. Logical cache payload remains473702400bytes per branch across90 tensors. Native equivalence is separately rejected; CPU equality alone is insufficient."
   ],
   "next_actions": [
     "Extend fixed-conditioning prefill to cache head-packed/normalized cross-attention K/V. The existing raw-KV cache still repeats the30 context head-packing reshapes bound in096. Require identical CPU/native trajectories, an ordinary native control with current source identities, and fresh used prefill costs in matched performance comparisons.",
