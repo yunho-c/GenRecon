@@ -87,13 +87,20 @@ def main():
         run([args.uv, 'pip', 'install', '--python', python, '-e', source], 'install_source_package')
         run([args.uv, 'pip', 'install', '--python', python, '--index-url',
              'https://download.pytorch.org/whl/cpu', 'torch==2.11.0+cpu'], 'install_cpu_torch')
-        build_env = {**env, 'PATH': str(venv/'bin')+os.pathsep+env['PATH'],
+        build_env = {**env, 'PATH': str(venv/'bin')+os.pathsep+env['PATH'], 'VIRTUAL_ENV': str(venv),
                      'PYTHON_ENV_DIR': str(venv), 'CMAKE_BUILD_PARALLEL_LEVEL': str(args.jobs)}
         run([source/'build_metal.sh', '--configure-only', '--enable-ccache', '--build-type', 'Release',
              '--build-dir', build, '--install-prefix', build, '--export-compile-commands'], 'configure', source, build_env)
         # Pin generic Python as well as Python3; transitive CMake projects use both.
-        run(['cmake', '-S', source, '-B', build, '-DENABLE_TRACY=ON',
-             '-DPython_EXECUTABLE='+str(python), '-DPython3_EXECUTABLE='+str(python)], 'pin_profile_options', source, build_env)
+        python_paths = json.loads(subprocess.check_output([python, '-c',
+            'import sysconfig,json; print(json.dumps({"include":sysconfig.get_path("include"),'
+            '"library":sysconfig.get_config_var("LIBDIR")+"/libpython"+sysconfig.get_config_var("LDVERSION")+".so"}))'],
+            env=build_env, text=True))
+        run(['cmake', '-S', source, '-B', build, '-DENABLE_TRACY=ON', '-U_Python_*', '-U_Python3_*',
+             '-DPython_EXECUTABLE='+str(python), '-DPython3_EXECUTABLE='+str(python),
+             '-DPython_INCLUDE_DIR='+python_paths['include'], '-DPython3_INCLUDE_DIR='+python_paths['include'],
+             '-DPython_LIBRARY='+python_paths['library'], '-DPython3_LIBRARY='+python_paths['library']],
+             'pin_profile_options', source, build_env)
         cache = (build/'CMakeCache.txt').read_text()
         if 'ENABLE_TRACY:BOOL=ON' not in cache or 'WITH_PYTHON_BINDINGS:BOOL=ON' not in cache:
             raise ValueError('CMake did not retain profiling and Python binding options')
