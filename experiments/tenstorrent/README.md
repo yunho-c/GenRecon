@@ -1227,6 +1227,27 @@ uses the fixture's noise shape; regression checks also reject changed fixed
 shape concatenation. Thirty-two focused tests pass. This failed attempt contains
 no candidate native output or accepted texture speed result.
 
+The [complete texture cache comparison](results/autoresearch/111-transposed-texture-cache-abba/summary.json)
+now measures **19.38% lower median time**, from **14.475s to 11.670s**, over
+three ABBA rounds (six complete trajectories per path). Every cached trial uses
+a fresh positive/negative native prefill pair, with median pair cost 351.3ms
+included. Every state in all 12 trials matches the fresh ordinary native control
+bitwise, with original 12 steps, 18 calls, fixed shape concatenation, learned
+objects and LoRA retained. No fallback or measured recompilation occurs. Native
+IR has 32 matrix products and 30 cross-KV head packs in prefill, versus 425
+matrix products and zero such packs per body call.
+
+This remains a synthetic512 fixture on one n150 with the experimental FP32
+recipe. Stock CPU final relative L2 is unchanged at 0.105171 and fails the strict
+0.1 limit (PCC 0.994447). Production defaults and raw cache default are unchanged.
+To reproduce, use the result105 command with `tex_flow_tensor`, the texture
+CPU cache from result107 and `cached_flow_sampler.py --stage tex --cache-layout
+heads_t --paired-rounds 3` with a fresh same-source ordinary native control.
+The result111 `verify.py` audits the retained native/CPU complete tapes, all
+paired trial schedules/counters/timing arithmetic and actual runtime IR without
+opening hardware. Compressed duplicate tapes refer to results108/109 only after
+their exact serialized bytes were checked against the new runs.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

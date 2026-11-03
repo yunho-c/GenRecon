@@ -1,0 +1,12 @@
+{
+  "body-runtime-ttnn.mlir.gz": "fbfcdc0223d07cecca650081e205710fbf7b9bc00232291c7536a50f3ee9dd6b",
+  "focused-tests.txt": "ad305ec7b35e66bd3562d0bd57e28e735d51e221e0d22f4b8becb88090dae857",
+  "inline-control-runtime-ttnn.mlir.gz": "dc757170eb5ef8a20a7b5315b1153555be2cf7da436c180489863fd10cba0a44",
+  "prefill-runtime-ttnn.mlir.gz": "407127ce0aaae927ed43b7f409e1e9bbd39b4e0475cbf7da1d2cd276d53f19fc",
+  "result.json": "2c612ac4ca052c78898f253c0659a064dafb551f792b7859a026dfc7abec255e",
+  "run.log.gz": "c5de8bf652114bbad27c0200602aafa790d55bcc7c22e20534f0388028af5256",
+  "summary.json": "ed8d87e0a8bf05d7a3c005b3d895c3b4f07126ea5732956cf8c10fde457ac250",
+  "trajectory-inline-control.pt.gz": "4de1a0a432de5c66f86226353aa077b7a23ac9a675adf38f77e906234d88b61e",
+  "verify.py": "d8a903ffd1af7b5e3d4226fdaa6f637dbe011673ef7183a008c163f6c701d0eb",
+  "xla_metrics.txt": "a1c5c034f0afe51cd1da44184d40fdabbd57eb057524728f478a98a1ce2add14"
+}

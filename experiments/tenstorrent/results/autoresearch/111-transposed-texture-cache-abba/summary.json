@@ -1,0 +1,92 @@
+{
+  "status": "completed_native_exact_paired_texture_performance_stock_CPU_quality_failed",
+  "hardware": "single n150 Wormhole B0 PCIe3",
+  "source_commit": "37c26834d785e54dd0dddd2886c6924ce3babec0",
+  "scope": "Pretrained texture512, seeded synthetic noise/context/projected conditioning plus fixed32-channel shape concatenation; original12steps18calls, guidance strength/rescale/interval unchanged. Pipeline-loaded BF16-quantized learned values promoted FP32, real_pairs_flat_head_first RoPE and FP32 reciprocal attention, HiFi4. Original learned parameter objects and LoRA retained.",
+  "change": "Cache projected conditioning, normalized key in BHDT and value in BHND per block; static cross-KV normalization/head packing and conditioning projections move to fresh native prefill for each guidance branch.",
+  "paired_design": "ABBA rounds in one process, shared original weights. Each cached trial computes and uses a fresh positive/negative native prefill pair; both paths retain all original12steps/18calls for tex. Explicit synchronization, no compilation/warmup/artifact I/O in measured windows.",
+  "paired_summary": {
+    "ordinary": {
+      "seconds": [
+        14.491591483994853,
+        14.462999932002276,
+        14.443619292986114,
+        14.47585349297151,
+        14.480526235012803,
+        14.474958793027326
+      ],
+      "median_seconds": 14.475406142999418,
+      "min_seconds": 14.443619292986114,
+      "max_seconds": 14.491591483994853
+    },
+    "cached": {
+      "seconds": [
+        11.670974829990882,
+        11.662264009995852,
+        11.670013137976639,
+        11.680544467933942,
+        11.676758164016064,
+        11.666140816989355
+      ],
+      "median_seconds": 11.67049398398376,
+      "min_seconds": 11.662264009995852,
+      "max_seconds": 11.680544467933942
+    },
+    "cached_reduction_percent": 19.37708780884304
+  },
+  "paired_prefill_pair_seconds": [
+    0.35155044501880184,
+    0.35118904401315376,
+    0.3514479849836789,
+    0.3519346059765667,
+    0.35066486202413216,
+    0.3499121490167454
+  ],
+  "paired_prefill_pair_median_seconds": 0.35131851449841633,
+  "prepared_CPU_all_states_bitwise_ordinary": true,
+  "initial_cached_and_inline_all_states_bitwise_fresh_ordinary_native": true,
+  "all12trials_all_states_bitwise_native": true,
+  "all12trials_compile_states_unchanged": true,
+  "fallback_ops": [],
+  "aten_counters": {},
+  "original_parameter_identities_preserved": true,
+  "cache_logical_bytes_per_branch": 473702400,
+  "cache_tensors_per_branch": 90,
+  "native_main_counts": {
+    "prefill": {
+      "matrix": 32,
+      "cross_KV_head_packs": 30
+    },
+    "body": {
+      "matrix": 425,
+      "cross_KV_head_packs": 0
+    },
+    "inline_control": {
+      "matrix": 457,
+      "cross_KV_head_packs": 30
+    }
+  },
+  "stock_CPU_final_quality": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.10517075593740585,
+    "pcc": 0.9944466976224953,
+    "max_abs": 2.1296298503875732
+  },
+  "CPU_tapes": "../109-texture-cache-cpu-and-identity-fix; exact serialized bytes checked against143",
+  "fresh_native_control": "../110-texture512-matching-source-controls/ordinary-result.json; native tape/IR exact serialized bytes equal108",
+  "native_tape": "../108-texture512-fresh-native-control/trajectory-tt.pt.gz; exact serialized bytes equal143",
+  "focused_tests": "32 passed; focused-tests.txt",
+  "verification": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/results/autoresearch/111-transposed-texture-cache-abba/verify.py",
+  "evidence_retention": "Complete initial native, inline and CPU tapes are retained, with verified deduplication links. Each paired trajectory is compared at every state before appending trial result; per-trial tapes are not separately retained. Native IR, timing windows, original schedules, complete compilation counters and final fallback metrics retained.",
+  "limits": [
+    "One process, one chip and synthetic512-token texture fixture; no full-pipeline, larger-scene or reconstruction-quality claim.",
+    "Includes fresh positive/negative native prefill and complete transfer-inclusive PJRT sampler calls. Excludes initial raw-condition upload, compile, warmup and artifact I/O.",
+    "Ordinary paired path inlines original conditioning in each call and shares all learned objects; every state matches fresh original native142.",
+    "Unchanged strict relativeL2<=0.1/PCC>=0.99 gates still fail: final stock CPU error0.105170756/PCC0.994446698. Production defaults and raw cache default unchanged.",
+    "Cache logical payload is not measured physical allocation or peak memory. No attribution of wall-time savings to a single internal instruction."
+  ]
+}

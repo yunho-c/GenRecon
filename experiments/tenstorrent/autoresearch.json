@@ -118,7 +118,8 @@
     "results/autoresearch/107-texture512-stock-cpu-reference/summary.json",
     "results/autoresearch/108-texture512-fresh-native-control/summary.json",
     "results/autoresearch/109-texture-cache-cpu-and-identity-fix/summary.json",
-    "results/autoresearch/110-texture512-matching-source-controls/summary.json"
+    "results/autoresearch/110-texture512-matching-source-controls/summary.json",
+    "results/autoresearch/111-transposed-texture-cache-abba/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -225,10 +226,11 @@
     "Sealed complete original pretrained texture512 stock CPU trajectory:58.2411s, original12steps18calls and fixed32-channel shape concat. Compressed artifact and strict model/reference/checkpoint/fixture manifest retained. Fresh native140 and cache141 gates remain pending; no texture speed claim.",
     "Fresh ordinary texture512 native control completes original12steps18calls with fixed32-channel shape concat, no fallback or sampler recompilation. Stock CPU final relativeL2=0.105170756/PCC=0.994446698 fails unchanged strict relativeL2<=0.1. Native main457 matrixops/30crossKVpacks.14.4673s overlapped candidateCPU preparation and is not paired speed evidence; cache141 still validating.",
     "Pretrained heads_t texture cached CPU trajectory matches every ordinary prepared state bitwise and retains original learned identities. Candidate141 fails before device opening: native-control placeholder returned64 input channels instead of32 predicted texture channels. Fix uses fixture.noise features;32 focused checks include original shape/texture identity acceptance and changed texture shape-concat rejection. No native/performance conclusion from141; rerun fresh controls without relaxing shared-source checks.",
-    "Fresh same-source texture ordinary142 reproduces every byte of native140 trajectory, no fallback/recompile and unchanged failed stockCPU gates. Cache143 complete CPU trajectories match ordinary bitwise, and fixed native-control identity gate validates203 shared sources. Candidate native performance/equivalence still pending. Reuse duplicate committed tapes only after exact serialized-byte verification."
+    "Fresh same-source texture ordinary142 reproduces every byte of native140 trajectory, no fallback/recompile and unchanged failed stockCPU gates. Cache143 complete CPU trajectories match ordinary bitwise, and fixed native-control identity gate validates203 shared sources. Candidate native performance/equivalence still pending. Reuse duplicate committed tapes only after exact serialized-byte verification.",
+    "Texture heads_t passes full pretrained CPU/native guards and all12 paired ABBA trajectories: median14.475406s to11.670494s,19.3771% lower including fresh both-branch prefill (median0.351319s). Every native state matches fresh ordinary142, original12steps18calls/fixedshapeconcat/learnedobjects/LoRA retained, no fallback or measured recompilation.32 focused tests and independent compressed-evidence audit pass. Strict stock CPU final relativeL2=0.105170756/PCC=0.994446698 still fails. Synthetic512 on one n150 only; raw/production defaults unchanged."
   ],
   "next_actions": [
-    "Extend validated transposed-key heads_t conditioning cache to texture and matched real-image shape/texture fixtures using fresh same-source ordinary controls. Require CPU/native every-state equality, original schedules, no fallback/recompilation and paired prefill-inclusive timing; retain unchanged strict stock CPU quality gates.",
+    "Profile complete original texture18call sampler and optimized conditioning-cache graphs on matching-revision SDK, requiring canonical forward/every-native-state calibration and complete per-call C++ timing coverage. Extend native-exact cache to matched real-image shape/texture fixtures and larger active-token counts before promotion.",
     "Investigate the exact current-recipe reshape paths behind the three input groups totaling180.85ms. Bind operation IDs to native IR and test a layout-aware QKV/attention rewrite with learned LoRA retained; require CPU and native trajectory controls before any promotion.",
     "Use measured heads_t conditioning-prefill cache as an opt-in execution boundary. Investigate strict full-trajectory numerical accuracy and real-scene geometry/material quality before promotion. Preserve native layout-dependent key normalization; untransposed heads cache remains rejected.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
@@ -237,10 +239,16 @@
   ],
   "live_experiments": [
     {
-      "run": 143,
-      "purpose": "Texture heads_t complete CPU/native equivalence and prefill-inclusive three-round ABBA against142",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/143-transposed-texture-cache-abba",
-      "tool_session": 41181
+      "run": 144,
+      "purpose": "Export original FP32 flat-RoPE texture denoiser for calibrated operator profiling",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/144-texture-fp32-flat-codegen",
+      "tool_session": 42023
+    },
+    {
+      "run": 145,
+      "purpose": "Canonical generated texture forward and repeat calibration before matching-revision profiling SDK execution",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/145-texture-canonical-execute",
+      "tool_session": 50776
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
