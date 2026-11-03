@@ -1219,6 +1219,14 @@ Strict physical checkpoint, reference-source, SDK and semantic fixture checks
 apply on reuse. The stored 58.24s CPU duration is reference provenance, not a
 native speed comparison.
 
+The [pretrained texture CPU control and identity fix](results/autoresearch/109-texture-cache-cpu-and-identity-fix/summary.json)
+preserve every ordinary prepared CPU state bitwise. The first candidate attempt
+stopped before device opening because the native-control identity placeholder
+returned 64 input channels rather than 32 predicted texture channels. It now
+uses the fixture's noise shape; regression checks also reject changed fixed
+shape concatenation. Thirty-two focused tests pass. This failed attempt contains
+no candidate native output or accepted texture speed result.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation

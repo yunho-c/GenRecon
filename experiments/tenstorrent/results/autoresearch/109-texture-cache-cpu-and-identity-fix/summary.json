@@ -1,0 +1,38 @@
+{
+  "status": "completed_pretrained_texture_CPU_exact_native_identity_harness_bug_fixed",
+  "original_run_status": "failed",
+  "original_run_phase": "validate_completed_ordinary_native_control",
+  "prepared_CPU_cached_all_states_bitwise_ordinary": true,
+  "original_parameter_identities_preserved": true,
+  "cache_logical_bytes_per_branch": 473702400,
+  "cache_tensors_per_branch": 90,
+  "ordinary_prepared_CPU_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 4.512743396520977e-06,
+    "pcc": 0.999999999989804,
+    "max_abs": 6.532669067382812e-05
+  },
+  "cached_CPU_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 4.512743396520977e-06,
+    "pcc": 0.999999999989804,
+    "max_abs": 6.532669067382812e-05
+  },
+  "CPU_artifacts_sha256": {
+    "trajectory-ordinary-cpu.pt": "15636a921cacb13bd8d394bb429e65cf802fca75b4ca4aaf999d88510a26b224",
+    "trajectory-cached-cpu.pt": "5d43d24b1ea7d9047985c80848b982b136674e1b4125370633859fb293485ba0"
+  },
+  "failure": "Native-control identity validation used zeros_like(forward_input). Texture forward inputs have64 channels including fixed shape concat; predictions must have32. Sampler rejects the64-channel placeholder before candidate device opening. This is a harness contract error, not a native equivalence result.",
+  "fix": "Build identity placeholder from fixture.noise features (32 texture channels) while retaining original full fixture, sampler schedule and concat hash checks. Add shape/texture control acceptance and changed-shape-concat rejection regression checks.",
+  "focused_tests": "32 passed including full cached texture schedules for all layouts and native-control identity regression tests.",
+  "next": "Fresh ordinary142 and candidate143 from matching updated shared sources; do not weaken source/hash/fixture/native equality gates.",
+  "limits": "No candidate device output, fallback audit or timing result exists for failed141. No texture speed or quality promotion."
+}

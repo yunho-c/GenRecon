@@ -49,7 +49,12 @@ def validate_native_control(directory, report, fixture):
         raise ValueError('Native control trajectory seal differs or is missing')
     expected = torch.load(path, weights_only=True, map_location='cpu')
     # Validate semantic fixture identity independently of the eventual candidate.
-    identity, _ = fixture.run(lambda x, t, cond: torch.zeros_like(x))
+    from experiments.tenstorrent.scene_sampling import features
+    # Texture forwards receive noise concatenated with fixed shape channels,
+    # but predict only noise channels. Identity validation must honor that same
+    # sampler contract, even though these placeholder values are not compared.
+    zero_prediction = torch.zeros_like(features(fixture.noise))
+    identity, _ = fixture.run(lambda x, t, cond: zero_prediction)
     compare_trajectories(identity, expected)
     return expected, {'directory': str(directory.resolve()), 'artifact_sha256': recorded,
                       'shared_source_hashes_checked': len(common), 'identity_verified': True}
