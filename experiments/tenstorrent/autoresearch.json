@@ -145,6 +145,28 @@
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [],
+  "live_experiments": [
+    {
+      "name": "Original complete shape sampler, self-only precise QK",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/088-shape-self-outer-qk",
+      "source_commit": "c06e903",
+      "status": "launched",
+      "note": "FP32 tensors/HiFi4, original12steps/21calls, same sealed CPU reference and strict gates. Report must show30 precise self and30 ordinary cross modules. Native IR/no fallback/recompile and full timing required."
+    },
+    {
+      "name": "Fresh matched FP32 sampler baseline",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/089-shape-self-outer-control",
+      "source_commit": "c06e903",
+      "status": "launched",
+      "note": "Same new helper sources with ordinary FP32 reciprocal attention; verify all TT states against historical run077. Hardware lock serializes native work."
+    },
+    {
+      "name": "Complete prepared self-only precise-QK CPU control",
+      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/090-prepared-self-outer-cpu",
+      "source_commit": "c06e903",
+      "status": "launched",
+      "note": "Identical model/helpers and original sampler on CPU. Compare every state and final against stock; confirm helper association changes are small without weakening gates."
+    }
+  ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
