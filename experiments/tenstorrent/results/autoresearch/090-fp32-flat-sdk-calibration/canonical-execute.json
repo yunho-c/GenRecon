@@ -1,0 +1,97 @@
+{
+  "status": "passed_smoke",
+  "command": "execute",
+  "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/120-shape-fp32-flat-codegen",
+  "scope": "Compiler-generated TTNN alternate execution; synthetic inputs; not a scene-quality benchmark",
+  "source_sha256": "b80eb22befd3b5527a4777f809b2d41f1c12965e059a8a7513d68dbc6aa75fb6",
+  "phase": "complete",
+  "torch": "2.11.0+cpu",
+  "case": "shape_flow_tensor",
+  "seed": 0,
+  "compiler_options": {
+    "optimization_level": 0,
+    "math_fidelity": "hifi4"
+  },
+  "rope_mode": "real_pairs_flat_head_first",
+  "attention_mode": "fp32_reciprocal",
+  "device_precision": "float32",
+  "export_sha256": "c8db775b351d94410ce94dfc5ca463fc6beb87b78ff7a65c35905f5cd232e926",
+  "ttnn_path": "/home/user/tt-forge-venv/lib/python3.12/site-packages/ttnn/__init__.py",
+  "native_library_sha256": {
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnn.so": "32a1eb33982dabf23018409458cd36ff2b9a1e5e8073e66bfe80ae915da702d4",
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/_ttnncpp.so": "6c9b0144218f7412a85ed99be8e05704b7da2b171cd02dadf611aa1697c9177e",
+    "/home/user/tt-forge-venv/lib/python3.12/site-packages/pjrt_plugin_tt/lib64/libtt_metal.so": "7b7e42b9b33f320a4761db8546780b40a005ea63212ff9bd5711b4c8efc9b564"
+  },
+  "instrumented": false,
+  "flush_device_profiler": false,
+  "profiler_program_support_count": null,
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "activation_preparation_scope": "Generated loader reads files, converts dtype/layout and uploads activations; explicit device synchronization completes this before BEGIN/timer.",
+  "compatibility_repairs": [
+    {
+      "symbol": "cpu_hoisted_const_eval_b6969c39",
+      "output_dtype": "uint32",
+      "reason": "Restore the output dtype declared by native IR for the adjacent-pair index constant; generated Python omitted it."
+    }
+  ],
+  "activation_preparation_seconds": [
+    {
+      "label": "GENRECON_FIRST",
+      "seconds": 0.008603970985859632
+    },
+    {
+      "label": "GENRECON_WARMUP_0",
+      "seconds": 0.002870109979994595
+    },
+    {
+      "label": "GENRECON_WARMUP_1",
+      "seconds": 0.0030334009788930416
+    },
+    {
+      "label": "GENRECON_WARMUP_2",
+      "seconds": 0.00287279998883605
+    },
+    {
+      "label": "GENRECON_MEASURED_0",
+      "seconds": 0.0028250099858269095
+    },
+    {
+      "label": "GENRECON_MEASURED_1",
+      "seconds": 0.002597120008431375
+    },
+    {
+      "label": "GENRECON_MEASURED_2",
+      "seconds": 0.004125075007323176
+    }
+  ],
+  "first_seconds": 32.65576346596936,
+  "numerical_checks": {
+    "first": {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.03656881467589079,
+      "pcc": 0.9993294719072424,
+      "max_abs": 0.20944824814796448
+    }
+  },
+  "vs_stock_cpu_fp32": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.03656881467589079,
+    "pcc": 0.9993294719072424,
+    "max_abs": 0.20944824814796448
+  },
+  "warm_seconds": [
+    0.7712962809600867,
+    0.770655288011767,
+    0.7714408510364592
+  ],
+  "warm_median_seconds": 0.7712962809600867,
+  "output_sha256": "61b4e81b87c029ba0d0e883270cb8cab21bc14bc87afc0aac741901f1c60fcb4"
+}

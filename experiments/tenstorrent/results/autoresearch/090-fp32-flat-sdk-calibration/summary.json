@@ -1,0 +1,38 @@
+{
+  "status": "completed_current_recipe_full_denoiser_calibration",
+  "recipe": {
+    "rope_mode": "real_pairs_flat_head_first",
+    "attention_mode": "fp32_reciprocal",
+    "device_precision": "float32",
+    "math_fidelity": "hifi4",
+    "tokens": 512
+  },
+  "same_noise_and_positive_conditions_as_canonical_full_sampler110": true,
+  "all_outputs_bitwise_canonical": true,
+  "all_repeats_exact": true,
+  "canonical_warm_seconds": [
+    0.7712962809600867,
+    0.770655288011767,
+    0.7714408510364592
+  ],
+  "sdk_warm_seconds": [
+    0.7703972880262882,
+    0.7706719979760237,
+    0.771957993041724
+  ],
+  "prepared_cpu_relative_l2": 1.6326304096568405e-06,
+  "stock_cpu_forward_check": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.03656881467589079,
+    "pcc": 0.9993294719072424,
+    "max_abs": 0.20944824814796448
+  },
+  "timing_scope": "Warm calls: resident weights, compiler const-eval cache and preuploaded activations; generated forward, output D2H and synchronization included. Activation loading/H2D/layout preparation and profiler flushing excluded.",
+  "rejected_control": "Unrepaired generated Python again rejects signed embedding indices. Recorded opt-in repair restores only the uint32 output declared by native IR, validating the exact adjacent-pair index values.",
+  "limits": "Complete pretrained denoiser forward with synthetic512 fixture; no claim of full sampler or reconstruction quality. Learned BF16-quantized values promoted to FP32, not raw checkpoint FP32. Warm timings calibrate SDK and execution boundary; not an optimization claim.",
+  "next": "Marked matching-revision current-recipe device profile124, retaining native zones and explicit signposts."
+}

@@ -1055,6 +1055,14 @@ percentages. All operation rows and C++ device timings are retained compressed.
 Future captures select native zones and explicit signposts (`tracy -p`) to avoid
 tracing every Python function during imports and JIT compilation.
 
+The [current FP32 flat-RoPE recipe calibration](results/autoresearch/090-fp32-flat-sdk-calibration/summary.json)
+uses the same noise and positive conditions as the original shape512 sampler
+control. All 457 matrix operations remain, prepared CPU error is 1.63e-6, and
+canonical/SDK generated outputs and repeats are bitwise equal. Warm medians are
+771.30/770.67ms at the preloaded-activation boundary. These controls enable a
+separate marked profile of current arithmetic; full-trajectory gates remain
+unchanged, and this forward smoke pass does not establish scene quality.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation
