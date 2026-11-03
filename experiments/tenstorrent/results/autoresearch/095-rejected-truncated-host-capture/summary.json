@@ -1,0 +1,11 @@
+{
+  "status": "rejected_incomplete_tracy_host_capture",
+  "all_original_sampler_states_bitwise_native": true,
+  "native_cpp_device_timing_rows": 101256,
+  "tracy_device_operation_rows": 33752,
+  "tracy_signposts": 31,
+  "last_tracy_signpost": "GENRECON_SAMPLER_0_CALL_04_BEGIN",
+  "finding": "Native C++ timings contain all24*4219 operations, including3 first/warm and21 sampler calls. The Tracy host stream stops during sampler call4 despite the worker completing all21 calls. Full marked-sampler summary correctly rejects the missing end/window; no whole-sampler percentages are accepted from partial host rows.",
+  "next": "Record exact native C++ CSV byte ranges after each synchronized profiler read. Use those actual per-call device records and Python host timers for complete native timing, independently of a truncated optional Tracy visualization. Preserve every-state native equality and original CPU gates.",
+  "limits": "Root cause of Tracy early disconnect unverified; the stock capture CLI suppresses capture-tool diagnostics and can write a valid partial trace with returncode0. Do not infer full capture success from exit code."
+}
