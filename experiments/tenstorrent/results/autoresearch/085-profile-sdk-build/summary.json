@@ -1,0 +1,10 @@
+{
+  "status": "built_unvalidated",
+  "scope": "Matching-revision isolated Tracy-enabled SDK build and install. Device profiling capability and full-model equivalence require separate validation.",
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "build_seconds": 450.4806709289551,
+  "native_artifact_count": 18,
+  "build_result_sha256": "d5bf720c01b0d304136d62b4fc046f60fa443316cfcf6c6dba5bc49222d7f44b",
+  "reproduce": "/home/user/tt-forge-venv/bin/python experiments/tenstorrent/build_profile_sdk.py --workspace /home/user/tt-scratchpad/genrecon/profile-sdk-f1 --source-cache /home/user/tt-metal --uv /home/user/tt-metal/python_env/bin/uv --runtime-lock experiments/tenstorrent/results/autoresearch/084-profile-sdk-configure/requirements-profile.txt --jobs 32",
+  "preserved_environments": "Canonical Forge environment and existing 9f9 TT-Metal checkout remain separate."
+}
