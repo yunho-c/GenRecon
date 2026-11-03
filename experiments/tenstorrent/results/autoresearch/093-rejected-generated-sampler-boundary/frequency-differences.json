@@ -1,0 +1,17 @@
+{
+  "native_ir_uncompressed_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1",
+  "differences": [
+    {
+      "index": 12,
+      "native": 0.4216964840888977,
+      "eager_cpu": 0.4216965138912201,
+      "ulp_difference": -1
+    },
+    {
+      "index": 106,
+      "native": 0.00048696750309318304,
+      "eager_cpu": 0.0004869675321970135,
+      "ulp_difference": -1
+    }
+  ]
+}

@@ -19,6 +19,8 @@ def main():
     parser.add_argument('--sdk-workspace', type=Path, required=True)
     parser.add_argument('--export-dir', type=Path, required=True)
     parser.add_argument('--native-control-result', type=Path, required=True)
+    parser.add_argument('--sampler-native-control-dir', type=Path,
+        help='Run the original shape sampler and require every state bitwise equal to this sealed native control')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--profile', action='store_true')
     parser.add_argument('--compact-profile', action='store_true',
@@ -65,9 +67,15 @@ def main():
             # Pinned Metal generates cpp_device_perf_report.csv before these
             # two optional raw-marker copies. Require that report below.
             command += ['--disable-device-data-dump-to-files', '--disable-device-data-push-to-tracy']
-    command += [str(ROOT/'experiments/tenstorrent/codegen_probe.py'), 'execute',
+    worker = 'codegen_sampler.py' if args.sampler_native_control_dir else 'codegen_probe.py'
+    command += [str(ROOT/'experiments/tenstorrent'/worker)]
+    if not args.sampler_native_control_dir:
+        command += ['execute']
+    command += [
         '--directory', str(args.export_dir.resolve()), '--result', str(output/'execute.json'),
         '--native-control-result', str(args.native_control_result.resolve()), '--runs', str(args.runs)]
+    if args.sampler_native_control_dir:
+        command += ['--sampler-native-control-dir', str(args.sampler_native_control_dir.resolve())]
     if args.repair_embedding_indices:
         command += ['--repair-embedding-indices']
     if args.profile:
@@ -93,7 +101,8 @@ def main():
     if report['returncode'] == 0:
         result = json.loads((output/'execute.json').read_text())
         paths = [Path(name) for name in result['native_library_sha256']]
-        if (result.get('status') == 'passed_smoke' and result.get('native_control', {}).get('bitwise_equal')
+        expected_status = 'completed_native_matched_sampler' if args.sampler_native_control_dir else 'passed_smoke'
+        if (result.get('status') == expected_status and result.get('native_control', {}).get('bitwise_equal')
                 and paths and all(path.is_relative_to(sdk) for path in paths)):
             report['status'] = 'completed_calibrated_execute' if not args.profile else 'completed_capture_unvalidated'
             if args.compact_profile:

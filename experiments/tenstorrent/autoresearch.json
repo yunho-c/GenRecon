@@ -100,7 +100,8 @@
     "results/autoresearch/089-matching-revision-shape-profile/summary.json",
     "results/autoresearch/090-fp32-flat-sdk-calibration/summary.json",
     "results/autoresearch/091-current-fp32-flat-profile/summary.json",
-    "results/autoresearch/092-compact-profile-control/summary.json"
+    "results/autoresearch/092-compact-profile-control/summary.json",
+    "results/autoresearch/093-rejected-generated-sampler-boundary/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -189,7 +190,8 @@
     "Matched-revision full shape512 generated profile preserves canonical output bitwise and has4403 complete rows in every first/warm/measured window. Measured604.54ms wall/588.36ms kernel sum; reshape32.62%, matmul20.18%, binary18.04% of kernel sums. These are not whole-sampler wall percentages. Keep quality gates and defaults unchanged; current FP32 flat-RoPE recipe calibration follows.",
     "Current FP32 flat-RoPE reciprocal-attention shape512 full denoiser export retains all457 matrix operations and matches original sampler110 noise/positive conditions. Prepared CPU error1.63e-6; matching SDK and canonical generated outputs are bitwise equal with exact repeats, warm medians0.770672/0.771296s. Full-trajectory gates remain unchanged and failed historically.",
     "Current FP32 flat-RoPE denoiser marked capture preserves canonical output bitwise with4219 complete rows and457 matrix products in each of five windows. Warm776.01ms wall/760.51ms kernel sum: matrix26.73%, reshape26.47%, binary20.36%. Three reshape input groups total180.85ms. Preserve original quality gates; target exact layout paths and original-schedule sampler profiling rather than treating these as whole-sampler percentages.",
-    "Compact profiling retains all4219 actual native per-operation device timings and identical operation/shape counts in each of five windows, with bitwise canonical output. It omits3.6GiB raw per-core CSV and reduces the Tracy trace from135MiB to42MiB on this control. Per-operation metrics remain complete; use full captures for per-core timelines. No sampler speedup claim."
+    "Compact profiling retains all4219 actual native per-operation device timings and identical operation/shape counts in each of five windows, with bitwise canonical output. It omits3.6GiB raw per-core CSV and reduces the Tracy trace from135MiB to42MiB on this control. Per-operation metrics remain complete; use full captures for per-core timelines. No sampler speedup claim.",
+    "First complete dynamic generated sampler is rejected: Forge and SDK states agree bitwise, but native PJRT diverges at step5 and final relative error is0.068157 versus native/0.310530 versus stock CPU. Two fixed timestep-frequency values differ by one ULP between eager-generated and native constants. Retain native equality guard and test exact constant restoration before using full-sampler profiles."
   ],
   "next_actions": [
     "Use validated compact matching-revision profiling to execute/profile the original12-step/21-call shape sampler through dynamic generated activations. Five-input mapping is sealed in091; require every state bitwise canonical110 and unchanged stock CPU gates. Then compare dynamic conditioning prefill/body costs.",

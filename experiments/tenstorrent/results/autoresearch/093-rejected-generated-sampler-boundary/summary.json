@@ -1,0 +1,30 @@
+{
+  "status": "rejected_unrepaired_generated_sampler_boundary",
+  "sdk_and_canonical_generated_all_states_bitwise": true,
+  "first_four_steps_bitwise_native_pjrt": true,
+  "first_native_difference_step": 5,
+  "generated_vs_native_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": true,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.06815670678695201,
+    "pcc": 0.9976730424317088,
+    "max_abs": 1.2602620273828506
+  },
+  "generated_vs_stock_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.31053031434999084,
+    "pcc": 0.9513048891079162,
+    "max_abs": 4.1263275146484375
+  },
+  "schedule": "Original12steps/21calls, all learned weights and guidance retained.",
+  "finding": "Generated execution on both runtimes agrees bitwise but drifts from native PJRT after step4. Two generated eager-CPU timestep-frequency values differ by one ULP from native compiler constants. Their causal contribution requires the next exact-constant control.",
+  "decision": "Do not treat unrepaired generated sampler as native-equivalent. Keep exact native guard and original CPU gates. Test an explicit recorded restoration of only the two fixed frequency values from committed native IR.",
+  "tests": "16 focused tests pass, including rejection of a one-state perturbation that still passes ordinary smoke thresholds."
+}
