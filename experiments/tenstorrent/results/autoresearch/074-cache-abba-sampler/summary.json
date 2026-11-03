@@ -1,0 +1,113 @@
+{
+  "status": "completed_shared_weight_abba_sampler",
+  "scope": "ABBA rounds in one process, shared original weights. Each cached trial computes and uses a fresh positive/negative native prefill pair; both paths retain all original12steps/21calls. Explicit synchronization, no compilation/warmup/artifact I/O in measured windows.",
+  "finding": "Three shared-weight ABBA rounds (six complete trajectories per mode) measure median ordinary 16.924766s versus cached 16.031136s including fresh, used positive/negative prefill each trial (5.28% lower). All native states in every trial equal the sealed original ordinary control bitwise, with no measured Dynamo/XLA compilation or fallback. Native main products remain457 ordinary/425 cached plus32 prefill. Original12steps/21calls and stock CPU gates are unchanged; inherited29.99% final error still fails them.",
+  "timings": {
+    "ordinary": {
+      "seconds": [
+        16.911548014031723,
+        16.93333493900718,
+        16.914503365987912,
+        16.92973318899749,
+        16.91979945503408,
+        16.934034266043454
+      ],
+      "median_seconds": 16.924766322015785,
+      "min_seconds": 16.911548014031723,
+      "max_seconds": 16.934034266043454
+    },
+    "cached": {
+      "seconds": [
+        16.03776834596647,
+        16.070733102969825,
+        16.00278826599242,
+        16.03188143396983,
+        16.030389778024983,
+        16.02605142799439
+      ],
+      "median_seconds": 16.031135605997406,
+      "min_seconds": 16.00278826599242,
+      "max_seconds": 16.070733102969825
+    },
+    "cached_reduction_percent": 5.280018045838197
+  },
+  "rounds": [
+    {
+      "ordinary_mean_seconds": 16.922441476519452,
+      "cached_mean_seconds": 16.054250724468147,
+      "reduction_percent": 5.130410722684154
+    },
+    {
+      "ordinary_mean_seconds": 16.9221182774927,
+      "cached_mean_seconds": 16.017334849981125,
+      "reduction_percent": 5.346750404853173
+    },
+    {
+      "ordinary_mean_seconds": 16.926916860538768,
+      "cached_mean_seconds": 16.028220603009686,
+      "reduction_percent": 5.30927318266794
+    }
+  ],
+  "native_ir": {
+    "prefill": {
+      "linear_matmul_ops": 32,
+      "conditioning_products": 32,
+      "self_qk_ops": 0,
+      "cross_qk_ops": 0,
+      "bf16_matrix_ops": 0,
+      "all_hifi4_fp32_destination": true,
+      "sha256": "846cd66f4638128925b1712482822ea1d3fca8cbe049f1482c26121d29c93123"
+    },
+    "body": {
+      "linear_matmul_ops": 425,
+      "conditioning_products": 0,
+      "self_qk_ops": 30,
+      "cross_qk_ops": 30,
+      "bf16_matrix_ops": 0,
+      "all_hifi4_fp32_destination": true,
+      "sha256": "fc933940f7fd92e5d55ac491f3496d969bbf1ce39ba69681ef8fab23d460b5b3"
+    },
+    "inline-control": {
+      "linear_matmul_ops": 457,
+      "conditioning_products": 32,
+      "self_qk_ops": 30,
+      "cross_qk_ops": 30,
+      "bf16_matrix_ops": 0,
+      "all_hifi4_fp32_destination": true,
+      "sha256": "d2070ad09b6dc440f2b0a0947c2bb826da8d90fa0e43cb8e3cbc78b8be7ba00b"
+    }
+  },
+  "native_control": {
+    "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/089-shape-self-outer-control/shape_flow_tensor",
+    "artifact_sha256": "9ab5ef422a9ecf823b32ef7ad2bda8eb28b5c92a8374c161c9bdb99bae81b40d",
+    "shared_source_hashes_checked": 174,
+    "identity_verified": true
+  },
+  "cpu_all_states_bitwise_ordinary": true,
+  "all_trial_states_bitwise_native_control": true,
+  "no_compilation_in_any_measured_window": true,
+  "strict_stock_cpu_gates_pass": false,
+  "final_vs_stock_cpu": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "cache_bytes_per_branch": 473702400,
+  "prefill_pair_seconds": [
+    0.06674557598307729,
+    0.06681945495074615,
+    0.0666717829881236,
+    0.06630228098947555,
+    0.06768676597857848,
+    0.06653758103493601
+  ],
+  "tests": "8 focused CPU checks pass, including inline original-LoRA/value identity. Full pretrained CPU cached trajectory is bitwise ordinary; sealed native source/input/config identity is verified. Every original sampler state in every complete timed trial is bitwise the accepted ordinary native trajectory. Every window has unchanged Dynamo and XLA compile counts; no fallback.",
+  "limits": "Same synthetic512 fixture, single n150 Wormhole chip and one process; temporal drift is counterbalanced within ABBA rounds but this is not multi-device/multi-scene statistical evidence. All learned parameters are original quantized values promoted to FP32. No geometry/material or default1024 cascade validation. Graph/operator counts are not device-kernel timing attribution.",
+  "decision": "Retain conditioning reuse as a measured opt-in execution improvement, numerically neutral against the ordinary TT recipe. Pursue strict accuracy gates and real-scene/memory validation before default promotion.",
+  "reproduce": "cached_flow_sampler.py --cpu-trajectory-cache <sealed-shape512-cache> --native-control-dir <sealed089-control> --paired-rounds 3 --output-dir <new> (source4303232)"
+}

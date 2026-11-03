@@ -902,3 +902,26 @@ sealed accepted ordinary native trajectory bitwise. Each measured cached
 trial computes and uses a fresh positive/negative cache pair; its setup cost
 is included. Dynamo and XLA compilation counters must remain fixed in every
 measured window. Warmups, comparisons and artifact writes occur outside timing.
+
+On a fresh machine, restore the accepted native control from committed evidence
+without rerunning it (the loader verifies its sealed SHA256 and all fixture,
+checkpoint, SDK and shared-source identities):
+
+```bash
+mkdir -p /tmp/genrecon-ordinary-control
+cp experiments/tenstorrent/results/autoresearch/073-pretrained-conditioning-cache/control-result.json /tmp/genrecon-ordinary-control/result.json
+gzip -dc experiments/tenstorrent/results/autoresearch/073-pretrained-conditioning-cache/control-trajectory-tt.pt.gz > /tmp/genrecon-ordinary-control/trajectory-tt.pt
+```
+
+Pass `/tmp/genrecon-ordinary-control` to `--native-control-dir`. The sealed stock
+CPU cache is restored separately from result038; its physical checkpoint,
+source/version and every semantic fixture input must also match.
+
+[Three ABBA rounds](results/autoresearch/074-cache-abba-sampler/summary.json)
+confirm median 16.925s ordinary versus 16.031s cached including fresh prefill
+(5.28% lower, six complete trajectories each). Every original native state in
+every timed trial equals the accepted ordinary control bitwise; no Dynamo/XLA
+compilation or fallback occurs in measured windows. The compiler emits the same
+32-product prefill and 425-product cached-body IR as result073. The unchanged
+29.99% stock-CPU final error remains a failed quality gate. The gain is scoped
+to this synthetic512 scene and one chip; further scene/quality validation remains.
