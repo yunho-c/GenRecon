@@ -1,0 +1,145 @@
+[
+  {
+    "leaf": "llvm::SmallPtrSetImplBase::doFind (libTTMLIRCompiler.so)",
+    "samples": 8
+  },
+  {
+    "leaf": "0x75597d4ed671 (libTTMLIRCompiler.so)",
+    "samples": 6,
+    "file_offset": "0x906e671",
+    "symbol": "mlir::tt::ttir::ConstevalForwardAnalysis::valueTracesToConstantArgs(mlir::Value)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597d4ed62f (libTTMLIRCompiler.so)",
+    "samples": 3,
+    "file_offset": "0x906e62f",
+    "symbol": "mlir::tt::ttir::ConstevalForwardAnalysis::valueTracesToConstantArgs(mlir::Value)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "mlir::Value::getDefiningOp (libTTMLIRCompiler.so)",
+    "samples": 3
+  },
+  {
+    "leaf": "0x75597a8ca6b9 (libTTMLIRCompiler.so)",
+    "samples": 3,
+    "file_offset": "0x644b6b9",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597a8ca5f8 (libTTMLIRCompiler.so)",
+    "samples": 3,
+    "file_offset": "0x644b5f8",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597a8ca6e4 (libTTMLIRCompiler.so)",
+    "samples": 3,
+    "file_offset": "0x644b6e4",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "llvm::SmallPtrSetImplBase::insert_imp_big (libTTMLIRCompiler.so)",
+    "samples": 2
+  },
+  {
+    "leaf": "0x75597a8ca6d0 (libTTMLIRCompiler.so)",
+    "samples": 2,
+    "file_offset": "0x644b6d0",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597a8ca62f (libTTMLIRCompiler.so)",
+    "samples": 2,
+    "file_offset": "0x644b62f",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "llvm::SmallPtrSetImplBase::FindBucketFor (libTTMLIRCompiler.so)",
+    "samples": 2
+  },
+  {
+    "leaf": "0x75597a8ca683 (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x644b683",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597a8c958e (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x644a58e",
+    "symbol": "unsigned long std::__detail::__gcd<unsigned long>(unsigned long, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597a8ca6c9 (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x644b6c9",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597a8ca699 (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x644b699",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597a8ca68d (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x644b68d",
+    "symbol": "void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<true>(char const*, unsigned long)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597d4ed65b (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x906e65b",
+    "symbol": "mlir::tt::ttir::ConstevalForwardAnalysis::valueTracesToConstantArgs(mlir::Value)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "llvm::SmallPtrSetImplBase::Grow (libTTMLIRCompiler.so)",
+    "samples": 1
+  },
+  {
+    "leaf": "0x7559d2450594 (libc.so.6)",
+    "samples": 1
+  },
+  {
+    "leaf": "0x75597d4ed639 (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x906e639",
+    "symbol": "mlir::tt::ttir::ConstevalForwardAnalysis::valueTracesToConstantArgs(mlir::Value)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597d4ed2ca (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x906e2ca",
+    "symbol": "mlir::tt::ttir::ConstevalForwardAnalysis::valueTracesToConstantArgs(mlir::Value)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597d4ed60d (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x906e60d",
+    "symbol": "mlir::tt::ttir::ConstevalForwardAnalysis::valueTracesToConstantArgs(mlir::Value)",
+    "location": "??:?"
+  },
+  {
+    "leaf": "0x75597d4ed755 (libTTMLIRCompiler.so)",
+    "samples": 1,
+    "file_offset": "0x906e755",
+    "symbol": "mlir::tt::ttir::ConstevalForwardAnalysis::valueTracesToConstantArgs(mlir::Value)",
+    "location": "??:?"
+  }
+]

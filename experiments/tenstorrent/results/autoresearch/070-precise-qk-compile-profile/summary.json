@@ -1,0 +1,24 @@
+{
+  "status": "completed_bounded_compiler_profile",
+  "scope": "Cold compilation of the self-only precise-QK diagnostic. No worker restart or math changes; warm/sampler timings occur after profiling. Native sampling briefly pauses the compiler, so first-inference time includes profiling effects.",
+  "profiler": "py-spy0.4.3 installed in an isolated external tools directory; no project/runtime dependency change.",
+  "python_samples": 374,
+  "python_duration_seconds": 15,
+  "python_rate_hz": 25,
+  "python_nonblocking": true,
+  "native_samples": 49,
+  "native_duration_seconds": 10,
+  "native_rate_hz": 5,
+  "native_nonblocking": false,
+  "const_reachability_native_leaf_samples": 14,
+  "library_sha256": "8bafb0f018bb33c79c0b92d691ffa33a9e64d344555d6f4c890fd1a599c4cb69",
+  "library_load_base": "0x75597447f000",
+  "matching_tt_mlir_commit": "6b2d83bbee7bc60e8521b814368d32785df6cd73",
+  "source_sha256": {
+    "lib/Dialect/TTIR/Transforms/EraseInverseOps/ConstevalForwardAnalysis.cpp": "badd7387bc4ff34832c7261686328915a9ccfa86f4542189b1d1a8fed5954a38",
+    "include/ttmlir/Dialect/TTIR/Transforms/EraseInverseOps/ConstevalForwardAnalysis.h": "2875ae2ee782455e61c7a7c42e59055b0cf3d9bd8d631089c893157cf2d2a284"
+  },
+  "finding": "Bounded compiler sampling observed 374 Python samples at XLA warm-up-cache compilation. 14 of 49 native leaf samples resolve to ConstevalForwardAnalysis::valueTracesToConstantArgs; other leaves include LLVM pointer sets and strings. This is a short compilation window, not whole-compile pass attribution or device-kernel profiling. Both sampling windows ended before native runtime IR emission and sampler timing.",
+  "source_audit": "The pinned analysis already caches reachability and marks that cache dirty on rewrite events, rebuilding lazily. These samples do not measure invalidation or cache-miss rates; no cause or compiler fix is proven.",
+  "reproduce": "While a native run.py worker is compiling, py-spy record --pid <pid> --nonblocking --duration 15 --rate 25 --format raw --output <new>; separately --native --duration 10 --rate 5. Native+nonblocking is unsupported. Resolve recorded native addresses using the contemporaneous library mapping and exact wheel binary."
+}

@@ -1,0 +1,1 @@
+Can't get native stack traces with the --nonblocking option.

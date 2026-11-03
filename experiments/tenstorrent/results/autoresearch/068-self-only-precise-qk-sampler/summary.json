@@ -1,7 +1,21 @@
 {
-  "status": "completed_control_candidate_compiling",
-  "finding": "Fresh ordinary reciprocal-attention FP32 control completes the original shape sampler in 16.865s. Every native state matches historical077 bitwise under the new helper sources, with no fallback or recompilation. The matched self-only precise-QK candidate is still compiling; no candidate performance or accuracy conclusion yet.",
+  "status": "completed_original_sampler_with_matched_control",
+  "scope": "Original synthetic shape512 checkpoint/LoRA, fixed noise and conditions, FP32 model tensors, flat head-first RoPE, HiFi4. Only self-attention QK arithmetic changes; original stock CPU reference and acceptance gates retained.",
+  "candidate_seconds": 72.39433170395205,
   "control_seconds": 16.865314755996224,
+  "time_ratio": 4.292498109364563,
+  "candidate_warm_ms": 3447.81005801633,
+  "control_warm_ms": 803.3637990010902,
+  "candidate_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.28875350791970067,
+    "pcc": 0.9578410176114337,
+    "max_abs": 3.471959352493286
+  },
   "control_vs_stock_final": {
     "shape_match": true,
     "finite": true,
@@ -12,6 +26,29 @@
     "pcc": 0.9545747629508539,
     "max_abs": 4.071747064590454
   },
+  "candidate_all_states_pass_gates": false,
   "control_matches_historical_all_states_bitwise": true,
-  "reproduce": "run.py shape_flow_tensor, flat head-first RoPE, FP32 reciprocal attention/tensors/HiFi4, sealed stock cache, all original sampler steps."
+  "native_ir": {
+    "candidate": {
+      "linear_matmul_ops": 427,
+      "bf16_linear_matmul_ops": 0,
+      "self_qk_matmul_ops": 0,
+      "cross_qk_matmul_ops": 30,
+      "self_outer_product_multiply_ops": 3840,
+      "runtime_ir_sha256": "ed43e39c5ba151ece0528b723862c2a54c7ee4f7791eb66d9d92c094b3debf12"
+    },
+    "control": {
+      "linear_matmul_ops": 457,
+      "bf16_linear_matmul_ops": 0,
+      "self_qk_matmul_ops": 30,
+      "cross_qk_matmul_ops": 30,
+      "self_outer_product_multiply_ops": 0,
+      "runtime_ir_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1"
+    }
+  },
+  "finding": "Complete original shape512 self-only precise-QK sampler has final relative L2 0.288754 versus ordinary FP32 control 0.299911. Runtime 72.394s versus 16.865s (4.292x). All original12steps/21forwards remain, with30 precise self and30 ordinary cross modules, no fallback or recompilation. Every fresh control TT state equals historical077 bitwise: True. Native IR confirms all30 self QK matrix ops replaced by3840 outer-product multiplies and all30 cross QK matrix ops retained.",
+  "decision": "Reject as a performance/accuracy fix on this fixture:4.29x slower for only29.99% to28.88% final-error improvement, with strict gates still failed. Retain as an opt-in numerical diagnostic; prioritize fixed-conditioning reuse and projection/modulation controls.",
+  "tests": "108 focused CPU checks pass. Full original sampler, fresh matched native control, exact effective-policy counts, physical checkpoint/stock-cache/source/fixture identity and original state gates are checked.",
+  "reproduce": "run.py --cases shape_flow_tensor --rope-mode real_pairs_flat_head_first --attention-mode <fp32_self_outer_qk or fp32_reciprocal> --device-precision float32 --math-fidelity hifi4 --native-ir --sampler-trajectory --cpu-trajectory-cache <sealed-shape512-cache> --reference-precision float32 --optimization-level 0 --cpu-threads 16 --runs 3 --timeout 3600 --output-dir <new>",
+  "compile_profile_note": "First-inference time includes bounded compiler stack sampling. Sampling ended before native runtime IR emission; warmed forward and complete sampler timings are measured after it. See result070."
 }

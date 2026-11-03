@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "linear_matmul_ops": 427,
+    "bf16_linear_matmul_ops": 0,
+    "self_qk_matmul_ops": 0,
+    "cross_qk_matmul_ops": 30,
+    "self_outer_product_multiply_ops": 3840,
+    "runtime_ir_sha256": "ed43e39c5ba151ece0528b723862c2a54c7ee4f7791eb66d9d92c094b3debf12"
+  },
+  "control": {
+    "linear_matmul_ops": 457,
+    "bf16_linear_matmul_ops": 0,
+    "self_qk_matmul_ops": 30,
+    "cross_qk_matmul_ops": 30,
+    "self_outer_product_multiply_ops": 0,
+    "runtime_ir_sha256": "3b28bb51cd6ff3bb16e5c8cd01b248bb7d6a49bc81b0136cfd0fdb18adb84fb1"
+  }
+}

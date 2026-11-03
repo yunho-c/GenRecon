@@ -1,6 +1,6 @@
 {
-  "status": "completed_prepared_cpu_native_comparison_pending",
-  "finding": "The complete prepared self-only precise-QK CPU sampler passes every original state gate, with final relative L2 0.0000918785 (0.00919%) versus stock. Original12steps/21forwards, physical checkpoint and all shared native/CPU source hashes match. The native candidate is still compiling; this CPU result does not establish TT accuracy or CUDA equivalence.",
+  "status": "completed_prepared_cpu_original_sampler",
+  "finding": "Identical prepared CPU self-only precise-QK complete trajectory has final relative L2 0.000091878 against stock; all-state gates pass: True. Native candidate differs 0.288736 from the same CPU recipe. Physical checkpoint and all shared model/helper hashes match; not a CUDA oracle.",
   "cpu_vs_stock_final": {
     "shape_match": true,
     "finite": true,
@@ -12,6 +12,16 @@
     "max_abs": 0.0017467737197875977
   },
   "cpu_all_states_pass_gates": true,
+  "native_vs_prepared_cpu_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.288736482401356,
+    "pcc": 0.9578460204852716,
+    "max_abs": 3.4719109535217285
+  },
   "source_hashes_verified": 174,
   "verified_checkpoint_sha256": "d9e13be151a213bf67565d2a17341fe97328e455814fb2328a59366344e122fb",
   "reproduce": "precision_reference.py --stage shape --precision float32 --rope-mode real_pairs_flat_head_first --attention-mode fp32_self_outer_qk --threads 16 --output-dir <new>"

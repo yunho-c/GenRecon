@@ -792,6 +792,22 @@ RoPE, AV, all tokens and the original sampler schedule remain intact. This
 opt-in mode has higher cost; complete original trajectories and identically
 prepared CPU controls are required before interpreting quality or performance.
 
+The [complete self-only precise-QK sampler](results/autoresearch/068-self-only-precise-qk-sampler/summary.json)
+costs 72.394s versus 16.865s (4.29x) while final relative error improves only
+29.99% to 28.88%; original accuracy gates still fail. Native IR confirms 3,840
+outer-product multiplies replace exactly 30 self QK matrix operations, retaining
+all 30 cross QK operations. Every fresh baseline state matches historical output
+bitwise, with no fallback or recompilation. The [identical prepared CPU control](results/autoresearch/069-self-only-precise-qk-cpu/summary.json)
+passes every state gate at 0.00919% final drift against stock. This expensive
+path remains a numerical diagnostic; it is rejected as a performance/accuracy fix.
+
+A [bounded cold-compile profile](results/autoresearch/070-precise-qk-compile-profile/summary.json)
+places the sampled work inside native TT-MLIR compilation. Fourteen of 49 native
+leaf samples resolve to constant-argument reachability analysis; the short
+window does not establish whole-compile pass shares or a causal compiler fix.
+First-inference time includes profiling effects. Both sample windows ended
+before runtime IR emission, so the warmed sampler measurement follows profiling.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and

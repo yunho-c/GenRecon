@@ -77,7 +77,8 @@
     "results/autoresearch/066-balanced-outer-product/summary.json",
     "results/autoresearch/067-learned-attention-outer/summary.json",
     "results/autoresearch/069-self-only-precise-qk-cpu/summary.json",
-    "results/autoresearch/068-self-only-precise-qk-sampler/summary.json"
+    "results/autoresearch/068-self-only-precise-qk-sampler/summary.json",
+    "results/autoresearch/070-precise-qk-compile-profile/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -141,22 +142,17 @@
     "Balanced outer-product FP32 accumulation matches its CPU formula bitwise in all nine native cases, with no BF16 or matrix operations in emitted runtime IR. Random K128 FP32 product error versus ordinary CPU matmul falls0.00171543 to2.18e-7; the previous exact-result1 cancellation now returns1. All input readbacks/repeats are exact, without fallback. Extra pointwise/slice operations cost substantially more; this is a precision diagnostic, not a fast attention replacement.",
     "Self attention passes all three bitwise guards: isolated vs full-model, observer vs isolated, and native QKV-only vs captured attended output. On identical actual TT Q/K/V, balanced outer QK lowers core relative error0.0147219 to0.00193264 (7.62x), while median time rises5.606ms to97.413ms (17.37x). Cross attention fails isolated/full-model and observer/ordinary equality, so it supports no suboperation attribution or QKV alternative claim.",
     "The complete prepared self-only precise-QK CPU sampler passes every original state gate, with final relative L2 0.0000918785 (0.00919%) versus stock. Original12steps/21forwards, physical checkpoint and all shared native/CPU source hashes match. The native candidate is still compiling; this CPU result does not establish TT accuracy or CUDA equivalence.",
-    "Fresh ordinary reciprocal-attention FP32 control completes the original shape sampler in 16.865s. Every native state matches historical077 bitwise under the new helper sources, with no fallback or recompilation. The matched self-only precise-QK candidate is still compiling; no candidate performance or accuracy conclusion yet."
+    "Fresh ordinary reciprocal-attention FP32 control completes the original shape sampler in 16.865s. Every native state matches historical077 bitwise under the new helper sources, with no fallback or recompilation. The matched self-only precise-QK candidate is still compiling; no candidate performance or accuracy conclusion yet.",
+    "Complete original shape512 self-only precise-QK sampler has final relative L2 0.288754 versus ordinary FP32 control 0.299911. Runtime 72.394s versus 16.865s (4.292x). All original12steps/21forwards remain, with30 precise self and30 ordinary cross modules, no fallback or recompilation. Every fresh control TT state equals historical077 bitwise: True. Native IR confirms all30 self QK matrix ops replaced by3840 outer-product multiplies and all30 cross QK matrix ops retained.",
+    "Identical prepared CPU self-only precise-QK complete trajectory has final relative L2 0.000091878 against stock; all-state gates pass: True. Native candidate differs 0.288736 from the same CPU recipe. Physical checkpoint and all shared model/helper hashes match; not a CUDA oracle.",
+    "Bounded compiler sampling observed 374 Python samples at XLA warm-up-cache compilation. 14 of 49 native leaf samples resolve to ConstevalForwardAnalysis::valueTracesToConstantArgs; other leaves include LLVM pointer sets and strings. This is a short compilation window, not whole-compile pass attribution or device-kernel profiling. Both sampling windows ended before native runtime IR emission and sampler timing."
   ],
   "next_actions": [
-    "Run a self-attention-only outer-QK diagnostic in the complete original FP32 shape sampler. Local self attention passes all source guards and core error improves7.62x at17.37x core cost. Cross isolation/observation fails and is excluded. Require identical prepared CPU control, original sealed stock reference/gates, all21 model calls, actual native IR, no fallback and complete timings before interpreting full-sampler quality or cost.",
+    "Test immutable conditioning reuse: original cross-attention K/V and per-block projected conditioning are fixed over sampler steps. Require exact CPU positive/negative branch equivalence, unchanged learned parameters/LoRA and actual native consteval/main-graph evidence before a full matched sampler trial. Precise self QK is4.29x slower with failed gates and is retained only as a diagnostic.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
     "Expand optimized 6181-token and texture profiles with marked complete device rows and explicit preloaded-activation timing. Investigate a profiling-enabled native runtime matching Forge only after higher-priority accuracy work; current generated profiling uses a different Metal revision."
   ],
-  "live_experiments": [
-    {
-      "name": "Original complete shape sampler, self-only precise QK",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/088-shape-self-outer-qk",
-      "source_commit": "c06e903",
-      "status": "compile_and_first_inference",
-      "note": "FP32 tensors/HiFi4, original12steps/21calls, same sealed CPU reference and strict gates. Report must show30 precise self and30 ordinary cross modules. Native IR/no fallback/recompile and full timing required."
-    }
-  ],
+  "live_experiments": [],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
 }
