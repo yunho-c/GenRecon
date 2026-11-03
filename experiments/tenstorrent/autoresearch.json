@@ -57,7 +57,8 @@
     "results/autoresearch/046-poster-bf16-av-occupancy/summary.json",
     "results/autoresearch/047-rejected-head-first-view/summary.json",
     "results/autoresearch/048-rope-layout-probe/summary.json",
-    "results/autoresearch/049-integrated-flat-rope/summary.json"
+    "results/autoresearch/049-integrated-flat-rope/summary.json",
+    "results/autoresearch/050-poster-flat-rope-sampler/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -99,10 +100,11 @@
     "Real-poster BF16 AV improves occupancy IoU vs the same FP32 reference from 0.6776 to 0.7132, with 5660 occupied voxels vs 6464 reference. False positives/negatives fall from 781/1555 to 613/1417. Sampler time is 128.155s vs 129.725s in the paired run (1.21% lower). All legacy/refreshed reference control grids decode bitwise identically.",
     "Source-level head-first views do not realize the intended device layout. Native IR retains 60 RoPE multiplies with token-first phase shapes and padded 12-head rows, with60 extra typecasts vs control. The candidate is slower (650.0ms vs625.7ms per forward, 13.63s vs13.21s sampler) and differs 30.6% from TT control at final state despite exact CPU preparation.",
     "Explicit contiguous head-first inputs still leave the cosine multiply token-first in native IR, with native output bitwise equal to token-first. Flattening head/token rows changes the native cosine multiply to [1,12,T,128] with [1,1,T,128] phases. On seeded BF16 inputs, flat output matches CPU bitwise at both512 and4096 tokens; baseline relative L2 is about0.00055/0.00065. At4096, measured kernel+output-transfer median falls28.06ms to12.60ms (2.23x); at512 it increases4.17ms to4.44ms. These are kernel results, not full-flow measurements.",
-    "Flattened head-first and token-first formulations both match CPU bitwise on the seeded BF16 fixtures. At4096, head-first prototype median13.15ms vs token-first16.39ms; integrated head-first12.18ms and bitwise equal to prototype. All eight preintegration native outputs match the independent integration process bitwise. Baseline microtiming varies between processes (about26.6\u201336.2ms at4096), so do not treat precise kernel ratios or small512-token differences as full-flow performance evidence."
+    "Flattened head-first and token-first formulations both match CPU bitwise on the seeded BF16 fixtures. At4096, head-first prototype median13.15ms vs token-first16.39ms; integrated head-first12.18ms and bitwise equal to prototype. All eight preintegration native outputs match the independent integration process bitwise. Baseline microtiming varies between processes (about26.6\u201336.2ms at4096), so do not treat precise kernel ratios or small512-token differences as full-flow performance evidence.",
+    "Flattened head-first RoPE reduces the complete poster sampler from128.155s to104.503s (1.226x,18.46% lower), with forward median5824.9ms to4755.1ms. Final relative L2 vs stock FP32 is0.5726 vs0.5750. Native IR realizes60 head-first cosine multiplies; nominal cosine-result payload is24MiB vs64MiB and phase payload2MiB vs64MiB, excluding allocator overhead. Other layout/gather operations also change, so this does not attribute all saved time to one operator."
   ],
   "next_actions": [
-    "Finish confirmed live run066 and queued decoder067. Inspect actual final native IR for head-first cosine layout and60 FP32 QK/60 BF16 AV products, no fallback/recompilation, all original22 forwards and12 steps. Compare complete states and occupancy to run058 and sealed stock CPU reference. Retain any numerical failures; commit/push completed results.",
+    "Archive completed common-decoder run067 for flattened RoPE. Verify control grids bitwise unchanged and compare new occupancy against BF16-AV, FP32 reciprocal, SDPA and CPU precision diagnostic. Commit/push all completed results.",
     "After the layout experiment, establish an all-FP32 device-torso accuracy baseline using the same already-BF16-quantized learned weights and original CPU reference. The CPU BF16-boundary diagnostic itself fails strict FP32 trajectory gates, so quantify how much removable rounding vs remaining native arithmetic contributes before more selective precision tuning. Start with shape512 to validate memory/runtime and complete schedule.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
@@ -111,22 +113,16 @@
   ],
   "live_experiments": [
     {
-      "name": "066-poster-flat-rope",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/066-poster-flat-rope",
-      "pid_at_last_check": 343128,
-      "tool_session_id": 21140,
-      "status_at_last_check": "running cpu_reference",
-      "purpose": "Complete real-poster BF16-AV sampler using integrated flattened head-first RoPE, original CPU reference and schedules.",
-      "note": "Actual worker confirmed; inspect process arguments and result before treating as live or terminal. Do not restart from observation timeout."
+      "name": "068-shape-device-fp32",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/068-shape-device-fp32",
+      "status_at_last_check": "actual worker confirmed waiting for device,5.376GB parameter payload, CPU prep relative L2 1.63e-6",
+      "pid_at_last_check": 349507
     },
     {
-      "name": "067-flat-rope-occupancy",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/067-flat-rope-occupancy",
-      "pid_at_last_check": 343139,
-      "tool_session_id": 41277,
-      "status_at_last_check": "live controller waiting for run066 terminal result",
-      "log": "/home/user/tt-scratchpad/genrecon/autoresearch/067-run.log",
-      "purpose": "Common FP32 CPU decoder on stock references, prior SDPA/FP32/BF16-AV candidates, new flattened RoPE and CPU precision diagnostic."
+      "name": "069-shape-device-pipeline-control",
+      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/069-shape-device-pipeline-control",
+      "status_at_last_check": "actual worker confirmed compiling",
+      "pid_at_last_check": 349540
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."

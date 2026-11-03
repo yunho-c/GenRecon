@@ -1,0 +1,88 @@
+{
+  "status": "completed_faster_sampler_numerical_gates_failed",
+  "scope": "Same real-poster crop, original learned weights/LoRA, conditioning, all4096 tokens, original12-step/22-forward schedule. BF16 AV policy unchanged; only real-pair RoPE uses flattened head-first layout.",
+  "pairing": "Reference/checkpoint/config/version/input signatures equal; both reuse the same sealed stock CPU reference after physical checkpoint and semantic fixture checks.",
+  "native_ir_counts": {
+    "token_first_cosine_multiply": 0,
+    "head_first_cosine_multiply": 60,
+    "softmax": 0,
+    "exp": 60,
+    "fp32_qk": 60,
+    "bf16_av": 60
+  },
+  "native_layout_audit": {
+    "control": {
+      "representative_cosine_multiply": "%420 = \"ttnn.multiply\"(%416, %arg679) : (tensor<1x4096x12x128xf32, #ttnn_layout85>, tensor<1x4096x1x128xf32, #ttnn_layout85>) -> tensor<1x4096x12x128xf32, #ttnn_layout85> loc(#loc1076)",
+      "encodings": {
+        "#ttnn_layout85": "#ttnn_layout85 = #ttnn.ttnn_layout<(d0, d1, d2, d3) -> (d0 * 131072 + d1 * 32 + d2, d3), <1x1>, memref<4096x4x!ttcore.tile<32x32, f32>, #dram>, <interleaved>>"
+      },
+      "nominal_f32_tile_payload_bytes_by_encoding": {
+        "#ttnn_layout85": 67108864
+      },
+      "payload_note": "Nominal tiled tensor payload, excluding allocator/bank alignment overhead."
+    },
+    "candidate": {
+      "representative_cosine_multiply": "%421 = \"ttnn.multiply\"(%420, %arg679) : (tensor<1x12x4096x128xf32, #ttnn_layout102>, tensor<1x1x4096x128xf32, #ttnn_layout82>) -> tensor<1x12x4096x128xf32, #ttnn_layout102> loc(#loc1078)",
+      "encodings": {
+        "#ttnn_layout102": "#ttnn_layout102 = #ttnn.ttnn_layout<(d0, d1, d2, d3) -> (d0 * 49152 + d1 * 4096 + d2, d3), <1x1>, memref<1536x4x!ttcore.tile<32x32, f32>, #dram>, <interleaved>>",
+        "#ttnn_layout82": "#ttnn_layout82 = #ttnn.ttnn_layout<(d0, d1, d2, d3) -> (d0 * 4096 + d1 * 4096 + d2, d3), <1x1>, memref<128x4x!ttcore.tile<32x32, f32>, #dram>, <interleaved>>"
+      },
+      "nominal_f32_tile_payload_bytes_by_encoding": {
+        "#ttnn_layout102": 25165824,
+        "#ttnn_layout82": 2097152
+      },
+      "payload_note": "Nominal tiled tensor payload, excluding allocator/bank alignment overhead."
+    }
+  },
+  "candidate_seconds": 104.50316542596556,
+  "control_seconds": 128.15515011397656,
+  "speedup": 1.2263279259685875,
+  "candidate_warm_ms": 4755.071756022517,
+  "control_warm_ms": 5824.852360005025,
+  "candidate_vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.5726457947165011,
+    "pcc": 0.8275740660699201,
+    "max_abs": 4.0569740533828735
+  },
+  "control_vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.5750323387172479,
+    "pcc": 0.8258408812473363,
+    "max_abs": 3.725231409072876
+  },
+  "candidate_vs_cpu_precision_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.5079662669421585,
+    "pcc": 0.8664432048465657,
+    "max_abs": 4.058385848999023
+  },
+  "candidate_vs_control_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.20747037920485853,
+    "pcc": 0.978516975936999,
+    "max_abs": 3.281792640686035
+  },
+  "fallback_ops": [],
+  "aten_counters": {},
+  "trajectory_recompiled": false,
+  "finding": "Flattened head-first RoPE reduces the complete poster sampler from128.155s to104.503s (1.226x,18.46% lower), with forward median5824.9ms to4755.1ms. Final relative L2 vs stock FP32 is0.5726 vs0.5750. Native IR realizes60 head-first cosine multiplies; nominal cosine-result payload is24MiB vs64MiB and phase payload2MiB vs64MiB, excluding allocator overhead. Other layout/gather operations also change, so this does not attribute all saved time to one operator.",
+  "decision": "Retain opt-in improvement on this crop; strict latent gates still fail. Inspect common-decoder geometry in result051 and expand scenes/stages before global/default promotion. Native returncode1 records failed numerical gates, not runtime failure.",
+  "reproduce": "run.py --cases ss_flow --flow-inputs <poster inputs> --sampler-trajectory --cpu-trajectory-cache <sealed poster cache> --rope-mode real_pairs_flat_head_first --attention-mode fp32_scores_bf16_av --native-ir --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 3 --timeout 3600 --output-dir <new>"
+}

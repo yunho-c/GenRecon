@@ -1,0 +1,259 @@
+{
+  "fixture_identity_verified": true,
+  "identity_note": "Condition/config hashes match",
+  "final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.20747037920485853,
+    "pcc": 0.978516975936999,
+    "max_abs": 3.281792640686035
+  },
+  "pred_x_t": [
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0002765100347109838,
+      "pcc": 0.9999999617722987,
+      "max_abs": 0.0017101764678955078
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.00041778869754570863,
+      "pcc": 0.9999999127309026,
+      "max_abs": 0.0026172399520874023
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0005732799553251906,
+      "pcc": 0.9999998357396864,
+      "max_abs": 0.0037572383880615234
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0007556602826529959,
+      "pcc": 0.9999997146169709,
+      "max_abs": 0.005288243293762207
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0009782615352390803,
+      "pcc": 0.9999995215823305,
+      "max_abs": 0.004922151565551758
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0013463391405265299,
+      "pcc": 0.9999990936060336,
+      "max_abs": 0.008478641510009766
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0019436687448602088,
+      "pcc": 0.9999981123070159,
+      "max_abs": 0.01240915060043335
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.0038019368726364155,
+      "pcc": 0.9999927707833054,
+      "max_abs": 0.020418524742126465
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.010262976031337485,
+      "pcc": 0.9999473455979139,
+      "max_abs": 0.06955800950527191
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.05265915053523604,
+      "pcc": 0.9986152367015451,
+      "max_abs": 0.5948637872934341
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.09058807723647123,
+      "pcc": 0.9959150933358675,
+      "max_abs": 0.981960654258728
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.20747037920485853,
+      "pcc": 0.978516975936999,
+      "max_abs": 3.281792640686035
+    }
+  ],
+  "pred_x_0": [
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.04457707458958281,
+      "pcc": 0.999005890256203,
+      "max_abs": 0.09576869010925293
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.04643049283030587,
+      "pcc": 0.9989202176027188,
+      "max_abs": 0.09124469757080078
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.044886124064281635,
+      "pcc": 0.998993726631632,
+      "max_abs": 0.1457914113998413
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.04044563556679341,
+      "pcc": 0.9991823617044663,
+      "max_abs": 0.11172056198120117
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.03698280466702145,
+      "pcc": 0.9993149975607866,
+      "max_abs": 0.10041642189025879
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.03345854674460517,
+      "pcc": 0.9994398225571465,
+      "max_abs": 0.1244848370552063
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.03282634435158084,
+      "pcc": 0.9994607108148674,
+      "max_abs": 0.14016461372375488
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.05067173045086634,
+      "pcc": 0.9987196113697517,
+      "max_abs": 0.24024581909179688
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": true,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.09591615235897205,
+      "pcc": 0.9953779751838568,
+      "max_abs": 0.5596883296966553
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.25342766431195946,
+      "pcc": 0.968110121850991,
+      "max_abs": 2.9984334111213684
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.16339267446780806,
+      "pcc": 0.9867352158472019,
+      "max_abs": 2.043223023414612
+    },
+    {
+      "shape_match": true,
+      "finite": true,
+      "passed": false,
+      "max_relative_l2": 0.1,
+      "min_pcc": 0.99,
+      "relative_l2": 0.20747317881115082,
+      "pcc": 0.9785163936721152,
+      "max_abs": 3.281841993331909
+    }
+  ],
+  "all_states_pass_smoke": false
+}
