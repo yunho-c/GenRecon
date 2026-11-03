@@ -1,0 +1,17 @@
+{
+  "status": "completed_control_candidate_compiling",
+  "finding": "Fresh ordinary reciprocal-attention FP32 control completes the original shape sampler in 16.865s. Every native state matches historical077 bitwise under the new helper sources, with no fallback or recompilation. The matched self-only precise-QK candidate is still compiling; no candidate performance or accuracy conclusion yet.",
+  "control_seconds": 16.865314755996224,
+  "control_vs_stock_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.29991133282335974,
+    "pcc": 0.9545747629508539,
+    "max_abs": 4.071747064590454
+  },
+  "control_matches_historical_all_states_bitwise": true,
+  "reproduce": "run.py shape_flow_tensor, flat head-first RoPE, FP32 reciprocal attention/tensors/HiFi4, sealed stock cache, all original sampler steps."
+}

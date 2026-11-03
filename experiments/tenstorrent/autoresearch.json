@@ -75,7 +75,9 @@
     "results/autoresearch/064-fresh-matrix-cancellation-controls/summary.json",
     "results/autoresearch/065-arbitrary-fp32-single-term/summary.json",
     "results/autoresearch/066-balanced-outer-product/summary.json",
-    "results/autoresearch/067-learned-attention-outer/summary.json"
+    "results/autoresearch/067-learned-attention-outer/summary.json",
+    "results/autoresearch/069-self-only-precise-qk-cpu/summary.json",
+    "results/autoresearch/068-self-only-precise-qk-sampler/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -137,7 +139,9 @@
     "Fresh-process HiFi4/HiFi3 tests verify actual FP32 operand/accumulation configurations and bitwise input device roundtrips. The FP32 cancellation has exact CPU result1 but native result0 under both fidelities. BF16-representable cancellation gives2^-14 exactly under HiFi4 but zero under HiFi3. Random matmul outputs retain bits beyond ten fraction bits, ruling out a simple final-output-only quantization model. K1 rewrites to broadcast multiply and is exact on BF16-representable values; it is not evidence of exact matrix-unit arithmetic. General matrix errors differ across K32/K128 and fidelity; this does not locate every internal loss or quantify sampler contribution.",
     "For seeded arbitrary FP32 values, the K1 product lowered to broadcast multiply matches CPU bitwise across512x512 outputs, with exact input roundtrips and repeats and no fallback. All eight previous HiFi4 controls repeat bitwise in this independent process. This confirms a precise multiplication primitive for these inputs; it does not establish multi-term dot-product accuracy, speed or full-model quality.",
     "Balanced outer-product FP32 accumulation matches its CPU formula bitwise in all nine native cases, with no BF16 or matrix operations in emitted runtime IR. Random K128 FP32 product error versus ordinary CPU matmul falls0.00171543 to2.18e-7; the previous exact-result1 cancellation now returns1. All input readbacks/repeats are exact, without fallback. Extra pointwise/slice operations cost substantially more; this is a precision diagnostic, not a fast attention replacement.",
-    "Self attention passes all three bitwise guards: isolated vs full-model, observer vs isolated, and native QKV-only vs captured attended output. On identical actual TT Q/K/V, balanced outer QK lowers core relative error0.0147219 to0.00193264 (7.62x), while median time rises5.606ms to97.413ms (17.37x). Cross attention fails isolated/full-model and observer/ordinary equality, so it supports no suboperation attribution or QKV alternative claim."
+    "Self attention passes all three bitwise guards: isolated vs full-model, observer vs isolated, and native QKV-only vs captured attended output. On identical actual TT Q/K/V, balanced outer QK lowers core relative error0.0147219 to0.00193264 (7.62x), while median time rises5.606ms to97.413ms (17.37x). Cross attention fails isolated/full-model and observer/ordinary equality, so it supports no suboperation attribution or QKV alternative claim.",
+    "The complete prepared self-only precise-QK CPU sampler passes every original state gate, with final relative L2 0.0000918785 (0.00919%) versus stock. Original12steps/21forwards, physical checkpoint and all shared native/CPU source hashes match. The native candidate is still compiling; this CPU result does not establish TT accuracy or CUDA equivalence.",
+    "Fresh ordinary reciprocal-attention FP32 control completes the original shape sampler in 16.865s. Every native state matches historical077 bitwise under the new helper sources, with no fallback or recompilation. The matched self-only precise-QK candidate is still compiling; no candidate performance or accuracy conclusion yet."
   ],
   "next_actions": [
     "Run a self-attention-only outer-QK diagnostic in the complete original FP32 shape sampler. Local self attention passes all source guards and core error improves7.62x at17.37x core cost. Cross isolation/observation fails and is excluded. Require identical prepared CPU control, original sealed stock reference/gates, all21 model calls, actual native IR, no fallback and complete timings before interpreting full-sampler quality or cost.",
@@ -150,22 +154,8 @@
       "name": "Original complete shape sampler, self-only precise QK",
       "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/088-shape-self-outer-qk",
       "source_commit": "c06e903",
-      "status": "launched",
+      "status": "compile_and_first_inference",
       "note": "FP32 tensors/HiFi4, original12steps/21calls, same sealed CPU reference and strict gates. Report must show30 precise self and30 ordinary cross modules. Native IR/no fallback/recompile and full timing required."
-    },
-    {
-      "name": "Fresh matched FP32 sampler baseline",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/089-shape-self-outer-control",
-      "source_commit": "c06e903",
-      "status": "launched",
-      "note": "Same new helper sources with ordinary FP32 reciprocal attention; verify all TT states against historical run077. Hardware lock serializes native work."
-    },
-    {
-      "name": "Complete prepared self-only precise-QK CPU control",
-      "directory": "/home/user/tt-scratchpad/genrecon/autoresearch/090-prepared-self-outer-cpu",
-      "source_commit": "c06e903",
-      "status": "launched",
-      "note": "Identical model/helpers and original sampler on CPU. Compare every state and final against stock; confirm helper association changes are small without weakening gates."
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
