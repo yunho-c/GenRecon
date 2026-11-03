@@ -1,0 +1,13 @@
+{
+  "status": "completed_bitwise_transposed_key_boundary_control",
+  "both_condition_branches_bitwise_native_raw_cross": true,
+  "CPU_all_paths_bitwise_original": true,
+  "query": "Teacher-forced identical prepared CPU first-block cross input; all original learned objects/LoRA retained.",
+  "native_QK_transpose_b": false,
+  "finding": "Keeping normalized cache keys already transposed for QK restores the original native first-block outputs exactly on both branches, unlike the rejected untransposed head cache.",
+  "raw_evidence": "All target tensor values/shapes/dtypes are exactly recoverable using result101/outputs.pt.gz and outputs-xor-delta.pt.gz with restore_outputs.py. Per-tensor logical digests are verified during restoration; zip bytes/storage strides are not the identity.",
+  "delta_bytes": 14382872,
+  "tests": "71 focused CPU checks pass. Actual complete saved output tree was reconstructed and every leaf digest verified. Native cross outputs repeat bitwise, no fallback.",
+  "limits": "First-block diagnostic only; no full sampler/native performance promotion yet. Original stock CPU trajectory gates remain unchanged.",
+  "next": "Fresh original native control and complete transposed-key sampler CPU/native equality before prefill-inclusive ABBA measurements."
+}

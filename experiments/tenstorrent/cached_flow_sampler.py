@@ -44,7 +44,7 @@ def main():
     parser.add_argument('--cpu-threads', type=int, default=16)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--cpu-only', action='store_true')
-    parser.add_argument('--cache-layout', choices=('raw','heads'), default='raw')
+    parser.add_argument('--cache-layout', choices=('raw','heads','heads_t'), default='raw')
     parser.add_argument('--paired-rounds', type=int, default=0, help='ABBA complete sampler rounds sharing weights')
     parser.add_argument('--native-control-dir', type=Path, help='Sealed ordinary native run required for paired trials')
     args = parser.parse_args()

@@ -19,7 +19,7 @@ sys.path.insert(0,str(ROOT))
 sys.path.insert(0,str(Path(__file__).parent))
 
 
-def stages(attention):
+def stages(attention,key_transposed=False):
     import torch
     from torch import nn
     from experiments.tenstorrent.inference_attention import reciprocal_attention
@@ -33,7 +33,8 @@ def stages(attention):
             attn=self.attention
             key,value=raw.reshape(1,raw.shape[1],2,attn.num_heads,-1).unbind(2)
             if attn.qk_rms_norm:key=attn.k_rms_norm(key)
-            return key.permute(0,2,1,3),value.permute(0,2,1,3)
+            order=(0,2,3,1) if key_transposed else (0,2,1,3)
+            return key.permute(order),value.permute(0,2,1,3)
 
     class RawCross(nn.Module):
         def __init__(self):
@@ -55,7 +56,7 @@ def stages(attention):
         def forward(self,x,raw):
             return self.head(x,self.pack(raw))
 
-    pack=PackKV();raw=RawCross();head=CachedHeadCrossAttention(attention)
+    pack=PackKV();raw=RawCross();head=CachedHeadCrossAttention(attention,key_transposed)
     return pack,raw,head,FusedPackCross(pack,head)
 
 
@@ -65,10 +66,12 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--checkpoint-dir',type=Path,default=Path.home()/'models/genrecon')
+    parser.add_argument('--cache-layout',choices=('heads','heads_t'),default='heads')
     args=parser.parse_args();args.output_dir=args.output_dir.resolve();args.output_dir.mkdir(parents=True,exist_ok=False)
     os.environ.update(PJRT_DEVICE='TT',ATTN_BACKEND='sdpa',SPARSE_ATTN_BACKEND='sdpa',SPARSE_CONV_BACKEND='none')
     from experiments.tenstorrent.experiment_identity import sha256
     report={'status':'running','scope':__doc__,'seed':0,'script_sha256':sha256(Path(__file__)),
+            'cache_layout':args.cache_layout,
             'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()}
     def phase(name):
         report['phase']=name;(args.output_dir/'result.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n');print(name,flush=True)
@@ -96,9 +99,9 @@ def main():
             query=values['first_cross_input'].clone()
             del values,observation
         original_cross=model.blocks[0].cross_attn
-        headed_prefill,body=prepare_conditioning_cache(model,'heads')
+        headed_prefill,body=prepare_conditioning_cache(model,args.cache_layout)
         raw_prefill=ConditioningPrefill(model,'raw')
-        pack,raw_cross,head_cross,fused=stages(original_cross)
+        pack,raw_cross,head_cross,fused=stages(original_cross,args.cache_layout=='heads_t')
         branches={'positive':(inputs[2],inputs[3]),
                   'negative':(torch.zeros_like(inputs[2]),torch.zeros_like(inputs[3]))}
         cpu={}

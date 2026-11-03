@@ -1,15 +1,17 @@
 import os
 os.environ.update(ATTN_BACKEND='sdpa',SPARSE_CONV_BACKEND='none')
 import torch
+import pytest
 from experiments.tenstorrent.test_frozen_conditioning import fixture
 from experiments.tenstorrent.head_cache_boundary_probe import stages
 
 
-def test_diagnostic_paths_preserve_original_attention_and_share_all_learned_objects():
+@pytest.mark.parametrize('transposed',[False,True])
+def test_diagnostic_paths_preserve_original_attention_and_share_all_learned_objects(transposed):
     flow,positive,negative=fixture()
     original=flow.blocks[0].cross_attn
     parameters={id(value) for value in original.parameters()}
-    pack,raw,head,fused=stages(original)
+    pack,raw,head,fused=stages(original,transposed)
     for module in (pack,raw,head,fused):
         assert {id(value) for value in module.parameters()}==parameters
     query=torch.randn(1,17,48)

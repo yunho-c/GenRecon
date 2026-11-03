@@ -2,6 +2,7 @@
 
 Cache tuples contain projected conditioning and either flat raw KV (default)
 or normalized, head-packed key and value tensors per block (opt-in heads mode).
+The experimental heads_t mode stores the key already transposed for QK.
 They remain explicit graph inputs, allowing new same-shape scenes without
 freezing their values into a compiled denoiser. Native validation is mandatory.
 The original sampler's caller selects the positive or negative tuple; the
@@ -22,7 +23,7 @@ class ConditioningPrefill(nn.Module):
         self.heads=tuple(block.cross_attn.attention.num_heads for block in flow.blocks)
         self.key_norms=nn.ModuleList([
             block.cross_attn.attention.k_rms_norm if block.cross_attn.attention.qk_rms_norm else nn.Identity()
-            for block in flow.blocks] if cache_layout=='heads' else [])
+            for block in flow.blocks] if cache_layout!='raw' else [])
         self.tokens=flow.phases.shape[0]
         self.context_channels=self.key_values[0].in_features
         self.projected_channels=self.projections[0].in_features
@@ -43,7 +44,8 @@ class ConditioningPrefill(nn.Module):
             else:
                 key,value=raw.reshape(1,context.shape[1],2,self.heads[index],-1).unbind(2)
                 key=self.key_norms[index](key)
-                result.extend((projected_value,key.permute(0,2,1,3),value.permute(0,2,1,3)))
+                key_order=(0,2,3,1) if self.cache_layout=='heads_t' else (0,2,1,3)
+                result.extend((projected_value,key.permute(key_order),value.permute(0,2,1,3)))
         return tuple(result)
 
 
@@ -62,9 +64,10 @@ class CachedKVInput(nn.Module):
 
 class CachedHeadCrossAttention(nn.Module):
     """Use original queries/output projection with fixed, prepared K/V inputs."""
-    def __init__(self,prepared):
+    def __init__(self,prepared,key_transposed=False):
         super().__init__()
         self.attention=prepared.attention
+        self.key_transposed=key_transposed
         self.eval()
 
     def forward(self,x,context,phases=None):
@@ -72,6 +75,10 @@ class CachedHeadCrossAttention(nn.Module):
         attention=self.attention
         batch,tokens,channels=x.shape
         key,value=context
+        if self.key_transposed:
+            # The attention helper transposes K for QK. These two views cancel,
+            # retaining the canonical transposed-key matmul boundary natively.
+            key=key.transpose(-2,-1)
         query=attention.to_q(x).reshape(batch,tokens,attention.num_heads,-1)
         if attention.qk_rms_norm:
             query=attention.q_rms_norm(query)
@@ -94,7 +101,7 @@ class CachedConditionFlow(nn.Module):
             if cache_layout=='raw':
                 block.cross_attn.attention.to_kv=CachedKVInput(block.cross_attn.attention.to_kv)
             else:
-                block.cross_attn=CachedHeadCrossAttention(block.cross_attn)
+                block.cross_attn=CachedHeadCrossAttention(block.cross_attn,cache_layout=='heads_t')
         self.eval()
 
     def forward(self,x,t,cache):
@@ -115,10 +122,14 @@ class CachedConditionFlow(nn.Module):
                 length=key_value.shape[1]
             else:
                 value=values[2]
-                if (key_value.ndim!=4 or key_value.shape[:2]!=(1,self.heads[index]) or
-                    key_value.shape[-1]!=self.channels//self.heads[index] or value.shape!=key_value.shape):
+                if key_value.ndim!=4 or key_value.shape[:2]!=(1,self.heads[index]):
                     raise ValueError('Head-packed KV cache has incompatible dimensions')
-                length=key_value.shape[2]
+                transposed=self.cache_layout=='heads_t'
+                length=key_value.shape[-1] if transposed else key_value.shape[-2]
+                width=key_value.shape[-2] if transposed else key_value.shape[-1]
+                if (width!=self.channels//self.heads[index] or
+                    value.shape!=(1,self.heads[index],length,self.channels//self.heads[index])):
+                    raise ValueError('Head-packed KV cache has incompatible dimensions')
             if context_tokens is None:context_tokens=length
             elif length!=context_tokens:raise ValueError('KV context lengths must agree across blocks')
         flow=self.flow
@@ -135,7 +146,7 @@ class CachedConditionFlow(nn.Module):
 
 def prepare_conditioning_cache(flow,cache_layout='raw'):
     """Validate the complete plan before changing any original module."""
-    if cache_layout not in ('raw','heads'):
+    if cache_layout not in ('raw','heads','heads_t'):
         raise ValueError('Unknown conditioning cache layout')
     if flow.training or flow.dtype!=torch.float32 or any(
         value.is_floating_point() and value.dtype!=torch.float32 for value in flow.parameters()):

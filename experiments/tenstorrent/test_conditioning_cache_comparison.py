@@ -8,7 +8,7 @@ from experiments.tenstorrent.conditioning_cache import prepare_conditioning_cach
 from experiments.tenstorrent.conditioning_cache_comparison import InlineConditionFlow
 
 
-@pytest.mark.parametrize('layout',['raw','heads'])
+@pytest.mark.parametrize('layout',['raw','heads','heads_t'])
 def test_inline_control_preserves_original_lora_values_and_recomputes_scene_conditions(layout):
     flow, positive, negative = fixture()
     x, t = torch.randn(17, 8), torch.tensor([.6])

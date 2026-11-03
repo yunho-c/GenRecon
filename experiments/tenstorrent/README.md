@@ -1130,6 +1130,22 @@ key normalization in each denoiser call. Moving those fixed-condition operations
 into prefill is the next execution-optimization hypothesis, subject to CPU/native
 trajectory controls and complete prefill-inclusive performance comparisons.
 
+The [head-packed cache prototype](results/autoresearch/097-head-packed-cache-prototype/summary.json)
+is opt-in (`--cache-layout heads`); raw KV remains the default. Its complete
+[pretrained CPU trajectory](results/autoresearch/099-head-cache-pretrained-cpu/summary.json)
+is bitwise ordinary, retaining learned objects and LoRA. The
+[native candidate](results/autoresearch/100-rejected-native-head-cache/summary.json)
+is rejected before ABBA timing: final relative L2 versus the fresh ordinary
+native control is 0.102053. Its unpaired timing is not accepted speedup evidence.
+
+The [shared-weight first-block diagnostic](results/autoresearch/101-head-cache-boundary-diagnostic/summary.json)
+finds identical native cached K/V from both prefix constructions. Fused packing
+and attention match raw-cache attention bitwise, while splitting the two graphs
+changes the result. Native IR shows transposed key normalization and QK
+`transpose_b=false` in the fused path, versus `transpose_b=true` with cached
+untransposed keys. A transposed-key cache is the next counterfactual; no specific
+faulty instruction or quality-preserving speedup is established by this result.
+
 The [native runtime trace control](results/autoresearch/086-runtime-trace-sampler/summary.json)
 captures all 457 denoiser matrix operations and preserves every original sampler
 state bitwise over 12 steps and 21 calls. Its timing overlapped SDK compilation
