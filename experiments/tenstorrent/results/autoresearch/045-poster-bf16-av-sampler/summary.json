@@ -1,0 +1,64 @@
+{
+  "status": "completed_opt_in_accuracy_tradeoff",
+  "scope": "Same real-poster learned occupancy flow, checkpoint, all 4096 tokens, DINO conditioning, real-pair RoPE, original 12-step/22-forward sampler. QK/scaling/softmax FP32; probabilities and AV use original BF16 torso dtype.",
+  "pairing": "Original reference-source/checkpoint/config/version/input signatures equal to refreshed FP32 control. Both reuse the same sealed stock FP32 CPU trajectory after physical checkpoint hash and exact fixture checks.",
+  "native_ir_counts": {
+    "softmax": 0,
+    "exp": 60,
+    "fp32_qk": 60,
+    "bf16_av": 60
+  },
+  "prepared_attention_modules": 60,
+  "candidate_seconds": 128.15515011397656,
+  "control_seconds": 129.7250297869905,
+  "time_ratio": 0.9878984057618512,
+  "candidate_warm_ms": 5824.852360005025,
+  "control_warm_ms": 5886.077859031502,
+  "candidate_vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.5750323387172479,
+    "pcc": 0.8258408812473363,
+    "max_abs": 3.725231409072876
+  },
+  "control_vs_stock_fp32_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.6074017333941918,
+    "pcc": 0.8052576796358678,
+    "max_abs": 3.521012783050537
+  },
+  "candidate_vs_cpu_precision_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.5070583583301526,
+    "pcc": 0.8666920066186908,
+    "max_abs": 3.479804754257202
+  },
+  "candidate_vs_refreshed_fp32_tt_final": {
+    "shape_match": true,
+    "finite": true,
+    "passed": false,
+    "max_relative_l2": 0.1,
+    "min_pcc": 0.99,
+    "relative_l2": 0.2719903674676661,
+    "pcc": 0.9630247383803412,
+    "max_abs": 2.2967811226844788
+  },
+  "fallback_ops": [],
+  "aten_counters": {},
+  "trajectory_recompiled": false,
+  "finding": "BF16 AV decreases real-poster final latent error vs stock FP32 from 0.6074 to 0.5750. Forward latency is 5824.9ms vs 5886.1ms; complete sampler timings are retained below. This is an exploratory matched run on one crop, not proof of general accuracy or a statistically established small speed gain.",
+  "decision": "Keep opt-in and strict failed trajectory gates. Assess common-decoder occupancy in result046. Test the independent head-first RoPE layout for larger avoidable layout costs; isolated attention speed savings did not translate into a large full-flow gain.",
+  "reference_retention": "The shared original CPU payload is retained in result027; device candidate trajectory is retained here. Native returncode1 denotes failed numerical gates, not a runtime failure.",
+  "reproduce": "run.py --cases ss_flow --flow-inputs <poster inputs> --sampler-trajectory --cpu-trajectory-cache <sealed poster cache> --rope-mode real_pairs --attention-mode fp32_scores_bf16_av --native-ir --optimization-level 0 --reference-precision float32 --cpu-threads 16 --runs 3 --timeout 3600 --output-dir <new>"
+}

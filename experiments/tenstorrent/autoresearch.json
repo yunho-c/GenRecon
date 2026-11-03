@@ -52,7 +52,8 @@
     "results/autoresearch/041-poster-reciprocal-occupancy/summary.json",
     "results/autoresearch/042-attention-precision-boundaries/summary.json",
     "results/autoresearch/043-output-head-attribution/summary.json",
-    "results/autoresearch/044-refreshed-poster-control/summary.json"
+    "results/autoresearch/044-refreshed-poster-control/summary.json",
+    "results/autoresearch/045-poster-bf16-av-sampler/summary.json"
   ],
   "decisions": [
     "Keep compiler defaults unchanged: small FP32 block levels 0/1/2 do not show a clear latency gain; trace replay needs full-flow confirmation.",
@@ -89,11 +90,12 @@
     "Under the same original FP32 CPU decoder and zero threshold, real-poster occupied-grid IoU vs FP32 improves from 0.5135 with real-RoPE SDPA to 0.6776 with FP32 reciprocal attention; occupied voxels rise from 4241 to 5690 vs reference 6464. IoU vs CPU precision diagnostic improves from 0.5361 to 0.7227. CPU precision diagnostic vs FP32 remains 0.8684. Controls decode bitwise identically to retained historical grids.",
     "BF16 AV preserves isolated accuracy: self error 0.01290 to 0.01293, cross 0.00644 to 0.00618. Isolated measured times fall about 13% self and 3% cross vs the extracted FP32 baseline, but these millisecond operator timings do not predict full-flow speed. BF16 QK raises self error to 0.0999; its CPU quantization diagnostic already incurs 0.1014, so keep QK FP32 for the next full-flow candidate.",
     "For accepted full shape captures, CPU execution of the original head on actual TT hidden values has 6.77% error vs the stock prediction; observed TT prediction error is 6.69%. Combined native head arithmetic differs only 0.522% from CPU on identical TT hidden values. Hidden error is 1.97%, normalized-hidden error 1.71%. The learned projection amplifies upstream differences; a separate output-head precision fix is low priority on this fixture. These metrics are not additive error components.",
-    "Every refreshed TT sampler state and final sample matches the legacy FP32 reciprocal run bitwise. Sampler time 129.725s matches prior129.726s closely. Extracting shared arithmetic did not alter this full-model execution. Strict reference gates still fail at final relative L2 0.6074; this control is not a promotion."
+    "Every refreshed TT sampler state and final sample matches the legacy FP32 reciprocal run bitwise. Sampler time 129.725s matches prior129.726s closely. Extracting shared arithmetic did not alter this full-model execution. Strict reference gates still fail at final relative L2 0.6074; this control is not a promotion.",
+    "BF16 AV decreases real-poster final latent error vs stock FP32 from 0.6074 to 0.5750. Forward latency is 5824.9ms vs 5886.1ms; complete sampler timings are retained below. This is an exploratory matched run on one crop, not proof of general accuracy or a statistically established small speed gain."
   ],
   "next_actions": [
-    "Finish confirmed live run057 and run058. Compare every refreshed FP32 sampler state bitwise with legacy run054 before interpreting helper extraction as unchanged. Compare candidate timing and all original 12 states against the sealed stock reference and refreshed control; all 60 attention modules must be prepared, with no fallback/recompilation.",
-    "Finish queued common-decoder run061, inspect actual controller process/session19359 and log. Compare new BF16-AV occupancy against refreshed FP32 and legacy grids under strict fixture identity; retain any numerical failures and commit/push each completed result.",
+    "Archive completed common-decoder run061. Refreshed FP32 states match legacy bitwise; compare all control grids and assess BF16-AV occupancy against both FP32 and CPU precision diagnostic.",
+    "Finish run062 head-first shape layout. Compare all sampler states with modern real-RoPE SDPA control run053 under strict identity and native IR padding/dtype inspection. If exact and faster, extend to real-poster BF16-AV sampler and common-decoder occupancy.",
     "After numerical controls, test head-first [batch,heads,tokens,dim] real-pair RoPE to avoid padding the 12-head axis to 32. Current occupancy reshape costs justify the experiment, but require CPU equivalence, IR dtype/layout validation, full sampler comparisons and occupancy quality checks.",
     "Use the sealed original CPU cache to avoid repeated 12-minute references. Restore by copying manifest.json and decompressing reference.pt.gz from results/autoresearch/027-cpu-reference-cache into a fresh external directory. The actual checkpoint, model/reference sources and all semantic fixture inputs must match.",
     "Extend real-image matched fixtures to shape/texture trajectories and downstream geometry/material evaluation. Keep historical full-pipeline baseline distinct from synthetic and occupancy-only results. Defaults remain stock.",
@@ -101,19 +103,9 @@
   ],
   "live_experiments": [
     {
-      "name": "058-poster-bf16-av",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/058-poster-bf16-av",
-      "status_at_last_check": "actual worker confirmed; compile/first inference"
-    },
-    {
-      "name": "061-poster-av-occupancy",
-      "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/061-poster-av-occupancy",
-      "status_at_last_check": "actual controller318379 waiting for sampler058"
-    },
-    {
       "name": "062-shape-head-first",
       "output_directory": "/home/user/tt-scratchpad/genrecon/autoresearch/062-shape-head-first",
-      "status_at_last_check": "actual new worker started; CPU build/reference"
+      "status_at_last_check": "actual worker confirmed; native compile/first inference, all30 blocks, zero CPU preparation drift"
     }
   ],
   "supervisor_note": "Both original 1800s real-image sampler supervisors were temporarily stopped under a bounded controller while their native workers continued unchanged. Both workers finished and supervisors resumed. Final control record is retained in result 029; no live supervisor extension remains."
