@@ -1,0 +1,24 @@
+{
+  "status": "completed_profiling_sdk_configuration_unbuilt",
+  "finding": "An independent TT-Metal/TTNN checkout at canonical revisionf1f4ff75579 is configured for Release, Python3.12 bindings, distributed support and Tracy. Exact submodule revisions, toolchain, configure commands and a pinned Python dependency lock are retained. The generated rtoptions.cpp compile command contains-DTRACY_ENABLE, so configuration proves the intended native build definition beyond a cache label. No native libraries have been built or run yet; device profiling remains unverified. Existing Forge and9f9 profiling SDK checkouts are unchanged.",
+  "workspace": "/home/user/tt-scratchpad/genrecon/profile-sdk-f1",
+  "metal_commit": "f1f4ff75579ebd7a69c7da52d45368f273026d85",
+  "submodules": [
+    " 29125b7ad8b5513eeaa4417ed92892bf39c8bd74 models/demos/t3000/llama2_70b/reference/llama (heads/main)",
+    " 27221a69789f24d492135093e096b978b4ca3a68 tt_metal/third_party/tracy (27221a6)",
+    " 7b2176e2fe913089f8cd2be9dfb738ead6e7aa27 tt_metal/third_party/tt-cluster-descriptors (7b2176e)",
+    " bc77ac2f7382ffeb9fa5430055f0854d53979489 tt_metal/third_party/umd (bc77ac2)"
+  ],
+  "toolchain": {
+    "clang++-20": "Ubuntu clang version 20.1.8 (++20250708082409+6fb913d3e2ec-1~exp1~20250708202428.132)",
+    "cmake": "cmake version 4.2.3",
+    "ninja": "1.10.1",
+    "ccache": "ccache version 4.13.6"
+  },
+  "profiler_compile_proof": "profiler-compile-proof.json",
+  "runtime_lock": "requirements-profile.txt",
+  "existing_sdk_commit_unchanged": "9f9cd4fd590f4b606bd0981a4fe0b6403eb38ec9",
+  "limitations": "Configuration only. No new runtime, device timing, numerical equivalence or full-sampler result is claimed. A stale generic-Python3.10 header cache was rejected and then fixed by atomically pinning interpreter/header/library paths.",
+  "next": "Compile/install in the isolated workspace, then require exact native arithmetic controls and verified device-profiler output before collecting sampler profiles.",
+  "reproduce": "build_profile_sdk.py --workspace <external-dir> --runtime-lock experiments/tenstorrent/results/autoresearch/084-profile-sdk-configure/requirements-profile.txt --jobs 32 --configure-only (optional --source-cache <existing-metal-repo> for cloning speed only)"
+}

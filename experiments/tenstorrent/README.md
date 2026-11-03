@@ -1010,3 +1010,21 @@ the launcher fix and numerical provenance, not a new performance gain. The
 [standalone canonical profiler probe](results/autoresearch/082-canonical-profiler-rejection/summary.json)
 also confirms the wheel's Tracy rejection before device opening. Matching
 source revision and bundled profiler symbols do not imply profiling is enabled.
+
+The [matching-revision profiling SDK configuration](results/autoresearch/084-profile-sdk-configure/summary.json)
+uses an independent checkout at Forge's Metal revision, an isolated Python3.12
+venv and recorded dependencies. CMake enables Tracy and the actual native
+runtime-options compile command contains `TRACY_ENABLE`. This establishes
+configuration only; compilation, numeric equivalence and working device profiles
+remain unverified. Existing SDKs are preserved. Reproduce with:
+
+```bash
+/home/user/tt-forge-venv/bin/python experiments/tenstorrent/build_profile_sdk.py \
+  --workspace /home/user/tt-scratchpad/genrecon/profile-sdk-f1 \
+  --runtime-lock experiments/tenstorrent/results/autoresearch/084-profile-sdk-configure/requirements-profile.txt \
+  --jobs 32 --configure-only
+```
+
+Omit `--configure-only` to compile/install. Logs, command PIDs, source/submodule
+identities, Python dependencies and build flags are checkpointed outside Git;
+a successful build is labeled `built_unvalidated` until device controls pass.
