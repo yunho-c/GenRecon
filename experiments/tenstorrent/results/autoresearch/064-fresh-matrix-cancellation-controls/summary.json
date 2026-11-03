@@ -1,0 +1,472 @@
+{
+  "status": "completed_fresh_process_native_matrix_controls",
+  "scope": "Test native FP32 matmul preservation and explicit rounding counterfactuals.\n\nSeeded synthetic matrices, not learned attention or complete-model attribution.\nIdentity operands remain dynamic native inputs. All inputs and outputs use\nFP32 storage; some cases intentionally contain exactly BF16-representable values.\n",
+  "metrics": {
+    "hifi3": {
+      "identity_fp32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0004174871043838143,
+          "pcc": 0.9999999758895027,
+          "max_abs": 0.0019516944885253906
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -3.998046875,
+          3.990234375
+        ],
+        "reference_minmax": [
+          -3.998835802078247,
+          3.9906017780303955
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      },
+      "identity_bf16_values_fp32_storage": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000346,
+          "max_abs": 0.0
+        },
+        "native_bitwise_cpu": true,
+        "native_minmax": [
+          -4.0,
+          3.984375
+        ],
+        "reference_minmax": [
+          -4.0,
+          3.984375
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      },
+      "product_fp32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0018240401147721235,
+          "pcc": 0.9999997038384656,
+          "max_abs": 0.12975692749023438
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -57.75621795654297,
+          53.24732208251953
+        ],
+        "reference_minmax": [
+          -57.88050842285156,
+          53.343997955322266
+        ],
+        "native_bitwise_truncated_input_counterfactual": false,
+        "outputs_beyond_ten_fraction_bits_count": 261188
+      },
+      "product_bf16_values_fp32_storage": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007844703599478626,
+          "pcc": 0.9999998375111593,
+          "max_abs": 0.07982635498046875
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -57.93748474121094,
+          53.34265899658203
+        ],
+        "reference_minmax": [
+          -57.97603225708008,
+          53.36526107788086
+        ],
+        "native_bitwise_truncated_input_counterfactual": false,
+        "outputs_beyond_ten_fraction_bits_count": 260533
+      },
+      "product_bf16_values_k32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.00032041060360051346,
+          "pcc": 0.9999999487218553,
+          "max_abs": 0.016872406005859375
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -28.727561950683594,
+          30.306655883789062
+        ],
+        "reference_minmax": [
+          -28.726810455322266,
+          30.302490234375
+        ],
+        "native_bitwise_truncated_input_counterfactual": false,
+        "outputs_beyond_ten_fraction_bits_count": 259104
+      },
+      "product_bf16_values_k1": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000095,
+          "max_abs": 0.0
+        },
+        "native_bitwise_cpu": true,
+        "native_minmax": [
+          -11.028564453125,
+          11.19482421875
+        ],
+        "reference_minmax": [
+          -11.028564453125,
+          11.19482421875
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "lowering": "broadcast multiply, not matmul",
+        "outputs_beyond_ten_fraction_bits_count": 223555
+      },
+      "cancellation_fp32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": false,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.0,
+          "pcc": null,
+          "max_abs": 1.0
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          0.0,
+          0.0
+        ],
+        "reference_minmax": [
+          1.0,
+          1.0
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      },
+      "cancellation_bf16_values": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": false,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.0,
+          "pcc": null,
+          "max_abs": 6.103515625e-05
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          0.0,
+          0.0
+        ],
+        "reference_minmax": [
+          6.103515625e-05,
+          6.103515625e-05
+        ],
+        "native_bitwise_truncated_input_counterfactual": false,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      }
+    },
+    "hifi4": {
+      "identity_fp32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0004174871043838143,
+          "pcc": 0.9999999758895027,
+          "max_abs": 0.0019516944885253906
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -3.998046875,
+          3.990234375
+        ],
+        "reference_minmax": [
+          -3.998835802078247,
+          3.9906017780303955
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      },
+      "identity_bf16_values_fp32_storage": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000346,
+          "max_abs": 0.0
+        },
+        "native_bitwise_cpu": true,
+        "native_minmax": [
+          -4.0,
+          3.984375
+        ],
+        "reference_minmax": [
+          -4.0,
+          3.984375
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      },
+      "product_fp32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0017154340527533224,
+          "pcc": 0.9999997155871655,
+          "max_abs": 0.1058197021484375
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -57.789276123046875,
+          53.250221252441406
+        ],
+        "reference_minmax": [
+          -57.88050842285156,
+          53.343997955322266
+        ],
+        "native_bitwise_truncated_input_counterfactual": false,
+        "outputs_beyond_ten_fraction_bits_count": 262084
+      },
+      "product_bf16_values_fp32_storage": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0007452099783918314,
+          "pcc": 0.9999998398230919,
+          "max_abs": 0.08157730102539062
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -57.9385871887207,
+          53.343624114990234
+        ],
+        "reference_minmax": [
+          -57.97603225708008,
+          53.36526107788086
+        ],
+        "native_bitwise_truncated_input_counterfactual": false,
+        "outputs_beyond_ten_fraction_bits_count": 261933
+      },
+      "product_bf16_values_k32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0003130710591545885,
+          "pcc": 0.9999999518983411,
+          "max_abs": 0.019372940063476562
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          -28.72927474975586,
+          30.309202194213867
+        ],
+        "reference_minmax": [
+          -28.726810455322266,
+          30.302490234375
+        ],
+        "native_bitwise_truncated_input_counterfactual": false,
+        "outputs_beyond_ten_fraction_bits_count": 261721
+      },
+      "product_bf16_values_k1": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": 1.0000000000000095,
+          "max_abs": 0.0
+        },
+        "native_bitwise_cpu": true,
+        "native_minmax": [
+          -11.028564453125,
+          11.19482421875
+        ],
+        "reference_minmax": [
+          -11.028564453125,
+          11.19482421875
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "lowering": "broadcast multiply, not matmul",
+        "outputs_beyond_ten_fraction_bits_count": 223555
+      },
+      "cancellation_fp32": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": false,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 1.0,
+          "pcc": null,
+          "max_abs": 1.0
+        },
+        "native_bitwise_cpu": false,
+        "native_minmax": [
+          0.0,
+          0.0
+        ],
+        "reference_minmax": [
+          1.0,
+          1.0
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      },
+      "cancellation_bf16_values": {
+        "native_vs_cpu": {
+          "shape_match": true,
+          "finite": true,
+          "passed": true,
+          "max_relative_l2": 0.1,
+          "min_pcc": 0.99,
+          "relative_l2": 0.0,
+          "pcc": null,
+          "max_abs": 0.0
+        },
+        "native_bitwise_cpu": true,
+        "native_minmax": [
+          6.103515625e-05,
+          6.103515625e-05
+        ],
+        "reference_minmax": [
+          6.103515625e-05,
+          6.103515625e-05
+        ],
+        "native_bitwise_truncated_input_counterfactual": true,
+        "outputs_beyond_ten_fraction_bits_count": 0
+      }
+    }
+  },
+  "native_ir": {
+    "hifi3": {
+      "identity_fp32": {
+        "runtime_ir_sha256": "8a8a07971338c7db1c90aa008b57792fb602a48db8a2dd23d38d709fb91f4e2f",
+        "lowering": "matmul",
+        "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi3, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout2>, tensor<128x128xf32, #ttnn_layout3>) -> tensor<512x128xf32, #ttnn_layout2> loc(#loc3)"
+      },
+      "product_fp32": {
+        "runtime_ir_sha256": "0e85cba43139e6487d39e2762d991027d567a170735ac4b72f0f3eaad672f02a",
+        "lowering": "matmul",
+        "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi3, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout3>, tensor<128x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      },
+      "product_bf16_values_k32": {
+        "runtime_ir_sha256": "75495fa919988e684cb53205623a77d9cd923f80071dc0c11e945ac7dc6c310f",
+        "lowering": "matmul",
+        "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi3, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x32xf32, #ttnn_layout3>, tensor<32x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      },
+      "product_bf16_values_k1": {
+        "runtime_ir_sha256": "d8ef15f85b217abeaef2b3600582cd063417eff8fd818d201a706c46663eccf7",
+        "lowering": "broadcast multiply, not matmul",
+        "operation": "%2 = \"ttnn.multiply\"(%0, %1) : (tensor<512x1xf32, #ttnn_layout3>, tensor<1x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      }
+    },
+    "hifi4": {
+      "identity_fp32": {
+        "runtime_ir_sha256": "896e349a91bf2cb372c0a34461f8f3139e7196802119299b8c42432b24502aa9",
+        "lowering": "matmul",
+        "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout2>, tensor<128x128xf32, #ttnn_layout3>) -> tensor<512x128xf32, #ttnn_layout2> loc(#loc3)"
+      },
+      "product_fp32": {
+        "runtime_ir_sha256": "4e03c4621b91597171f05ade0bb5ff3409b7640d035cbd3669d9a40e3ba649b2",
+        "lowering": "matmul",
+        "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout3>, tensor<128x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      },
+      "product_bf16_values_k32": {
+        "runtime_ir_sha256": "ef9f0d99aec42448ecc43a1a55f4acc639c0e897c7efbdc00e84bc046655248f",
+        "lowering": "matmul",
+        "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x32xf32, #ttnn_layout3>, tensor<32x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      },
+      "product_bf16_values_k1": {
+        "runtime_ir_sha256": "d8ef15f85b217abeaef2b3600582cd063417eff8fd818d201a706c46663eccf7",
+        "lowering": "broadcast multiply, not matmul",
+        "operation": "%2 = \"ttnn.multiply\"(%0, %1) : (tensor<512x1xf32, #ttnn_layout3>, tensor<1x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+      }
+    }
+  },
+  "independent_fidelity_outputs": {
+    "identity_fp32": {
+      "bitwise_equal": true,
+      "hifi4_output_digest": "4a1c9602a090b95752025aaa5131f81a973110200ea77d8aa3b1b034942e39e1",
+      "hifi3_output_digest": "4a1c9602a090b95752025aaa5131f81a973110200ea77d8aa3b1b034942e39e1"
+    },
+    "identity_bf16_values_fp32_storage": {
+      "bitwise_equal": true,
+      "hifi4_output_digest": "ed8fb396548dd14d66145c7cb6b45e8a8fab31f7643ac5eb46e218d2ef70a7b0",
+      "hifi3_output_digest": "ed8fb396548dd14d66145c7cb6b45e8a8fab31f7643ac5eb46e218d2ef70a7b0"
+    },
+    "product_fp32": {
+      "bitwise_equal": false,
+      "hifi4_output_digest": "7ecf2c4ae05c813872c71af9668a9235ddfe4a406e1584939223b48895728b63",
+      "hifi3_output_digest": "65a471a721be70fd49d87bfc04b0b091554f87897feb75572f2fd036b1bbe350"
+    },
+    "product_bf16_values_fp32_storage": {
+      "bitwise_equal": false,
+      "hifi4_output_digest": "2b9fbf6fba1b102a6aa437c811f64fe977f003044c2e2e8346ecbdafde12a004",
+      "hifi3_output_digest": "7cab28c861456a8abf391aba320584076802b3ff913a999812aab11dbdd5c93b"
+    },
+    "product_bf16_values_k32": {
+      "bitwise_equal": false,
+      "hifi4_output_digest": "0a339c47ec32e0f4fc654fed4ee21ba8e6c051185492a343eb248d836e47b766",
+      "hifi3_output_digest": "cf399a3bad938fddf56b09792721bd48c35b5d0a5f8a86f36e91f8d5489ecadb"
+    },
+    "product_bf16_values_k1": {
+      "bitwise_equal": true,
+      "hifi4_output_digest": "f95818dce7ba37fdbdcbcf3f9f00f128792e2de3947aa36f0a515a6c7873c78d",
+      "hifi3_output_digest": "f95818dce7ba37fdbdcbcf3f9f00f128792e2de3947aa36f0a515a6c7873c78d"
+    },
+    "cancellation_fp32": {
+      "bitwise_equal": true,
+      "hifi4_output_digest": "b5d16fc34b9829d040fc581beb93a258b11556e976ac931630dfae9ca5f06c4b",
+      "hifi3_output_digest": "b5d16fc34b9829d040fc581beb93a258b11556e976ac931630dfae9ca5f06c4b"
+    },
+    "cancellation_bf16_values": {
+      "bitwise_equal": false,
+      "hifi4_output_digest": "0da559cd848579050c5059cd0f9988421018b06529c790ca4f104ca5daf47141",
+      "hifi3_output_digest": "b5d16fc34b9829d040fc581beb93a258b11556e976ac931630dfae9ca5f06c4b"
+    }
+  },
+  "finding": "Fresh-process HiFi4/HiFi3 tests verify actual FP32 operand/accumulation configurations and bitwise input device roundtrips. The FP32 cancellation has exact CPU result1 but native result0 under both fidelities. BF16-representable cancellation gives2^-14 exactly under HiFi4 but zero under HiFi3. Random matmul outputs retain bits beyond ten fraction bits, ruling out a simple final-output-only quantization model. K1 rewrites to broadcast multiply and is exact on BF16-representable values; it is not evidence of exact matrix-unit arithmetic. General matrix errors differ across K32/K128 and fidelity; this does not locate every internal loss or quantify sampler contribution.",
+  "tests": "Five CPU counterfactual/fresh-process guard checks pass. Each of16 native cases verifies bitwise input roundtrip, exact output repeats, no fallback and no aten counters. Native runtime IR proves three matmul graph shapes and one K1 broadcast-multiply graph per fidelity.",
+  "decision": "Use verified matrix precision behavior when choosing an attention experiment. Input truncation and reduction arithmetic need separate controls; neither tensor dtype nor requested fidelity alone proves FP32 preservation. No model default or numerical gate changes.",
+  "reproduce": "Run fp32_matmul_probe.py --math-fidelities hifi4 --output-dir <new> and hifi3 in two separate processes. Device lock serializes them; seed62 and inputs match. Archive retains raw reports, outputs, metrics and actual runtime IR."
+}

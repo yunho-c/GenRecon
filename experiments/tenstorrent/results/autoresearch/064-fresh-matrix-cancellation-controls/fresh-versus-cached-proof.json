@@ -1,0 +1,42 @@
+{
+  "identity_fp32": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": true
+  },
+  "identity_bf16_values_fp32_storage": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": true
+  },
+  "product_fp32": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": false
+  },
+  "product_bf16_values_fp32_storage": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": false
+  },
+  "product_bf16_values_k32": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": false
+  },
+  "product_bf16_values_k1": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": true
+  },
+  "cancellation_fp32": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": true
+  },
+  "cancellation_bf16_values": {
+    "fresh_hifi4_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_cached_hifi4": true,
+    "cached_requested_hifi3_bitwise_fresh_hifi3": false
+  }
+}

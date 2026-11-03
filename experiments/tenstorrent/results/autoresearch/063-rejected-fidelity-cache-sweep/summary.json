@@ -1,0 +1,49 @@
+{
+  "status": "rejected_fidelity_comparison_native_cache_reuse",
+  "finding": "Reject the same-process requested HiFi4/HiFi3 sweep: all16 outputs reuse the first four compiled native graph shapes, only HiFi4 runtime IR exists, and every requested-HiFi3 output equals its HiFi4 counterpart bitwise. Fresh-process controls below determine which numerical results actually differ. The harness now rejects multiple fidelities before creating output; fresh-process native compute configurations are required.",
+  "independent_process_comparisons": {
+    "identity_fp32": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": true
+    },
+    "identity_bf16_values_fp32_storage": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": true
+    },
+    "product_fp32": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": false
+    },
+    "product_bf16_values_fp32_storage": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": false
+    },
+    "product_bf16_values_k32": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": false
+    },
+    "product_bf16_values_k1": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": true
+    },
+    "cancellation_fp32": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": true
+    },
+    "cancellation_bf16_values": {
+      "fresh_hifi4_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_cached_hifi4": true,
+      "cached_requested_hifi3_bitwise_fresh_hifi3": false
+    }
+  },
+  "decision": "Never interpret torch.compiler.reset as clearing native executable cache. Require one fidelity per process and verify actual runtime IR. Same-fidelity graph reuse with identical shapes/dtypes remains valid when explicitly labeled.",
+  "reproduce": "Historical rejected run082 used fp32_matmul_probe.py --math-fidelities hifi4 hifi3 at source9bc14a2; current CLI rejects this. Fresh runs083/084 are separate processes.",
+  "retention": "Original raw requested metadata, actual HiFi4 runtime IRs and independent equality proof retained. Old HiFi4 tensors equal the retained fresh HiFi4 output artifact in result064 bitwise; no duplicate full outputs retained."
+}

@@ -1,0 +1,46 @@
+{
+  "hifi3": {
+    "identity_fp32": {
+      "runtime_ir_sha256": "8a8a07971338c7db1c90aa008b57792fb602a48db8a2dd23d38d709fb91f4e2f",
+      "lowering": "matmul",
+      "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi3, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout2>, tensor<128x128xf32, #ttnn_layout3>) -> tensor<512x128xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "product_fp32": {
+      "runtime_ir_sha256": "0e85cba43139e6487d39e2762d991027d567a170735ac4b72f0f3eaad672f02a",
+      "lowering": "matmul",
+      "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi3, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout3>, tensor<128x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "product_bf16_values_k32": {
+      "runtime_ir_sha256": "75495fa919988e684cb53205623a77d9cd923f80071dc0c11e945ac7dc6c310f",
+      "lowering": "matmul",
+      "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi3, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x32xf32, #ttnn_layout3>, tensor<32x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "product_bf16_values_k1": {
+      "runtime_ir_sha256": "d8ef15f85b217abeaef2b3600582cd063417eff8fd818d201a706c46663eccf7",
+      "lowering": "broadcast multiply, not matmul",
+      "operation": "%2 = \"ttnn.multiply\"(%0, %1) : (tensor<512x1xf32, #ttnn_layout3>, tensor<1x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+    }
+  },
+  "hifi4": {
+    "identity_fp32": {
+      "runtime_ir_sha256": "896e349a91bf2cb372c0a34461f8f3139e7196802119299b8c42432b24502aa9",
+      "lowering": "matmul",
+      "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout2>, tensor<128x128xf32, #ttnn_layout3>) -> tensor<512x128xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "product_fp32": {
+      "runtime_ir_sha256": "4e03c4621b91597171f05ade0bb5ff3409b7640d035cbd3669d9a40e3ba649b2",
+      "lowering": "matmul",
+      "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x128xf32, #ttnn_layout3>, tensor<128x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "product_bf16_values_k32": {
+      "runtime_ir_sha256": "ef9f0d99aec42448ecc43a1a55f4acc639c0e897c7efbdc00e84bc046655248f",
+      "lowering": "matmul",
+      "operation": "%2 = \"ttnn.matmul\"(%0, %1) <{compute_config = #ttnn.device_compute_kernel_config<math_fidelity = hifi4, fp32_dest_acc_en = true>, transpose_a = false, transpose_b = false}> : (tensor<512x32xf32, #ttnn_layout3>, tensor<32x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+    },
+    "product_bf16_values_k1": {
+      "runtime_ir_sha256": "d8ef15f85b217abeaef2b3600582cd063417eff8fd818d201a706c46663eccf7",
+      "lowering": "broadcast multiply, not matmul",
+      "operation": "%2 = \"ttnn.multiply\"(%0, %1) : (tensor<512x1xf32, #ttnn_layout3>, tensor<1x512xf32, #ttnn_layout4>) -> tensor<512x512xf32, #ttnn_layout2> loc(#loc3)"
+    }
+  }
+}

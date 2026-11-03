@@ -1,0 +1,42 @@
+{
+  "identity_fp32": {
+    "bitwise_equal": true,
+    "hifi4_output_digest": "4a1c9602a090b95752025aaa5131f81a973110200ea77d8aa3b1b034942e39e1",
+    "hifi3_output_digest": "4a1c9602a090b95752025aaa5131f81a973110200ea77d8aa3b1b034942e39e1"
+  },
+  "identity_bf16_values_fp32_storage": {
+    "bitwise_equal": true,
+    "hifi4_output_digest": "ed8fb396548dd14d66145c7cb6b45e8a8fab31f7643ac5eb46e218d2ef70a7b0",
+    "hifi3_output_digest": "ed8fb396548dd14d66145c7cb6b45e8a8fab31f7643ac5eb46e218d2ef70a7b0"
+  },
+  "product_fp32": {
+    "bitwise_equal": false,
+    "hifi4_output_digest": "7ecf2c4ae05c813872c71af9668a9235ddfe4a406e1584939223b48895728b63",
+    "hifi3_output_digest": "65a471a721be70fd49d87bfc04b0b091554f87897feb75572f2fd036b1bbe350"
+  },
+  "product_bf16_values_fp32_storage": {
+    "bitwise_equal": false,
+    "hifi4_output_digest": "2b9fbf6fba1b102a6aa437c811f64fe977f003044c2e2e8346ecbdafde12a004",
+    "hifi3_output_digest": "7cab28c861456a8abf391aba320584076802b3ff913a999812aab11dbdd5c93b"
+  },
+  "product_bf16_values_k32": {
+    "bitwise_equal": false,
+    "hifi4_output_digest": "0a339c47ec32e0f4fc654fed4ee21ba8e6c051185492a343eb248d836e47b766",
+    "hifi3_output_digest": "cf399a3bad938fddf56b09792721bd48c35b5d0a5f8a86f36e91f8d5489ecadb"
+  },
+  "product_bf16_values_k1": {
+    "bitwise_equal": true,
+    "hifi4_output_digest": "f95818dce7ba37fdbdcbcf3f9f00f128792e2de3947aa36f0a515a6c7873c78d",
+    "hifi3_output_digest": "f95818dce7ba37fdbdcbcf3f9f00f128792e2de3947aa36f0a515a6c7873c78d"
+  },
+  "cancellation_fp32": {
+    "bitwise_equal": true,
+    "hifi4_output_digest": "b5d16fc34b9829d040fc581beb93a258b11556e976ac931630dfae9ca5f06c4b",
+    "hifi3_output_digest": "b5d16fc34b9829d040fc581beb93a258b11556e976ac931630dfae9ca5f06c4b"
+  },
+  "cancellation_bf16_values": {
+    "bitwise_equal": false,
+    "hifi4_output_digest": "0da559cd848579050c5059cd0f9988421018b06529c790ca4f104ca5daf47141",
+    "hifi3_output_digest": "b5d16fc34b9829d040fc581beb93a258b11556e976ac931630dfae9ca5f06c4b"
+  }
+}

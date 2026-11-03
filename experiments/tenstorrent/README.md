@@ -743,6 +743,24 @@ LayerNorm errors are 0.056–0.145%. These measurements use identical native
 inputs at one seeded timestep-600 forward. They do not assign additive shares
 of full-model or sampler error, or establish quality preservation.
 
+The [native matrix probe](results/autoresearch/062-fp32-matrix-preservation/summary.json)
+shows why FP32 storage alone is insufficient: identity multiplication matches
+ten-fraction-bit input truncation bitwise on seeded FP32 values. The
+[fresh-process cancellation controls](results/autoresearch/064-fresh-matrix-cancellation-controls/summary.json)
+verify exact input device roundtrips and actual compute configurations. A
+matrix expression with exact result 1 returns 0 under both HiFi4 and HiFi3;
+another with BF16-representable inputs preserves its tiny result under HiFi4
+but loses it under HiFi3. General matrix errors also depend on reduction length.
+These tests do not identify every internal loss or assign sampler-error shares.
+
+`fp32_matmul_probe.py --math-fidelities hifi4 --output-dir <new>` reproduces
+the current controls. Run HiFi3 in a **separate process**. A
+[rejected same-process sweep](results/autoresearch/063-rejected-fidelity-cache-sweep/summary.json)
+reused HiFi4 native graphs despite `torch.compiler.reset()` and changed requested
+options; the harness now rejects that usage. Runtime IR, rather than requested
+metadata, establishes fidelity. The K=1 product rewrites to a broadcast multiply,
+so its exact result is separate from matrix-unit arithmetic.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
