@@ -34,6 +34,7 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--variant', choices=('default', 'full_sync', 'packer', 'precise', 'hifi3', 'hifi2', 'fp16_dest'), default='default')
     parser.add_argument('--native-control-dir', type=Path, required=True)
+    parser.add_argument('--profile-device', action='store_true', help='Probe device-only profiler on standalone canonical TTNN')
     args = parser.parse_args()
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=False)
@@ -41,9 +42,12 @@ def main():
         TT_METAL_CACHE=str(args.output_dir/'metal-cache'), TT_METAL_INSPECTOR='1',
         TT_METAL_INSPECTOR_LOG_RUNTIME_ENTRIES='1', TT_METAL_INSPECTOR_CAPTURE_TENSOR_SPECS='1',
         TT_METAL_LOG_KERNELS_COMPILE_COMMANDS='1', ATTN_BACKEND='sdpa', SPARSE_CONV_BACKEND='none')
+    os.environ.pop('TT_METAL_DEVICE_PROFILER', None)
+    if args.profile_device:
+        os.environ.update(TT_METAL_DEVICE_PROFILER='1', TT_METAL_PROFILER_DISABLE_PUSH_TO_TRACY='1')
     report = {'status': 'running', 'variant': args.variant, 'scope': __doc__,
               'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
-              'clean_native_process_start': True}
+              'clean_native_process_start': True, 'profile_device': args.profile_device}
 
     def phase(name):
         report['phase'] = name
@@ -138,6 +142,10 @@ def main():
             'cpu_negative': expected[shift, 256].item(),
             'native_positive': torch.unique(actual[shifts == shift, :256]).tolist(),
             'native_negative': torch.unique(actual[shifts == shift, 256:]).tolist()} for shift in range(32)}
+        if args.profile_device:
+            phase('flush_device_profiler')
+            ttnn.synchronize_device(device)
+            ttnn.ReadDeviceProfiler(device)
         ttnn.close_mesh_device(device)
         device = None
         report['status'] = 'completed_canonical_kernel_control'
