@@ -45,6 +45,7 @@ def worker(args):
         "lora_mode": args.lora_mode,
         "rope_mode": args.rope_mode,
         "attention_mode": args.attention_mode,
+        "device_precision": args.device_precision,
         "requested_active_voxels": args.active_voxels,
         "profile_markers": args.profile_markers,
         "synthetic_trajectory": args.synthetic_trajectory and args.flow_inputs is None,
@@ -154,7 +155,21 @@ def worker(args):
             result['attention_cpu_relative_l2'] = [
                 ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
                 for ref, out in zip(reference, prepared, strict=True)]
-            result['attention_note'] = 'Original weights and outer dtype retained; stable FP32 unfused exp/reciprocal, with QK/AV precision selected by attention_mode. Error includes preparation and device arithmetic.'
+            result['attention_note'] = 'Attention preparation retains learned weights and its outer dtype; stable FP32 unfused exp/reciprocal, with QK/AV precision selected by attention_mode. Any subsequent whole-model device precision change is reported separately. Error includes all preparation and device arithmetic.'
+        if args.device_precision == 'float32':
+            from experiments.tenstorrent.inference_precision import prepare_float32_device
+            result['phase'] = 'prepare_device_float32'
+            write_result(path, result)
+            result['device_precision_preparation'] = prepare_float32_device(model)
+            inputs = reference_inputs
+            result['phase'] = 'prepared_device_cpu_reference'
+            write_result(path, result)
+            with torch.no_grad():
+                prepared = outputs(model(*reference_inputs))
+            result['device_precision_cpu_relative_l2'] = [
+                ((out.double().cpu() - ref.double()).norm() / ref.double().norm().clamp_min(1e-30)).item()
+                for ref, out in zip(reference, prepared, strict=True)]
+        result['device_input_dtypes'] = [str(value.dtype) for value in inputs]
         result["phase"] = "waiting_for_device"
         write_result(path, result)
         # Permit CPU references/downloads to overlap, but serialize our hardware
@@ -276,6 +291,8 @@ def main():
     parser.add_argument("--lora-mode", choices=("stock", "merged", "lowrank", "frozen_delta"), default="stock")
     parser.add_argument("--rope-mode", choices=("stock", "real_pairs", "real_pairs_head_first", "real_pairs_flat_head_first"), default="stock")
     parser.add_argument('--attention-mode', choices=('stock', 'fp32_reciprocal', 'fp32_scores_bf16_av', 'bf16_qk_fp32_softmax'), default='stock')
+    parser.add_argument('--device-precision', choices=('pipeline', 'float32'), default='pipeline',
+                        help='FP32 device diagnostic promotes the already quantized model after original CPU references')
     parser.add_argument('--native-ir', action='store_true', help='Dump actual native compiler IR with dry run disabled')
     parser.add_argument('--synthetic-trajectory', '--sampler-trajectory', action='store_true',
                         help='Compare the complete original 12-step schedule against stock FP32 CPU (complete tensor flows only)')
@@ -293,6 +310,8 @@ def main():
     args = parser.parse_args()
     if min(args.runs, args.timeout, args.cpu_threads, args.trace_region_size) < 1:
         parser.error("runs, timeout, cpu-threads and trace-region-size must be positive")
+    if args.device_precision == 'float32' and args.reference_precision != 'float32':
+        parser.error('FP32 device diagnostic requires the stock FP32 reference')
     if args.active_voxels is not None and args.active_voxels < 1:
         parser.error("active-voxels must be positive")
     if args.flow_inputs is not None:
@@ -326,6 +345,7 @@ def main():
         command += ["--lora-mode", args.lora_mode]
         command += ["--rope-mode", args.rope_mode]
         command += ['--attention-mode', args.attention_mode]
+        command += ['--device-precision', args.device_precision]
         if args.native_ir:
             command += ['--native-ir']
         if args.synthetic_trajectory:

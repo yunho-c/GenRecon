@@ -652,6 +652,16 @@ the same rotation and uses flattened head/token rows around its arithmetic.
 Independent kernel outputs repeat bitwise; microtiming varies across processes,
 so full sampler timing and common-decoder quality remain required.
 
+`--device-precision float32 --reference-precision float32` establishes an FP32
+device-tensor baseline after the original stock reference and cache checks.
+It promotes the already quantized learned values, preserves LoRA parameter
+identities and complex/integer buffers, and updates model dtype attributes.
+Reports include parameter bytes/dtypes and the promoted CPU forward check.
+The original load/reference metadata stays intact; native IR and measured
+error establish device behavior. FP32 tensor storage does not guarantee IEEE
+FP32 arithmetic inside every native kernel. This is an opt-in accuracy
+diagnostic with higher resident weight memory, and defaults remain unchanged.
+
 Full pretrained flow probes use the source configs and strict checkpoint
 loading, including the trained LoRA, aggregation and per-block conditioning
 weights. `ss_flow` uses all 4096 latent tokens. `shape_flow_tensor` and
